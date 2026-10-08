@@ -155,17 +155,14 @@ public function counts(): array;</pre>
   <div class="cols">
     <div>
       <span class="tag">Illustrative change</span>
-<pre class="code tight" data-lang="php" data-mark="3">public function handle(string $id): void
+<pre class="code xtight" data-lang="php" data-mark="3">public function handle(string $id): void
 {
     $this-&gt;todos-&gt;delete($this-&gt;todos-&gt;find($id));
 }</pre>
-<pre class="term"><span class="prompt">$</span> composer analyse
- ------ -----------------------------------------------------
+<pre class="term" style="font-size:20px;line-height:1.4;padding:14px 22px"><span class="prompt">$</span> composer analyse
   Line   Actions/Todos/DeleteTodo.php
- ------ -----------------------------------------------------
   17     Parameter #1 $todo of method TodoRepository::delete()
          expects App\Models\Todo, App\Models\Todo|null given.
- ------ -----------------------------------------------------
  <span class="err">[ERROR] Found 1 error</span></pre>
     </div>
     <div>
