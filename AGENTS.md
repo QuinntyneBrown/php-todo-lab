@@ -93,15 +93,18 @@ php-todo-lab/
     ├── src/
     │   ├── app/
     │   │   ├── core/                 App-wide singletons; nothing here imports features/
-    │   │   │   └── api/              TodoApi port, HttpTodoApi adapter, models/ (only rxjs/HttpClient)
+    │   │   │   ├── api/              TodoApi port, HttpTodoApi adapter, models/ (only rxjs/HttpClient)
+    │   │   │   └── connectivity/     Connectivity: the browser's online signal
     │   │   ├── features/
     │   │   │   └── todos/
     │   │   │       ├── todo.store.ts             TodoStore (signals)
-    │   │   │       ├── todo-page/                Smart component on route `/`
+    │   │   │       ├── ui-strings.ts             UI_STRINGS: every user-facing string
+    │   │   │       ├── todo-page/                Smart component on route `/`, its
+    │   │   │       │                             TodoShortcutsDirective, and per-feature specs
     │   │   │       └── components/               Presentational: todo-header/, todo-composer/,
     │   │   │                                     todo-filter/, todo-list/, todo-item/,
     │   │   │                                     todo-empty-state/
-    │   │   ├── shared/ui/            Reusable presentational components (toast/)
+    │   │   ├── shared/ui/            Reusable UI: toast/, announcer/ (the polite live region)
     │   │   ├── app.config.ts         Providers, including TodoApi -> HttpTodoApi
     │   │   ├── app.routes.ts
     │   │   └── app.component.{ts,html,scss}

@@ -9,6 +9,17 @@
     [activeCount]="store.activeCount()"
     [completedCount]="store.completedCount()"
   />
+  @if (!connectivity.online()) {
+    <!-- Above the card and non-blocking: everything stays usable (L2-042 criterion 3). -->
+    <div class="notice" role="status">
+      <svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"
+        />
+      </svg>
+      <span>{{ strings.offline }}</span>
+    </div>
+  }
   <section class="card" [attr.aria-label]="strings.list.label">
     <app-todo-composer
       [focusRequest]="composerFocus()"

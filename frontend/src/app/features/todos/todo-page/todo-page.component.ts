@@ -9,6 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { Connectivity } from '../../../core/connectivity/connectivity';
 import { Announcer } from '../../../shared/ui/announcer/announcer';
 import { ToastComponent } from '../../../shared/ui/toast/toast.component';
 import { TodoComposerComponent } from '../components/todo-composer/todo-composer.component';
@@ -44,6 +45,7 @@ export class TodoPageComponent implements OnChanges {
   readonly filter = input<string>();
 
   protected readonly store = inject(TodoStore);
+  protected readonly connectivity = inject(Connectivity);
   private readonly announcer = inject(Announcer);
   private readonly router = inject(Router);
   protected readonly today = new Date();

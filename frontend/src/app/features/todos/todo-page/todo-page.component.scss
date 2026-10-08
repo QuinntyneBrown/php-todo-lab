@@ -66,6 +66,29 @@
   }
 }
 
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--sun-soft);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.notice__icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 // Bottom-centred, clear of the home indicator (L2-028 criterion 5).
 .toasts {
   position: fixed;
