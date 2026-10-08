@@ -1,5 +1,9 @@
 <main class="app">
-  <app-todo-header [date]="today" />
+  <app-todo-header
+    [date]="today"
+    [activeCount]="store.activeCount()"
+    [completedCount]="store.completedCount()"
+  />
   <section class="card" [attr.aria-label]="strings.list.label">
     <app-todo-composer [focusRequest]="composerFocus()" />
 

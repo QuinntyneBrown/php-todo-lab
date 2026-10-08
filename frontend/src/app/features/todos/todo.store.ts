@@ -19,6 +19,10 @@ export class TodoStore {
     this.listResource.hasValue() ? [...this.listResource.value().data] : [],
   );
 
+  /** Counted from the local copy, so they move with every optimistic change (L2-007). */
+  readonly activeCount = computed(() => this.todos().filter((t) => !t.completed).length);
+  readonly completedCount = computed(() => this.todos().filter((t) => t.completed).length);
+
   readonly loading = computed(() => this.listResource.isLoading());
   readonly loadFailed = computed(() => this.listResource.status() === 'error');
 
