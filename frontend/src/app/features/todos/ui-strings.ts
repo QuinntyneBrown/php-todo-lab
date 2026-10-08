@@ -54,8 +54,9 @@ export const UI_STRINGS = {
     updated: 'Task updated',
     deleted: 'Task deleted',
     restored: 'Task restored',
-    remaining: (n: number) => `${String(n)} left`,
-    allDone: 'All done',
+    /** An action with the count it leaves, as one message so neither interrupts (L2-007). */
+    withCount: (action: string, active: number, completed: number) =>
+      `${action}. ${active === 0 && completed > 0 ? 'All done' : `${String(active)} left`}`,
   },
   ariaLabels: {
     edit: (title: string) => `Edit ${title}`,

@@ -126,21 +126,18 @@ export class TodoPageComponent implements OnChanges {
 
   /** Ctrl/Cmd+Z undoes while a toast offers Undo (L2-015 criterion 6). */
   protected onKeydown(event: KeyboardEvent): void {
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') {
-      if (this.store.toast()?.undo) {
-        event.preventDefault();
-        this.onUndo();
-      }
+    const undoKey = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z';
+    if (undoKey && this.store.toast()?.undo) {
+      event.preventDefault();
+      this.onUndo();
     }
   }
 
-  /** One message with the action and the new count, so neither interrupts the other (L2-007). */
   private announce(action: string): void {
-    const count =
-      this.store.activeCount() === 0 && this.store.completedCount() > 0
-        ? UI_STRINGS.announcements.allDone
-        : UI_STRINGS.announcements.remaining(this.store.activeCount());
-    this.announcer.announce(`${action}. ${count}`);
+    const { activeCount, completedCount } = this.store;
+    this.announcer.announce(
+      UI_STRINGS.announcements.withCount(action, activeCount(), completedCount()),
+    );
   }
 
   private focusComposer(): void {
