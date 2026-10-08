@@ -59,6 +59,7 @@ php-todo-lab/
 │   ├── app/
 │   │   ├── Actions/Todos/            One use case per class: CreateTodo, ListTodos, ...
 │   │   ├── Enums/                    TodoStatus (backed enum)
+│   │   ├── Exceptions/               ProblemDetailsRenderer, domain exceptions (TodoNotFound, ...)
 │   │   ├── Http/
 │   │   │   ├── Controllers/Api/V1/   TodoController: thin, one Action per method
 │   │   │   ├── Requests/Api/V1/      Form Requests: all validation lives here
@@ -77,6 +78,7 @@ php-todo-lab/
 │   │   └── console.php               Scheduled tasks (for example pruning)
 │   ├── tests/
 │   │   ├── Feature/Api/V1/           Pest HTTP tests against real MySQL, one file per endpoint
+│   │   ├── Feature/Models/           Pest tests of the schema and model scopes against MySQL
 │   │   ├── Unit/Actions/             Pest unit tests with the in-memory fake
 │   │   ├── Fakes/                    InMemoryTodoRepository
 │   │   └── Pest.php
