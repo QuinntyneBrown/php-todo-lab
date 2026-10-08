@@ -173,20 +173,14 @@ private static function iso(mixed $stored): ?string
   <div class="cols">
     <div>
       <div class="file">backend/app/Http/Resources/V1/ClearedTodosResource.php</div>
-<pre class="code xtight" data-lang="php" data-mark="4,9,16,24">/**
+<pre class="code xtight" data-lang="php" data-mark="4,8,12,18">/**
  * The clear-completed response: the deleted ids, for undo, and their count (L2-017).
  *
  * @property list&lt;string&gt; $resource
  */
 final class ClearedTodosResource extends JsonResource
 {
-    /**
-     * @param  list&lt;string&gt;  $ids
-     */
-    public function __construct(array $ids)
-    {
-        parent::__construct($ids);
-    }
+    // ... constructor takes list&lt;string&gt; $ids
 
     public function toArray(Request $request): array
     {
