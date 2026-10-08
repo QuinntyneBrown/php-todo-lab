@@ -1,0 +1,13 @@
+@if (loading()) {
+  <ul class="skeleton" data-testid="skeleton" aria-hidden="true">
+    <li><span class="skeleton__dot"></span><span class="skeleton__bar"></span></li>
+    <li><span class="skeleton__dot"></span><span class="skeleton__bar"></span></li>
+    <li><span class="skeleton__dot"></span><span class="skeleton__bar"></span></li>
+  </ul>
+} @else if (todos().length > 0) {
+  <ul class="list" [attr.aria-label]="label">
+    @for (todo of todos(); track todo.id) {
+      <li class="list__row"><app-todo-item [todo]="todo" /></li>
+    }
+  </ul>
+}

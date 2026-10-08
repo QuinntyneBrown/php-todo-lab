@@ -1,0 +1,97 @@
+:host {
+  display: block;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  column-gap: 4px;
+  min-height: 60px;
+  padding: 4px 8px 4px 6px;
+  transition:
+    opacity 0.2s,
+    background-color 0.15s;
+
+  &:hover {
+    background: var(--paper-sunk);
+  }
+}
+
+// Native input over a drawn box (L2-029 criterion 2).
+.check {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  cursor: pointer;
+}
+
+.check__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.check__box {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--line-strong);
+  display: grid;
+  place-items: center;
+  transition:
+    background-color 0.18s,
+    border-color 0.18s,
+    transform 0.18s var(--ease-out);
+}
+
+.check__tick {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: var(--on-sea);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 18;
+  stroke-dashoffset: 18;
+  transition: stroke-dashoffset 0.22s var(--ease-out) 0.06s;
+}
+
+.check__input:hover + .check__box {
+  border-color: var(--sea);
+}
+
+.check__input:focus-visible + .check__box {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.check__input:checked + .check__box {
+  background: var(--sea);
+  border-color: var(--sea);
+
+  .check__tick {
+    stroke-dashoffset: 0;
+  }
+}
+
+.title {
+  min-width: 0;
+  padding: 10px 6px;
+}
+
+.title__text {
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.item--done .title__text {
+  color: var(--slate);
+}

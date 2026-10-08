@@ -1,0 +1,69 @@
+.list,
+.skeleton {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.list__row {
+  border-bottom: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.skeleton li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 17px 16px;
+  border-bottom: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &:nth-child(1) .skeleton__bar {
+    width: 58%;
+  }
+
+  &:nth-child(2) .skeleton__bar {
+    width: 72%;
+  }
+
+  &:nth-child(3) .skeleton__bar {
+    width: 44%;
+  }
+}
+
+.skeleton__dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--line);
+  flex: none;
+  margin-left: 2px;
+}
+
+// The only thing that animates on load (L2-024 criterion 1).
+.skeleton__bar {
+  height: 14px;
+  border-radius: 7px;
+  background: linear-gradient(90deg, var(--line) 25%, var(--paper-sunk) 50%, var(--line) 75%) 0 0 /
+    200% 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+// A static tone instead of the shimmer (L2-024 criterion 2).
+@media (prefers-reduced-motion: reduce) {
+  .skeleton__bar {
+    animation: none;
+  }
+}

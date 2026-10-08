@@ -1,17 +1,21 @@
-import { ChangeDetectionStrategy, Component, afterNextRender, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, afterNextRender, inject, signal } from '@angular/core';
 import { TodoComposerComponent } from '../components/todo-composer/todo-composer.component';
+import { TodoEmptyStateComponent } from '../components/todo-empty-state/todo-empty-state.component';
 import { TodoHeaderComponent } from '../components/todo-header/todo-header.component';
+import { TodoListComponent } from '../components/todo-list/todo-list.component';
+import { TodoStore } from '../todo.store';
 import { UI_STRINGS } from '../ui-strings';
 
 /** The one screen (L2-022): header, composer, toolbar, list, and toasts. */
 @Component({
   selector: 'app-todo-page',
-  imports: [TodoHeaderComponent, TodoComposerComponent],
+  imports: [TodoHeaderComponent, TodoComposerComponent, TodoListComponent, TodoEmptyStateComponent],
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoPageComponent {
+  protected readonly store = inject(TodoStore);
   protected readonly today = new Date();
   protected readonly strings = UI_STRINGS;
   protected readonly composerFocus = signal<number | null>(null);

@@ -2,5 +2,19 @@
   <app-todo-header [date]="today" />
   <section class="card" [attr.aria-label]="strings.list.label">
     <app-todo-composer [focusRequest]="composerFocus()" />
+
+    @if (store.loadFailed()) {
+      <div class="banner" role="alert">
+        <p class="banner__text">{{ strings.list.loadFailed }}</p>
+        <button class="banner__btn" type="button" (click)="store.reload()">
+          {{ strings.list.retry }}
+        </button>
+      </div>
+    } @else {
+      <app-todo-list [todos]="store.todos()" [loading]="store.loading()" />
+      @if (!store.loading() && store.todos().length === 0) {
+        <app-todo-empty-state kind="none" />
+      }
+    }
   </section>
 </main>

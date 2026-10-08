@@ -25,3 +25,34 @@
   box-shadow: var(--shadow);
   overflow: hidden;
 }
+
+// Inline error inside the card; the composer above stays usable (L2-008).
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 16px;
+  background: var(--danger-soft);
+  color: var(--ink);
+}
+
+.banner__text {
+  margin: 0;
+  flex: 1 1 200px;
+  font-weight: 500;
+}
+
+.banner__btn {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--danger);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--danger);
+  font-weight: 600;
+
+  &:hover {
+    background: var(--paper);
+  }
+}
