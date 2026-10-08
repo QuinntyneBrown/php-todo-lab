@@ -24,7 +24,7 @@ export class InMemoryTodoApi extends TodoApi {
   private clock = Date.parse('2026-01-01T00:00:00.000Z');
   private nextId = 1;
   private readonly failures: { operation: Operation; error: ApiError }[] = [];
-  private gate: Promise<void> | null = null;
+  private gate: { promise: Promise<void>; operation?: Operation } | null = null;
 
   /** Adds todos oldest first, so the last title is the newest. */
   seed(...todos: (string | { title: string; completed?: boolean })[]): Todo[] {
@@ -62,10 +62,11 @@ export class InMemoryTodoApi extends TodoApi {
     this.failures.push({ operation, error });
   }
 
-  /** Holds every response until the returned function is called. */
-  hold(): () => void {
+  /** Holds every response, or only `operation`'s, until the returned function is called. */
+  hold(operation?: Operation): () => void {
     let release!: () => void;
-    this.gate = new Promise<void>((resolve) => (release = resolve));
+    const promise = new Promise<void>((resolve) => (release = resolve));
+    this.gate = operation ? { promise, operation } : { promise };
     return () => {
       this.gate = null;
       release();
@@ -145,7 +146,8 @@ export class InMemoryTodoApi extends TodoApi {
 
   private async respond(operation: Operation, args: unknown[]): Promise<void> {
     this.calls.push({ operation, args });
-    if (this.gate) await this.gate;
+    const gate = this.gate;
+    if (gate && (gate.operation === undefined || gate.operation === operation)) await gate.promise;
     await Promise.resolve();
     const index = this.failures.findIndex((f) => f.operation === operation);
     if (index >= 0) {

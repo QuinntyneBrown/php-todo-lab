@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { ApiError } from '../../core/api/api-error';
-import type { Todo, UpdateTodoPayload } from '../../core/api/models';
+import type { Todo, TodoListResponse, UpdateTodoPayload } from '../../core/api/models';
 import { TodoApi } from '../../core/api/todo-api';
 import type { ToastState } from '../../shared/ui/toast/toast-state';
 import { UI_STRINGS } from './ui-strings';
@@ -55,10 +55,21 @@ export class TodoStore {
   private readonly pendingTasks = inject(PendingTasks);
   private readonly listResource = resource({ loader: () => this.api.list() });
 
-  /** The local copy that optimistic updates change; replaced by every fresh load. */
-  readonly todos = linkedSignal<TodoView[]>(() =>
-    this.listResource.hasValue() ? [...this.listResource.value().data] : [],
-  );
+  /**
+   * The local copy that optimistic updates change. A fresh load replaces it but keeps tasks
+   * still being created, unless the load already brought a new task with the same title:
+   * the server stored it before answering the create.
+   */
+  readonly todos = linkedSignal<TodoListResponse | undefined, TodoView[]>({
+    source: () => (this.listResource.hasValue() ? this.listResource.value() : undefined),
+    computation: (list, previous) => {
+      const loaded = list?.data ?? [];
+      const known = new Set(previous?.value.map((t) => t.id));
+      const arrived = new Set(loaded.filter((t) => !known.has(t.id)).map((t) => t.title));
+      const creating = previous?.value.filter((t) => t.pending && !arrived.has(t.title)) ?? [];
+      return [...creating, ...loaded];
+    },
+  });
   readonly toast = signal<ToastState | null>(null);
 
   /** The one task whose title is being edited (L2-012 criterion 6). */
@@ -113,7 +124,9 @@ export class TodoStore {
 
     try {
       const created = await this.track(this.api.create(title));
-      this.todos.update((todos) => todos.map((t) => (t.id === placeholder.id ? created : t)));
+      // In server order, and once only: a list loaded meanwhile may already hold it.
+      this.todos.update((todos) => todos.filter((t) => t.id !== placeholder.id));
+      this.insert(created);
       return { ok: true };
     } catch (error) {
       this.todos.update((todos) => todos.filter((t) => t.id !== placeholder.id));
