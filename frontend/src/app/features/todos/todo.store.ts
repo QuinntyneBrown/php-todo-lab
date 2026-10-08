@@ -165,6 +165,13 @@ export class TodoStore {
     return true;
   }
 
+  /** The visible row after this one, else the one before, for focus after a delete. */
+  neighbourOf(id: string): TodoView | undefined {
+    const visible = this.visibleTodos();
+    const index = visible.findIndex((t) => t.id === id);
+    return visible[index + 1] ?? visible[index - 1];
+  }
+
   /** Removes a task at once and offers Undo; a failed delete puts it back (L2-015). */
   async delete(id: string): Promise<void> {
     const todo = this.todos().find((t) => t.id === id);

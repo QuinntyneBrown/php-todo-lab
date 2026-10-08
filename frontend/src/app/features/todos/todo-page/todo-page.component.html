@@ -1,4 +1,9 @@
-<main class="app">
+<main
+  class="app"
+  appTodoShortcuts
+  (composerShortcut)="focusComposer()"
+  (undoShortcut)="onUndoShortcut($event)"
+>
   <app-todo-header
     [date]="today"
     [activeCount]="store.activeCount()"

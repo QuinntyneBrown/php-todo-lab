@@ -11,6 +11,11 @@ import {
 import type { TodoView } from '../../todo.store';
 import { UI_STRINGS } from '../../ui-strings';
 
+/** A request to focus one row's checkbox; each new object repeats the move. */
+export interface RowFocus {
+  readonly id: string;
+}
+
 /**
  * One task row: a native checkbox named by the title (L2-029), the title, which edits in
  * place (L2-012), and its controls.
@@ -25,7 +30,7 @@ export class TodoItemComponent {
   readonly todo = input.required<TodoView>();
   readonly editing = input(false);
   /** Each new value focuses this row's checkbox; the page owns when (L2-031 criterion 3). */
-  readonly focusRequest = input<number | null>(null);
+  readonly focusRequest = input<RowFocus | null>(null);
   /** Whether a keyboard activated the delete, so the page can move focus on (L2-031). */
   readonly deleted = output<{ viaKeyboard: boolean }>();
   /** The checked state the user chose. */

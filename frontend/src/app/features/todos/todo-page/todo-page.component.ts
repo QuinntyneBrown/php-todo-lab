@@ -21,9 +21,7 @@ import { TodoHeaderComponent } from '../components/todo-header/todo-header.compo
 import { type RowFocus, TodoListComponent } from '../components/todo-list/todo-list.component';
 import { type RefusedAdd, type TodoFilter, TodoStore, parseFilter } from '../todo.store';
 import { UI_STRINGS } from '../ui-strings';
-
-/** Where a typed `/` is text rather than the composer shortcut (L2-023 criterion 1). */
-const TEXT_ENTRY = 'textarea, [contenteditable], input:not([type=checkbox], [type=radio])';
+import { TodoShortcutsDirective } from './todo-shortcuts.directive';
 
 /** The one screen (L2-022): header, composer, toolbar, list, and toasts. */
 @Component({
@@ -35,11 +33,11 @@ const TEXT_ENTRY = 'textarea, [contenteditable], input:not([type=checkbox], [typ
     TodoListComponent,
     TodoEmptyStateComponent,
     ToastComponent,
+    TodoShortcutsDirective,
   ],
   templateUrl: './todo-page.component.html',
   styleUrl: './todo-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { '(document:keydown)': 'onKeydown($event)' },
 })
 export class TodoPageComponent implements OnChanges {
   /** The `?filter=` query parameter, bound by the router (L2-006, L2-047). */
@@ -103,13 +101,11 @@ export class TodoPageComponent implements OnChanges {
 
   /** After a keyboard delete, focus goes to the next row, else the previous, else the composer. */
   protected onDelete(id: string, viaKeyboard: boolean): void {
-    const visible = this.store.visibleTodos();
-    const index = visible.findIndex((t) => t.id === id);
-    const neighbour = visible[index + 1] ?? visible[index - 1];
+    const neighbour = this.store.neighbourOf(id);
     void this.store.delete(id);
     this.announce(UI_STRINGS.announcements.deleted);
     if (!viaKeyboard) return;
-    if (neighbour) this.rowFocus.update((f) => ({ id: neighbour.id, seq: (f?.seq ?? 0) + 1 }));
+    if (neighbour) this.rowFocus.set({ id: neighbour.id });
     else this.focusComposer();
   }
 
@@ -125,17 +121,11 @@ export class TodoPageComponent implements OnChanges {
     this.announce(UI_STRINGS.announcements.restored);
   }
 
-  /** `/` jumps to the composer (L2-023); Ctrl/Cmd+Z undoes while a toast offers it (L2-015). */
-  protected onKeydown(event: KeyboardEvent): void {
-    const typing = event.target instanceof HTMLElement && event.target.matches(TEXT_ENTRY);
-    const undoKey = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z';
-    if (event.key === '/' && !typing) {
-      event.preventDefault();
-      this.focusComposer();
-    } else if (undoKey && this.store.toast()?.undo) {
-      event.preventDefault();
-      this.onUndo();
-    }
+  /** Ctrl/Cmd+Z undoes only while a toast offers Undo (L2-015 criterion 6). */
+  protected onUndoShortcut(event: KeyboardEvent): void {
+    if (!this.store.toast()?.undo) return;
+    event.preventDefault();
+    this.onUndo();
   }
 
   private announce(action: string): void {
@@ -145,7 +135,7 @@ export class TodoPageComponent implements OnChanges {
     );
   }
 
-  private focusComposer(): void {
+  protected focusComposer(): void {
     this.composerFocus.update((n) => (n ?? 0) + 1);
   }
 }
