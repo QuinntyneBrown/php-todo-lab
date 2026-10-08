@@ -46,7 +46,7 @@
         [attr.aria-label]="strings.ariaLabels.edit(todo().title)"
         (click)="startEdit()"
       >
-        {{ todo().title }}
+        <span class="title__text">{{ todo().title }}</span>
       </button>
     }
   </div>

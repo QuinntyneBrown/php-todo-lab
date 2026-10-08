@@ -62,3 +62,16 @@ button {
   border: 0;
   padding: 0;
 }
+
+// Motion only confirms an action, and not at all when the user asks for less: transitions
+// and animations finish at once, so state changes apply instantly (L2-011, L2-024).
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+  }
+}

@@ -146,20 +146,28 @@
 
 .title {
   min-width: 0;
-  padding: 10px 6px;
+  padding: 0 6px;
 }
 
-// The title is a button that starts editing; it reads as text (L2-012).
-// The strike-through wipes left to right, across every wrapped line (L2-011).
+// The title is a button that starts editing; it reads as text, with a 44 px hit area
+// (L2-012, L2-028).
 .title__btn {
-  display: inline;
-  max-width: 100%;
-  padding: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 0;
   margin: 0;
   border: 0;
   border-radius: 4px;
+  background: none;
   text-align: left;
   cursor: text;
+}
+
+// The strike-through wipes left to right, across every wrapped line (L2-011).
+.title__text {
+  min-width: 0;
   line-height: 1.4;
   overflow-wrap: anywhere;
   background: linear-gradient(currentcolor, currentcolor) 0 55% / 0% 2px no-repeat;
@@ -170,7 +178,7 @@
 }
 
 // Muted, and struck through: colour is never the only signal (L2-030 criterion 6).
-.item--done .title__btn {
+.item--done .title__text {
   color: var(--slate);
   background-size: 100% 2px;
 }
@@ -249,7 +257,7 @@
 @media (prefers-reduced-motion: reduce) {
   .check__box,
   .check__tick,
-  .title__btn {
+  .title__text {
     transition: none;
   }
 
