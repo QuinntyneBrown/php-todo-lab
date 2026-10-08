@@ -152,11 +152,10 @@
 // The title is a button that starts editing; it reads as text, with a 44 px hit area
 // (L2-012, L2-028).
 .title__btn {
-  display: flex;
-  align-items: center;
+  display: block;
   width: 100%;
   min-height: 44px;
-  padding: 8px 0;
+  padding: 11px 0;
   margin: 0;
   border: 0;
   border-radius: 4px;
@@ -165,9 +164,10 @@
   cursor: text;
 }
 
-// The strike-through wipes left to right, across every wrapped line (L2-011).
+// The strike-through wipes left to right, across every wrapped line (L2-011): it needs an
+// inline box, which box-decoration-break repeats on each line.
 .title__text {
-  min-width: 0;
+  display: inline;
   line-height: 1.4;
   overflow-wrap: anywhere;
   background: linear-gradient(currentcolor, currentcolor) 0 55% / 0% 2px no-repeat;

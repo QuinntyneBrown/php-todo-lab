@@ -22,7 +22,7 @@
   width: calc((100% - 6px) / 3);
   border-radius: 999px;
   background: var(--paper);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-sm);
   transition: transform 0.22s var(--ease-out);
 }
 
