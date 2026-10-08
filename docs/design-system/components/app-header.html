@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App header — Tasks design system</title>
+<meta name="description" content="The page header: today's weekday as the h1, the date, and a progress summary with a ring that fills as tasks are done.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Navigation · Product</p>
+      <h1>App header</h1>
+      <p class="ds-lead">The app header tells you what day it is and how much is left. The weekday is the page's only h1; the ring fills as tasks are completed and turns into a tick when everything is done.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Used in v1</span><span class="ds-pill"><code>&lt;header&gt;</code> + <code>&lt;h1&gt;</code></span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>The header sits above the task <a href="card.html">card</a> on the canvas. It has no navigation and no actions: Tasks is one screen (L2-022), so the header is identity and status only. The weekday and date are formatted in the user's locale (L2-022.4); the count is the number of active tasks (L2-007).</p>
+      <p>It replaces the catalog's generic top bar. There are no search, tabs or menu variants because the product has nothing to navigate to; if a second screen is ever added, use <a href="sidebar-navigation.html">sidebar navigation</a> or <a href="tabs.html">tabs</a> under this header rather than adding links to it.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" style="padding-inline: var(--space-10);">
+          <header class="app-header" style="position: relative; width: 100%; padding-bottom: 0;">
+            <div class="app-header__heading"><p class="app-header__title">Wednesday</p><p class="app-header__subtitle">7 October</p></div>
+            <div class="progress-summary">
+              <div class="progress-summary__text"><span class="progress-summary__num">3</span><span class="progress-summary__label">left</span></div>
+              <div class="progress-ring" style="--progress: 0.4;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div>
+            </div>
+            <span class="ds-callout" style="left: -2rem; top: 0.5rem;" aria-hidden="true">1</span>
+            <span class="ds-callout" style="left: -2rem; bottom: 0;" aria-hidden="true">2</span>
+            <span class="ds-callout" style="right: 4.5rem; top: -1.5rem;" aria-hidden="true">3</span>
+            <span class="ds-callout" style="right: -0.5rem; top: -1.5rem;" aria-hidden="true">4</span>
+          </header>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Weekday (h1)</b><small><code>.app-header__title</code>: <code>--text-display</code> (Bricolage 800, 30→52px fluid), <code>--letter-spacing-tighter</code>. The page's one h1 (L2-029.1).</small></div></li>
+          <li><div><b>Date</b><small><code>.app-header__subtitle</code>: medium, <code>--color-fg-muted</code>, <code>--space-2</code> below the weekday.</small></div></li>
+          <li><div><b>Count and label</b><small><code>.progress-summary__num</code> (<code>--text-stat</code>, tabular) over "left" (<code>--text-label</code>, muted); right-aligned.</small></div></li>
+          <li><div><b>Ring</b><small><code>.progress-ring</code>: 5-unit track in <code>--color-border-default</code>, accent fill set by <code>--progress</code> (0–1); a tick appears at 1. 48px at XS, 56px from SM.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>The header has one layout and three content states, driven by the counts.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas" style="padding-inline: var(--space-2);">
+          <div class="app-header"><div class="app-header__heading"><p class="app-header__title">Wednesday</p><p class="app-header__subtitle">7 October</p></div><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">0</span><span class="progress-summary__label">left</span></div><div class="progress-ring" style="--progress: 0;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div></div></div>
+          <div class="app-header"><div class="app-header__heading"><p class="app-header__title">Wednesday</p><p class="app-header__subtitle">7 October</p></div><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">3</span><span class="progress-summary__label">left</span></div><div class="progress-ring" style="--progress: 0.4;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div></div></div>
+          <div class="app-header"><div class="app-header__heading"><p class="app-header__title">Wednesday</p><p class="app-header__subtitle">7 October</p></div><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">All done</span><span class="progress-summary__label" hidden>left</span></div><div class="progress-ring progress-ring--complete" style="--progress: 1;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div></div></div>
+        </div>
+        <div class="ds-example__caption"><span>Empty or loading: "0 left", empty ring. In progress: "3 left", ring at 2 of 5 done. All done: "All done", full ring with tick (pages/page.all-done).</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;header class="app-header"&gt;
+  &lt;div class="app-header__heading"&gt;
+    &lt;h1 class="app-header__title"&gt;Wednesday&lt;/h1&gt;
+    &lt;p class="app-header__subtitle"&gt;7 October&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;div class="progress-summary"&gt;
+    &lt;div class="progress-summary__text"&gt;
+      &lt;span class="progress-summary__num"&gt;3&lt;/span&gt;
+      &lt;span class="progress-summary__label"&gt;left&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="progress-ring" style="--progress: 0.4" aria-hidden="true"&gt;
+      &lt;svg class="progress-ring__svg" viewBox="0 0 48 48"&gt;
+        &lt;circle class="progress-ring__track" cx="24" cy="24" r="20"/&gt;
+        &lt;circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/&gt;
+      &lt;/svg&gt;
+      &lt;svg class="progress-ring__done" viewBox="0 0 20 20"&gt;&lt;path d="M4 10.5l4 4L16 6"/&gt;&lt;/svg&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/header&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>The header is fluid, not sized: the weekday scales with the viewport between 30px and 52px (<code>clamp(var(--font-size-3xl), 8vw, var(--font-size-5xl))</code>) and the ring steps from 48px to 56px at SM. See <a href="#responsive">responsive behaviour</a>.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">State</th><th scope="col">Progress summary</th><th scope="col">When</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">0 left</th><td><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">0</span><span class="progress-summary__label">left</span></div><div class="progress-ring" style="--progress: 0;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div></div></td><td>Loading, load error, or no tasks at all (pages/page.loading, page.empty).</td></tr>
+          <tr><th scope="row">3 left</th><td><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">3</span><span class="progress-summary__label">left</span></div><div class="progress-ring" style="--progress: 0.4;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div></div></td><td>Some done: ring = done ÷ total (2 of 5 = 40%).</td></tr>
+          <tr><th scope="row">All done</th><td><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">All done</span><span class="progress-summary__label" hidden>left</span></div><div class="progress-ring progress-ring--complete" style="--progress: 1;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div></div></td><td>Every task completed (pages/page.all-done); "left" is hidden and the tick scales in.</td></tr>
+        </tbody>
+      </table></div>
+      <p>The header is not interactive, so it has no hover, focus, active or disabled states.</p>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="app-header" style="padding-bottom: 0;"><div class="app-header__heading"><p class="app-header__title">Friday</p><p class="app-header__subtitle">9 October</p></div><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">3</span><span class="progress-summary__label">left</span></div><div class="progress-ring" style="--progress: 0.4;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div></div></div></div>
+        <div data-theme="dark"><div class="app-header" style="padding-bottom: 0;"><div class="app-header__heading"><p class="app-header__title">Friday</p><p class="app-header__subtitle">9 October</p></div><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">All done</span><span class="progress-summary__label" hidden>left</span></div><div class="progress-ring progress-ring--complete" style="--progress: 1;" aria-hidden="true"><svg class="progress-ring__svg" viewBox="0 0 48 48"><circle class="progress-ring__track" cx="24" cy="24" r="20"/><circle class="progress-ring__fill" cx="24" cy="24" r="20" pathLength="100"/></svg><svg class="progress-ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg></div></div></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>XS</b>: weekday at 30px (8vw clamps to the minimum at 320–375px), ring 48px (L2-027.1); the heading shrinks first and can break mid-word (<code>overflow-wrap: anywhere</code>) before the summary is squeezed.</li>
+        <li><b>SM and up</b>: ring 56px; the weekday grows with the viewport until it reaches 52px at about 650px.</li>
+        <li><b>MD, LG, XL</b>: the header spans the 640px column; at LG the whole column is offset 8vh from the top (L2-027.4).</li>
+        <li><b>Open issue (new drift, found here)</b>: at 320–360px, "All done" beside "Wednesday" leaves the weekday about 130px, so the 30px display face breaks the word mid-way (visible in the variants above). The mock has the same geometry with no wrap rule, so there it overflows instead. Proposed fix for the next mock revision: below SM, drop the "All done" text into the visually hidden live announcement and show only the ticked ring.</li>
+        <li>At 200% zoom the summary stays on the same line; "All done" never wraps because the summary is <code>flex: none</code>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Weekday and count use <code>--color-fg-default</code>; date and "left" use <code>--color-fg-muted</code>; ring track <code>--color-border-default</code>; ring fill and tick <code>--color-accent</code>. All sit on <code>--color-bg-canvas</code>. Dark swaps the same roles; the accent ring brightens to sea-400 (9.9:1 against the dark canvas).</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A <code>&lt;header&gt;</code> (banner landmark) containing the page's single <code>&lt;h1&gt;</code>, the weekday (L2-029.1). No ARIA widget pattern; see the <a href="https://www.w3.org/WAI/ARIA/apg/practices/landmark-regions/">APG landmark regions</a> guidance.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Nothing in the header is focusable; Tab goes straight to the composer.</td></tr>
+        <tr><td>Screen reader heading key (<kbd>H</kbd> / <kbd>1</kbd>)</td><td>Jumps to the weekday.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>No focusable parts; the header never receives focus.</p>
+      <h3>Labelling</h3>
+      <p>The ring is <code>aria-hidden</code>: it repeats the visible count. Count changes are announced through the page's polite live region as "2 left" or "All done" (L2-007.5), not by the header itself, so the number is not read on every render.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Weekday and count on canvas</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Date and "left" on canvas</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Ring fill and tick on canvas</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-canvas" data-min="3"></span></div>
+      </div>
+      <p>The ring track is decorative (the count is the information); the fill meets 3:1 against the canvas.</p>
+      <h3>Motion</h3>
+      <p>The ring fill animates <code>stroke-dashoffset</code> over <code>--duration-slow</code>; the tick fades and scales in over <code>--duration-base</code>. Nothing animates on load (L2-024.1); reduced motion makes both instant.</p>
+      <h3>Touch</h3>
+      <p>Nothing to tap.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Weekday and date come from <code>toLocaleDateString</code> with <code>{ weekday: 'long' }</code> and <code>{ day: 'numeric', month: 'long' }</code>, so they follow the user's language and order.</li>
+        <li>Count: a bare number over "left" ("3 left"); "All done" replaces both when nothing is left and at least one task exists.</li>
+        <li>No year, no time, no greeting.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">3</span><span class="progress-summary__label">left</span></div></div></div><figcaption>Use the stat role (<code>--text-stat</code>, line height 1) and snug 1.2 for the two-line summary.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="progress-summary"><div class="progress-summary__text" style="line-height: 1.15;"><span class="progress-summary__num" style="font-size: 1.5rem;">3</span><span class="progress-summary__label" style="font-size: 0.8125rem;">left</span></div></div></div><figcaption>Hand-set 1.15 line height and a 13px label as in the mock (D12, D14); every size comes from the type roles.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><span>Ring 48px at XS, 56px from 36rem, set once in <code>.progress-ring__svg</code>.</span></div><figcaption>Step the ring with a mobile-first <code>min-width</code> query.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><span><code>@media (max-width: 575.98px)</code> overrides scattered per component.</span></div><figcaption>Patch the phone layout with desktop-first max-width queries (D18).</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><span><code>&lt;h1&gt;Wednesday&lt;/h1&gt;</code> and the ring <code>aria-hidden</code>.</span></div><figcaption>One h1 per page, the weekday; the ring is decoration for a number that is already visible.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><span><code>&lt;div role="progressbar" aria-valuenow="40"&gt;</code> on the ring.</span></div><figcaption>Expose the ring as a progressbar: screen readers would hear "40%" and "3 left" for the same fact.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Weekday, count</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Date, "left"</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Ring track</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Ring fill, tick</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Weekday font</td><td><code>--text-display</code></td><td><span data-theme="light"><span data-token="--text-display"></span></span></td><td><span data-theme="dark"><span data-token="--text-display"></span></span></td></tr>
+          <tr><td>Weekday tracking</td><td><code>--letter-spacing-tighter</code></td><td><span data-theme="light"><span data-token="--letter-spacing-tighter"></span></span></td><td><span data-theme="dark"><span data-token="--letter-spacing-tighter"></span></span></td></tr>
+          <tr><td>Count font</td><td><code>--text-stat</code></td><td><span data-theme="light"><span data-token="--text-stat"></span></span></td><td><span data-theme="dark"><span data-token="--text-stat"></span></span></td></tr>
+          <tr><td>"left" font</td><td><code>--text-label</code></td><td><span data-theme="light"><span data-token="--text-label"></span></span></td><td><span data-theme="dark"><span data-token="--text-label"></span></span></td></tr>
+          <tr><td>Bottom padding</td><td><code>--space-5</code></td><td><span data-theme="light"><span data-token="--space-5"></span></span></td><td><span data-theme="dark"><span data-token="--space-5"></span></span></td></tr>
+          <tr><td>Heading-to-summary gap</td><td><code>--space-4</code></td><td><span data-theme="light"><span data-token="--space-4"></span></span></td><td><span data-theme="dark"><span data-token="--space-4"></span></span></td></tr>
+          <tr><td>Count-to-ring gap</td><td><code>--space-3</code></td><td><span data-theme="light"><span data-token="--space-3"></span></span></td><td><span data-theme="dark"><span data-token="--space-3"></span></span></td></tr>
+          <tr><td>Ring size (XS)</td><td><code>--space-12</code></td><td><span data-theme="light"><span data-token="--space-12"></span></span></td><td><span data-theme="dark"><span data-token="--space-12"></span></span></td></tr>
+          <tr><td>Ring fill</td><td><code>--duration-slow</code></td><td><span data-theme="light"><span data-token="--duration-slow"></span></span></td><td><span data-theme="dark"><span data-token="--duration-slow"></span></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>const now = new Date();
+title.textContent = now.toLocaleDateString(undefined, { weekday: 'long' });
+subtitle.textContent = now.toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
+
+ring.style.setProperty('--progress', total ? String(done / total) : '0');
+ring.classList.toggle('progress-ring--complete', total &gt; 0 &amp;&amp; done === total);</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.app-header</code>, <code>__heading</code>, <code>__title</code>, <code>__subtitle</code></td><td>Header row, heading block, weekday h1, date.</td></tr>
+        <tr><td><code>.progress-summary</code>, <code>__text</code>, <code>__num</code>, <code>__label</code></td><td>Count block; hide <code>__label</code> with <code>hidden</code> for "All done".</td></tr>
+        <tr><td><code>.progress-ring</code>, <code>__svg</code>, <code>__track</code>, <code>__fill</code>, <code>__done</code></td><td>Ring; the fill circle needs <code>pathLength="100"</code>.</td></tr>
+        <tr><td><code>--progress</code> (0–1)</td><td>Fraction done.</td></tr>
+        <tr><td><code>.progress-ring--complete</code></td><td>Full ring and tick.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <ul>
+        <li><a href="../../mocks/pages/page.loaded.html">pages/page.loaded</a> (3 left, 40% ring)</li>
+        <li><a href="../../mocks/pages/page.empty.html">pages/page.empty</a>, <a href="../../mocks/pages/page.loading.html">pages/page.loading</a> (0 left)</li>
+        <li><a href="../../mocks/pages/page.all-done.html">pages/page.all-done</a> (All done with tick)</li>
+      </ul>
+      <p>Mock → system: <code>.head</code> → <code>.app-header</code>; <code>.head__day</code> → <code>.app-header__title</code>; <code>.head__date</code> → <code>.app-header__subtitle</code>; <code>.progress</code> → <code>.progress-summary</code>; <code>.progress.is-complete</code> → <code>.progress-ring--complete</code> on the ring; <code>.ring-wrap</code> → <code>.progress-ring</code>; <code>.ring</code> → <code>.progress-ring__svg</code>; <code>data-progress</code> + script dash maths → <code>--progress</code> with <code>pathLength="100"</code>.</p>
+      <p>Drift fixed during extraction: D11 (date margin 6px → 8px), D12 and D14 (summary 13px/1.15 → type roles), D18 (ring size query made mobile-first).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

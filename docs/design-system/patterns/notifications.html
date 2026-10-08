@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Notifications — Tasks design system</title>
+<meta name="description" content="Toast, banner, notice and field message: priority, place, role and lifetime.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Notifications</h1>
+      <p class="ds-lead">Each kind of message has one place and one lifetime, so people learn where to look.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Used in v1</span><span class="ds-pill">L2-008.5, L2-015, L2-028.5, L2-031, L2-042.3</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive behaviour</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Four surfaces tell the person something happened. Each has a fixed job, place and lifetime, so the same kind of message always appears in the same place:</p>
+      <ul>
+        <li><b><a href="../components/toast.html">Toast</a></b>: the result of an action they just took, at the bottom centre. Undo toasts last 6 s; error toasts state what did not happen.</li>
+        <li><b><a href="../components/alert.html">Banner</a></b> (flush danger alert): the list could not load, inside the card in place of the list.</li>
+        <li><b><a href="../components/alert.html">Notice</a></b> (compact warning alert): a condition of the whole app (offline), above the card.</li>
+        <li><b><a href="../components/inline-message.html">Field message</a></b>: a problem with what they typed, under the field.</li>
+      </ul>
+      <p>Plus an invisible fifth: the polite live region that announces every change (see <a href="feedback-and-loading.html#accessibility">Feedback and loading</a>). There is no notification centre and no badge count.</p>
+    </section>
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Priority</th><th scope="col">Surface</th><th scope="col">Role</th><th scope="col">Lifetime</th><th scope="col">Example</th></tr></thead>
+        <tbody>
+        <tr><td>1 — blocks the person's goal</td><td>Banner in the card</td><td><code>role="alert"</code></td><td>Until Try again succeeds</td><td>Couldn't load your tasks. Check your connection and try again.</td></tr>
+        <tr><td>2 — their action failed</td><td>Error toast</td><td><code>role="alert"</code></td><td>Until the next toast replaces it</td><td>Couldn't delete that task.</td></tr>
+        <tr><td>2 — their input is invalid</td><td>Field message</td><td><code>role="alert"</code> + <code>aria-describedby</code></td><td>Until they type again</td><td>Enter a task title.</td></tr>
+        <tr><td>3 — app-wide condition</td><td>Notice above the card</td><td><code>role="status"</code></td><td>While the condition lasts</td><td>You're offline. Changes will fail until you reconnect.</td></tr>
+        <tr><td>4 — reversible success</td><td>Undo toast</td><td><code>role="status"</code></td><td>6 s; paused on hover and focus</td><td>Task deleted · Undo</td></tr>
+        <tr><td>5 — routine success</td><td>Live region only</td><td><code>aria-live="polite"</code></td><td>—</td><td>Task completed</td></tr>
+        </tbody>
+      </table></div>
+      <p>One toast at a time: a new toast replaces the current one (a second delete replaces the first Undo). Errors never auto-dismiss on a timer; they leave when replaced or when the person acts again.</p>
+    </section>
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+<div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas">
+<div class="alert alert--warning alert--compact" role="status"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"/></svg><p class="alert__body">You're offline. Changes will fail until you reconnect.</p></div><section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc1">New task</label><input class="input input--filled input--lg" id="pc1" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-invalid="true" aria-describedby="pc1e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc1e" role="alert">Enter a task title.</p><div class="toolbar"><div class="segmented" role="group" aria-label="Show tasks"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 0">All <span class="segmented__count">0</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Active, 0">Active <span class="segmented__count">0</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 0">Done <span class="segmented__count">0</span></button></div><button class="btn btn--ghost" type="button" aria-disabled="true">Clear completed</button></div><div class="alert alert--danger alert--flush" role="alert"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><p class="alert__body">Couldn't load your tasks. Check your connection and try again.</p><button class="btn" type="button">Try again</button></div></section><div class="cluster" style="justify-content: center;"><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">Couldn&#x27;t add that task. Try again.</span></div></div>
+        </div>
+        <div class="ds-example__caption"><span>All four surfaces in their places (never all at once in practice): notice above, field message under the composer, banner in the list region, toast at the bottom.</span></div>
+      </div>
+    </section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas">
+<div class="stack stack--tight" style="align-items: center;"><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div><div class="toast toast--static" role="status"><span class="toast__message">3 tasks cleared</span><button class="btn btn--ghost" type="button">Undo</button></div><div class="toast toast--static" role="status"><span class="toast__message">1 task cleared</span><button class="btn btn--ghost" type="button">Undo</button></div><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">Couldn&#x27;t add that task. Try again.</span></div><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">Couldn&#x27;t update that task.</span></div><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">Couldn&#x27;t save that change.</span></div><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">Couldn&#x27;t delete that task.</span></div><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">That task no longer exists.</span></div></div>
+        </div>
+        <div class="ds-example__caption"><span>Every toast in the product (L2-004.3, L2-010.2, L2-013.4, L2-014.5, L2-015, L2-017).</span></div>
+      </div>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack"><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">That task no longer exists.</span></div><div class="alert alert--warning alert--compact" role="status"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"/></svg><p class="alert__body">You're offline. Changes will fail until you reconnect.</p></div></div></div>
+        <div data-theme="dark"><div class="stack"><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">That task no longer exists.</span></div><div class="alert alert--warning alert--compact" role="status"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"/></svg><p class="alert__body">You're offline. Changes will fail until you reconnect.</p></div></div></div>
+      </div>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul>
+        <li>Toast: bottom centre at every breakpoint (not bottom-right), 16px from the bottom plus <code>env(safe-area-inset-bottom)</code>, full width minus gutters up to 420px (L2-028.5).</li>
+        <li>The list reserves <code>--layout-safe-bottom</code> (96px + safe area) so the toast never hides the last row.</li>
+        <li>Notice and banner wrap text; the banner's Try again button moves under the text on narrow cards.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<ul>
+        <li>Toasts never take focus (L2-031.5); Undo is reachable by Tab and by Ctrl/Cmd+Z. The 6 s timer pauses while the toast or its button has focus or hover (WCAG 2.2.1).</li>
+        <li>Error toasts use <code>role="alert"</code>, others <code>role="status"</code> (L2-031.2). Do not also push the same text into the live region, or it is read twice.</li>
+        <li>The toast's focus ring uses the action colour so it stays visible on the inverse surface in both themes.</li>
+        <li>Toasts and notices are colour + icon or verb + text; none relies on colour alone.</li>
+      </ul>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+          <div class="ds-pair"><span>Toast text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Undo</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse-accent|--color-bg-inverse" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Undo hovered</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse-accent|--color-bg-inverse-hover" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Error toast</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Field message</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul>
+        <li>Success: object + past participle, no full stop: "Task deleted", "3 tasks cleared" (singular for 1).</li>
+        <li>Failure: "Couldn't" + verb + object + full stop, then a next step only when there is one: "Couldn't add that task. Try again."</li>
+        <li>Action button: one verb: "Undo", "Try again".</li>
+        <li>No "Oops", no "Sorry", no exclamation marks (L2-025).</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div></div><figcaption>One toast, bottom centre, with one action.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="stack stack--tight"><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div></div></div><figcaption>Stack a toast per delete; replace the current one instead.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><section class="card" aria-label="Tasks"><div class="alert alert--danger alert--flush" role="alert"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><p class="alert__body">Couldn't load your tasks. Check your connection and try again.</p><button class="btn" type="button">Try again</button></div></section></div><figcaption>Load failures go in the list region, where the list would be, with Try again.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="toast toast--static toast--danger" role="alert"><span class="toast__message">Couldn&#x27;t load your tasks.</span></div></div><figcaption>Report a load failure in a toast; the empty list stays unexplained after it.</figcaption></figure>
+      </div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<ul>
+        <li><a href="../../mocks/pages/notifications.html">pages/notifications</a> (every toast, banner, field message and announcement)</li>
+        <li><a href="../../mocks/pages/page.deleted.html">pages/page.deleted</a>, <a href="../../mocks/pages/page.load-error.html">pages/page.load-error</a>, <a href="../../mocks/pages/page.offline.html">pages/page.offline</a></li>
+      </ul>
+      <p>Drift fixed: D7, D8, D10, D13, D19, D20.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

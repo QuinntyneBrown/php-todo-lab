@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>List — Tasks design system</title>
+<meta name="description" content="Lists: simple, two-line, with icon, interactive and plain, with every state in both themes.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Data display</p>
+      <h1>List</h1>
+      <p class="ds-lead">A list shows similar items one per row, with an optional icon, one line of metadata and a trailing value.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill ds-pill--warn">Not used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+
+      <p>A list shows a set of similar items, one per row: mock pages, settings, search results. It is the generic sibling of the <a href="task-item.html">task item</a>, which carries the product's own row with checkbox, editable title and delete.</p>
+      <ul>
+        <li>Use a list when items are read top to bottom and have at most a title, one line of metadata and one trailing value.</li>
+        <li>Use a <a href="table.html">table</a> when people compare values across columns; use a <a href="description-list.html">description list</a> for key–value pairs about one thing.</li>
+        <li>Interactive rows contain exactly one link or button that fills the row; the <code>&lt;li&gt;</code> itself is never the control.</li>
+      </ul>
+      <p>v1 renders only the task list; the generic list is part of the system for the launcher and future screens, and its look is taken from the mock launcher tiles and task rows.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+<div class="ds-anatomy"><figure class="ds-anatomy__figure"><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><svg class="icon list__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="list__body"><span class="list__title">todo.html</span><span class="list__meta">Interactive prototype</span></span><span class="list__trailing">1 of 18</span></li></ul></div><span class="ds-callout" style="left: 6%; top: 30%;" aria-hidden="true">1</span><span class="ds-callout" style="left: 30%; top: 22%;" aria-hidden="true">2</span><span class="ds-callout" style="left: 30%; top: 70%;" aria-hidden="true">3</span><span class="ds-callout" style="left: 88%; top: 30%;" aria-hidden="true">4</span></figure><ol class="ds-anatomy__list"><li><div><b>Leading icon (optional)</b><small>20px, <code>--color-fg-muted</code>, <code>aria-hidden</code>.</small></div></li><li><div><b>Title</b><small><code>.list__title</code>, medium weight; wraps, never truncates.</small></div></li><li><div><b>Metadata (optional)</b><small><code>.list__meta</code>, 14px <code>--color-fg-muted</code>.</small></div></li><li><div><b>Trailing (optional)</b><small><code>.list__trailing</code>: a count, date or chevron.</small></div></li></ol></div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+
+      <p>Pick the lightest variant that carries the information.</p>
+      <div class="ds-example"><div class="ds-example__canvas "><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><span class="list__body"><span class="list__title">Renew passport</span></span></li><li class="list__item"><span class="list__body"><span class="list__title">Book dentist appointment</span></span></li><li class="list__item"><span class="list__body"><span class="list__title">Water the plants</span></span></li></ul></div></div><div class="ds-example__caption"><span>Simple: one line per item, divided by a 1px rule.</span></div><details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;ul class="list"&gt;
+  &lt;li class="list__item"&gt;
+    &lt;a class="list__action" href="pages/page.loaded.html"&gt;
+      &lt;span class="list__body"&gt;
+        &lt;span class="list__title"&gt;Loaded&lt;/span&gt;
+        &lt;span class="list__meta"&gt;Five tasks, two done&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre></details></div>
+      <div class="ds-example"><div class="ds-example__canvas "><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><span class="list__body"><span class="list__title">Light</span><span class="list__meta">Follows the product's light token set</span></span></li><li class="list__item"><span class="list__body"><span class="list__title">Dark</span><span class="list__meta">Follows the dark token set</span></span></li></ul></div></div><div class="ds-example__caption"><span>Two-line: title plus metadata.</span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas "><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><svg class="icon list__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="list__body"><span class="list__title">todo.html</span><span class="list__meta">Interactive prototype</span></span></li><li class="list__item"><svg class="icon list__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5"/></svg><span class="list__body"><span class="list__title">states.row.html</span><span class="list__meta">Row states gallery</span></span></li></ul></div></div><div class="ds-example__caption"><span>With icon: the icon reinforces the type; the text still names it.</span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas "><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><a class="list__action" href="#variants"><span class="list__body"><span class="list__title">Loaded</span><span class="list__meta">Five tasks, two done</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li class="list__item"><a class="list__action" href="#variants" aria-current="page"><span class="list__body"><span class="list__title">Empty</span><span class="list__meta">First run</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li class="list__item"><a class="list__action" href="#variants"><span class="list__body"><span class="list__title">Load error</span><span class="list__meta">Banner with Try again</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul></div></div><div class="ds-example__caption"><span>Interactive: each row is one link; the current page carries <code>aria-current</code>.</span></div></div>
+      <div class="ds-example"><div class="ds-example__canvas "><div class="card" style="width: 100%;"><ul class="list list--plain"><li class="list__item"><span class="list__body"><span class="list__title">All</span></span></li><li class="list__item"><span class="list__body"><span class="list__title">Active</span></span></li><li class="list__item"><span class="list__body"><span class="list__title">Done</span></span></li></ul></div></div><div class="ds-example__caption"><span>Plain: no dividers, for short lists inside other components.</span></div></div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Lists have one density: 56px minimum rows (48px plus padding) so every interactive row is a 44px target."><h2><a href="#sizes">Sizes</a></h2><p class="ds-na">Lists have one density: 56px minimum rows (48px plus padding) so every interactive row is a 44px target.</p></section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+
+      <p>Only interactive rows have states. Hover and focus are forced with <code>data-state</code>; selection uses <code>aria-current</code> for navigation or <code>aria-selected</code> inside a listbox.</p>
+      <div class="ds-matrix"><table><thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Current / selected</th></tr></thead><tbody><tr><th scope="row">Interactive row</th><td><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><a class="list__action" href="#variants"><span class="list__body"><span class="list__title">Loaded</span><span class="list__meta">Five tasks</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul></div></td><td><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><a class="list__action" href="#variants" data-state="hover"><span class="list__body"><span class="list__title">Loaded</span><span class="list__meta">Five tasks</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul></div></td><td><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><a class="list__action" href="#variants" data-state="focus"><span class="list__body"><span class="list__title">Loaded</span><span class="list__meta">Five tasks</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul></div></td><td><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><a class="list__action" href="#variants" aria-current="page"><span class="list__body"><span class="list__title">Loaded</span><span class="list__meta">Five tasks</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul></div></td></tr></tbody></table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes"><div data-theme="light"><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><a class="list__action" href="#variants"><span class="list__body"><span class="list__title">Loaded</span><span class="list__meta">Five tasks</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li class="list__item"><a class="list__action" href="#variants" aria-current="page"><span class="list__body"><span class="list__title">Empty</span><span class="list__meta">First run</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li class="list__item"><a class="list__action" href="#variants" data-state="hover"><span class="list__body"><span class="list__title">Load error</span><span class="list__meta">Banner</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul></div></div><div data-theme="dark"><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><a class="list__action" href="#variants"><span class="list__body"><span class="list__title">Loaded</span><span class="list__meta">Five tasks</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li class="list__item"><a class="list__action" href="#variants" aria-current="page"><span class="list__body"><span class="list__title">Empty</span><span class="list__meta">First run</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li><li class="list__item"><a class="list__action" href="#variants" data-state="hover"><span class="list__body"><span class="list__title">Load error</span><span class="list__meta">Banner</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul></div></div></div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+
+      <ul>
+        <li>Lists are a single column at every breakpoint and take the width of their container.</li>
+        <li>Titles and metadata wrap; the trailing value stays on the first line's right edge and never shrinks below its content.</li>
+        <li>On <code>hover: none</code> devices nothing is hidden behind hover; the chevron marks interactive rows.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+
+      <p>Rows read <code>--color-border-default</code> (divider), <code>--color-bg-subtle</code> (hover), <code>--color-accent-subtle</code> (current/selected), <code>--color-fg-muted</code> (icon, metadata, trailing). In dark the divider and hover darken with the surface and the selected tint becomes deep sea. Override the tokens on <code>.list</code> to re-skin a list; never colour individual rows.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+
+      <h3>Role and pattern</h3>
+      <p>A native <code>&lt;ul&gt;</code>/<code>&lt;li&gt;</code>; screen readers announce "list, 3 items". Interactive rows hold a single <code>&lt;a&gt;</code> or <code>&lt;button&gt;</code> (<code>.list__action</code>) whose text is the title and metadata. A selectable list that acts as one widget uses the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/listbox/">APG Listbox</a> pattern instead, with <code>aria-selected</code>.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody><tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves between row links in order.</td></tr><tr><td><kbd>Enter</kbd></td><td>Follows the link or activates the button.</td></tr><tr><td><kbd>Space</kbd></td><td>Activates a button row (links ignore Space).</td></tr></tbody></table></div>
+      <h3>Focus</h3>
+      <p>The ring is drawn inset (<code>outline-offset: -2px</code>) so it stays inside the card's rounded clip.</p>
+      <h3>Labelling</h3>
+      <p>The visible title is the name. Do not add <code>aria-label</code> that differs from the text; icons are <code>aria-hidden</code>. A list that needs a heading gets one immediately before it, or <code>aria-labelledby</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);"><div class="ds-pair"><span>Title on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Metadata on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Title on hovered row</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-subtle" data-min="4.5"></span></div><div class="ds-pair"><span>Title on current row</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div><div class="ds-pair"><span>Focus ring on hovered row</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-subtle" data-min="3"></span></div></div>
+      <h3>Motion</h3>
+      <p>Only the hover background changes, with no transition. Nothing to reduce.</p>
+      <h3>Touch</h3>
+      <p>Interactive rows are at least 56px tall and full width, well above the 44px target.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+
+      <ul>
+        <li>Titles are nouns or short phrases in sentence case: "Load error", not "LOAD ERROR" or "Click to view load error".</li>
+        <li>Metadata adds one fact: a count, a state, a date. Numbers use digits ("5 tasks").</li>
+        <li>Order by what people look for: newest first for tasks, the fixed product order for navigation.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont"><figure class="ds-do"><div class="ds-example__canvas"><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><a class="list__action" href="#variants"><span class="list__body"><span class="list__title">Loaded</span><span class="list__meta">Five tasks</span></span><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a></li></ul></div></div><figcaption>Make the whole row one link with the title as its text.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><span class="list__body"><span class="list__title">Loaded</span></span><a class="link" href="#variants">View</a><a class="link" href="#states">Open</a></li></ul></div></div><figcaption>Put several small links in a row; each "View" is meaningless out of context (2.4.4).</figcaption></figure><figure class="ds-do"><div class="ds-example__canvas"><div class="card" style="width: 100%;"><ul class="list"><li class="list__item"><span class="list__body"><span class="list__title">Renew passport</span></span></li><li class="list__item"><span class="list__body"><span class="list__title">Book dentist appointment</span></span></li></ul></div></div><figcaption>Use <code>.task-list</code> for tasks and <code>.list</code> for everything else.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="card" style="width: 100%;"><ul class="list"><li class="list__item" style="min-height: 2rem; padding-block: 0;"><span class="list__title">Renew passport</span></li><li class="list__item" style="min-height: 2rem; padding-block: 0;"><span class="list__title">Book dentist appointment</span></li></ul></div></div><figcaption>Squeeze rows below the 44px target to fit more; the mocks' rows are 60px for a reason (L2-028.1).</figcaption></figure></div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead><tbody><tr><td>Divider</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr><tr><td>Hover</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr><tr><td>Current / selected</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr><tr><td>Title</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr><tr><td>Icon, metadata, trailing</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr><tr><td>Focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr><tr><td>Row padding</td><td><code>--space-2</code> / <code>--space-4</code></td><td colspan="2"><span data-token="--space-2"></span> / <span data-token="--space-4"></span></td></tr><tr><td>Gap</td><td><code>--space-3</code></td><td colspan="2"><span data-token="--space-3"></span></td></tr><tr><td>Metadata font</td><td><code>--text-body-sm</code></td><td colspan="2"><span data-token="--text-body-sm"></span></td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+
+      <pre><code>&lt;ul class="list"&gt;
+  &lt;li class="list__item"&gt;
+    &lt;a class="list__action" href="pages/page.loaded.html"&gt;
+      &lt;span class="list__body"&gt;
+        &lt;span class="list__title"&gt;Loaded&lt;/span&gt;
+        &lt;span class="list__meta"&gt;Five tasks, two done&lt;/span&gt;
+      &lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody><tr><td><code>.list</code></td><td>The <code>&lt;ul&gt;</code>; rows divided by a hairline.</td></tr><tr><td><code>.list--plain</code></td><td>No dividers.</td></tr><tr><td><code>.list__item</code></td><td>A row.</td></tr><tr><td><code>.list__action</code></td><td>The single link or button that fills an interactive row.</td></tr><tr><td><code>.list__icon</code>, <code>.list__body</code>, <code>.list__title</code>, <code>.list__meta</code>, <code>.list__trailing</code></td><td>Row parts.</td></tr><tr><td><code>aria-current="page"</code> on the action / <code>aria-selected="true"</code> on the item</td><td>Current or selected row tint.</td></tr><tr><td><code>data-state="hover|focus"</code></td><td>Documentation only.</td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/index.html">index.html</a> (launcher tiles: one link per item, title plus one line of description)</li>
+        <li><a href="../../mocks/pages/page.loaded.html">pages/page.loaded</a> (row rhythm, dividers and hover tint shared with the task row)</li>
+      </ul>
+      <p>Class mapping: mock-only <code>.tiles</code>/<code>.tile</code> → <code>.list</code> rows or <code>.card.card--interactive</code>; row metrics from <code>.item</code>.</p>
+      <p>Drift fixed during extraction: D11 (row padding on the 4px grid), D22 (the generic list is a system addition built from task-row metrics).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

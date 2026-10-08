@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Empty state — Tasks design system</title>
+<meta name="description" content="First-run and filtered empty states with their illustrations, plus compact and action variants.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Empty state</h1>
+      <p class="ds-lead">What the list shows when there is nothing in it: a small illustration, a title and the next step.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>An empty state fills the list area when there is nothing to show, and says why and what to do next. The product has three: <b>first run</b> (L2-008.2), <b>no active tasks</b> under the Active filter (L2-006.4), and <b>nothing completed</b> under the Done filter (L2-006.5). Each is an illustration, a title and one sentence; the composer directly above is the action, so v1 empty states have no button.</p><ul><li>Use an empty state when a successful load returns nothing. Use the <a href="alert.html">banner</a> when the load failed; never an empty state.</li><li>Use the <a href="error-page.html">error page</a> only when the whole screen cannot render.</li><li>When everything is complete under All, the list still shows the done tasks; the header ring says "All done", not an empty state.</li></ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy"><figure class="ds-anatomy__figure"><div style="width: 100%;"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><p class="empty-state__title">Nothing here yet</p><p class="empty-state__text">Type a task above and press Enter.</p></div></div><span class="ds-callout" style="left: 8%; top: 30%;" aria-hidden="true">1</span><span class="ds-callout" style="left: 8%; top: 56%;" aria-hidden="true">2</span><span class="ds-callout" style="left: 8%; top: 70%;" aria-hidden="true">3</span></figure><ol class="ds-anatomy__list"><li><div><b>Illustration</b><small>88px inline SVG from the art palette: accent-subtle disc, accent line work, one sun dot. <code>aria-hidden</code>.</small></div></li><li><div><b>Title</b><small><code>--text-h2</code> (24px display, 800), tight tracking. A heading in the page outline.</small></div></li><li><div><b>Text</b><small>One sentence, muted, capped at 30ch, centred.</small></div></li></ol></div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas"><div class="card" style="width: 100%;"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><h2 class="empty-state__title">Nothing here yet</h2><p class="empty-state__text">Type a task above and press Enter.</p></div></div></div><div class="ds-example__caption"><span>First run (L2-008.2): the composer has focus so the next keystroke starts the first task.</span></div><details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class=&quot;empty-state&quot;&gt;
+  &lt;svg class=&quot;empty-state__art&quot; viewBox=&quot;0 0 88 88&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;
+  &lt;h2 class=&quot;empty-state__title&quot;&gt;Nothing here yet&lt;/h2&gt;
+  &lt;p class=&quot;empty-state__text&quot;&gt;Type a task above and press Enter.&lt;/p&gt;
+&lt;/div&gt;</code></pre></details></div><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas"><div class="card" style="width: 100%;"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><path class="art-line" d="M28 47l11 11 22-26"/><path class="art-ray" d="M71 13l-3 6M79 26l-6 2M62 6v6"/><circle class="art-highlight" cx="14" cy="24" r="4"/></svg><h2 class="empty-state__title">All clear</h2><p class="empty-state__text">Nothing left to do.</p></div></div></div><div class="ds-example__caption"><span>Active filter, nothing left (L2-006.4): a celebratory tick with sun rays.</span></div></div><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas"><div class="card" style="width: 100%;"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-line art-line--quiet" cx="44" cy="46" r="16"/></svg><h2 class="empty-state__title">Nothing completed yet</h2><p class="empty-state__text">Tick a task and it will show up here.</p></div></div></div><div class="ds-example__caption"><span>Done filter, nothing completed (L2-006.5): a quiet dashed ring.</span></div></div><h3>With actions (system addition)</h3><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas"><div class="card" style="width: 100%;"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-line art-line--quiet" cx="44" cy="46" r="16"/></svg><h2 class="empty-state__title">No tasks match</h2><p class="empty-state__text">Try a different filter.</p><div class="empty-state__actions"><button class="btn" type="button">Show all tasks</button></div></div></div></div><div class="ds-example__caption"><span>One primary or secondary action plus at most one link. Only when the fix is not already on screen (D22).</span></div></div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Two sizes. <b>Full</b> (48px block padding, 88px art, 24px title) fills a list. <b>Compact</b> (24px padding, 56px art, 20px title) fits a panel or table body.</p><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas"><div class="card" style="flex: 1 1 18rem;"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><h2 class="empty-state__title">Nothing here yet</h2><p class="empty-state__text">Type a task above and press Enter.</p></div></div><div class="card" style="flex: 1 1 14rem;"><div class="empty-state empty-state--compact"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><h2 class="empty-state__title">Nothing here yet</h2><p class="empty-state__text">Type a task above and press Enter.</p></div></div></div><div class="ds-example__caption"><span>Full and <code>.empty-state--compact</code>.</span></div></div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Empty states are static content with no interactive states of their own; any action button follows <a href="button.html">Button</a>. The matrix shows each variant at rest and with an action focused.</p><div class="ds-matrix"><table><thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Action hover</th><th scope="col">Action focus</th></tr></thead><tbody><tr><th scope="row">First run</th><td><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><h2 class="empty-state__title">Nothing here yet</h2><p class="empty-state__text">Type a task above and press Enter.</p></div></td><td><p>No action.</p></td><td><p>No action; focus is in the composer.</p></td></tr><tr><th scope="row">All clear</th><td><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><path class="art-line" d="M28 47l11 11 22-26"/><path class="art-ray" d="M71 13l-3 6M79 26l-6 2M62 6v6"/><circle class="art-highlight" cx="14" cy="24" r="4"/></svg><h2 class="empty-state__title">All clear</h2><p class="empty-state__text">Nothing left to do.</p></div></td><td><p>No action.</p></td><td><p>No action.</p></td></tr><tr><th scope="row">Nothing completed</th><td><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-line art-line--quiet" cx="44" cy="46" r="16"/></svg><h2 class="empty-state__title">Nothing completed yet</h2><p class="empty-state__text">Tick a task and it will show up here.</p></div></td><td><p>No action.</p></td><td><p>No action.</p></td></tr><tr><th scope="row">With action</th><td><div class="empty-state empty-state--compact"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-line art-line--quiet" cx="44" cy="46" r="16"/></svg><h2 class="empty-state__title">No tasks match</h2><p class="empty-state__text">Try a different filter.</p><div class="empty-state__actions"><button class="btn" type="button">Show all tasks</button></div></div></td><td><div class="empty-state empty-state--compact"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-line art-line--quiet" cx="44" cy="46" r="16"/></svg><h2 class="empty-state__title">No tasks match</h2><p class="empty-state__text">Try a different filter.</p><div class="empty-state__actions"><button class="btn" type="button" data-state="hover">Show all tasks</button></div></div></td><td><div class="empty-state empty-state--compact"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-line art-line--quiet" cx="44" cy="46" r="16"/></svg><h2 class="empty-state__title">No tasks match</h2><p class="empty-state__text">Try a different filter.</p><div class="empty-state__actions"><button class="btn" type="button" data-state="focus">Show all tasks</button></div></div></td></tr></tbody></table></div><h3>Both themes</h3><div class="ds-themes"><div data-theme="light"><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0;"><div class="card"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><h2 class="empty-state__title">Nothing here yet</h2><p class="empty-state__text">Type a task above and press Enter.</p></div></div><div class="card"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><path class="art-line" d="M28 47l11 11 22-26"/><path class="art-ray" d="M71 13l-3 6M79 26l-6 2M62 6v6"/><circle class="art-highlight" cx="14" cy="24" r="4"/></svg><h2 class="empty-state__title">All clear</h2><p class="empty-state__text">Nothing left to do.</p></div></div></div></div><div data-theme="dark"><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0;"><div class="card"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><h2 class="empty-state__title">Nothing here yet</h2><p class="empty-state__text">Type a task above and press Enter.</p></div></div><div class="card"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><path class="art-line" d="M28 47l11 11 22-26"/><path class="art-ray" d="M71 13l-3 6M79 26l-6 2M62 6v6"/><circle class="art-highlight" cx="14" cy="24" r="4"/></svg><h2 class="empty-state__title">All clear</h2><p class="empty-state__text">Nothing left to do.</p></div></div></div></div></div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul><li>Centred in the card at every breakpoint; 24px side padding keeps the text clear of the card edge at 320px.</li><li>The 30ch cap keeps the sentence to one or two lines from 320px to 1920px.</li><li>The illustration never scales with the viewport; switch to compact in narrow panels instead.</li></ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The illustration uses six art classes mapped to semantic tokens: <code>.art-fill</code> (<code>--color-accent-subtle</code>), <code>.art-line</code> (<code>--color-accent</code>), <code>.art-line--quiet</code> (<code>--color-border-strong</code>, dashed), <code>.art-highlight</code> and <code>.art-ray</code> (<code>--color-highlight</code>, sun) and <code>.art-paper</code> (<code>--color-bg-surface</code>). New illustrations draw with these classes only, so they follow both themes automatically.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3><p>A heading and a paragraph; the art is <code>aria-hidden</code>. No ARIA pattern applies. When a filter change produces the empty state, the polite live region announces the count ("0 active"), not the empty-state text.</p><h3>Keyboard</h3><div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody><tr><td><kbd>Tab</kbd></td><td>Reaches the action, if any. v1 empty states have none.</td></tr></tbody></table></div><h3>Focus</h3><p>Never moves focus. On first run focus is already in the composer (L2-022.3).</p><h3>Labelling</h3><p>The title is an <code>h2</code> under the page's single <code>h1</code> (the weekday, L2-029.1).</p><h3>Contrast</h3><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);"><div class="ds-pair"><span>Title on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Text on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Sun accents (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-highlight|--color-bg-surface" data-min="1"></span></div></div><h3>Motion</h3><p>None. Empty states appear without animation; when the last row leaves, its 250ms exit plays and the empty state replaces the list.</p><h3>Touch</h3><p>Only the optional action is a target (44px).</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul><li>Title: the situation in two or three words, sentence case, no full stop: "Nothing here yet", "All clear", "Nothing completed yet".</li><li>Text: one sentence telling the person how to get content here: "Type a task above and press Enter." "Tick a task and it will show up here."</li><li>No "Oops", no exclamation marks, no blame ("You haven't…") (L2-025).</li></ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont"><figure class="ds-do"><div class="ds-example__canvas"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><h2 class="empty-state__title">Nothing here yet</h2><p class="empty-state__text">Type a task above and press Enter.</p></div></div><figcaption>Title at <code>--text-h2</code> (24px), the next step on the scale (D12).</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/></svg><h2 class="empty-state__title" style="font-size: 1.375rem;">Nothing here yet</h2><p class="empty-state__text">Type a task above and press Enter.</p></div></div><figcaption>Title at an off-scale 22px, as in the mocks (D12).</figcaption></figure><figure class="ds-do"><div class="ds-example__canvas"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><path class="art-line" d="M28 47l11 11 22-26"/><path class="art-ray" d="M71 13l-3 6M79 26l-6 2M62 6v6"/><circle class="art-highlight" cx="14" cy="24" r="4"/></svg><h2 class="empty-state__title">All clear</h2><p class="empty-state__text">Nothing left to do.</p></div></div><figcaption>Calm, specific copy: "All clear. Nothing left to do."</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="empty-state"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><path class="art-line" d="M28 47l11 11 22-26"/><path class="art-ray" d="M71 13l-3 6M79 26l-6 2M62 6v6"/><circle class="art-highlight" cx="14" cy="24" r="4"/></svg><h2 class="empty-state__title">Woohoo! You did it!</h2><p class="empty-state__text">Oops, nothing to show!</p><div class="empty-state__actions"><button class="btn btn--primary" type="button">Add task</button></div></div></div><figcaption>Exclaim, and duplicate the Add task button that is already in the composer above.</figcaption></figure></div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead><tbody><tr><td>Art disc</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr><tr><td>Art lines</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr><tr><td>Art sun</td><td><code>--color-highlight</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-highlight" data-swatch></i><span data-token="--color-highlight"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-highlight" data-swatch></i><span data-token="--color-highlight"></span></span></td></tr><tr><td>Art quiet line</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr><tr><td>Text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr><tr><td>Title</td><td><code>--text-h2, --letter-spacing-tight</code></td><td colspan="2"><span data-token="--text-h2"></span></td></tr><tr><td>Padding full / compact</td><td><code>--space-12 --space-6 / --space-6 --space-4</code></td><td colspan="2"><span data-token="--space-12"></span> / <span data-token="--space-6"></span></td></tr><tr><td>Art to title</td><td><code>--space-4</code></td><td colspan="2"><span data-token="--space-4"></span></td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;div class=&quot;empty-state&quot;&gt;
+  &lt;svg class=&quot;empty-state__art&quot; viewBox=&quot;0 0 88 88&quot; aria-hidden=&quot;true&quot;&gt;
+    &lt;circle class=&quot;art-fill&quot; cx=&quot;44&quot; cy=&quot;46&quot; r=&quot;38&quot;/&gt;
+    &lt;path class=&quot;art-line&quot; d=&quot;M28 47l11 11 22-26&quot;/&gt;
+    &lt;path class=&quot;art-ray&quot; d=&quot;M71 13l-3 6M79 26l-6 2M62 6v6&quot;/&gt;
+    &lt;circle class=&quot;art-highlight&quot; cx=&quot;14&quot; cy=&quot;24&quot; r=&quot;4&quot;/&gt;
+  &lt;/svg&gt;
+  &lt;h2 class=&quot;empty-state__title&quot;&gt;All clear&lt;/h2&gt;
+  &lt;p class=&quot;empty-state__text&quot;&gt;Nothing left to do.&lt;/p&gt;
+&lt;/div&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody><tr><td><code>.empty-state</code></td><td>Full size, centred.</td></tr><tr><td><code>.empty-state--compact</code></td><td>Compact size.</td></tr><tr><td><code>.empty-state__art|__title|__text|__actions</code></td><td>Parts.</td></tr><tr><td><code>.art-fill</code> <code>.art-paper</code> <code>.art-line</code> <code>.art-line--quiet</code> <code>.art-line--danger</code> <code>.art-highlight</code> <code>.art-ray</code></td><td>Illustration palette.</td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <ul><li><a href="../../mocks/pages/page.empty.html">pages/page.empty</a> (first run)</li><li><a href="../../mocks/pages/page.filter-active.empty.html">pages/page.filter-active.empty</a> (All clear)</li><li><a href="../../mocks/pages/page.filter-done.empty.html">pages/page.filter-done.empty</a> (Nothing completed yet)</li><li><a href="../../mocks/pages/page.all-done.html">pages/page.all-done</a> (why All never shows an empty state)</li></ul><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Mock class</th><th scope="col">System class</th></tr></thead><tbody><tr><td><code>.state</code></td><td><code>.empty-state</code></td></tr><tr><td><code>.state__art</code></td><td><code>.empty-state__art</code></td></tr><tr><td><code>.state__art .a</code></td><td><code>.art-fill</code></td></tr><tr><td><code>.state__art .b</code></td><td><code>.art-line</code></td></tr><tr><td><code>.state__art .b--quiet</code></td><td><code>.art-line--quiet</code></td></tr><tr><td><code>.state__art .c</code></td><td><code>.art-highlight</code></td></tr><tr><td><code>.state__art .d</code></td><td><code>.art-ray</code></td></tr><tr><td><code>.state__art .e</code></td><td><code>.art-paper</code></td></tr><tr><td><code>.state__title</code></td><td><code>.empty-state__title</code></td></tr><tr><td><code>.state__text</code></td><td><code>.empty-state__text</code></td></tr></tbody></table></div><p>Drift fixed during extraction: D12 (22px title → 24px). Actions and the compact size are system additions (D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

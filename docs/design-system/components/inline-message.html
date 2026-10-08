@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inline message — Tasks design system</title>
+<meta name="description" content="Field hints, errors and confirmations linked with aria-describedby.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Inline message</h1>
+      <p class="ds-lead">One sentence under a field that says what to type or what went wrong with it.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>An inline message is one short sentence attached to a field: a hint before typing, an error after a failed submit, or a confirmation. It lives under the field it describes and is linked to it with <code>aria-describedby</code>. In v1 every inline message is an error at the composer (L2-002.1, L2-003.2, L2-004.4) or under a row being edited (L2-013.2).</p><ul><li>Use an inline message when the fix is in the field. Use an <a href="alert.html">alert</a> when the problem is the whole list, and a <a href="toast.html">toast</a> for the result of an action elsewhere.</li><li>Never show an error before the person has submitted; the composer shows nothing while typing except the character counter from 160 characters.</li></ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy"><figure class="ds-anatomy__figure"><div style="width: 100%;"><div class="field" style="width: 100%;"><label class="field__label" for="fa">Task title</label><input class="input" id="fa" type="text" value="" aria-describedby="ma" aria-invalid="true"><p class="message message--error" id="ma"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>Enter a task title.</p></div></div><span class="ds-callout" style="left: 50%; top: 52%;" aria-hidden="true">1</span><span class="ds-callout" style="left: 10%; top: 84%;" aria-hidden="true">2</span><span class="ds-callout" style="left: 40%; top: 84%;" aria-hidden="true">3</span></figure><ol class="ds-anatomy__list"><li><div><b>Field</b><small>The control the message describes; gets <code>aria-invalid="true"</code> for errors.</small></div></li><li><div><b>Icon (optional)</b><small>16px, inherits the message colour; <code>aria-hidden</code>.</small></div></li><li><div><b>Text</b><small>14px medium (<code>--text-body-sm</code> at 500), tone colour; referenced by the field's <code>aria-describedby</code>.</small></div></li></ol></div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field" style="width: 100%;"><label class="field__label" for="fv1">Task title</label><input class="input" id="fv1" type="text" value="" aria-describedby="mv1"><p class="message message--hint" id="mv1">Up to 200 characters.</p></div><div class="field" style="width: 100%;"><label class="field__label" for="fv2">Task title</label><input class="input" id="fv2" type="text" value="" aria-describedby="mv2" aria-invalid="true"><p class="message message--error" id="mv2">Enter a task title.</p></div><div class="field" style="width: 100%;"><label class="field__label" for="fv3">Task title</label><input class="input" id="fv3" type="text" value="Call mom Sunday" aria-describedby="mv3"><p class="message message--success" id="mv3">Saved.</p></div></div><div class="ds-example__caption"><span>Hint, error and success. Only error is used in v1; hint and success are system additions (D22).</span></div><details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class=&quot;field&quot;&gt;
+  &lt;label class=&quot;field__label&quot; for=&quot;title&quot;&gt;Task title&lt;/label&gt;
+  &lt;input class=&quot;input&quot; id=&quot;title&quot; type=&quot;text&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;titleError&quot;&gt;
+  &lt;p class=&quot;message message--error&quot; id=&quot;titleError&quot;&gt;Enter a task title.&lt;/p&gt;
+&lt;/div&gt;</code></pre></details></div><h3>In the product</h3><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--stack"><div class="card" style="width: 100%;"><form class="composer" novalidate><div class="composer__field"><label class="visually-hidden" for="cip1">New task</label><input class="input input--filled input--lg" id="cip1" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-invalid="true" aria-describedby="cmp1"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="cmp1">Enter a task title.</p></div><div class="card" style="width: 100%;"><form class="composer" novalidate><div class="composer__field"><label class="visually-hidden" for="cip2">New task</label><input class="input input--filled input--lg" id="cip2" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Plan the team offsite" aria-invalid="true" aria-describedby="cmp2"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="cmp2">You have 500 tasks. Finish or delete some to add more.</p></div><div class="card" style="width: 100%;"><form class="composer" novalidate><div class="composer__field"><label class="visually-hidden" for="cip3">New task</label><input class="input input--filled input--lg" id="cip3" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Buy oat milk" aria-invalid="true" aria-describedby="cmp3"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="cmp3">The title field must not be greater than 200 characters.</p></div></div><div class="ds-example__caption"><span>At the composer: empty submit (L2-002.1), task limit (L2-003.2), server 422 text shown as is (L2-004.4). The typed text is kept.</span></div></div><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas"><div class="card" style="width: 100%;"><ul class="task-list"><li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Call mom"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><input class="input task__edit" type="text" value="Call mom" aria-label="Edit task title" aria-invalid="true" aria-describedby="te1"><p class="message message--error task__message" id="te1">A task needs a title.</p></div><span></span></li></ul></div></div><div class="ds-example__caption"><span>Under a row being edited (L2-013.2): the original title comes back and the message explains why.</span></div></div><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field" style="width: 100%;"><label class="field__label" for="fv4">Task title</label><input class="input" id="fv4" type="text" value="" aria-describedby="mv4" aria-invalid="true"><p class="message message--error" id="mv4"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>Enter a task title.</p></div><div class="field" style="width: 100%;"><label class="field__label" for="fv5">Task title</label><input class="input" id="fv5" type="text" value="" aria-describedby="mv5"><p class="message message--hint" id="mv5"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5v.01"/></svg>Up to 200 characters.</p></div></div><div class="ds-example__caption"><span>With a leading icon, for forms where several messages can appear at once.</span></div></div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="One size: 14px medium, matching both field errors in the product (D12)."><h2><a href="#sizes">Sizes</a></h2><p class="ds-na">One size: 14px medium, matching both field errors in the product (D12).</p></section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>A message has no interactive states. What changes is whether it is present and how the field around it looks.</p><div class="ds-matrix"><table><thead><tr><th scope="col">Tone</th><th scope="col">Field default</th><th scope="col">Field focused</th><th scope="col">Field invalid</th><th scope="col">Field disabled</th></tr></thead><tbody><tr><th scope="row">Hint</th><td><div class="field" style="width: 100%;"><label class="field__label" for="fs1">Task title</label><input class="input" id="fs1" type="text" value="" aria-describedby="ms1"><p class="message message--hint" id="ms1">Up to 200 characters.</p></div></td><td><div class="field" style="width: 100%;"><label class="field__label" for="fs2">Task title</label><input class="input" data-state="focus" id="fs2" type="text" value="" aria-describedby="ms2"><p class="message message--hint" id="ms2">Up to 200 characters.</p></div></td><td><p>Hints do not mark the field invalid.</p></td><td><div class="field" style="width: 100%;"><label class="field__label" for="fs3">Task title</label><input class="input" disabled id="fs3" type="text" value="" aria-describedby="ms3"><p class="message message--hint" id="ms3">Up to 200 characters.</p></div></td></tr><tr><th scope="row">Error</th><td><p>Errors only appear after a submit.</p></td><td><div class="field" style="width: 100%;"><label class="field__label" for="fs4">Task title</label><input class="input" data-state="focus" id="fs4" type="text" value="" aria-describedby="ms4" aria-invalid="true"><p class="message message--error" id="ms4">Enter a task title.</p></div></td><td><div class="field" style="width: 100%;"><label class="field__label" for="fs5">Task title</label><input class="input" id="fs5" type="text" value="" aria-describedby="ms5" aria-invalid="true"><p class="message message--error" id="ms5">Enter a task title.</p></div></td><td><p>A disabled field cannot be submitted, so it has no error.</p></td></tr><tr><th scope="row">Success</th><td><div class="field" style="width: 100%;"><label class="field__label" for="fs6">Task title</label><input class="input" id="fs6" type="text" value="Call mom" aria-describedby="ms6"><p class="message message--success" id="ms6">Saved.</p></div></td><td><div class="field" style="width: 100%;"><label class="field__label" for="fs7">Task title</label><input class="input" data-state="focus" id="fs7" type="text" value="Call mom" aria-describedby="ms7"><p class="message message--success" id="ms7">Saved.</p></div></td><td><p>n/a</p></td><td><p>n/a</p></td></tr></tbody></table></div><ul><li><b>Appears</b> on submit, never on blur or while typing (L2-002).</li><li><b>Clears</b> as soon as the person types again; the field loses <code>aria-invalid</code> at the same moment.</li><li><b>Hidden</b> messages keep their element (with <code>hidden</code>) so the <code>aria-describedby</code> reference stays valid.</li></ul><h3>Both themes</h3><div class="ds-themes"><div data-theme="light"><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0;"><div class="field" style="width: 100%;"><label class="field__label" for="ft1">Task title</label><input class="input" id="ft1" type="text" value="" aria-describedby="mt1"><p class="message message--hint" id="mt1">Up to 200 characters.</p></div><div class="field" style="width: 100%;"><label class="field__label" for="ft2">Task title</label><input class="input" id="ft2" type="text" value="" aria-describedby="mt2" aria-invalid="true"><p class="message message--error" id="mt2">Enter a task title.</p></div><div class="field" style="width: 100%;"><label class="field__label" for="ft3">Task title</label><input class="input" id="ft3" type="text" value="Call mom" aria-describedby="mt3"><p class="message message--success" id="mt3">Saved.</p></div></div></div><div data-theme="dark"><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0;"><div class="field" style="width: 100%;"><label class="field__label" for="ft1">Task title</label><input class="input" id="ft1" type="text" value="" aria-describedby="mt1"><p class="message message--hint" id="mt1">Up to 200 characters.</p></div><div class="field" style="width: 100%;"><label class="field__label" for="ft2">Task title</label><input class="input" id="ft2" type="text" value="" aria-describedby="mt2" aria-invalid="true"><p class="message message--error" id="mt2">Enter a task title.</p></div><div class="field" style="width: 100%;"><label class="field__label" for="ft3">Task title</label><input class="input" id="ft3" type="text" value="Call mom" aria-describedby="mt3"><p class="message message--success" id="mt3">Saved.</p></div></div></div></div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul><li>The message spans the width of its field and wraps; it never truncates. The task-limit sentence wraps to two lines at 320px.</li><li>At the composer it sits below the field row, inset 16px to line up with the input text, at every breakpoint (the Add task button collapses to its icon below 576px but the message keeps the full width).</li></ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Tone colour comes straight from semantic tokens: <code>--color-danger-fg</code>, <code>--color-success-fg</code>, <code>--color-fg-muted</code> for hints. There are no component tokens; to restyle, override the semantic role in a theme. In dark the error text lightens to <code>--palette-red-300</code>.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3><p>A paragraph referenced from the field with <code>aria-describedby</code>, plus <code>aria-invalid="true"</code> on the field for errors (WCAG 3.3.1). In v1 the error paragraph also carries <code>role="alert"</code> so it is announced when it appears after a submit even though focus stays in the field. Hints are never live regions.</p><h3>Keyboard</h3><p>Nothing to operate: the component is not focusable.</p><h3>Focus</h3><p>Focus stays in the field (the composer keeps focus after a failed submit so the person can type the fix). The message is not focusable.</p><h3>Labelling</h3><p>The text names the problem and the fix in the field's terms ("Enter a task title."). It is read after the field's label because of <code>aria-describedby</code>. Icons are <code>aria-hidden</code>.</p><h3>Contrast</h3><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);"><div class="ds-pair"><span>Error under the composer</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Error on page</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-canvas" data-min="4.5"></span></div><div class="ds-pair"><span>Hint</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Success</span><span class="ds-pair__ratio" data-contrast="--color-success-fg|--color-bg-surface" data-min="4.5"></span></div><div class="ds-pair"><span>Invalid field border</span><span class="ds-pair__ratio" data-contrast="--color-danger-solid|--color-bg-surface" data-min="3"></span></div></div><h3>Motion</h3><p>The message appears without animation. On an empty submit the composer field gives one short shake (<code>.composer--shake</code>, 250ms), removed under reduced motion (L2-024.2).</p><h3>Touch</h3><p>Not interactive. The message never covers the field or the Add task button.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul><li>One sentence, ending with a full stop, telling the person what to do: "Enter a task title." not "Title is required".</li><li>When the cause is not obvious, state it and then the way out: "You have 500 tasks. Finish or delete some to add more."</li><li>Server validation text is shown as the server wrote it (L2-004.4); keep the API messages in plain language.</li><li>No "Error:" prefix, no apology, no exclamation mark (L2-025).</li></ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont"><figure class="ds-do"><div class="ds-example__canvas"><div class="field" style="width: 100%;"><label class="field__label" for="fd1">Task title</label><input class="input" id="fd1" type="text" value="" aria-describedby="md1" aria-invalid="true"><p class="message message--error" id="md1">Enter a task title.</p></div></div><figcaption>Use one size for every field error: 14px medium (D12).</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="field" style="width: 100%;"><label class="field__label" for="dd1">Task title</label><input class="input" id="dd1" type="text" aria-invalid="true" aria-describedby="dm1"><p class="message message--error" id="dm1" style="font-size: 0.9375rem;">Enter a task title.</p></div></div><figcaption>Size errors per component; the composer error was 15px while the edit error was 14px (D12).</figcaption></figure><figure class="ds-do"><div class="ds-example__canvas"><div class="field" style="width: 100%;"><label class="field__label" for="fd2">Task title</label><input class="input" id="fd2" type="text" value="" aria-describedby="md2" aria-invalid="true"><p class="message message--error" id="md2">Enter a task title.</p></div></div><figcaption>Say what to do.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="field" style="width: 100%;"><label class="field__label" for="fd3">Task title</label><input class="input" id="fd3" type="text" value="" aria-describedby="md3" aria-invalid="true"><p class="message message--error" id="md3">Invalid input!</p></div></div><figcaption>Write a code-like or shouting message that does not help.</figcaption></figure><figure class="ds-do"><div class="ds-example__canvas"><div style="width: 100%;"><div class="card" style="width: 100%;"><form class="composer" novalidate><div class="composer__field"><label class="visually-hidden" for="cid4">New task</label><input class="input input--filled input--lg" id="cid4" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-invalid="true" aria-describedby="cmd4"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="cmd4">Enter a task title.</p></div></div></div><figcaption>Mark the field invalid as well as showing the text, so the error is not colour alone.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div style="width: 100%;"><div class="card" style="width: 100%;"><form class="composer" novalidate><div class="composer__field"><label class="visually-hidden" for="cid5">New task</label><input class="input input--filled input--lg" id="cid5" type="text" maxlength="200" placeholder="Enter a task title." autocomplete="off" value="" aria-describedby="cmd5"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form></div></div></div><figcaption>Put the error in the placeholder; it disappears as soon as the person types.</figcaption></figure></div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead><tbody><tr><td>Error text</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr><tr><td>Success text</td><td><code>--color-success-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-fg" data-swatch></i><span data-token="--color-success-fg"></span></span></td></tr><tr><td>Hint text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr><tr><td>Invalid field border</td><td><code>--color-danger-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td></tr><tr><td>Type</td><td><code>--text-body-sm (weight --font-weight-medium)</code></td><td colspan="2"><span data-token="--text-body-sm"></span></td></tr><tr><td>Gap from field</td><td><code>--space-2</code></td><td colspan="2"><span data-token="--space-2"></span></td></tr><tr><td>Icon gap</td><td><code>--space-1</code></td><td colspan="2"><span data-token="--space-1"></span></td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;form class=&quot;composer&quot; novalidate&gt;
+  &lt;div class=&quot;composer__field&quot;&gt;
+    &lt;label class=&quot;visually-hidden&quot; for=&quot;newTask&quot;&gt;New task&lt;/label&gt;
+    &lt;input class=&quot;input input--filled input--lg&quot; id=&quot;newTask&quot; aria-invalid=&quot;true&quot; aria-describedby=&quot;newTaskError&quot; …&gt;
+  &lt;/div&gt;
+  &lt;button class=&quot;btn btn--primary btn--lg btn--collapse&quot; type=&quot;submit&quot; aria-label=&quot;Add task&quot;&gt;…&lt;/button&gt;
+&lt;/form&gt;
+&lt;p class=&quot;message message--error composer__message&quot; id=&quot;newTaskError&quot; role=&quot;alert&quot;&gt;Enter a task title.&lt;/p&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody><tr><td><code>.message</code></td><td>Base: 14px medium, flex row for an optional icon.</td></tr><tr><td><code>.message--hint|error|success</code></td><td>Tone.</td></tr><tr><td><code>.composer__message</code></td><td>Insets the message under the composer row.</td></tr><tr><td><code>.task__message</code></td><td>Spacing under the inline edit field.</td></tr><tr><td><code>hidden</code></td><td>Keeps the element (and its id) while there is nothing to say.</td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <ul><li><a href="../../mocks/pages/states.composer.html">pages/states.composer</a> (empty submit, task limit, server validation)</li><li><a href="../../mocks/pages/notifications.html">pages/notifications</a> (field messages)</li><li><a href="../../mocks/pages/states.row.html">pages/states.row</a> (empty edit)</li><li><a href="../../mocks/pages/page.limit.html">pages/page.limit</a> (task limit in context)</li></ul><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Mock class</th><th scope="col">System class</th></tr></thead><tbody><tr><td><code>.composer__error</code></td><td><code>.message.message--error.composer__message</code></td></tr><tr><td><code>.edit__msg</code></td><td><code>.message.message--error.task__message</code></td></tr></tbody></table></div><p>Drift fixed during extraction: D12 (composer error 15px vs edit error 14px → both 14px).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

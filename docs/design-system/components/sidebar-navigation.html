@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sidebar navigation — Tasks design system</title>
+<meta name="description" content="Sidebar navigation: grouped, collapsible and icon-rail variants, every state, both themes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Navigation</p>
+      <h1>Sidebar navigation</h1>
+      <p class="ds-lead">Lists the places in an app and marks where you are. Not used in v1, which has one screen.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: ready</span><span class="ds-pill ds-pill--warn">Not used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Sidebar navigation lists the places in an app and marks where you are. It is visible beside the content on wide screens and moves into a drawer on narrow ones.</p>
+      <p><b>Not used in v1.</b> The product is one screen with no routes beyond <code>/</code> (L2-022), so there is nowhere to navigate. The pattern is extracted from this documentation's own sidebar so a future multi-list version starts from a tested component (D22).</p>
+      <ul>
+        <li>Use it when an app has five or more top-level destinations that people move between often.</li>
+        <li>Use the <a href="button-group.html">segmented control</a> for switching views of one list (All / Active / Done) and <a href="tabs.html">tabs</a> for sections of one page.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure"><nav class="sidenav" aria-label="Lists (anatomy)" style="height: auto;"><details class="sidenav__group" open><summary class="sidenav__heading">Lists</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=today" aria-current="page"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sidenav__label">Today</span><span class="badge badge--count" aria-label="3 left">3</span></a></li><li><a class="sidenav__link" href="?list=all"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span><span class="badge badge--count" aria-label="12 left">12</span></a></li><li><a class="sidenav__link" href="?list=done"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sidenav__label">Completed</span></a></li></ul></details><details class="sidenav__group" open><summary class="sidenav__heading">Account</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=settings"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span class="sidenav__label">Settings</span></a></li></ul></details></nav>
+          <span class="ds-callout" style="left: 18%; top: 8%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 72%; top: 24%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 28%; top: 36%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 88%; top: 24%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Group heading</b><small><code>&lt;summary&gt;</code>, overline type, collapses its group.</small></div></li>
+          <li><div><b>Current item</b><small><code>aria-current="page"</code>; accent-subtle fill, accent text, semibold.</small></div></li>
+          <li><div><b>Item</b><small>Icon (20px) + label, 44px tall, <code>--radius-md</code>.</small></div></li>
+          <li><div><b>Count badge (optional)</b><small>Pushed to the end; labelled with its meaning.</small></div></li>
+        </ol>
+      </div>
+    </section>
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<nav class="sidenav" aria-label="Lists (grouped)" style="height: auto;"><details class="sidenav__group" open><summary class="sidenav__heading">Lists</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=today" aria-current="page"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sidenav__label">Today</span><span class="badge badge--count" aria-label="3 left">3</span></a></li><li><a class="sidenav__link" href="?list=all"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span><span class="badge badge--count" aria-label="12 left">12</span></a></li><li><a class="sidenav__link" href="?list=done"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sidenav__label">Completed</span></a></li></ul></details><details class="sidenav__group" open><summary class="sidenav__heading">Account</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=settings"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span class="sidenav__label">Settings</span></a></li></ul></details></nav><nav class="sidenav sidenav--collapsed" aria-label="Lists (collapsed)" style="height: auto;"><details class="sidenav__group" open><summary class="sidenav__heading">Lists</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=today" aria-current="page" aria-label="Today"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sidenav__label">Today</span><span class="badge badge--count" aria-label="3 left">3</span></a></li><li><a class="sidenav__link" href="?list=all" aria-label="All tasks"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span><span class="badge badge--count" aria-label="12 left">12</span></a></li><li><a class="sidenav__link" href="?list=done" aria-label="Completed"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sidenav__label">Completed</span></a></li></ul></details><details class="sidenav__group" open><summary class="sidenav__heading">Account</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=settings" aria-label="Settings"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span class="sidenav__label">Settings</span></a></li></ul></details></nav>
+        </div>
+        <div class="ds-example__caption"><span>Grouped with collapsible groups and badges; collapsed to icons (labels stay as accessible names).</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;nav class="sidenav" aria-label="Lists"&gt;
+  &lt;details class="sidenav__group" open&gt;
+    &lt;summary class="sidenav__heading"&gt;Lists&lt;/summary&gt;
+    &lt;ul class="sidenav__list"&gt;
+      &lt;li&gt;&lt;a class="sidenav__link" href="/today" aria-current="page"&gt;…&lt;span class="sidenav__label"&gt;Today&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/details&gt;
+&lt;/nav&gt;</code></pre></details>
+      </div>
+    </section>
+    <section class="ds-section" id="sizes" data-na="One size: 44px items in a 16rem column; the collapsed variant is the only width change."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">One size: 44px items in a 16rem column; the collapsed variant is the only width change.</p>
+    </section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Current</th><th scope="col">Current + focus</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Item</th><td><a class="sidenav__link" href="?list=x" style="width: 11rem;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span></a></td><td><a class="sidenav__link" href="?list=x" data-state="hover" style="width: 11rem;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span></a></td><td><a class="sidenav__link" href="?list=x" data-state="focus" style="width: 11rem;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span></a></td><td><a class="sidenav__link" href="?list=x" aria-current="page" style="width: 11rem;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">Today</span></a></td><td><a class="sidenav__link" href="?list=x" aria-current="page" data-state="focus" style="width: 11rem;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">Today</span></a></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Group</h3>
+      <p>Groups are native <code>&lt;details&gt;</code>: open shows the chevron down, closed shows it pointing right.</p>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="ds-example__canvas" style="padding: 0;"><nav class="sidenav" aria-label="Lists (light)" style="height: auto;"><details class="sidenav__group" open><summary class="sidenav__heading">Lists</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=today" aria-current="page"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sidenav__label">Today</span><span class="badge badge--count" aria-label="3 left">3</span></a></li><li><a class="sidenav__link" href="?list=all"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span><span class="badge badge--count" aria-label="12 left">12</span></a></li><li><a class="sidenav__link" href="?list=done"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sidenav__label">Completed</span></a></li></ul></details><details class="sidenav__group" open><summary class="sidenav__heading">Account</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=settings"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span class="sidenav__label">Settings</span></a></li></ul></details></nav></div></div>
+        <div data-theme="dark"><div class="ds-example__canvas" style="padding: 0;"><nav class="sidenav" aria-label="Lists (dark)" style="height: auto;"><details class="sidenav__group" open><summary class="sidenav__heading">Lists</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=today" aria-current="page"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sidenav__label">Today</span><span class="badge badge--count" aria-label="3 left">3</span></a></li><li><a class="sidenav__link" href="?list=all"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span><span class="badge badge--count" aria-label="12 left">12</span></a></li><li><a class="sidenav__link" href="?list=done"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sidenav__label">Completed</span></a></li></ul></details><details class="sidenav__group" open><summary class="sidenav__heading">Account</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=settings"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span class="sidenav__label">Settings</span></a></li></ul></details></nav></div></div>
+      </div>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>LG and up (≥ 992px): visible beside the content, sticky, full height, <code>--layout-sidebar-width</code> (16rem).</li>
+        <li>Below LG: hidden behind a menu button in the top bar (<code>aria-expanded</code> + <code>aria-controls</code>) and shown as a left drawer; groups other than the current one start collapsed.</li>
+        <li>The collapsed icon rail is for MD screens where content needs the width; it keeps tooltips with the item names.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Reads <code>--color-bg-surface</code>, <code>--color-border-default</code>, <code>--color-fg-muted</code>, <code>--color-fg-subtle</code>, <code>--color-bg-subtle</code>, <code>--color-accent-subtle</code> and <code>--color-fg-accent</code>. Override <code>--layout-sidebar-width</code> to change the width.</p>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A <code>&lt;nav aria-label&gt;</code> landmark with lists of links, the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/">APG Disclosure pattern</a> for collapsible groups (native <code>&lt;details&gt;</code>), and <code>aria-current="page"</code> on the current link. It is not a menu or a tree; arrow keys are not used.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through group headings and links in order.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Follows a link.</td></tr>
+        <tr><td><kbd>Enter</kbd>, <kbd>Space</kbd> on a heading</td><td>Opens or closes the group.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>Shared 2px ring at a 2px offset around the 44px item. When the drawer opens, focus moves to the current item; Esc closes the drawer and returns focus to the menu button.</p>
+      <h3>Labelling</h3>
+      <p>Each <code>&lt;nav&gt;</code> has a distinct <code>aria-label</code>. In the collapsed rail the visible label is hidden visually but kept in the DOM, so the link name does not change. Count badges carry <code>aria-label="3 left"</code>, not a bare number.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Item on surface</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Hovered item</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Current item</span><span class="ds-pair__ratio" data-contrast="--color-fg-accent|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Group heading</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The chevron rotates over <code>--duration-fast</code>; the drawer slides in over <code>--duration-slow</code>. Both are instant with reduced motion.</p>
+      <h3>Touch</h3>
+      <p>Items are 44px tall with 2px between them; the whole row is the target.</p>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Item labels are nouns in sentence case ("All tasks", not "View all tasks").</li>
+        <li>Group headings are one or two words.</li>
+        <li>Counts are numbers only, with the meaning in the accessible name.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><a class="sidenav__link" href="?list=x" aria-current="page" style="width: 11rem;"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">Today</span></a></div><figcaption>Mark the current page with <code>aria-current="page"</code> and a fill, not colour alone.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><a class="sidenav__link" href="?list=today" style="width: 11rem; color: var(--color-fg-accent);">Today</a></div><figcaption>Show the current page with a colour change only (WCAG 1.4.1); the mocks never rely on colour alone (L2-030.6).</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><nav class="sidenav sidenav--collapsed" aria-label="Lists (do)" style="height: auto;"><details class="sidenav__group" open><summary class="sidenav__heading">Lists</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=today" aria-current="page" aria-label="Today"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="sidenav__label">Today</span><span class="badge badge--count" aria-label="3 left">3</span></a></li><li><a class="sidenav__link" href="?list=all" aria-label="All tasks"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg><span class="sidenav__label">All tasks</span><span class="badge badge--count" aria-label="12 left">12</span></a></li><li><a class="sidenav__link" href="?list=done" aria-label="Completed"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg><span class="sidenav__label">Completed</span></a></li></ul></details><details class="sidenav__group" open><summary class="sidenav__heading">Account</summary><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=settings" aria-label="Settings"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span class="sidenav__label">Settings</span></a></li></ul></details></nav></div><figcaption>Keep labels as accessible names when collapsing to icons.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><nav class="sidenav sidenav--collapsed" aria-label="Lists (don't)"><ul class="sidenav__list"><li><a class="sidenav__link" href="?list=x"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg><span class="visually-hidden">Link</span></a></li></ul></nav></div><figcaption>Leave icon-only links with generic names.</figcaption></figure>
+      </div>
+    </section>
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Background</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Edge</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Item text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Heading</td><td><code>--color-fg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td></tr>
+          <tr><td>Hover fill</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+          <tr><td>Current fill</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Current text</td><td><code>--color-fg-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-accent" data-swatch></i><span data-token="--color-fg-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-accent" data-swatch></i><span data-token="--color-fg-accent"></span></span></td></tr>
+          <tr><td>Width</td><td><code>--layout-sidebar-width</code></td><td colspan="2"><span data-token="--layout-sidebar-width"></span></td></tr>
+          <tr><td>Item height</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+          <tr><td>Item radius</td><td><code>--radius-md</code></td><td colspan="2"><span data-token="--radius-md"></span></td></tr>
+          <tr><td>Item font</td><td><code>--text-label</code></td><td colspan="2"><span data-token="--text-label"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;nav class="sidenav" aria-label="Lists"&gt;
+  &lt;details class="sidenav__group" open&gt;
+    &lt;summary class="sidenav__heading"&gt;Lists&lt;/summary&gt;
+    &lt;ul class="sidenav__list"&gt;
+      &lt;li&gt;&lt;a class="sidenav__link" href="/today" aria-current="page"&gt;&lt;svg class="icon" aria-hidden="true"&gt;…&lt;/svg&gt;&lt;span class="sidenav__label"&gt;Today&lt;/span&gt;&lt;span class="badge badge--count" aria-label="3 left"&gt;3&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/details&gt;
+&lt;/nav&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.sidenav</code></td><td>Column with surface and edge.</td></tr>
+        <tr><td><code>.sidenav--collapsed</code></td><td>Icon rail; labels visually hidden.</td></tr>
+        <tr><td><code>.sidenav__group</code> / <code>__heading</code></td><td>Collapsible group on <code>details</code>/<code>summary</code>.</td></tr>
+        <tr><td><code>.sidenav__link</code></td><td>Item.</td></tr>
+        <tr><td><code>aria-current="page"</code></td><td>Current item.</td></tr>
+      </tbody></table></div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>No product mock has navigation (one screen, L2-022). The component follows this documentation's own sidebar and the mock conventions: 44px targets (L2-028.1), state carried by ARIA rather than classes (<a href="../../mocks/README.md">mocks README</a>).</p>
+      <p>Drift fixed during extraction: none; not in the mocks, built from the system tokens (D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

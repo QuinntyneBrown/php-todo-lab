@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tasks design system</title>
+<meta name="description" content="Tokens, foundations, components and patterns for the Tasks to-do app, extracted from docs/mocks.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens/tokens.css">
+<link rel="stylesheet" href="assets/components.css">
+<link rel="stylesheet" href="assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="foundations/color.html">Color</a></li>
+      <li><a href="foundations/typography.html">Typography</a></li>
+      <li><a href="foundations/spacing.html">Spacing</a></li>
+      <li><a href="foundations/layout.html">Layout</a></li>
+      <li><a href="foundations/elevation.html">Elevation</a></li>
+      <li><a href="foundations/shape.html">Shape</a></li>
+      <li><a href="foundations/motion.html">Motion</a></li>
+      <li><a href="foundations/iconography.html">Iconography</a></li>
+      <li><a href="foundations/theming.html">Theming</a></li>
+      <li><a href="foundations/responsive.html">Responsive</a></li>
+      <li><a href="foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="components/button.html">Button</a></li>
+      <li><a href="components/button-group.html">Button group</a></li>
+      <li><a href="components/link.html">Link</a></li>
+      <li><a href="components/menu.html">Menu</a></li>
+      <li><a href="components/text-field.html">Text field</a></li>
+      <li><a href="components/textarea.html">Textarea</a></li>
+      <li><a href="components/select.html">Select</a></li>
+      <li><a href="components/checkbox.html">Checkbox</a></li>
+      <li><a href="components/radio-group.html">Radio group</a></li>
+      <li><a href="components/switch.html">Switch</a></li>
+      <li><a href="components/form-field.html">Form field</a></li>
+      <li><a href="components/form-layout.html">Form layout</a></li>
+      <li><a href="components/composer.html">Composer</a></li>
+      <li><a href="components/app-header.html">App header</a></li>
+      <li><a href="components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="components/tabs.html">Tabs</a></li>
+      <li><a href="components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="components/pagination.html">Pagination</a></li>
+      <li><a href="components/skip-link.html">Skip link</a></li>
+      <li><a href="components/card.html">Card</a></li>
+      <li><a href="components/dialog.html">Dialog</a></li>
+      <li><a href="components/tooltip.html">Tooltip</a></li>
+      <li><a href="components/divider.html">Divider</a></li>
+      <li><a href="components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="components/task-item.html">Task item</a></li>
+      <li><a href="components/list.html">List</a></li>
+      <li><a href="components/table.html">Table</a></li>
+      <li><a href="components/description-list.html">Description list</a></li>
+      <li><a href="components/avatar.html">Avatar</a></li>
+      <li><a href="components/badge.html">Badge</a></li>
+      <li><a href="components/chip.html">Chip</a></li>
+      <li><a href="components/toast.html">Toast</a></li>
+      <li><a href="components/alert.html">Alert</a></li>
+      <li><a href="components/inline-message.html">Inline message</a></li>
+      <li><a href="components/progress.html">Progress</a></li>
+      <li><a href="components/spinner.html">Spinner</a></li>
+      <li><a href="components/skeleton.html">Skeleton</a></li>
+      <li><a href="components/empty-state.html">Empty state</a></li>
+      <li><a href="components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="patterns/forms.html">Forms</a></li>
+      <li><a href="patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="patterns/notifications.html">Notifications</a></li>
+      <li><a href="patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Design system</p>
+      <h1>Tasks design system</h1>
+      <p class="ds-lead">The visual and interaction language of Tasks, the one-screen to-do app: a calm ink-and-sea palette, a confident display face for the day, and one celebratory moment when a task is done. Every decision here was mined from the mocks in <a href="../mocks/index.html">docs/mocks</a>, normalised into tokens and checked for WCAG 2.2 AA in both themes.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA · light and dark</span><span class="ds-pill">12 foundations</span><span class="ds-pill">39 components</span><span class="ds-pill">8 patterns</span><span class="ds-pill">Extracted 8 October 2026</span></div>
+      <ul class="ds-toc"><li><a href="#start">Start here</a></li><li><a href="#foundations">Foundations</a></li><li><a href="#components">Components</a></li><li><a href="#patterns">Patterns</a></li><li><a href="#use">How to use</a></li><li><a href="#provenance">Provenance</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="start"><h2><a href="#start">Start here</a></h2>
+      <p>The product in one card, built only from <code>components.css</code>. Toggle the theme with the button in the navigation or press <kbd>t</kbd>.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas ds-example__canvas--stack" data-frozen>
+          <section class="card" aria-label="Tasks example">
+            <form class="composer" novalidate onsubmit="return false">
+              <div class="composer__field"><label class="visually-hidden" for="idxNew">New task</label><input class="input input--filled input--lg" id="idxNew" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off"></div>
+              <button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button>
+            </form>
+            <div class="toolbar">
+              <div class="segmented" role="group" aria-label="Show tasks"><span class="segmented__indicator" aria-hidden="true"></span>
+                <button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 3">All <span class="segmented__count">3</span></button>
+                <button class="segmented__option" type="button" aria-pressed="false" aria-label="Active, 2">Active <span class="segmented__count">2</span></button>
+                <button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 1">Done <span class="segmented__count">1</span></button>
+              </div>
+              <button class="btn btn--ghost" type="button">Clear completed</button>
+            </div>
+            <ul class="task-list">
+              <li class="task task--done"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" checked aria-label="Renew passport"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Renew passport">Renew passport</button></div><button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Renew passport"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></li>
+              <li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Reply to Priya about the venue"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Reply to Priya about the venue">Reply to Priya about the venue</button></div><button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Reply to Priya about the venue"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></li>
+              <li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Book dentist appointment"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div><button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Book dentist appointment"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></li>
+            </ul>
+          </section>
+        </div>
+        <div class="ds-example__caption"><span>Card, composer, segmented filter, ghost button and task rows: the whole v1 screen.</span><a href="../mocks/todo.html">Open the interactive mock</a></div>
+      </div>
+      <div class="ds-cards">
+        <a class="ds-card" href="foundations/color.html"><b>Color</b><span>Ink, sea, sun and red ramps; semantic roles; both themes; every contrast pair, live.</span></a>
+        <a class="ds-card" href="foundations/typography.html"><b>Typography</b><span>Bricolage Grotesque for display, Figtree for text; nine sizes; role shorthands.</span></a>
+        <a class="ds-card" href="foundations/layout.html"><b>Layout</b><span>L2-027 breakpoints, the 560/640px task column, grid, gutters and margins.</span></a>
+        <a class="ds-card" href="components/button.html"><b>Button</b><span>Primary, secondary, ghost, link, danger and icon buttons.</span></a>
+        <a class="ds-card" href="components/form-field.html"><b>Form field</b><span>Label, hint, control, counter and message as one unit.</span></a>
+        <a class="ds-card" href="components/dialog.html"><b>Dialog</b><span>Modal dialog and bottom sheet.</span></a>
+      </div>
+    </section>
+
+    <section class="ds-section" id="foundations"><h2><a href="#foundations">Foundations</a></h2>
+      <p>The decisions every component inherits. Each token appears on exactly one of these pages with its live light and dark value.</p>
+      <div class="ds-cards">
+        <a class="ds-card" href="foundations/color.html"><b>Color</b><span>Ink, sea, sun and red ramps; semantic roles; both themes; every contrast pair, live.</span></a>
+        <a class="ds-card" href="foundations/typography.html"><b>Typography</b><span>Bricolage Grotesque for display, Figtree for text; nine sizes; role shorthands.</span></a>
+        <a class="ds-card" href="foundations/spacing.html"><b>Spacing</b><span>The 4px scale, inside versus between, and the three control heights.</span></a>
+        <a class="ds-card" href="foundations/layout.html"><b>Layout</b><span>L2-027 breakpoints, the 560/640px task column, grid, gutters and margins.</span></a>
+        <a class="ds-card" href="foundations/elevation.html"><b>Elevation</b><span>Four shadows, the canvas, surface and raised hierarchy, and z-order.</span></a>
+        <a class="ds-card" href="foundations/shape.html"><b>Shape</b><span>Five radii plus full, and which radius fits which size; border widths.</span></a>
+        <a class="ds-card" href="foundations/motion.html"><b>Motion</b><span>Five durations, the completion choreography and reduced motion.</span></a>
+        <a class="ds-card" href="foundations/iconography.html"><b>Iconography</b><span>Stroke icons on a 24-unit grid, the icon sheet and labelling rules.</span></a>
+        <a class="ds-card" href="foundations/theming.html"><b>Theming</b><span>Light and dark from prefers-color-scheme, token tiers, adding a theme.</span></a>
+        <a class="ds-card" href="foundations/responsive.html"><b>Responsive</b><span>Mobile first, per-component breakpoint behaviour and touch rules.</span></a>
+        <a class="ds-card" href="foundations/accessibility.html"><b>Accessibility</b><span>WCAG 2.2 AA commitments, L2-029/L2-030 and the testing procedure.</span></a>
+        <a class="ds-card" href="foundations/content.html"><b>Content</b><span>Voice, sentence case, verbs, numbers, dates, error and empty-state formulas.</span></a>
+      </div>
+    </section>
+
+    <section class="ds-section" id="components"><h2><a href="#components">Components</a></h2>
+      <p>Every component the mocks use, plus the core set any product needs. Pages for components v1 does not use yet say so in their header; they are ready for the next screen, not invitations to add one.</p>
+      <h3>Actions</h3>
+      <div class="ds-cards">
+        <a class="ds-card" href="components/button.html"><b>Button</b><span>Primary, secondary, ghost, link, danger and icon buttons.</span></a>
+        <a class="ds-card" href="components/button-group.html"><b>Button group</b><span>The segmented All, Active and Done filter with live counts.</span></a>
+        <a class="ds-card" href="components/link.html"><b>Link</b><span>Inline and standalone links.</span></a>
+        <a class="ds-card" href="components/menu.html"><b>Menu</b><span>A menu button with actions, sections and checkable items.</span></a>
+      </div>
+      <h3>Inputs</h3>
+      <div class="ds-cards">
+        <a class="ds-card" href="components/text-field.html"><b>Text field</b><span>Single-line input with counter, addons and validation.</span></a>
+        <a class="ds-card" href="components/textarea.html"><b>Textarea</b><span>Multi-line input that can grow with its content.</span></a>
+        <a class="ds-card" href="components/select.html"><b>Select</b><span>Native select with the system chevron.</span></a>
+        <a class="ds-card" href="components/checkbox.html"><b>Checkbox</b><span>Square and round checkboxes, including the task check and its burst.</span></a>
+        <a class="ds-card" href="components/radio-group.html"><b>Radio group</b><span>One choice from a short set.</span></a>
+        <a class="ds-card" href="components/switch.html"><b>Switch</b><span>An on/off setting that applies immediately.</span></a>
+        <a class="ds-card" href="components/form-field.html"><b>Form field</b><span>Label, hint, control, counter and message as one unit.</span></a>
+        <a class="ds-card" href="components/form-layout.html"><b>Form layout</b><span>Fieldsets, split rows, inline forms, actions and error summary.</span></a>
+        <a class="ds-card" href="components/composer.html"><b>Composer</b><span>The product's add-a-task field and button.</span></a>
+      </div>
+      <h3>Navigation</h3>
+      <div class="ds-cards">
+        <a class="ds-card" href="components/app-header.html"><b>App header</b><span>Weekday, date and the remaining-tasks ring.</span></a>
+        <a class="ds-card" href="components/sidebar-navigation.html"><b>Sidebar navigation</b><span>Grouped side navigation with a current page.</span></a>
+        <a class="ds-card" href="components/tabs.html"><b>Tabs</b><span>Tabs that switch panels in place.</span></a>
+        <a class="ds-card" href="components/breadcrumb.html"><b>Breadcrumb</b><span>Where a page sits in a hierarchy.</span></a>
+        <a class="ds-card" href="components/pagination.html"><b>Pagination</b><span>Move between pages of a long set.</span></a>
+        <a class="ds-card" href="components/skip-link.html"><b>Skip link</b><span>Jump past repeated content to the main landmark.</span></a>
+      </div>
+      <h3>Containers</h3>
+      <div class="ds-cards">
+        <a class="ds-card" href="components/card.html"><b>Card</b><span>The raised surface that holds the task list.</span></a>
+        <a class="ds-card" href="components/dialog.html"><b>Dialog</b><span>Modal dialog and bottom sheet.</span></a>
+        <a class="ds-card" href="components/tooltip.html"><b>Tooltip</b><span>A short description on hover and focus.</span></a>
+        <a class="ds-card" href="components/divider.html"><b>Divider</b><span>Horizontal, vertical and labelled separators.</span></a>
+        <a class="ds-card" href="components/layout-primitives.html"><b>Layout primitives</b><span>Container, grid, stack and cluster.</span></a>
+      </div>
+      <h3>Data display</h3>
+      <div class="ds-cards">
+        <a class="ds-card" href="components/task-item.html"><b>Task item</b><span>A task row: check, editable title and delete.</span></a>
+        <a class="ds-card" href="components/list.html"><b>List</b><span>Generic lists with icons, metadata and actions.</span></a>
+        <a class="ds-card" href="components/table.html"><b>Table</b><span>Tabular data with sorting, selection and stacking.</span></a>
+        <a class="ds-card" href="components/description-list.html"><b>Description list</b><span>Key and value pairs.</span></a>
+        <a class="ds-card" href="components/avatar.html"><b>Avatar</b><span>A person or entity as image, initials or icon.</span></a>
+        <a class="ds-card" href="components/badge.html"><b>Badge</b><span>Short status or count labels.</span></a>
+        <a class="ds-card" href="components/chip.html"><b>Chip</b><span>Toggleable filters and removable tokens.</span></a>
+      </div>
+      <h3>Feedback</h3>
+      <div class="ds-cards">
+        <a class="ds-card" href="components/toast.html"><b>Toast</b><span>Bottom-centre confirmation with Undo, and error toasts.</span></a>
+        <a class="ds-card" href="components/alert.html"><b>Alert</b><span>Inline alerts, the load-error banner and the offline notice.</span></a>
+        <a class="ds-card" href="components/inline-message.html"><b>Inline message</b><span>Field hints, errors and confirmations.</span></a>
+        <a class="ds-card" href="components/progress.html"><b>Progress</b><span>The header ring and the progress bar.</span></a>
+        <a class="ds-card" href="components/spinner.html"><b>Spinner</b><span>Indeterminate activity indicator.</span></a>
+        <a class="ds-card" href="components/skeleton.html"><b>Skeleton</b><span>Placeholder rows while tasks load.</span></a>
+        <a class="ds-card" href="components/empty-state.html"><b>Empty state</b><span>Illustration, title and one sentence when there is nothing to show.</span></a>
+        <a class="ds-card" href="components/error-page.html"><b>Error page</b><span>Full-page 404, 500 and offline states.</span></a>
+      </div>
+    </section>
+
+    <section class="ds-section" id="patterns"><h2><a href="#patterns">Patterns</a></h2>
+      <p>How components combine for a job, and the rules that span them.</p>
+      <div class="ds-cards">
+        <a class="ds-card" href="patterns/forms.html"><b>Forms</b><span>The composer and inline edit: validation timing, keeping text, server messages.</span></a>
+        <a class="ds-card" href="patterns/feedback-and-loading.html"><b>Feedback and loading</b><span>Optimistic updates, revert on failure, skeletons, undo and announcements.</span></a>
+        <a class="ds-card" href="patterns/empty-and-error-states.html"><b>Empty and error states</b><span>First run, filter empty, all done, load error and offline.</span></a>
+        <a class="ds-card" href="patterns/navigation-and-structure.html"><b>Navigation and structure</b><span>One screen, landmarks, a single h1 and the filter in the URL.</span></a>
+        <a class="ds-card" href="patterns/dialogs-and-overlays.html"><b>Dialogs and overlays</b><span>Why v1 has no modals and when an overlay would be right.</span></a>
+        <a class="ds-card" href="patterns/tables-and-lists.html"><b>Tables and lists</b><span>The task list's order, wrapping and density; when a table fits.</span></a>
+        <a class="ds-card" href="patterns/notifications.html"><b>Notifications</b><span>Toast versus banner versus notice versus field message.</span></a>
+        <a class="ds-card" href="patterns/content-and-tone.html"><b>Content and tone</b><span>L2-025 voice and the product's microcopy library.</span></a>
+      </div>
+    </section>
+
+    <section class="ds-section" id="use"><h2><a href="#use">How to use</a></h2>
+      <ol>
+        <li><b>Link the CSS.</b> <code>tokens/tokens.css</code> first, then <code>assets/components.css</code>. Nothing else is required; <code>assets/ds.css</code> and <code>ds.js</code> only style this documentation.</li>
+        <li><b>Use the classes.</b> Copy the markup from any component page's <a href="components/button.html#code">Code</a> section. State lives in native attributes and ARIA (<code>disabled</code>, <code>aria-pressed</code>, <code>aria-invalid</code>, <code>aria-busy</code>); <code>data-state</code> is for documentation only.</li>
+        <li><b>Consume the tokens.</b> <code>tokens/tokens.json</code> is a DTCG export generated from <code>tokens.css</code> (dark values under <code>$extensions</code>). In the Angular app, <code>frontend/src/styles/tokens.scss</code> should mirror <code>tokens.css</code>; component SCSS reads semantic tokens only (L2-026.4).</li>
+        <li><b>Re-skin with component tokens.</b> Override <code>--btn-*</code>, <code>--input-*</code>, <code>--toast-*</code> and friends on a scope; never edit a component rule for a one-off.</li>
+        <li><b>Check contrast when you change a colour.</b> Add the pairing to <code>tokens/contrast-pairs.json</code> and run the contrast checker (see <a href="README.md">README</a>).</li>
+      </ol>
+      <pre><code>&lt;link rel="stylesheet" href="docs/design-system/tokens/tokens.css"&gt;
+&lt;link rel="stylesheet" href="docs/design-system/assets/components.css"&gt;
+
+&lt;button class="btn btn--primary btn--lg" type="submit"&gt;Add task&lt;/button&gt;</code></pre>
+    </section>
+
+    <section class="ds-section" id="provenance"><h2><a href="#provenance">Provenance</a></h2>
+      <p>Extracted on 8 October 2026 from the 17 mock pages and the prototype in <a href="../mocks/index.html">docs/mocks</a> (<code>styles/tokens.css</code>, <code>styles/app.css</code>), which implement <code>docs/specs/L2.md</code> L2-001 to L2-031 and L2-042. Values the mocks got wrong or left inconsistent were corrected and logged as drift (D1 to D22) in the <a href="README.md">README</a>; every component page's Sources section names the drift it fixed and the mock class it replaces.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="assets/ds.js"></script>
+</body>
+</html>

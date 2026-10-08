@@ -10,7 +10,7 @@ Open `index.html` in a browser (works from `file://`, no server needed). The lau
 index.html            launcher
 todo.html             interactive prototype: add, complete, edit, delete and undo, filter, clear completed
 app.js                mock-only helpers: ?theme= override, today's date, progress rings
-styles/tokens.css     colour, type, motion and radius tokens, light and dark (L2-026)
+styles/tokens.css     imports ../design-system/tokens/tokens.css (L2-026) and aliases the mock token names
 styles/app.css        product styles, then mock-only galleries and launcher (marked)
 pages/page.*.html     the screen in one state each
 pages/states.*.html   specimen galleries for the composer, rows and toolbar

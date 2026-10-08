@@ -45,16 +45,23 @@ home here, update this section in the same change.
 php-todo-lab/
 ├── AGENTS.md  CLAUDE.md  GEMINI.md   Agent instructions (CLAUDE/GEMINI point here)
 ├── README.md                         Setup, run, and every check command (L2-054)
+├── CONTRIBUTING.md  CODE_OF_CONDUCT.md  SECURITY.md  SUPPORT.md   Community health files
+├── CHANGELOG.md                      Keep a Changelog format
+├── LICENSE                           MIT
 ├── .editorconfig  .gitattributes     Shared whitespace and LF line endings
 ├── docker-compose.yml                Optional: MySQL 8.4 only, never the apps
 ├── docker/mysql/init/                SQL run on first start (creates `todo_test`)
 ├── .github/
 │   ├── copilot-instructions.md
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   ├── ISSUE_TEMPLATE/               bug_report.md, feature_request.md, config.yml
 │   └── workflows/ci.yml              backend and frontend jobs run `check` in parallel
 ├── docs/
 │   ├── specs/                        L1.md, L2.md: requirements (source of truth)
 │   ├── detailed-designs/<subsystem>/<feature>/   README.md + diagrams/
-│   └── mocks/                        todo.html + styles/: design target, no tests
+│   ├── mocks/                        todo.html + styles/: design target, no tests
+│   └── design-system/                tokens/, assets/components.css, foundations/, components/,
+│                                     patterns/ HTML pages: extracted from mocks/, no tests
 ├── backend/                          Laravel API (PHP 8.4, strict_types everywhere)
 │   ├── app/
 │   │   ├── Actions/Todos/            One use case per class: CreateTodo, ListTodos, ...

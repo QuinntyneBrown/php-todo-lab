@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Error page — Tasks design system</title>
+<meta name="description" content="404, 500 and offline error pages with one recovery action each.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Error page</h1>
+      <p class="ds-lead">A full-screen message for when the app cannot show anything: unknown address, server failure or no connection.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill ds-pill--warn">Not used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>An error page replaces the whole screen when the app cannot show anything useful: the address does not exist, the app failed to start, or it cannot load at all. <b>v1 does not use one</b>: there is a single route (<code>/</code>), the shell renders without the API, and every failure is handled in place with the <a href="alert.html">banner</a>, the offline notice or an error <a href="toast.html">toast</a> (L2-008.5, L2-042). The page is in the core set for future routes (D22).</p><ul><li>Prefer keeping the shell and showing an inline alert. Use an error page only when there is no shell to keep.</li><li>One way to recover, always.</li></ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy"><figure class="ds-anatomy__figure"><div style="width: 100%;"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">500</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="24" y="28" width="40" height="34" rx="7"/><rect class="art-line" x="24" y="28" width="40" height="34" rx="7"/><path class="art-line art-line--danger" d="M44 37v10M44 53v.01"/></svg><h2 class="error-page__title">Tasks couldn't start</h2><p class="error-page__text">Something failed on the server. Try again in a moment.</p><div class="error-page__actions"><button class="btn btn--primary" type="button">Try again</button></div><p class="error-page__ref">Reference 7f3a-91c2</p></div></div><span class="ds-callout" style="left: 8%; top: 12%;" aria-hidden="true">1</span><span class="ds-callout" style="left: 8%; top: 28%;" aria-hidden="true">2</span><span class="ds-callout" style="left: 8%; top: 44%;" aria-hidden="true">3</span><span class="ds-callout" style="left: 8%; top: 57%;" aria-hidden="true">4</span><span class="ds-callout" style="left: 8%; top: 72%;" aria-hidden="true">5</span><span class="ds-callout" style="left: 8%; top: 88%;" aria-hidden="true">6</span></figure><ol class="ds-anatomy__list"><li><div><b>Code</b><small>Overline in <code>--color-fg-accent</code>: 404, 500 or "Offline".</small></div></li><li><div><b>Illustration</b><small>88px, drawn with the empty-state art palette.</small></div></li><li><div><b>Title</b><small><code>--text-h1</code>; the page's only <code>h1</code> in production.</small></div></li><li><div><b>Text</b><small>What happened and what to do, muted, 40ch.</small></div></li><li><div><b>Action</b><small>One primary button or link that recovers.</small></div></li><li><div><b>Reference</b><small>500 only: a monospace id to quote to support.</small></div></li></ol></div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">404</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-paper" cx="40" cy="42" r="15"/><circle class="art-line" cx="40" cy="42" r="15"/><path class="art-line" d="M51 53l12 12"/><path class="art-line art-line--quiet" d="M34 42h12"/></svg><h2 class="error-page__title">Page not found</h2><p class="error-page__text">That address doesn't match anything in Tasks. Your list is on the home page.</p><div class="error-page__actions"><a class="btn btn--primary" href="#top">Go to your tasks</a></div></div></div><div class="ds-example__caption"><span>404: unknown address. A link home.</span></div><details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;main class=&quot;error-page&quot;&gt;
+  &lt;p class=&quot;error-page__code&quot;&gt;404&lt;/p&gt;
+  &lt;svg class=&quot;empty-state__art&quot; viewBox=&quot;0 0 88 88&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;
+  &lt;h1 class=&quot;error-page__title&quot;&gt;Page not found&lt;/h1&gt;
+  &lt;p class=&quot;error-page__text&quot;&gt;That address doesn&#x27;t match anything in Tasks. Your list is on the home page.&lt;/p&gt;
+  &lt;div class=&quot;error-page__actions&quot;&gt;&lt;a class=&quot;btn btn--primary&quot; href=&quot;/&quot;&gt;Go to your tasks&lt;/a&gt;&lt;/div&gt;
+&lt;/main&gt;</code></pre></details></div><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">500</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="24" y="28" width="40" height="34" rx="7"/><rect class="art-line" x="24" y="28" width="40" height="34" rx="7"/><path class="art-line art-line--danger" d="M44 37v10M44 53v.01"/></svg><h2 class="error-page__title">Tasks couldn't start</h2><p class="error-page__text">Something failed on the server. Try again in a moment.</p><div class="error-page__actions"><button class="btn btn--primary" type="button">Try again</button></div><p class="error-page__ref">Reference 7f3a-91c2</p></div></div><div class="ds-example__caption"><span>500: the app could not start. Try again, plus a reference id.</span></div></div><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">Offline</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><g transform="translate(20 22) scale(2)"><path class="art-line" d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01" style="stroke-width: 1.5"/><path class="art-line art-line--danger" d="M3 3l18 18" style="stroke-width: 1.5"/></g></svg><h2 class="error-page__title">You're offline</h2><p class="error-page__text">Tasks needs a connection to load. Check your connection and try again.</p><div class="error-page__actions"><button class="btn btn--primary" type="button">Try again</button></div></div></div><div class="ds-example__caption"><span>Offline: first load with no connection (a cached shell would show the notice instead).</span></div></div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="One size: the page fills the viewport column and centres its content."><h2><a href="#sizes">Sizes</a></h2><p class="ds-na">One size: the page fills the viewport column and centres its content.</p></section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>The page is static; its only interactive part is the action, shown here in every state.</p><div class="ds-matrix"><table><thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th><th scope="col">Busy</th></tr></thead><tbody><tr><th scope="row">500 action</th><td><button class="btn btn--primary" type="button">Try again</button></td><td><button class="btn btn--primary" type="button" data-state="hover">Try again</button></td><td><button class="btn btn--primary" type="button" data-state="focus">Try again</button></td><td><button class="btn btn--primary" type="button" data-state="active">Try again</button></td><td><button class="btn btn--primary" type="button" aria-busy="true">Try again</button></td></tr><tr><th scope="row">404 action</th><td><a class="btn btn--primary" href="#top">Go to your tasks</a></td><td><a class="btn btn--primary" href="#top" data-state="hover">Go to your tasks</a></td><td><a class="btn btn--primary" href="#top" data-state="focus">Go to your tasks</a></td><td><a class="btn btn--primary" href="#top" data-state="active">Go to your tasks</a></td><td><p>Links are never busy.</p></td></tr></tbody></table></div><p>Disabled does not apply: an error page always offers a working way out.</p><h3>Both themes</h3><div class="ds-themes"><div data-theme="light"><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0;"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">404</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-paper" cx="40" cy="42" r="15"/><circle class="art-line" cx="40" cy="42" r="15"/><path class="art-line" d="M51 53l12 12"/><path class="art-line art-line--quiet" d="M34 42h12"/></svg><h2 class="error-page__title">Page not found</h2><p class="error-page__text">That address doesn't match anything in Tasks. Your list is on the home page.</p><div class="error-page__actions"><a class="btn btn--primary" href="#top">Go to your tasks</a></div></div></div></div><div data-theme="dark"><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0;"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">404</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-paper" cx="40" cy="42" r="15"/><circle class="art-line" cx="40" cy="42" r="15"/><path class="art-line" d="M51 53l12 12"/><path class="art-line art-line--quiet" d="M34 42h12"/></svg><h2 class="error-page__title">Page not found</h2><p class="error-page__text">That address doesn't match anything in Tasks. Your list is on the home page.</p><div class="error-page__actions"><a class="btn btn--primary" href="#top">Go to your tasks</a></div></div></div></div></div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul><li>Single centred column at every width; text capped at 40ch, title balanced.</li><li>64px block padding from SM; at XS the content starts 64px from the top so the action stays above the fold at 320 × 568.</li><li>Actions wrap and centre; on phones the primary action stays one tap from the thumb, never pinned.</li></ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>No component tokens. Code <code>--color-fg-accent</code>, title <code>--color-fg-default</code>, text <code>--color-fg-muted</code>, reference <code>--color-fg-subtle</code>; illustrations use the art classes from <a href="empty-state.html">Empty state</a>, with <code>.art-line--danger</code> for the failure mark.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3><p>A full page: <code>&lt;title&gt;</code> starts with the problem ("Page not found — Tasks"), one <code>h1</code>, a <code>main</code> landmark, and the action as a real link or button. No ARIA pattern needed. (On this documentation page the titles are <code>h2</code> because the page already has its <code>h1</code>.)</p><h3>Keyboard</h3><div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody><tr><td><kbd>Tab</kbd></td><td>Skip link, then the recovery action.</td></tr><tr><td><kbd>Enter</kbd></td><td>Follows the link or activates Try again.</td></tr></tbody></table></div><h3>Focus</h3><p>On load, focus starts at the top of the document as usual; the title is the first thing read after the page title.</p><h3>Labelling</h3><p>The code (404) is visible text but the title carries the meaning; screen readers hear "404, Page not found".</p><h3>Contrast</h3><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);"><div class="ds-pair"><span>Code</span><span class="ds-pair__ratio" data-contrast="--color-fg-accent|--color-bg-canvas" data-min="4.5"></span></div><div class="ds-pair"><span>Title</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-canvas" data-min="4.5"></span></div><div class="ds-pair"><span>Text</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-canvas" data-min="4.5"></span></div><div class="ds-pair"><span>Reference</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-canvas" data-min="4.5"></span></div></div><h3>Motion</h3><p>None.</p><h3>Touch</h3><p>The action is 44px tall.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul><li>Title says what is wrong in plain words: "Page not found", "You're offline". Not "Error 404".</li><li>Text: cause, then the next step. "Something failed on the server. Try again in a moment."</li><li>Never apologise or blame the person; no "Oops" (L2-025).</li><li>Action labels: "Go to your tasks", "Try again".</li></ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont"><figure class="ds-do"><div class="ds-example__canvas"><div class="card" style="width: 100%;"><div class="alert alert--danger alert--flush"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><p class="alert__body">Couldn't load your tasks. Check your connection and try again.</p><button class="btn" type="button">Try again</button></div></div></div><figcaption>Keep the app and show the banner when only the list failed (L2-008.5).</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">Error</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="24" y="28" width="40" height="34" rx="7"/><rect class="art-line" x="24" y="28" width="40" height="34" rx="7"/><path class="art-line art-line--danger" d="M44 37v10M44 53v.01"/></svg><h2 class="error-page__title">Couldn't load your tasks</h2><p class="error-page__text">Check your connection and try again.</p><div class="error-page__actions"><button class="btn btn--primary" type="button">Try again</button></div></div></div><figcaption>Replace the whole screen for a list failure; the composer should keep working.</figcaption></figure><figure class="ds-do"><div class="ds-example__canvas"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">404</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-paper" cx="40" cy="42" r="15"/><circle class="art-line" cx="40" cy="42" r="15"/><path class="art-line" d="M51 53l12 12"/><path class="art-line art-line--quiet" d="M34 42h12"/></svg><h2 class="error-page__title">Page not found</h2><p class="error-page__text">That address doesn't match anything in Tasks. Your list is on the home page.</p><div class="error-page__actions"><a class="btn btn--primary" href="#top">Go to your tasks</a></div></div></div><figcaption>One clear way out.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="error-page" style="padding-block: var(--space-10);"><p class="error-page__code">404</p><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-paper" cx="40" cy="42" r="15"/><circle class="art-line" cx="40" cy="42" r="15"/><path class="art-line" d="M51 53l12 12"/><path class="art-line art-line--quiet" d="M34 42h12"/></svg><h2 class="error-page__title">Oops! Sorry!</h2><p class="error-page__text">We're really sorry, something went wrong.</p><div class="error-page__actions"><button class="btn" type="button">Back</button><button class="btn" type="button">Home</button><button class="btn" type="button">Help</button></div></div></div><figcaption>Apologise, stay vague and offer three equal choices.</figcaption></figure></div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead><tbody><tr><td>Code</td><td><code>--color-fg-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-accent" data-swatch></i><span data-token="--color-fg-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-accent" data-swatch></i><span data-token="--color-fg-accent"></span></span></td></tr><tr><td>Text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr><tr><td>Reference</td><td><code>--color-fg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td></tr><tr><td>Title</td><td><code>--text-h1</code></td><td colspan="2"><span data-token="--text-h1"></span></td></tr><tr><td>Block padding</td><td><code>--space-16</code></td><td colspan="2"><span data-token="--space-16"></span></td></tr><tr><td>Gap</td><td><code>--space-3</code></td><td colspan="2"><span data-token="--space-3"></span></td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;main class=&quot;error-page&quot; id=&quot;main&quot;&gt;
+  &lt;p class=&quot;error-page__code&quot;&gt;500&lt;/p&gt;
+  &lt;svg class=&quot;empty-state__art&quot; viewBox=&quot;0 0 88 88&quot; aria-hidden=&quot;true&quot;&gt;…&lt;/svg&gt;
+  &lt;h1 class=&quot;error-page__title&quot;&gt;Tasks couldn&#x27;t start&lt;/h1&gt;
+  &lt;p class=&quot;error-page__text&quot;&gt;Something failed on the server. Try again in a moment.&lt;/p&gt;
+  &lt;div class=&quot;error-page__actions&quot;&gt;&lt;button class=&quot;btn btn--primary&quot; type=&quot;button&quot;&gt;Try again&lt;/button&gt;&lt;/div&gt;
+  &lt;p class=&quot;error-page__ref&quot;&gt;Reference 7f3a-91c2&lt;/p&gt;
+&lt;/main&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody><tr><td><code>.error-page</code></td><td>Centred column.</td></tr><tr><td><code>.error-page__code|__title|__text|__actions|__ref</code></td><td>Parts.</td></tr><tr><td><code>.empty-state__art</code></td><td>Illustration, reused from Empty state.</td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>No mock shows an error page: v1 keeps every failure inline. Built from the system tokens and the empty-state illustration style (D22).</p><ul><li><a href="../../mocks/pages/page.load-error.html">pages/page.load-error</a> (the inline alternative used in v1)</li><li><a href="../../mocks/pages/page.offline.html">pages/page.offline</a> (offline handled with a notice)</li></ul><p>Drift fixed during extraction: none (system addition, D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

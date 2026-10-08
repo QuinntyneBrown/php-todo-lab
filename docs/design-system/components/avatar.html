@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avatar — Tasks design system</title>
+<meta name="description" content="Avatars: initials, image, icon, status and groups in three sizes.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Data display</p>
+      <h1>Avatar</h1>
+      <p class="ds-lead">A person shown as a photo, initials or an icon, always alongside their name.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill ds-pill--warn">Not used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+
+      <p>An avatar represents a person with a photo, initials or a generic icon. The to-do app has a single anonymous user and no accounts in v1, so avatars are not used; the component exists so a future shared-list or account feature starts from the system.</p>
+      <ul><li>Use an avatar next to a person's name, or alone where space is tight and the name is in the accessible name.</li><li>Never use an avatar as the only way to tell people apart; pair it with the name.</li></ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+<div class="ds-anatomy"><figure class="ds-anatomy__figure"><span class="avatar avatar--lg" role="img" aria-label="Ana Novak">AN<span class="avatar__status" aria-hidden="true"></span></span><span class="ds-callout" style="left: 44%; top: 34%;" aria-hidden="true">1</span><span class="ds-callout" style="left: 58%; top: 62%;" aria-hidden="true">2</span></figure><ol class="ds-anatomy__list"><li><div><b>Circle</b><small>Initials on <code>--color-accent-subtle</code> in <code>--color-fg-accent</code>, or a cropped photo.</small></div></li><li><div><b>Status dot (optional)</b><small>28% of the size, <code>--color-success-icon</code> with a surface-coloured ring.</small></div></li></ol></div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+
+      <div class="ds-example"><div class="ds-example__canvas "><span class="avatar " role="img" aria-label="Ana Novak">AN</span><span class="avatar avatar--icon " role="img" aria-label="Unknown person"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg></span><span class="avatar " role="img" aria-label="Leo Park, online">LP<span class="avatar__status" aria-hidden="true"></span></span><span class="avatar-group" role="img" aria-label="Ana Novak, Leo Park, Sam Reid and 2 more"><span class="avatar " aria-hidden="true">AN</span><span class="avatar " aria-hidden="true">LP</span><span class="avatar " aria-hidden="true">SR</span><span class="avatar avatar--overflow" aria-hidden="true">+2</span></span></div><div class="ds-example__caption"><span>Initials, icon, with status, and a group with overflow count.</span></div><details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class="avatar" role="img" aria-label="Ana Novak"&gt;AN&lt;/span&gt;
+&lt;span class="avatar avatar--lg"&gt;&lt;img src="ana.jpg" alt="Ana Novak"&gt;&lt;/span&gt;</code></pre></details></div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+<div class="ds-example"><div class="ds-example__canvas "><span class="avatar avatar--sm" role="img" aria-label="Ana Novak">AN</span><span class="avatar " role="img" aria-label="Ana Novak">AN</span><span class="avatar avatar--lg" role="img" aria-label="Ana Novak">AN</span></div><div class="ds-example__caption"><span>Small 32px (<code>--space-8</code>), medium 40px (<code>--space-10</code>), large 48px (<code>--space-12</code>).</span></div></div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+
+      <p>Avatars are not interactive. When one is a link (for example to a profile) the link takes the shared focus ring; the avatar itself has no hover or disabled state.</p>
+      <div class="ds-matrix"><table><thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Focus (as a link)</th></tr></thead><tbody><tr><th scope="row">Avatar</th><td><span class="avatar " role="img" aria-label="Ana Novak">AN</span></td><td><a href="#states" data-state="focus" style="display: inline-flex; border-radius: var(--radius-full);"><span class="avatar " role="img" aria-label="Ana Novak, view profile">AN</span></a></td></tr></tbody></table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes"><div data-theme="light"><span class="avatar " role="img" aria-label="Ana Novak">AN</span><span class="avatar avatar--icon " role="img" aria-label="Unknown person"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg></span><span class="avatar " role="img" aria-label="Leo Park, online">LP<span class="avatar__status" aria-hidden="true"></span></span><span class="avatar-group" role="img" aria-label="Ana Novak, Leo Park, Sam Reid and 2 more"><span class="avatar " aria-hidden="true">AN</span><span class="avatar " aria-hidden="true">LP</span><span class="avatar " aria-hidden="true">SR</span><span class="avatar avatar--overflow" aria-hidden="true">+2</span></span></div><div data-theme="dark"><span class="avatar " role="img" aria-label="Ana Novak">AN</span><span class="avatar avatar--icon " role="img" aria-label="Unknown person"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/></svg></span><span class="avatar " role="img" aria-label="Leo Park, online">LP<span class="avatar__status" aria-hidden="true"></span></span><span class="avatar-group" role="img" aria-label="Ana Novak, Leo Park, Sam Reid and 2 more"><span class="avatar " aria-hidden="true">AN</span><span class="avatar " aria-hidden="true">LP</span><span class="avatar " aria-hidden="true">SR</span><span class="avatar avatar--overflow" aria-hidden="true">+2</span></span></div></div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul><li>Sizes do not change with the viewport; pick the size for the context.</li><li>Groups show at most four avatars and then a count, at every width.</li></ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+<p>Reads <code>--color-accent-subtle</code> and <code>--color-fg-accent</code> (initials), <code>--color-bg-subtle-hover</code> (overflow), <code>--color-success-icon</code> (status) and <code>--color-bg-surface</code> for rings. Component token: <code>--avatar-size</code>.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+
+      <h3>Role and pattern</h3><p>Decorative when the name is next to it (<code>aria-hidden="true"</code>); otherwise <code>role="img"</code> with the name as <code>aria-label</code>, or an <code>&lt;img alt&gt;</code>. No APG widget pattern applies.</p>
+      <h3>Keyboard</h3><div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody><tr><td><kbd>Tab</kbd></td><td>Not focusable unless wrapped in a link or button.</td></tr></tbody></table></div>
+      <h3>Focus</h3><p>The wrapping link draws the shared ring, rounded to the circle.</p>
+      <h3>Labelling</h3><p>Status dots are colour only, so the status goes in the label ("Leo Park, online"). Groups get one label listing the names and the overflow count.</p>
+      <h3>Contrast</h3><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);"><div class="ds-pair"><span>Initials on avatar</span><span class="ds-pair__ratio" data-contrast="--color-fg-accent|--color-accent-subtle" data-min="4.5"></span></div><div class="ds-pair"><span>Overflow count</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-subtle-hover" data-min="4.5"></span></div></div>
+      <h3>Motion</h3><p>None.</p><h3>Touch</h3><p>A linked avatar must be at least 44px including padding; the 32px size is only used next to a name that is also the link.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul><li>Initials: first letter of the first two words of the name, uppercase by style.</li><li>Photos are cropped square and centred on the face.</li><li>Labels use the person's name, never "avatar" or "profile picture".</li></ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont"><figure class="ds-do"><div class="ds-example__canvas"><span class="cluster"><span class="avatar " role="img" aria-label="Leo Park, online">LP<span class="avatar__status" aria-hidden="true"></span></span><span>Leo Park</span></span></div><figcaption>Put the name next to the avatar and include status in the label.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><span class="avatar " role="img" aria-label="Leo Park">LP<span class="avatar__status" aria-hidden="true"></span></span></div><figcaption>Rely on the green dot alone; colour is never the only signal (L2-030.6).</figcaption></figure><figure class="ds-do"><div class="ds-example__canvas"><span class="avatar-group" role="img" aria-label="Ana Novak, Leo Park, Sam Reid and 2 more"><span class="avatar " aria-hidden="true">AN</span><span class="avatar " aria-hidden="true">LP</span><span class="avatar " aria-hidden="true">SR</span><span class="avatar avatar--overflow" aria-hidden="true">+2</span></span></div><figcaption>Cap groups and say how many more there are.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><span class="avatar-group" aria-hidden="true"><span class="avatar ">AN</span><span class="avatar ">LP</span><span class="avatar ">SR</span><span class="avatar ">MK</span><span class="avatar ">JT</span><span class="avatar ">RB</span></span></div><figcaption>Stack every avatar and leave the group unlabelled.</figcaption></figure></div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead><tbody><tr><td>Background</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr><tr><td>Initials</td><td><code>--color-fg-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-accent" data-swatch></i><span data-token="--color-fg-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-accent" data-swatch></i><span data-token="--color-fg-accent"></span></span></td></tr><tr><td>Overflow background</td><td><code>--color-bg-subtle-hover</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle-hover" data-swatch></i><span data-token="--color-bg-subtle-hover"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle-hover" data-swatch></i><span data-token="--color-bg-subtle-hover"></span></span></td></tr><tr><td>Status</td><td><code>--color-success-icon</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-success-icon" data-swatch></i><span data-token="--color-success-icon"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-success-icon" data-swatch></i><span data-token="--color-success-icon"></span></span></td></tr><tr><td>Ring</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr><tr><td>Size sm / md / lg</td><td><code>--space-8</code> / <code>--space-10</code> / <code>--space-12</code></td><td colspan="2"><span data-token="--space-8"></span> / <span data-token="--space-10"></span> / <span data-token="--space-12"></span></td></tr><tr><td>Radius</td><td><code>--radius-full</code></td><td colspan="2"><span data-token="--radius-full"></span></td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+<pre><code>&lt;span class="avatar" role="img" aria-label="Ana Novak"&gt;AN&lt;/span&gt;
+&lt;span class="avatar avatar--lg"&gt;&lt;img src="ana.jpg" alt="Ana Novak"&gt;&lt;/span&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody><tr><td><code>.avatar</code></td><td>Medium avatar.</td></tr><tr><td><code>.avatar--sm</code> <code>.avatar--lg</code></td><td>Sizes.</td></tr><tr><td><code>.avatar__status</code></td><td>Status dot.</td></tr><tr><td><code>.avatar-group</code></td><td>Overlapping group.</td></tr><tr><td><code>.avatar--overflow</code></td><td>"+n" count.</td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<p>No mock contains an avatar: the product has no accounts in v1. Colours and shape come from the accent tokens and the round checkbox; see <a href="../../mocks/pages/page.loaded.html">pages/page.loaded</a> for the visual language.</p><p>Drift fixed during extraction: none; system addition (D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

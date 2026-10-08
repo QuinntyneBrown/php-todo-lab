@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dialog — Tasks design system</title>
+<meta name="description" content="Dialog: native modal dialog, destructive, form, scrollable and sheet variants, every state, both themes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Containers</p>
+      <h1>Dialog</h1>
+      <p class="ds-lead">A modal window for one decision or one short form. Not used in v1: the product undoes instead of confirming.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: ready</span><span class="ds-pill ds-pill--warn">Not used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>A dialog interrupts the page to ask for one decision or one short piece of input, and nothing else can be used until it is answered or dismissed.</p>
+      <p><b>Not used in v1.</b> L2-022 keeps the app to one screen with no modals. Destructive actions are reversible instead of confirmable: deleting a task or clearing completed tasks shows a toast with Undo (L2-015, L2-017), which is faster and safer than a confirmation step. The dialog is documented so a future screen that genuinely needs one (for example, a destructive action that cannot be undone) builds it the same way (D22).</p>
+      <ul>
+        <li>Prefer an inline edit, an Undo toast, or a new page before reaching for a dialog.</li>
+        <li>Use the <b>destructive</b> variant only for irreversible actions; use <b>form</b> for one or two fields; use <b>scrollable</b> when the body is longer than the viewport.</li>
+        <li>Never open a dialog on page load or stack one dialog on another.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="dialog dialog--static" role="dialog" aria-labelledby="dg1-t" style="width: 100%; max-width: 20rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg1-t">Rename list</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><div class="field"><label class="field__label" for="dg1-i">List name</label><input class="input" id="dg1-i" type="text" value="Today"><p class="message message--hint" id="dg1-h">Up to 40 characters.</p></div></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--primary" type="button">Save name</button></div></div>
+          <span class="ds-callout" style="left: 12%; top: 16%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 88%; top: 16%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 12%; top: 48%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 40%; top: 84%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Title</b><small><code>--text-h3</code>; a question for destructive dialogs. It labels the dialog (<code>aria-labelledby</code>).</small></div></li>
+          <li><div><b>Close button</b><small>Ghost icon button, <code>aria-label="Close"</code>. Omitted on destructive dialogs, where Cancel is explicit.</small></div></li>
+          <li><div><b>Body</b><small>Muted text or a short form; <code>--space-4</code> / <code>--space-6</code> padding.</small></div></li>
+          <li><div><b>Footer</b><small>Actions aligned to the end, primary last; sticky on scroll.</small></div></li>
+        </ol>
+      </div>
+    </section>
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="dialog dialog--static" role="dialog" aria-labelledby="dg2-t" style="width: 100%; max-width: 22rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg2-t">Keyboard shortcuts</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><p>Ctrl or Cmd + Z undoes the last delete. Enter adds a task. Escape cancels an edit.</p></div><div class="dialog__footer"><button class="btn btn--primary" type="button">Done</button></div></div>
+<div class="dialog dialog--static" role="alertdialog" aria-labelledby="dg3-t" style="width: 100%; max-width: 22rem;"><div class="dialog__header"><span class="dialog__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></span><h3 class="dialog__title" id="dg3-t">Delete 3 completed tasks?</h3></div><div class="dialog__body"><p>They will be removed from every list. This cannot be undone.</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--danger" type="button">Delete tasks</button></div></div>
+        </div>
+        <div class="ds-example__caption"><span>Default (information) and destructive (<code>role="alertdialog"</code>, danger icon and button).</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;dialog class="dialog" aria-labelledby="t"&gt;
+  &lt;div class="dialog__header"&gt;&lt;h2 class="dialog__title" id="t"&gt;…&lt;/h2&gt;…&lt;/div&gt;
+  &lt;div class="dialog__body"&gt;…&lt;/div&gt;
+  &lt;div class="dialog__footer"&gt;…&lt;/div&gt;
+&lt;/dialog&gt;</code></pre></details>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<div class="dialog dialog--static" role="dialog" aria-labelledby="dg4-t" style="width: 100%; max-width: 22rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg4-t">Rename list</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><div class="field"><label class="field__label" for="dg4-i">List name</label><input class="input" id="dg4-i" type="text" value="Today"><p class="message message--hint" id="dg4-h">Up to 40 characters.</p></div></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--primary" type="button">Save name</button></div></div>
+<div class="dialog dialog--static dialog--scroll" role="dialog" aria-labelledby="dg5-t" style="width: 100%; max-width: 22rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg5-t">Keyboard shortcuts</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><p>Ctrl or Cmd + Z undoes the last delete.</p><p>Enter adds a task and keeps focus in the field.</p><p>Escape cancels an edit and restores the title.</p><p>Space completes or reopens the focused task.</p><p>Tab moves between the composer, the filters and each row.</p><p>Enter on a title starts editing it.</p></div><div class="dialog__footer"><button class="btn btn--primary" type="button">Done</button></div></div>
+        </div>
+        <div class="ds-example__caption"><span>Form dialog and scrollable body (header and footer stay put).</span></div>
+      </div>
+      <h3>Full-screen sheet on phones</h3>
+      <p>Below SM the same markup becomes a bottom sheet: full width, top corners rounded, footer sticky. No separate variant is needed.</p>
+    </section>
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Three widths. All of them become a full-width sheet below 576px.</p>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Size</th><th scope="col">Class</th><th scope="col">Max width</th><th scope="col">Use</th></tr></thead><tbody>
+        <tr><td>Small</td><td><code>.dialog--sm</code></td><td>24rem (384px)</td><td>Confirmations</td></tr>
+        <tr><td>Medium</td><td>default</td><td>32rem (512px)</td><td>Short forms, information</td></tr>
+        <tr><td>Large</td><td><code>.dialog--lg</code></td><td>44rem (704px)</td><td>Long lists, previews</td></tr>
+      </tbody></table></div>
+    </section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>States live on the dialog's controls. Busy dims the body and sets <code>aria-busy</code> on the dialog and the pressed button; invalid uses the field's <code>aria-invalid</code>; failed shows an inline danger alert above the footer and keeps the dialog open.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Focus (primary)</th><th scope="col">Busy</th><th scope="col">Invalid</th><th scope="col">Failed</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Form</th><td><div class="dialog dialog--static" role="dialog" aria-labelledby="dg6-t" style="width: 100%; max-width: 17rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg6-t">Rename list</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><div class="field"><label class="field__label" for="dg6-i">List name</label><input class="input" id="dg6-i" type="text" value="Today"><p class="message message--hint" id="dg6-h">Up to 40 characters.</p></div></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--primary" type="button">Save name</button></div></div></td><td><div class="dialog dialog--static" role="dialog" aria-labelledby="dg7-t" style="width: 100%; max-width: 17rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg7-t">Rename list</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><div class="field"><label class="field__label" for="dg7-i">List name</label><input class="input" id="dg7-i" type="text" value="Today"><p class="message message--hint" id="dg7-h">Up to 40 characters.</p></div></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--primary" type="button" data-state="focus">Save name</button></div></div></td><td><div class="dialog dialog--static" role="dialog" aria-labelledby="dg8-t" aria-busy="true" style="width: 100%; max-width: 17rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg8-t">Rename list</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><div class="field"><label class="field__label" for="dg8-i">List name</label><input class="input" id="dg8-i" type="text" value="Today"><p class="message message--hint" id="dg8-h">Up to 40 characters.</p></div></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--primary" type="button" aria-busy="true">Save name</button></div></div></td><td><div class="dialog dialog--static" role="dialog" aria-labelledby="dg9-t" style="width: 100%; max-width: 17rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg9-t">Rename list</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><div class="field"><label class="field__label" for="dg9-i">List name</label><input class="input" id="dg9-i" type="text" value="" aria-invalid="true" aria-describedby="dg9-e"><p class="message message--error" id="dg9-e">Enter a list name.</p></div></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--primary" type="button">Save name</button></div></div></td><td><div class="dialog dialog--static" role="dialog" aria-labelledby="dg10-t" style="width: 100%; max-width: 17rem;"><div class="dialog__header"><h3 class="dialog__title" id="dg10-t">Rename list</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body"><div class="field"><label class="field__label" for="dg10-i">List name</label><input class="input" id="dg10-i" type="text" value="Today"><p class="message message--hint" id="dg10-h">Up to 40 characters.</p></div></div><div class="alert alert--danger alert--compact" role="alert" style="margin: 0 var(--space-6) var(--space-3);"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><p class="alert__body">Couldn't save that change.</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--primary" type="button">Save name</button></div></div></td></tr>
+          <tr><th scope="row">Destructive</th><td><div class="dialog dialog--static" role="alertdialog" aria-labelledby="dg11-t" style="width: 100%; max-width: 17rem;"><div class="dialog__header"><span class="dialog__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></span><h3 class="dialog__title" id="dg11-t">Delete 3 completed tasks?</h3></div><div class="dialog__body"><p>They will be removed from every list. This cannot be undone.</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--danger" type="button">Delete tasks</button></div></div></td><td><div class="dialog dialog--static" role="alertdialog" aria-labelledby="dg12-t" style="width: 100%; max-width: 17rem;"><div class="dialog__header"><span class="dialog__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></span><h3 class="dialog__title" id="dg12-t">Delete 3 completed tasks?</h3></div><div class="dialog__body"><p>They will be removed from every list. This cannot be undone.</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--danger" type="button" data-state="focus">Delete tasks</button></div></div></td><td><div class="dialog dialog--static" role="alertdialog" aria-labelledby="dg13-t" aria-busy="true" style="width: 100%; max-width: 17rem;"><div class="dialog__header"><span class="dialog__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></span><h3 class="dialog__title" id="dg13-t">Delete 3 completed tasks?</h3></div><div class="dialog__body"><p>They will be removed from every list. This cannot be undone.</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--danger" type="button" aria-busy="true">Delete tasks</button></div></div></td><td>—</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="ds-example__canvas" style="padding: 0;"><div class="dialog dialog--static" role="alertdialog" aria-labelledby="dg14-t" style="width: 100%; max-width: 100%;"><div class="dialog__header"><span class="dialog__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></span><h3 class="dialog__title" id="dg14-t">Delete 3 completed tasks?</h3></div><div class="dialog__body"><p>They will be removed from every list. This cannot be undone.</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--danger" type="button">Delete tasks</button></div></div></div></div>
+        <div data-theme="dark"><div class="ds-example__canvas" style="padding: 0;"><div class="dialog dialog--static" role="alertdialog" aria-labelledby="dg14-t" style="width: 100%; max-width: 100%;"><div class="dialog__header"><span class="dialog__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></span><h3 class="dialog__title" id="dg14-t">Delete 3 completed tasks?</h3></div><div class="dialog__body"><p>They will be removed from every list. This cannot be undone.</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--danger" type="button">Delete tasks</button></div></div></div></div>
+      </div>
+      <p>In dark the dialog uses <code>--color-bg-surface-raised</code> (<code>--palette-ink-850</code>), one step lighter than cards, and <code>--shadow-4</code>; the backdrop is <code>--color-bg-backdrop</code>.</p>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>XS (&lt; 576px): bottom sheet. Full width, <code>--radius-xl</code> on the top corners only, <code>max-height: 90dvh</code>, footer sticky at the bottom so the action is always reachable.</li>
+        <li>SM and up (≥ 576px): centred, <code>calc(100% - 32px)</code> wide up to its size's max width.</li>
+        <li>Footer buttons wrap when the row is too narrow; the primary action stays last.</li>
+        <li>Long content scrolls inside <code>.dialog__body</code> (<code>.dialog--scroll</code>), never the page behind.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Reads <code>--color-bg-surface-raised</code>, <code>--color-fg-default</code>, <code>--color-fg-muted</code>, <code>--shadow-4</code>, <code>--radius-xl</code>, <code>--color-bg-backdrop</code>; the destructive icon reads <code>--color-danger-bg</code> and <code>--color-danger-icon</code>. Override <code>--dialog-width</code> for a custom width.</p>
+      <pre><code>.dialog--wide { --dialog-width: 56rem; }</code></pre>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;dialog&gt;</code> opened with <code>showModal()</code>, following the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/">APG Dialog (Modal) pattern</a>. <code>showModal()</code> supplies the modal role, the backdrop, the top layer and makes the rest of the page inert. Destructive confirmations use <code>role="alertdialog"</code> and <code>aria-describedby</code> on the body.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Cycle through the dialog's controls only; focus never reaches the page behind.</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes the dialog (the native <code>cancel</code> event) and returns focus. A busy dialog ignores Esc until the request settles.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Submits a form dialog from inside a field.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>On open, focus moves to the first field in a form dialog, to Cancel in a destructive dialog (the safe choice), otherwise to the primary action. On close, focus returns to the control that opened it. The ring is the shared 2px <code>--color-focus-ring</code>.</p>
+      <h3>Labelling</h3>
+      <p><code>aria-labelledby</code> points at the title; destructive dialogs add <code>aria-describedby</code> pointing at the body sentence. The close button is <code>aria-label="Close"</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Title on dialog</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Body on dialog</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Danger button label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring on dialog</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The dialog rises 16px and fades in over <code>--duration-slow</code> with <code>--ease-enter</code>; with reduced motion it appears instantly.</p>
+      <h3>Touch</h3>
+      <p>Footer buttons are 44px tall; on phones the sheet keeps them at the bottom of the screen, within thumb reach. Tapping the backdrop closes non-destructive dialogs only.</p>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Title: a question for decisions ("Delete 3 completed tasks?"), a noun phrase for information ("Keyboard shortcuts").</li>
+        <li>Body: one or two sentences saying what will happen and whether it can be undone. No apologies, no "Are you sure?" (L2-025).</li>
+        <li>Buttons repeat the verb of the title: "Delete tasks" and "Cancel", never "Yes" / "No" or "OK".</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div></div><figcaption>Make a reversible action undoable with a toast, as v1 does for delete and Clear completed (L2-015, L2-017).</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="dialog dialog--static" role="alertdialog" aria-labelledby="dg15-t" style="width: 100%; max-width: 100%;"><div class="dialog__header"><span class="dialog__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></span><h3 class="dialog__title" id="dg15-t">Delete this task?</h3></div><div class="dialog__body"><p>Are you sure?</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--danger" type="button">Delete tasks</button></div></div></div><figcaption>Interrupt every delete with "Are you sure?". L2-022 rules out modals in v1.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="dialog__footer" style="padding: 0;"><button class="btn" type="button">Cancel</button><button class="btn btn--danger" type="button">Delete tasks</button></div></div><figcaption>Name the action on the button and put the safe choice first.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="dialog__footer" style="padding: 0;"><button class="btn btn--primary" type="button">OK</button><button class="btn btn--primary" type="button">Yes</button></div></div><figcaption>Use "OK" / "Yes" or two primary buttons.</figcaption></figure>
+      </div>
+    </section>
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Surface</td><td><code>--color-bg-surface-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td></tr>
+          <tr><td>Backdrop</td><td><code>--color-bg-backdrop</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-backdrop" data-swatch></i><span data-token="--color-bg-backdrop"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-backdrop" data-swatch></i><span data-token="--color-bg-backdrop"></span></span></td></tr>
+          <tr><td>Title</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Body text</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Destructive icon background</td><td><code>--color-danger-bg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-bg" data-swatch></i><span data-token="--color-danger-bg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-bg" data-swatch></i><span data-token="--color-danger-bg"></span></span></td></tr>
+          <tr><td>Destructive icon</td><td><code>--color-danger-icon</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-icon" data-swatch></i><span data-token="--color-danger-icon"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-icon" data-swatch></i><span data-token="--color-danger-icon"></span></span></td></tr>
+          <tr><td>Radius</td><td><code>--radius-xl</code></td><td colspan="2"><span data-token="--radius-xl"></span></td></tr>
+          <tr><td>Shadow</td><td><code>--shadow-4</code></td><td colspan="2"><span data-token="--shadow-4"></span></td></tr>
+          <tr><td>Padding</td><td><code>--space-6</code> <code>--space-4</code></td><td colspan="2"><span data-token="--space-6"></span> / <span data-token="--space-4"></span></td></tr>
+          <tr><td>Title font</td><td><code>--text-h3</code></td><td colspan="2"><span data-token="--text-h3"></span></td></tr>
+          <tr><td>Enter motion</td><td><code>--duration-slow</code> <code>--ease-enter</code></td><td colspan="2"><span data-token="--duration-slow"></span> / <span data-token="--ease-enter"></span></td></tr>
+          <tr><td>Layer (when not top-layer)</td><td><code>--z-modal</code></td><td colspan="2"><span data-token="--z-modal"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;dialog class="dialog dialog--sm" role="alertdialog" aria-labelledby="del-t" aria-describedby="del-d"&gt;
+  &lt;div class="dialog__header"&gt;
+    &lt;span class="dialog__icon"&gt;&lt;svg class="icon" aria-hidden="true"&gt;…&lt;/svg&gt;&lt;/span&gt;
+    &lt;h2 class="dialog__title" id="del-t"&gt;Delete 3 completed tasks?&lt;/h2&gt;
+  &lt;/div&gt;
+  &lt;div class="dialog__body"&gt;&lt;p id="del-d"&gt;This cannot be undone.&lt;/p&gt;&lt;/div&gt;
+  &lt;div class="dialog__footer"&gt;
+    &lt;button class="btn" type="button" autofocus&gt;Cancel&lt;/button&gt;
+    &lt;button class="btn btn--danger" type="button"&gt;Delete tasks&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;
+&lt;script&gt;trigger.addEventListener("click", () =&gt; dialog.showModal());&lt;/script&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.dialog</code></td><td>Sheet below SM, centred panel above.</td></tr>
+        <tr><td><code>.dialog--sm</code> <code>.dialog--lg</code></td><td>Width.</td></tr>
+        <tr><td><code>.dialog--scroll</code></td><td>Scrolling body between fixed header and footer.</td></tr>
+        <tr><td><code>.dialog__icon</code></td><td>Destructive icon.</td></tr>
+        <tr><td><code>aria-busy="true"</code></td><td>Busy: body dimmed; set it on the pressed button too.</td></tr>
+        <tr><td><code>.dialog--static</code></td><td>Documentation only: renders a dialog inline.</td></tr>
+      </tbody></table></div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>No mock: the <a href="../../mocks/README.md">mocks README</a> lists Dialogs as "None. L2-022 keeps the app to one screen with no modals; destructive actions are undone from a toast instead." Undo is specified in <a href="../../mocks/pages/page.deleted.html">pages/page.deleted</a> and <a href="../../mocks/pages/notifications.html">pages/notifications</a>.</p>
+      <p>Drift fixed during extraction: none; not in the mocks, built from the system tokens (D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>
