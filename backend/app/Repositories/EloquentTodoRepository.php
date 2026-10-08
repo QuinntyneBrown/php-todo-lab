@@ -30,4 +30,9 @@ final class EloquentTodoRepository implements TodoRepository
             'completed' => Todo::query()->completed()->count(),
         ];
     }
+
+    public function create(string $title): Todo
+    {
+        return Todo::query()->create(['title' => $title]);
+    }
 }

@@ -23,4 +23,6 @@ interface TodoRepository
      * @return array{active: int, completed: int}
      */
     public function counts(): array;
+
+    public function create(string $title): Todo;
 }

@@ -65,6 +65,11 @@ final class InMemoryTodoRepository implements TodoRepository
         ];
     }
 
+    public function create(string $title): Todo
+    {
+        return $this->seed($title);
+    }
+
     /**
      * @return Collection<string, Todo>
      */
