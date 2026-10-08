@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 02 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="02" data-video-title="Laravel through ASP.NET Core eyes" data-parts="Introduction|Bootstrap|Container|Layout|Configuration|CLI|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 02</div>
+  <h1>Laravel through ASP.NET Core eyes</h1>
+  <p class="lead">Program.cs, IServiceCollection and appsettings.json, mapped onto backend/</p>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>How a request travels from <code>public/index.php</code> to a controller</li>
+    <li>What <code>bootstrap/app.php</code> is, compared with <code>Program.cs</code></li>
+    <li>How the container resolves an interface, and why most wiring is invisible</li>
+    <li>Where configuration lives and why <code>env()</code> belongs in one kind of file</li>
+    <li>Which Artisan and Composer commands you will type every day</li>
+  </ol>
+</section>
+
+<section id="index" data-part="1" data-cue="Every HTTP request into this API hits one file">
+  <h2>The front controller</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/public/index.php</div>
+<pre class="code tight" data-lang="php" data-mark="13,17">define('LARAVEL_START', microtime(true));
+
+// Determine if the application is in maintenance mode...
+if (file_exists($maintenance = __DIR__.'/../storage/framework/maintenance.php')) {
+    require $maintenance;
+}
+
+// Register the Composer autoloader...
+require __DIR__.'/../vendor/autoload.php';
+
+// Bootstrap Laravel and handle the request...
+/** @var Application $app */
+$app = require_once __DIR__.'/../bootstrap/app.php';
+
+$app-&gt;handleRequest(Request::capture());</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Every path is routed to this file by the web server or <code>php artisan serve</code></li>
+        <li>Autoloader, then application, then <code>handleRequest</code></li>
+        <li>The equivalent of the generated <code>Main</code> that calls <code>CreateBuilder</code> and <code>app.Run()</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="bootstrap" data-part="1" data-cue="In ASP.NET Core terms, index.php is the generated Main">
+  <h2>bootstrap/app.php is Program.cs</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/bootstrap/app.php</div>
+<pre class="code tight" data-lang="php" data-mark="1,2,6,9,11">return Application::configure(basePath: dirname(__DIR__))
+    -&gt;withRouting(
+        api: __DIR__.'/../routes/api.php',
+        commands: __DIR__.'/../routes/console.php',
+    )
+    -&gt;withMiddleware(function (Middleware $middleware): void {
+        //
+    })
+    -&gt;withExceptions(function (Exceptions $exceptions): void {
+        $exceptions-&gt;render(new ProblemDetailsRenderer);
+    })-&gt;create();</pre>
+    </div>
+    <div>
+      <table class="small">
+        <tr><th>Laravel</th><th>ASP.NET Core</th></tr>
+        <tr><td><code>Application::configure(basePath:)</code></td><td><code>WebApplication.CreateBuilder(args)</code></td></tr>
+        <tr><td><code>withRouting(api: ...)</code></td><td><code>app.MapControllers()</code>, with an automatic <code>/api</code> prefix</td></tr>
+        <tr><td><code>withMiddleware(...)</code></td><td><code>app.Use...</code> pipeline order</td></tr>
+        <tr><td><code>withExceptions(...)</code></td><td><code>app.UseExceptionHandler()</code> + <code>IExceptionHandler</code></td></tr>
+        <tr><td><code>-&gt;create()</code></td><td><code>builder.Build()</code></td></tr>
+      </table>
+      <p class="small muted">Defaults include the <code>TrimStrings</code> and <code>ConvertEmptyStringsToNull</code> middleware the Form Requests rely on.</p>
+    </div>
+  </div>
+</section>
+
+<section id="no-mapcontrollers" data-part="1" data-cue="One difference to hold onto">
+  <h2>No AddControllers, no MapControllers</h2>
+  <ul>
+    <li>Controllers are plain classes the router instantiates by name</li>
+    <li>The routes file names each controller and method explicitly (video 03)</li>
+    <li>No attribute scanning, no assembly discovery</li>
+  </ul>
+  <div class="file">backend/routes/api.php</div>
+<pre class="code" data-lang="php" data-mark="2">Route::prefix('v1')-&gt;group(function (): void {
+    Route::get('todos', [TodoController::class, 'index']);
+    Route::post('todos', [TodoController::class, 'store']);</pre>
+</section>
+
+<section id="autowire" data-part="2" data-cue="Laravel's container is the IServiceCollection">
+  <h2>Auto-wiring by reflection</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Http/Controllers/Api/V1/TodoController.php</div>
+<pre class="code" data-lang="php" data-mark="1">public function store(StoreTodoRequest $request, CreateTodo $createTodo): JsonResponse
+{
+    $todo = $createTodo-&gt;handle($request-&gt;title());
+
+    return (new TodoResource($todo))-&gt;response()
+        -&gt;setStatusCode(201)
+        -&gt;header('Location', url("/api/v1/todos/{$todo-&gt;id}"));
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>A concrete class in a constructor or method signature is built on demand, recursively</li>
+        <li>No registration for concretes: <code>CreateTodo</code> is never listed anywhere</li>
+        <li>Method injection on controller actions and Artisan commands is normal, not <code>[FromServices]</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="bindings" data-part="2" data-cue="Registration is only needed for abstractions">
+  <h2>Binding an interface</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Providers/AppServiceProvider.php</div>
+<pre class="code" data-lang="php" data-mark="4,5,6">class AppServiceProvider extends ServiceProvider
+{
+    /** @var array&lt;class-string, class-string&gt; */
+    public array $bindings = [
+        TodoRepository::class =&gt; EloquentTodoRepository::class,
+    ];
+}</pre>
+      <div class="file">backend/bootstrap/providers.php</div>
+<pre class="code" data-lang="php">return [
+    AppServiceProvider::class,
+];</pre>
+    </div>
+    <div>
+      <table class="small">
+        <tr><th>Laravel</th><th>.NET</th></tr>
+        <tr><td><code>$bindings</code> / <code>bind()</code></td><td><code>AddTransient</code></td></tr>
+        <tr><td><code>$singletons</code> / <code>singleton()</code></td><td><code>AddSingleton</code> (per request, in practice)</td></tr>
+        <tr><td>Service provider</td><td>Composition root</td></tr>
+        <tr><td><code>bootstrap/providers.php</code></td><td>The list of providers you wrote; packages are auto-discovered</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="facades" data-part="2" data-cue="Now the part that reads as heresy">
+  <h2>Facades: service location with nice syntax</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Console/Commands/PurgeDeletedTodos.php</div>
+<pre class="code tight" data-lang="php" data-mark="2">$message = "Purged {$purged} soft-deleted todos.";
+Log::info($message);
+$this-&gt;info($message);</pre>
+      <div class="file">backend/tests/Feature/Console/PurgeDeletedTodosTest.php</div>
+<pre class="code tight" data-lang="php" data-mark="1,7">Log::spy();
+deletedHoursAgo(1);
+
+$this-&gt;artisan('todos:purge-deleted')
+    -&gt;expectsOutput('Purged 0 soft-deleted todos.')
+    -&gt;assertExitCode(0);
+
+Log::shouldHaveReceived('info')-&gt;with('Purged 0 soft-deleted todos.')-&gt;once();</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>DB::</code>, <code>Log::</code>, <code>Route::</code>, <code>Schedule::</code>, <code>Schema::</code> resolve a service and forward the call</li>
+        <li>Used here in infrastructure only: repository, command, routes, migrations</li>
+        <li><strong>Actions never touch a facade.</strong> They take <code>TodoRepository</code> in the constructor</li>
+        <li>Testable: <code>Log::spy()</code> is the injected-mock-logger equivalent</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="helpers" data-part="2" data-cue="Alongside facades are global helper functions">
+  <h2>Global helpers</h2>
+  <table>
+    <tr><th>Helper</th><th>Does</th><th>Seen in</th></tr>
+    <tr><td><code>now()</code></td><td>Current time through a clock tests can freeze</td><td><code>UpdateTodo</code>, <code>PurgeDeletedTodos</code></td></tr>
+    <tr><td><code>url()</code></td><td>Absolute URL for the <code>Location</code> header</td><td><code>TodoController::store</code></td></tr>
+    <tr><td><code>response()</code></td><td>Response builder</td><td><code>TodoController::destroy</code></td></tr>
+    <tr><td><code>config()</code></td><td>Reads configuration by dotted key</td><td><code>TodoLimitTest</code></td></tr>
+    <tr><td><code>collect()</code></td><td>Wraps an array in a Collection</td><td><code>InMemoryTodoRepository</code></td></tr>
+    <tr><td><code>app()</code></td><td>Resolves from the container: a smell outside tests and the composition root</td><td>Concurrency tests only</td></tr>
+  </table>
+</section>
+
+<section id="layout" data-part="3" data-cue="A Clean Architecture solution in .NET uses project references">
+  <h2>One project, many folders</h2>
+  <div class="cols">
+    <div>
+      <div class="card cs">
+        <h3>.NET Clean Architecture</h3>
+        <ul>
+          <li>Domain, Application, Infrastructure, Web projects</li>
+          <li>Project references enforce the dependency direction</li>
+          <li>The compiler rejects Domain → Infrastructure</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card php">
+        <h3>This Laravel backend</h3>
+        <ul>
+          <li>One project; layering is by folder and convention</li>
+          <li>Held by <code>AGENTS.md</code>, Larastan, and code review</li>
+          <li>Nothing stops an Action from querying <code>Todo</code> except the reviewer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="folders" data-part="3" data-cue="The folders you will live in">
+  <h2>The folders</h2>
+  <div class="cols">
+    <div>
+<pre class="code tight" data-lang="md">backend/
+├── app/
+│   ├── Actions/Todos/      one use case per class
+│   ├── Console/Commands/   Artisan commands
+│   ├── Enums/              TodoStatus
+│   ├── Exceptions/         renderer + domain exceptions
+│   ├── Http/               Controllers, Requests, Resources
+│   ├── Models/             Todo
+│   ├── Providers/          AppServiceProvider
+│   └── Repositories/       interface + Eloquent implementation
+├── bootstrap/app.php       the application factory
+├── config/                 arrays, read with config()
+├── database/               migrations, factories, seeders
+├── routes/                 api.php, console.php
+├── tests/                  Feature, Unit, Fakes
+├── public/                 web root (index.php)
+└── storage/                logs and caches, git-ignored</pre>
+    </div>
+    <div>
+      <ul>
+        <li>The layout is specified in <code>AGENTS.md</code> at the repository root</li>
+        <li>A file with no home means updating that tree in the same change</li>
+        <li><code>vendor/</code> is <code>node_modules</code>: never committed; <code>composer.lock</code> is</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="config" data-part="4" data-cue="Configuration lives in config">
+  <h2>Configuration is PHP arrays</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/config/database.php</div>
+<pre class="code tight" data-lang="php" data-mark="4,5,10,11,14,16">'mysql' =&gt; [
+    'driver' =&gt; 'mysql',
+    'url' =&gt; env('DB_URL'),
+    'host' =&gt; env('DB_HOST', '127.0.0.1'),
+    'port' =&gt; env('DB_PORT', '3306'),
+    'database' =&gt; env('DB_DATABASE', 'laravel'),
+    'username' =&gt; env('DB_USERNAME', 'root'),
+    'password' =&gt; env('DB_PASSWORD', ''),
+    'unix_socket' =&gt; env('DB_SOCKET', ''),
+    'charset' =&gt; env('DB_CHARSET', 'utf8mb4'),
+    'collation' =&gt; env('DB_COLLATION', 'utf8mb4_0900_ai_ci'),
+    'prefix' =&gt; '',
+    'prefix_indexes' =&gt; true,
+    'strict' =&gt; true,
+    'engine' =&gt; null,
+    'timezone' =&gt; '+00:00',</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>config/*.php</code> return arrays; the file name is the top-level key</li>
+        <li>Read with a dotted path: <code>config('database.connections.mysql')</code>, your <code>IConfiguration</code> section</li>
+        <li><code>strict</code> on, <code>utf8mb4</code>, and a fixed <code>+00:00</code> session time zone</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="env" data-part="4" data-cue="The environment comes from a .env file">
+  <h2>.env and the one rule about env()</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/.env.example</div>
+<pre class="code tight" data-lang="ini">APP_NAME="php-todo-lab"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=todo
+DB_USERNAME=todo
+DB_PASSWORD=secret</pre>
+    </div>
+    <div>
+      <table class="small">
+        <tr><th>Laravel</th><th>.NET</th></tr>
+        <tr><td><code>.env.example</code> (committed)</td><td><code>appsettings.json</code></td></tr>
+        <tr><td><code>.env</code> (ignored)</td><td>user secrets / environment</td></tr>
+        <tr><td><code>php artisan key:generate</code></td><td>data protection keys</td></tr>
+        <tr><td><code>phpunit.xml</code> <code>&lt;env&gt;</code> entries</td><td>test <code>appsettings.Testing.json</code></td></tr>
+      </table>
+      <p class="quote" style="font-size:34px">Call <code>env()</code> only inside <code>config/</code>. Everywhere else read <code>config()</code>: once configuration is cached, <code>env()</code> returns null.</p>
+    </div>
+  </div>
+</section>
+
+<section id="artisan" data-part="5" data-cue="Artisan is the dotnet CLI of a Laravel app">
+  <h2>Artisan commands you will use</h2>
+  <table>
+    <tr><th>Command</th><th>Does</th><th>.NET analogue</th></tr>
+    <tr><td><code>php artisan serve</code></td><td>Runs the API on <code>http://localhost:8000</code></td><td><code>dotnet run</code></td></tr>
+    <tr><td><code>php artisan migrate --seed</code></td><td>Creates the schema and sample tasks</td><td><code>dotnet ef database update</code> + seeding</td></tr>
+    <tr><td><code>php artisan key:generate</code></td><td>Fills <code>APP_KEY</code> after copying <code>.env.example</code></td><td>data protection setup</td></tr>
+    <tr><td><code>php artisan schedule:work</code></td><td>Runs the scheduler locally</td><td>a hosted service running in the app</td></tr>
+    <tr><td><code>php artisan todos:purge-deleted</code></td><td>Runs the project's own command once</td><td>a console project entry point</td></tr>
+    <tr><td><code>php artisan tinker</code></td><td>REPL in the application context</td><td>C# interactive / <code>dotnet-script</code></td></tr>
+  </table>
+</section>
+
+<section id="composer-scripts" data-part="5" data-cue="Composer scripts are the project's task runner">
+  <h2>composer check</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/composer.json</div>
+<pre class="code tight" data-lang="json" data-mark="1-5,9-13">"test": [
+    "@php artisan config:clear --ansi",
+    "pest --coverage --min=90 --exclude-group=performance",
+    "@php -d pcov.enabled=0 vendor/bin/pest --group=performance"
+],
+"format": "pint",
+"format:check": "pint --test",
+"analyse": "phpstan analyse --memory-limit=1G --no-progress",
+"check": [
+    "@format:check",
+    "@analyse",
+    "@test"
+]</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>composer check</code>: Pint, Larastan, Pest, stops at the first failure</li>
+        <li>Same command locally and in <code>.github/workflows/ci.yml</code></li>
+        <li>Coverage gate: 90% on Actions and repositories</li>
+        <li>The performance group runs without coverage instrumentation so timings are fair</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pitfalls" data-part="5" data-cue="Four to watch">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li><code>env()</code> outside <code>config/</code> works locally and breaks once configuration is cached</li>
+    <li>A facade or <code>app()</code> inside an Action breaks the dependency direction the unit tests rely on</li>
+    <li>Your own providers must be listed in <code>bootstrap/providers.php</code>; only packages are discovered</li>
+    <li>Edited <code>.env</code> and nothing changed? Check whether configuration is cached</li>
+  </ol>
+</section>
+
+<section id="recap" data-part="6" data-cue="public/index.php is Main, bootstrap/app.php is Program.cs">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Bootstrap:</b> <code>index.php</code> is <code>Main</code>; <code>bootstrap/app.php</code> is <code>Program.cs</code>: routing, middleware, exception rendering in one call</li>
+    <li><b>Container:</b> concretes auto-wire; interfaces bind in <code>AppServiceProvider::$bindings</code></li>
+    <li><b>Facades and helpers:</b> service location; fine in infrastructure, never in Actions</li>
+    <li><b>Config:</b> arrays under <code>config/</code>, read with <code>config()</code>, fed by <code>.env</code> via <code>env()</code> in config files only</li>
+    <li><b>Checks:</b> <code>composer check</code> must pass</li>
+  </ul>
+</section>
+
+<section id="next" data-part="6" data-cue="Next, we follow a request through the routes file">
+  <div class="kicker">Next</div>
+  <h2>03 · Routes, Form Requests and the thin controller</h2>
+  <p class="lead">Attribute routing, model binding and FluentValidation, mapped onto routes/api.php, the four Form Requests, and TodoController.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

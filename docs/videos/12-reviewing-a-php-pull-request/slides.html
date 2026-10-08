@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 12 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="12" data-video-title="Reviewing a PHP pull request" data-parts="Introduction|Before the code|Per layer|Looks wrong, is right|A worked slice|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 12</div>
+  <h1>Reviewing a PHP pull request</h1>
+  <p class="lead">A review order, a checklist per layer, the deliberate choices, and one feature slice from requirement to green check</p>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>What a pull request must contain before the code is read</li>
+    <li>In which order to review it</li>
+    <li>What to check in each layer</li>
+    <li>Which deliberate choices a .NET reviewer is tempted to "fix"</li>
+    <li>How a new slice is built test-first from a requirement</li>
+  </ol>
+</section>
+
+<section id="template" data-part="1" data-cue="Open .github/PULL_REQUEST_TEMPLATE.md">
+  <h2>The pull request template</h2>
+  <div class="cols">
+    <div>
+      <div class="file">.github/PULL_REQUEST_TEMPLATE.md</div>
+<pre class="code tight" data-lang="md" data-mark="7,12,13,14,15,18">## Summary
+
+Resolves #
+
+## Requirements
+
+&lt;!-- List the L2 requirements this change implements or updates, such as L2-001. --&gt;
+
+## Checklist
+
+- [ ] I read CONTRIBUTING.md.
+- [ ] Behaviour changes have a requirement, a detailed design, and a mock.
+- [ ] Each acceptance test was written first and seen to fail for the expected reason.
+- [ ] `composer check` passes in `backend/`.
+- [ ] `npm run check` passes in `frontend/`.
+- [ ] `npm run e2e` passes, if the user interface changed.
+- [ ] Formatting changes are in separate commits from behaviour changes.
+
+## Screenshots</pre>
+    </div>
+    <div>
+      <ul>
+        <li>The first pass is the checklist, not the diff</li>
+        <li>A behaviour change with no L2 id and no design is not ready, however good the code (<code>AGENTS.md</code>)</li>
+        <li>Exempt: documentation-only, test-only, mock-only, design-system-only</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="commits" data-part="1" data-cue="Then look at the commit list">
+  <h2>Then the commits</h2>
+  <div class="cols">
+    <div class="card good">
+      <h3>Expect</h3>
+      <ul>
+        <li>A reformat commit with no behaviour change (L2-056 criterion 6)</li>
+        <li>A test commit preceding or accompanying its implementation</li>
+        <li>A description that says how the failing run looked</li>
+      </ul>
+    </div>
+    <div class="card bad">
+      <h3>Ask</h3>
+      <ul>
+        <li>"Which test failed first, and why?"</li>
+        <li>"Can the reformat be its own commit?"</li>
+        <li>"Which L2 does this trace to?"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="order" data-part="2" data-cue="Read in request order">
+  <h2>Review in request order</h2>
+  <div class="arrow-row">
+    <div class="node">Routes</div><span class="sep">→</span>
+    <div class="node">Form Requests</div><span class="sep">→</span>
+    <div class="node">Controller</div><span class="sep">→</span>
+    <div class="node">Actions</div><span class="sep">→</span>
+    <div class="node">Repository</div><span class="sep">→</span>
+    <div class="node">Model, migrations</div>
+  </div>
+  <div class="arrow-row">
+    <div class="node">Resources</div><span class="sep">→</span>
+    <div class="node">Renderer</div><span class="sep">→</span>
+    <div class="node">Commands</div><span class="sep">→</span>
+    <div class="node">Tests</div><span class="sep">→</span>
+    <div class="node hot">Specs and contract</div>
+  </div>
+  <p class="muted">Request order is dependency order. Each layer has a short, mechanical list.</p>
+</section>
+
+<section id="layers-http" data-part="2" data-cue="Routes: static paths before parameterised ones">
+  <h2>HTTP layer checklist</h2>
+  <table class="small">
+    <tr><th>Layer</th><th>Check</th><th>Video</th></tr>
+    <tr><td>Routes</td><td>Static before parameterised; <code>whereUlid</code> on every id; controllers only; inside <code>v1</code>; breaking changes go to a new version</td><td>03, 07</td></tr>
+    <tr><td>Form Requests</td><td><code>rules()</code> + a typed accessor per input; no <code>all()</code>/<code>input()</code> downstream; <code>boolean:strict</code>; <code>Rule::enum</code>; a comment where a built-in rule was rejected</td><td>03</td></tr>
+    <tr><td>Controller</td><td>≤ 10 lines, one Action, one Resource, no logic, no queries; status and headers here; the id stays a string</td><td>03</td></tr>
+    <tr><td>Resources</td><td>Contract keys only, camelCase, under <code>V1</code>; <code>meta</code> via <code>with()</code>; <code>iso()</code> for timestamps; key changes update <code>L2.md</code> and the frontend models in the same PR</td><td>07</td></tr>
+    <tr><td>Renderer</td><td>A new domain exception gets an arm before the generic ones, and a test for status, content type, detail</td><td>08</td></tr>
+  </table>
+</section>
+
+<section id="layers-domain" data-part="2" data-cue="Actions: final readonly, one public handle">
+  <h2>Application and persistence checklist</h2>
+  <table class="small">
+    <tr><th>Layer</th><th>Check</th><th>Video</th></tr>
+    <tr><td>Actions</td><td><code>final readonly</code>, one public <code>handle</code>, constructor takes <code>TodoRepository</code>; no facades, no <code>Todo::query</code>, no <code>DB::transaction</code>, no caught domain exceptions; L2 id beside non-obvious rules; readonly result classes</td><td>04</td></tr>
+    <tr><td>Repository</td><td>Interface docblock sentence; implemented in Eloquent <em>and</em> the fake; transactions and locking reads where atomic; <code>update</code> one statement; <code>toBase()</code>; list order follows the index</td><td>06</td></tr>
+    <tr><td>Model, migrations</td><td><code>$fillable</code> never gains <code>id</code>; immutable casts; docblock grows with columns; new migration files, named indexes with a reason; factory states for new columns</td><td>05</td></tr>
+    <tr><td>Commands</td><td>Method injection, work through the repository, chunked writes, exit code, schedule entry, a test that reads the schedule</td><td>09</td></tr>
+  </table>
+</section>
+
+<section id="layers-tests" data-part="2" data-cue="Tests: a &quot;Traces to&quot; header on every file">
+  <h2>Tests and tooling checklist</h2>
+  <table class="small">
+    <tr><th>Area</th><th>Check</th><th>Video</th></tr>
+    <tr><td>Tests</td><td>"Traces to" header; a feature test per endpoint against MySQL; unit tests of Actions with the fake; factories only; time travel, no sleeping; no architecture tests; performance group if the repository or a Resource changed</td><td>10</td></tr>
+    <tr><td>Tooling</td><td><code>composer check</code> green; no <code>@phpstan-ignore</code>, no baseline; docblocks on every generic; no <code>env()</code> outside <code>config/</code>; no Pint rule disabled without a name and a reason</td><td>11</td></tr>
+    <tr><td>Contract</td><td><code>docs/specs/L2.md</code> updated for any API change; frontend <code>core/api/models</code> mirrors it</td><td>07</td></tr>
+  </table>
+</section>
+
+<section id="looks-wrong" data-part="3" data-cue="A .NET reviewer will want to change several things that are deliberate">
+  <h2>Looks wrong, is right</h2>
+  <table class="small">
+    <tr><th>What you see</th><th>Why it is right</th></tr>
+    <tr><td>Controller takes <code>string $todo</code>, no model binding</td><td>Actions own the not-found rule; restore and update differ on the same id</td></tr>
+    <tr><td><code>update()</code> issues a query-level statement, not <code>save()</code></td><td>Concurrent patches must apply in full (L2-043)</td></tr>
+    <tr><td><code>TodoResource</code> reads <code>getAttributes()</code> and rewrites timestamps as strings</td><td>500 rows in under 200 ms (L2-038); stored values are already UTC</td></tr>
+    <tr><td>Tests write through a <code>committed</code> connection and clean up in <code>finally</code></td><td><code>RefreshDatabase</code> wraps the default connection in a transaction other processes cannot see</td></tr>
+    <tr><td>Inline <code>/** @var list&lt;string&gt; $ids */</code></td><td>Narrows <code>pluck()-&gt;all()</code> for Larastan</td></tr>
+    <tr><td><code>TodoStatus::All =&gt; null</code> arm in <code>match</code></td><td><code>match</code> must be exhaustive</td></tr>
+    <tr><td><code>$fillable</code> omits <code>id</code></td><td>The over-posting defence (L2-021)</td></tr>
+  </table>
+  <p class="small muted">None of these need a comment. A PR that "simplifies" one needs a request for changes citing the requirement.</p>
+</section>
+
+<section id="slice-artefacts" data-part="4" data-cue="Here is one slice end to end">
+  <h2>A worked slice: an overdue filter</h2>
+  <p class="muted small">The illustration the backend layering design uses for the open/closed rule. Due dates are out of scope for the product; the mechanics are what matter.</p>
+  <ol class="steps">
+    <li><strong>Artefacts.</strong> An L2 requirement with Given-When-Then criteria traced to an L1; a design under <code>docs/detailed-designs</code>; a mock if the UI shows the filter</li>
+    <li><strong>Failing tests.</strong> <code>ListTodosTest</code>: <code>?status=overdue</code> expects 200 with only overdue rows. <code>tests/Unit/Actions/ListTodosTest.php</code>: a dataset row for the new case</li>
+    <li><strong>Run them.</strong> The feature test fails with 422: <code>ListTodosRequest</code> validates against the enum. The expected reason, written in the PR</li>
+  </ol>
+</section>
+
+<section id="slice-impl" data-part="4" data-cue="Step three, the implementation">
+  <h2>Three edits, no Action changes</h2>
+  <div class="cols">
+    <div>
+<pre class="code tight" data-lang="php" data-mark="5">enum TodoStatus: string
+{
+    case All = 'all';
+    case Active = 'active';
+    case Completed = 'completed';
+    case Overdue = 'overdue';   // 1. new case
+}</pre>
+<pre class="code tight" data-lang="php" data-mark="1,4">/** @param Builder&lt;Todo&gt; $query */
+public function scopeOverdue(Builder $query): void
+{
+    // 2. the new scope on the model
+}</pre>
+<pre class="code tight" data-lang="php" data-mark="5">match ($status) {
+    TodoStatus::All =&gt; null,
+    TodoStatus::Active =&gt; $query-&gt;active(),
+    TodoStatus::Completed =&gt; $query-&gt;completed(),
+    TodoStatus::Overdue =&gt; $query-&gt;overdue(),   // 3. one arm, plus the fake
+};</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Run <code>composer analyse</code> right after adding the case</li>
+        <li>Larastan reports every <code>match</code> over <code>TodoStatus</code> that does not handle <code>Overdue</code>: the repository and the fake</li>
+        <li>C#'s switch exhaustiveness warning, enforced at level 8</li>
+        <li><code>ListTodos</code>, <code>ListTodosRequest</code>, and the controller do not change (L2-044 criterion 6)</li>
+      </ul>
+      <p class="small muted">Illustrative code; the enum case and scope do not exist in the repository.</p>
+    </div>
+  </div>
+</section>
+
+<section id="slice-green" data-part="4" data-cue="Step four, green">
+  <h2>Green, then the pull request</h2>
+  <ol class="steps">
+    <li>Unit test passes with the fake; feature test passes against MySQL; <code>composer check</code> green</li>
+    <li><code>composer format</code> in its own commit, if it changed anything</li>
+    <li>Template filled in: the L2 id, and the failing-run reason in the description</li>
+  </ol>
+  <p class="quote">Three small production edits, two tests, three documents. That ratio is normal here.</p>
+</section>
+
+<section id="writing" data-part="4" data-cue="Comment with the requirement or the convention">
+  <h2>Writing the review</h2>
+  <div class="cols">
+    <div class="card good">
+      <h3>Lands</h3>
+      <ul class="small">
+        <li>"L2-044 criterion 1: this controller method runs a query."</li>
+        <li>"Can the reformat be a separate commit? L2-056 criterion 6."</li>
+        <li>"This undoes the one-statement update; see docs/detailed-designs/api-platform/persist-todos."</li>
+      </ul>
+    </div>
+    <div class="card bad">
+      <h3>Does not</h3>
+      <ul class="small">
+        <li>"Move this."</li>
+        <li>"Drop the reformat."</li>
+        <li>"I'd have used save() here."</li>
+      </ul>
+    </div>
+  </div>
+  <p>When the tests are good, the artefacts are present, and <code>composer check</code> is green: approve. The gates exist so review can spend its time on design.</p>
+</section>
+
+<section id="recap" data-part="5" data-cue="First the artefacts and the commits">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Order:</b> artefacts and commits, then code in request order, then tests, then tooling</li>
+    <li><b>Checklists:</b> short and mechanical, one per layer</li>
+    <li><b>Deliberate:</b> string ids, one-statement updates, raw-attribute Resources, the committed connection, inline narrowing, exhaustive <code>match</code>, guarded <code>$fillable</code></li>
+    <li><b>A slice:</b> requirement, failing test with its reason, smallest implementation, green check; Larastan finds every <code>match</code> a new case touches</li>
+  </ul>
+</section>
+
+<section id="series" data-part="5" data-cue="That is the series">
+  <div class="kicker">php-todo-lab for .NET developers</div>
+  <h2>You can read every file in backend/</h2>
+  <div class="cols-3">
+    <div class="card"><h3>01–02</h3><p class="small">PHP for C# hands; Laravel as Program.cs and the container</p></div>
+    <div class="card"><h3>03–09</h3><p class="small">Routes, Form Requests, controller; Actions; model; repository; Resources; problem details; commands</p></div>
+    <div class="card"><h3>10–12</h3><p class="small">Pest; Pint, Larastan, CI; this review</p></div>
+  </div>
+  <p class="lead">Next step: pick a small requirement, write the failing test, and open a pull request.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

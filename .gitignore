@@ -8,6 +8,7 @@ vendor/
 node_modules/
 
 # Build and tool output
+.cache/
 dist/
 .angular/
 coverage/

@@ -60,8 +60,15 @@ php-todo-lab/
 │   ├── specs/                        L1.md, L2.md: requirements (source of truth)
 │   ├── detailed-designs/<subsystem>/<feature>/   README.md + diagrams/
 │   ├── mocks/                        todo.html + styles/: design target, no tests
-│   └── design-system/                tokens/, assets/components.css, foundations/, components/,
-│                                     patterns/ HTML pages: extracted from mocks/, no tests
+│   ├── design-system/                tokens/, assets/components.css, foundations/, components/,
+│   │                                 patterns/ HTML pages: extracted from mocks/, no tests
+│   └── videos/                       Narrated training videos: README.md index, assets/ (shared
+│       └── NN-kebab-topic/           slides.css, slides.js, screenshots/), one folder per video with
+│                                     script.md, slides.html, README.md, and the generated .mp3/.mp4
+├── tools/
+│   ├── video-audio/                  generate-audio.mjs (edge-tts narration + timing manifest),
+│   │                                 script.mjs (script.md parser), pronunciations.json
+│   └── video-build/                  build-video.mjs (headless Chromium slides + ffmpeg captioned MP4)
 ├── backend/                          Laravel API (PHP 8.4, strict_types everywhere)
 │   ├── app/
 │   │   ├── Actions/Todos/            One use case per class: CreateTodo, ListTodos, ...

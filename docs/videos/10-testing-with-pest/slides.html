@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 10 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="10" data-video-title="Testing with Pest" data-parts="Introduction|Pest|Unit tests|Feature tests|Gate and workflow|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 10</div>
+  <h1>Testing with Pest</h1>
+  <p class="lead">xUnit, FluentAssertions and WebApplicationFactory, mapped onto the backend test suite</p>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>How <code>it</code>, <code>expect</code>, datasets and hooks map onto <code>Fact</code>, <code>Theory</code>, <code>Assert</code> and fixtures</li>
+    <li>What a unit test of an Action looks like with the in-memory fake</li>
+    <li>What a feature test looks like against MySQL, and how the database is reset</li>
+    <li>What the coverage gate covers, and why</li>
+    <li>How the ATDD loop runs for a new slice</li>
+  </ol>
+</section>
+
+<section id="pest" data-part="1" data-cue="Pest is a test runner and syntax layer on top of PHPUnit">
+  <h2>Pest against xUnit</h2>
+  <table class="small">
+    <tr><th>Pest</th><th>xUnit / FluentAssertions</th><th>Seen in</th></tr>
+    <tr><td><code>it('creates an active todo', function (): void { ... })</code></td><td><code>[Fact]</code></td><td>every test file</td></tr>
+    <tr><td><code>expect($todo-&gt;title)-&gt;toBe('Buy oat milk')-&gt;and(...)</code></td><td><code>Assert.Equal</code>, <code>.Should().Be()</code></td><td><code>CreateTodoTest</code></td></tr>
+    <tr><td><code>-&gt;with(['missing' =&gt; [[]], 'empty' =&gt; [['title' =&gt; '']]])</code></td><td><code>[Theory]</code> + <code>[InlineData]</code>, named</td><td><code>CreateTodoTest</code></td></tr>
+    <tr><td><code>-&gt;throws(TodoNotFound::class)</code></td><td><code>Assert.Throws&lt;T&gt;</code></td><td><code>DeleteAndRestoreTodoTest</code></td></tr>
+    <tr><td><code>beforeEach(function (): void { $this-&gt;repository = ... })</code></td><td>constructor / <code>IAsyncLifetime</code></td><td><code>UpdateTodoTest</code></td></tr>
+    <tr><td>file-level <code>function helper()</code> + <code>test()</code></td><td>a shared helper or fixture class</td><td><code>ListTodosTest</code>, <code>PurgeDeletedTodosTest</code></td></tr>
+    <tr><td><code>-&gt;group('performance')</code></td><td><code>[Trait("Category", ...)]</code></td><td><code>LatencyTest</code></td></tr>
+  </table>
+</section>
+
+<section id="config" data-part="1" data-cue="Two files configure it">
+  <h2>Two configuration files</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/tests/Pest.php</div>
+<pre class="code tight" data-lang="php" data-mark="2,3,6">pest()-&gt;extend(TestCase::class)
+    -&gt;use(RefreshDatabase::class)
+    -&gt;in('Feature');
+
+pest()-&gt;extend(TestCase::class)
+    -&gt;in('Unit');</pre>
+    </div>
+    <div>
+      <div class="file">backend/phpunit.xml</div>
+<pre class="code tight" data-lang="xml" data-mark="3,4,8,9,11,12">&lt;!-- The coverage gate (L2-051 criterion 3) covers Action and repository code. --&gt;
+&lt;source&gt;
+    &lt;include&gt;
+        &lt;directory&gt;app/Actions&lt;/directory&gt;
+        &lt;directory&gt;app/Repositories&lt;/directory&gt;
+    &lt;/include&gt;
+&lt;/source&gt;
+&lt;php&gt;
+    &lt;env name="APP_ENV" value="testing"/&gt;
+    &lt;env name="CACHE_STORE" value="array"/&gt;
+    &lt;env name="DB_CONNECTION" value="mysql"/&gt;
+    &lt;env name="DB_DATABASE" value="todo_test"/&gt;
+    &lt;env name="QUEUE_CONNECTION" value="sync"/&gt;
+    &lt;env name="SESSION_DRIVER" value="array"/&gt;
+&lt;/php&gt;</pre>
+    </div>
+  </div>
+  <p class="small muted">Feature tests get the Laravel <code>TestCase</code> plus <code>RefreshDatabase</code>; Unit tests get the <code>TestCase</code> only. <code>phpunit.xml</code> is the test appsettings and host configuration together.</p>
+</section>
+
+<section id="unit" data-part="2" data-cue="Open tests/Unit/Actions/UpdateTodoTest.php">
+  <h2>Layer one: an Action around the fake</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/tests/Unit/Actions/UpdateTodoTest.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,8,9,12,15,16,20,23,25">/**
+ * Traces to: L2-009, L2-014
+ */
+
+declare(strict_types=1);
+
+beforeEach(function (): void {
+    $this-&gt;repository = new InMemoryTodoRepository;
+    $this-&gt;action = new UpdateTodo($this-&gt;repository);
+});
+
+it('completes and reopens a todo', function (): void {
+    $todo = $this-&gt;repository-&gt;seed(title: 'Call mom');
+
+    expect($this-&gt;action-&gt;handle($todo-&gt;id, ['completed' =&gt; true])-&gt;completed)-&gt;toBeTrue()
+        -&gt;and($this-&gt;action-&gt;handle($todo-&gt;id, ['completed' =&gt; false])-&gt;completed_at)-&gt;toBeNull();
+});
+
+it('keeps completedAt when completing twice', function (): void {
+    $todo = $this-&gt;repository-&gt;seed(title: 'Call mom', completed: true);
+    $completedAt = $todo-&gt;completed_at;
+
+    expect($this-&gt;action-&gt;handle($todo-&gt;id, ['completed' =&gt; true])-&gt;completed_at)-&gt;toEqual($completedAt);
+});
+
+it('throws TodoNotFound for an unknown or deleted id', function (): void {
+    $deleted = $this-&gt;repository-&gt;seed(title: 'Gone', deleted: true);
+
+    expect(fn () =&gt; $this-&gt;action-&gt;handle('01jz0000000000000000000000', ['completed' =&gt; true]))
+        -&gt;toThrow(TodoNotFound::class)
+        -&gt;and(fn () =&gt; $this-&gt;action-&gt;handle($deleted-&gt;id, ['completed' =&gt; true]))
+        -&gt;toThrow(TodoNotFound::class);
+});</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>"Traces to" header: the requirement ids, checked in review, never parsed</li>
+        <li><code>seed(title:, completed:, deleted:)</code>: named arguments, a fixed clock advancing one second per row</li>
+        <li>No database, no container, no mocking library: milliseconds</li>
+        <li>L2-051: success, validation and not-found paths through the fake</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="fake" data-part="2" data-cue="The fake is in tests/Fakes">
+  <h2>The fake reads like the contract</h2>
+  <div class="file">backend/tests/Fakes/InMemoryTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="1,4,7,11,13,21">/** A database-free TodoRepository for unit tests of the Actions (L2-044 criterion 3). */
+final class InMemoryTodoRepository implements TodoRepository
+{
+    /** @var array&lt;string, Todo&gt; */
+    private array $rows = [];
+
+    private CarbonImmutable $clock;
+
+    /** Adds a todo created one second after the previous one. */
+    public function seed(string $title, bool $completed = false, bool $deleted = false): Todo
+    {
+        $this-&gt;clock = $this-&gt;clock-&gt;addSecond();
+
+        $todo = new Todo;
+        $todo-&gt;id = Str::lower((string) Str::ulid());
+        $todo-&gt;title = $title;
+        $todo-&gt;completed_at = $completed ? $this-&gt;clock : null;
+        $todo-&gt;created_at = $this-&gt;clock;
+        $todo-&gt;updated_at = $this-&gt;clock;
+        $todo-&gt;deleted_at = $deleted ? $this-&gt;clock : null;
+
+        return $this-&gt;rows[$todo-&gt;id] = $todo;
+    }</pre>
+  <p class="small muted">A hand-written fake of a use-case-shaped interface is small, typed, and documents the contract. Moq or NSubstitute would say less.</p>
+</section>
+
+<section id="feature" data-part="3" data-cue="Open tests/Feature/Api/V1/CreateTodoTest.php">
+  <h2>Layer two: real requests, real MySQL</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/tests/Feature/Api/V1/CreateTodoTest.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,3,4,5,6,9,10,14,15,16,19,20,21,22,23">it('creates a todo and returns 201 with a Location header', function (): void {
+    $response = $this-&gt;postJson('/api/v1/todos', ['title' =&gt; 'Buy oat milk'])
+        -&gt;assertCreated()
+        -&gt;assertJsonPath('data.title', 'Buy oat milk')
+        -&gt;assertJsonPath('data.completed', false)
+        -&gt;assertJsonPath('data.completedAt', null);
+
+    $id = $response-&gt;json('data.id');
+    $response-&gt;assertHeader('Location', url("/api/v1/todos/{$id}"));
+    expect(Todo::query()-&gt;find($id)?-&gt;title)-&gt;toBe('Buy oat milk');
+});
+
+it('rejects a missing, empty, whitespace-only, or non-string title', function (array $body): void {
+    $this-&gt;postJson('/api/v1/todos', $body)
+        -&gt;assertUnprocessable()
+        -&gt;assertJsonValidationErrors('title');
+})-&gt;with([
+    'missing' =&gt; [[]],
+    'empty' =&gt; [['title' =&gt; '']],
+    'whitespace only' =&gt; [['title' =&gt; '   ']],
+    'number' =&gt; [['title' =&gt; 42]],
+    'array' =&gt; [['title' =&gt; ['x']]],
+]);</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li><code>postJson</code>, <code>getJson</code>, <code>patchJson</code>, <code>deleteJson</code>: the whole pipeline in-process, no web server</li>
+        <li><code>assertCreated</code>, <code>assertJsonPath</code>, <code>assertHeader</code>, <code>assertUnprocessable</code>, <code>assertJsonValidationErrors</code></li>
+        <li>Then the model, to assert the row</li>
+        <li>One file per endpoint in <code>tests/Feature/Api/V1</code> (L2-051)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="refresh" data-part="3" data-cue="RefreshDatabase is how the database stays clean">
+  <h2>RefreshDatabase, time, and real MySQL</h2>
+  <div class="cols-3">
+    <div class="card">
+      <h3>RefreshDatabase</h3>
+      <p class="small">Migrates <code>todo_test</code> once, then wraps each test in a transaction rolled back at the end. Respawn without the deletes; Testcontainers without the container.</p>
+      <p class="small muted">Other processes cannot see the rows, hence the <code>committed</code> connection in the concurrency tests.</p>
+    </div>
+    <div class="card">
+      <h3>Time</h3>
+      <p class="small"><code>freezeTime()</code>, <code>travelTo()</code>, <code>travel(5)-&gt;minutes()</code> move the clock <code>now()</code> reads. Todos created one second apart; rows aged 25 hours. No sleeping.</p>
+    </div>
+    <div class="card">
+      <h3>Why MySQL, not SQLite</h3>
+      <p class="small">Locking reads, <code>utf8mb4</code> collation, millisecond timestamps: InnoDB behaviour the backend depends on. L2-051 criterion 1 requires it; CI runs a MySQL 8.4 service.</p>
+    </div>
+  </div>
+</section>
+
+<section id="gate" data-part="4" data-cue="composer test runs three things in order">
+  <h2>The coverage gate</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/composer.json</div>
+<pre class="code" data-lang="json" data-mark="2,3,4">"test": [
+    "@php artisan config:clear --ansi",
+    "pest --coverage --min=90 --exclude-group=performance",
+    "@php -d pcov.enabled=0 vendor/bin/pest --group=performance"
+],</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Clear the config cache, so <code>phpunit.xml</code> values win</li>
+        <li>90% minimum over <code>app/Actions</code> and <code>app/Repositories</code> only: where the rules live (L2-051 criterion 3)</li>
+        <li>Controllers and Resources are exercised by the feature tests anyway; a gate on glue rewards the wrong tests</li>
+        <li>The performance group runs with <code>pcov</code> off so timings are fair</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="atdd" data-part="4" data-cue="AGENTS.md makes acceptance test-driven development mandatory">
+  <h2>One slice, in order</h2>
+  <ol class="steps">
+    <li>Write the Given-When-Then acceptance criteria</li>
+    <li>Write the acceptance test with its <code>Traces to: L2-xxx</code> header</li>
+    <li>Run it: it must fail <strong>for the expected reason</strong> (a 404 before the route exists, an assertion in an Action test)</li>
+    <li>Write only the production code that makes it pass</li>
+    <li>Refactor with the tests green; run the relevant checks</li>
+    <li>Only then start the next slice</li>
+  </ol>
+</section>
+
+<section id="no-arch" data-part="4" data-cue="There is one more rule a .NET architect will want to break">
+  <h2>Never write architecture tests</h2>
+  <p class="quote">No test asserts the folder layout, class naming, banned APIs, or that every file has a traces header. Those belong to Larastan, Pint, and review.<cite>AGENTS.md, "Never write architecture tests". The suite proves behaviour only.</cite></p>
+</section>
+
+<section id="pitfalls" data-part="4" data-cue="Switching the test database to SQLite for speed">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li>SQLite for tests: the suite depends on MySQL semantics, and L2-051 forbids it</li>
+    <li>Rows through <code>DB::table</code> or SQL instead of factories</li>
+    <li>Mockery for the repository when the fake exists</li>
+    <li>Asserting the shape of the code instead of its behaviour</li>
+    <li>Missing "Traces to" header</li>
+    <li>A test written after the implementation: the failing run is the evidence</li>
+  </ol>
+</section>
+
+<section id="recap" data-part="5" data-cue="Pest is it, expect, with, throws">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Pest:</b> <code>it</code>, <code>expect</code>, <code>with</code>, <code>throws</code>, <code>beforeEach</code>, helper functions, over PHPUnit</li>
+    <li><b>Unit:</b> an Action around <code>InMemoryTodoRepository</code>, no database</li>
+    <li><b>Feature:</b> real requests through the pipeline against MySQL; <code>RefreshDatabase</code>, factories, time travel</li>
+    <li><b>Gate:</b> 90% on Actions and repositories; performance group without instrumentation</li>
+    <li><b>Workflow:</b> a failing acceptance test first; no structure tests</li>
+  </ul>
+</section>
+
+<section id="next" data-part="5" data-cue="Next, the quality gates around the tests">
+  <div class="kicker">Next</div>
+  <h2>11 · Quality gates: Pint, Larastan and CI</h2>
+  <p class="lead">dotnet format, analysers and nullable reference types, mapped onto Pint, Larastan level 8, composer check and ci.yml.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

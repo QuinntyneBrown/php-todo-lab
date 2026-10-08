@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 09 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="09" data-video-title="Artisan commands and the scheduler" data-parts="Introduction|The command|The schedule|Testing|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 09</div>
+  <h1>Artisan commands and the scheduler</h1>
+  <p class="lead">Hosted services and background jobs, mapped onto PurgeDeletedTodos and routes/console.php</p>
+</section>
+
+<section id="model" data-part="0" data-cue="PHP's request model has no such process">
+  <h2>No long-lived process</h2>
+  <div class="cols">
+    <div class="card cs">
+      <h3>.NET</h3>
+      <ul>
+        <li><code>BackgroundService</code> + <code>PeriodicTimer</code> inside the web process</li>
+        <li>Quartz, Hangfire: a scheduler that stays alive</li>
+      </ul>
+    </div>
+    <div class="card php">
+      <h3>Laravel</h3>
+      <ul>
+        <li>A command class: <code>todos:purge-deleted</code></li>
+        <li>A schedule declared in code: <code>routes/console.php</code></li>
+        <li>System cron runs <code>php artisan schedule:run</code> every minute</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>How an Artisan command is declared and receives dependencies</li>
+    <li>How the purge deletes in chunks, and why</li>
+    <li>How the scheduler runs without a long-lived process, and what production needs</li>
+    <li>How commands and schedules are tested, including time travel</li>
+  </ol>
+</section>
+
+<section id="command" data-part="1" data-cue="Open app/Console/Commands/PurgeDeletedTodos.php">
+  <h2>The command class</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/app/Console/Commands/PurgeDeletedTodos.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,4,7,9,11,13,16,18,19,20,24,27">/** Permanently removes todos soft-deleted more than 24 hours ago (L2-016). */
+final class PurgeDeletedTodos extends Command
+{
+    public const int RETENTION_HOURS = 24;
+
+    /** Small chunks keep each DELETE short, so it never holds long locks. */
+    public const int CHUNK_SIZE = 500;
+
+    protected $signature = 'todos:purge-deleted';
+
+    protected $description = 'Permanently delete todos soft-deleted more than 24 hours ago';
+
+    public function handle(TodoRepository $todos): int
+    {
+        $cutoff = now()-&gt;toImmutable()-&gt;subHours(self::RETENTION_HOURS);
+        $purged = 0;
+
+        do {
+            $chunk = $todos-&gt;purgeDeletedBefore($cutoff, self::CHUNK_SIZE);
+            $purged += $chunk;
+        } while ($chunk === self::CHUNK_SIZE);
+
+        $message = "Purged {$purged} soft-deleted todos.";
+        Log::info($message);
+        $this-&gt;info($message);
+
+        return self::SUCCESS;
+    }
+}</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Discovered automatically from <code>app/Console/Commands</code>; <code>php artisan list</code> shows it</li>
+        <li><code>$signature</code>: the name you type; <code>$description</code>: the help text</li>
+        <li><code>handle(TodoRepository $todos)</code>: method injection, the interface, never Eloquent</li>
+        <li>Returns an exit code: <code>self::SUCCESS</code> is 0, <code>self::FAILURE</code> is 1</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="handle" data-part="1" data-cue="The body computes the cutoff">
+  <h2>handle(), top to bottom</h2>
+  <div class="file">backend/app/Console/Commands/PurgeDeletedTodos.php</div>
+<pre class="code" data-lang="php" data-mark="3,6,7,8,11,12,14">public function handle(TodoRepository $todos): int
+{
+    $cutoff = now()-&gt;toImmutable()-&gt;subHours(self::RETENTION_HOURS);
+    $purged = 0;
+
+    do {
+        $chunk = $todos-&gt;purgeDeletedBefore($cutoff, self::CHUNK_SIZE);
+        $purged += $chunk;
+    } while ($chunk === self::CHUNK_SIZE);
+
+    $message = "Purged {$purged} soft-deleted todos.";
+    Log::info($message);
+    $this-&gt;info($message);
+
+    return self::SUCCESS;
+}</pre>
+  <ul class="small">
+    <li>Cutoff as an immutable date, now minus 24 hours</li>
+    <li>Loop until a batch comes back short; one message to the log and the console; exit 0</li>
+  </ul>
+</section>
+
+<section id="chunks" data-part="1" data-cue="Why loop in chunks rather than issue one delete">
+  <h2>Why chunks of 500</h2>
+  <div class="cols">
+    <div>
+<pre class="code" data-lang="php" data-mark="1,2,3,4">do {
+    $chunk = $todos-&gt;purgeDeletedBefore($cutoff, self::CHUNK_SIZE);
+    $purged += $chunk;
+} while ($chunk === self::CHUNK_SIZE);</pre>
+      <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="3,4,5,6">public function purgeDeletedBefore(CarbonImmutable $cutoff, int $limit): int
+{
+    return Todo::onlyTrashed()
+        -&gt;where('deleted_at', '&lt;', $cutoff)
+        -&gt;limit($limit)
+        -&gt;forceDelete();
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>One <code>DELETE</code> over thousands of rows holds row locks for the whole statement and can block the live API</li>
+        <li>500 at a time keeps every statement short (L2-016 criterion 4)</li>
+        <li>A short batch means the last one is done</li>
+        <li>Policy (how many, how old) in the command; SQL in the repository</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="schedule" data-part="2" data-cue="Open routes/console.php">
+  <h2>The schedule is one line of code</h2>
+  <div class="file">backend/routes/console.php</div>
+<pre class="code" data-lang="php" data-mark="5">&lt;?php
+
+declare(strict_types=1);
+
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('todos:purge-deleted')-&gt;hourly();</pre>
+  <ul>
+    <li>Versioned, reviewed, testable: the test asserts the expression is <code>0 * * * *</code></li>
+    <li>Runs in the application time zone, which <code>config/app.php</code> fixes to UTC</li>
+    <li>Registered through <code>withRouting(commands: ...)</code> in <code>bootstrap/app.php</code></li>
+  </ul>
+</section>
+
+<section id="tick" data-part="2" data-cue="Now the part that surprises .NET developers">
+  <h2>How it fires: cron is the timer</h2>
+  <div class="arrow-row">
+    <div class="node">system cron, every minute</div><span class="sep">→</span>
+    <div class="node">php artisan schedule:run</div><span class="sep">→</span>
+    <div class="node">boot, evaluate every expression</div><span class="sep">→</span>
+    <div class="node hot">todos:purge-deleted if due</div><span class="sep">→</span>
+    <div class="node">exit</div>
+  </div>
+<pre class="term"><span class="dim"># production crontab: one line</span>
+* * * * * cd /path/to/backend &amp;&amp; php artisan schedule:run &gt;&gt; /dev/null 2&gt;&amp;1
+
+<span class="dim"># local development</span>
+<span class="prompt">$</span> php artisan schedule:work          <span class="dim"># foreground loop that ticks every minute</span>
+<span class="prompt">$</span> php artisan todos:purge-deleted    <span class="dim"># run it once, now</span>
+Purged 0 soft-deleted todos.</pre>
+  <p class="small muted">Stateless between ticks: the shared-nothing model applied to background work.</p>
+</section>
+
+<section id="compare" data-part="2" data-cue="Compare that with a BackgroundService">
+  <h2>Compared with hosted services and job frameworks</h2>
+  <table class="small">
+    <tr><th>Concern</th><th>.NET</th><th>Laravel (this backend)</th></tr>
+    <tr><td>Timer</td><td>In-process <code>PeriodicTimer</code>; resets on restart</td><td>System cron; nothing stays alive</td></tr>
+    <tr><td>Multiple instances</td><td>Each runs the job unless you add distributed locking</td><td>Single server by default; <code>onOneServer()</code>, <code>withoutOverlapping()</code> when scaling out</td></tr>
+    <tr><td>Async jobs from requests</td><td>Hangfire, channels, queues</td><td>Laravel queues and workers; not used here (<code>QUEUE_CONNECTION=sync</code>)</td></tr>
+    <tr><td>Dependencies</td><td>Constructor injection into the service</td><td>Method injection into <code>handle()</code></td></tr>
+    <tr><td>Time</td><td><code>TimeProvider</code> + a fake in tests</td><td><code>now()</code> + <code>travelTo</code>, <code>freezeTime</code> in tests</td></tr>
+  </table>
+</section>
+
+<section id="test-helper" data-part="3" data-cue="Open tests/Feature/Console/PurgeDeletedTodosTest.php">
+  <h2>Time travel in tests</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/tests/Feature/Console/PurgeDeletedTodosTest.php</div>
+<pre class="code tight" data-lang="php" data-mark="3,4,5,10,12,15">function deletedHoursAgo(int $hours, int $count = 1): void
+{
+    test()-&gt;travelTo(now()-&gt;subHours($hours));
+    Todo::factory()-&gt;count($count)-&gt;create()-&gt;each-&gt;delete();
+    test()-&gt;travelBack();
+}
+
+it('purges todos soft-deleted more than 24 hours ago and keeps the rest', function (): void {
+    $this-&gt;freezeTime();
+    deletedHoursAgo(25);
+    deletedHoursAgo(24);
+    deletedHoursAgo(23);
+    $live = Todo::factory()-&gt;create();
+
+    $this-&gt;artisan('todos:purge-deleted')-&gt;assertSuccessful();
+
+    expect(Todo::withTrashed()-&gt;count())-&gt;toBe(3)
+        -&gt;and(Todo::query()-&gt;pluck('id')-&gt;all())-&gt;toBe([$live-&gt;id]);
+});</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li><code>now()</code> reads a clock tests can move: <code>travelTo</code>, <code>travel</code>, <code>freezeTime</code></li>
+        <li>No injection needed: the command already calls <code>now()</code></li>
+        <li>25 h purged, 24 h kept, 23 h kept: the boundary is strictly older than a day</li>
+        <li><code>$this-&gt;artisan(...)</code> runs the command in-process</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="test-rest" data-part="3" data-cue="The second test spies on the Log facade">
+  <h2>Output, chunks, and the schedule</h2>
+  <div class="file">backend/tests/Feature/Console/PurgeDeletedTodosTest.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,5,6,9,13,16,22,26">it('exits successfully and logs zero when nothing is eligible', function (): void {
+    Log::spy();
+    deletedHoursAgo(1);
+
+    $this-&gt;artisan('todos:purge-deleted')
+        -&gt;expectsOutput('Purged 0 soft-deleted todos.')
+        -&gt;assertExitCode(0);
+
+    Log::shouldHaveReceived('info')-&gt;with('Purged 0 soft-deleted todos.')-&gt;once();
+});
+
+it('purges more rows than fit in one chunk', function (): void {
+    deletedHoursAgo(48, 1201);
+
+    $this-&gt;artisan('todos:purge-deleted')
+        -&gt;expectsOutput('Purged 1201 soft-deleted todos.')
+        -&gt;assertSuccessful();
+
+    expect(Todo::withTrashed()-&gt;count())-&gt;toBe(0);
+});
+
+it('is scheduled to run hourly', function (): void {
+    $events = collect(app(Schedule::class)-&gt;events())
+        -&gt;filter(fn ($event): bool =&gt; str_contains((string) $event-&gt;command, 'todos:purge-deleted'));
+
+    expect($events)-&gt;toHaveCount(1)
+        -&gt;and($events-&gt;first()-&gt;expression)-&gt;toBe('0 * * * *');
+});</pre>
+</section>
+
+<section id="not" data-part="3" data-cue="Notice what these tests are not">
+  <h2>What these tests are not</h2>
+  <div class="cols">
+    <div class="card bad">
+      <h3>Not</h3>
+      <ul>
+        <li>Unit tests with a mocked repository</li>
+        <li>Running the scheduler with real time</li>
+      </ul>
+    </div>
+    <div class="card good">
+      <h3>Instead</h3>
+      <ul>
+        <li>Against MySQL through the real repository: the behaviour is "rows older than a day are gone"</li>
+        <li>Reading the declared schedule from the container: milliseconds, no flake</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pitfalls" data-part="3" data-cue="Calling DB or Todo::query from the command">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li><code>DB</code> or <code>Todo::query</code> in the command: layering broken, chunk contract skipped</li>
+    <li>One big <code>DELETE</code>: long locks</li>
+    <li><code>handle()</code> returning nothing: failures exit 0; return <code>self::FAILURE</code></li>
+    <li>No cron line in production: <code>schedule:work</code> locally hides it</li>
+    <li>Schedule tests that execute through the scheduler with real time</li>
+  </ol>
+</section>
+
+<section id="recap" data-part="4" data-cue="A command is a class with a signature">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Command:</b> signature, description, <code>handle()</code> with method injection, an exit code</li>
+    <li><b>Purge:</b> cutoff, loop in chunks of 500 through the repository, one log line</li>
+    <li><b>Schedule:</b> one line of code; cron runs <code>schedule:run</code> every minute; nothing stays alive</li>
+    <li><b>Tests:</b> <code>travelTo</code>, <code>freezeTime</code>, <code>$this-&gt;artisan</code>, <code>Log::spy</code>, read the schedule</li>
+  </ul>
+</section>
+
+<section id="next" data-part="4" data-cue="Next, the test suite itself">
+  <div class="kicker">Next</div>
+  <h2>10 · Testing with Pest</h2>
+  <p class="lead">xUnit and WebApplicationFactory, mapped onto Pest unit tests with the in-memory fake and feature tests against MySQL.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

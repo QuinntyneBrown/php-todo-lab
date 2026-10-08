@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 06 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="06" data-video-title="The Eloquent repository: queries, transactions and locks" data-parts="Introduction|Queries|Update|The cap|Bulk and purge|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 06</div>
+  <h1>The Eloquent repository: queries, transactions and locks</h1>
+  <p class="lead">IQueryable, ExecuteUpdate, transactions and isolation, mapped onto EloquentTodoRepository</p>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>How a query is composed from scopes, and why the result goes through <code>toBase</code></li>
+    <li>Why <code>update</code> issues a query-level statement instead of saving the model</li>
+    <li>How the 500-todo cap is enforced with a locking read in a retried transaction</li>
+    <li>How the bulk operations stay all-or-nothing</li>
+    <li>How the purge deletes in chunks without long locks</li>
+  </ol>
+</section>
+
+<section id="list" data-part="1" data-cue="Open app/Repositories/EloquentTodoRepository.php">
+  <h2>list(): scopes compose the query</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="3,5,6,7,8,9,11">public function list(TodoStatus $status): Collection
+{
+    $query = Todo::query()-&gt;orderByDesc('created_at')-&gt;orderByDesc('id');
+
+    match ($status) {
+        TodoStatus::All =&gt; null,
+        TodoStatus::Active =&gt; $query-&gt;active(),
+        TodoStatus::Completed =&gt; $query-&gt;completed(),
+    };
+
+    return $query-&gt;get()-&gt;toBase();
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Order matches the <code>(deleted_at, created_at, id)</code> index: MySQL reads it in order</li>
+        <li>Scopes are the reusable <code>Where</code> clauses; nothing runs until <code>get()</code></li>
+        <li><code>toBase()</code>: Eloquent collection → plain <code>Illuminate\Support\Collection</code>, the type the interface declares</li>
+        <li>Synchronous by design: no <code>async</code>, a query blocks the worker</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="iqueryable" data-part="1" data-cue="In EF Core you would compose an IQueryable">
+  <h2>The same shape in EF Core</h2>
+  <div class="cols">
+    <div>
+      <span class="tag cs">C#</span>
+<pre class="code tight" data-lang="cs">IQueryable&lt;Todo&gt; q = db.Todos
+    .OrderByDescending(t =&gt; t.CreatedAt)
+    .ThenByDescending(t =&gt; t.Id);
+
+q = status switch
+{
+    TodoStatus.Active =&gt; q.Where(t =&gt; t.CompletedAt == null),
+    TodoStatus.Completed =&gt; q.Where(t =&gt; t.CompletedAt != null),
+    _ =&gt; q,
+};
+
+return await q.ToListAsync(ct);</pre>
+    </div>
+    <div>
+      <table class="small">
+        <tr><th>Eloquent</th><th>EF Core</th></tr>
+        <tr><td><code>Todo::query()</code></td><td><code>db.Todos</code> (an <code>IQueryable</code>)</td></tr>
+        <tr><td>scope <code>active()</code></td><td>a reusable <code>Where</code> extension</td></tr>
+        <tr><td><code>get()</code></td><td><code>ToListAsync()</code></td></tr>
+        <tr><td><code>find($id)</code> / <code>onlyTrashed()-&gt;find($id)</code></td><td><code>FindAsync</code> / <code>IgnoreQueryFilters().FirstOrDefaultAsync</code></td></tr>
+        <tr><td><code>count()</code> through a scope</td><td><code>CountAsync()</code></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="find" data-part="1" data-cue="counts runs two count queries">
+  <h2>counts(), find(), findDeleted()</h2>
+  <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="4,5,11,21">public function counts(): array
+{
+    return [
+        'active' =&gt; Todo::query()-&gt;active()-&gt;count(),
+        'completed' =&gt; Todo::query()-&gt;completed()-&gt;count(),
+    ];
+}
+
+public function find(string $id): ?Todo
+{
+    return Todo::query()-&gt;find($id);
+}
+
+public function delete(Todo $todo): void
+{
+    $todo-&gt;delete();
+}
+
+public function findDeleted(string $id): ?Todo
+{
+    return Todo::onlyTrashed()-&gt;find($id);
+}</pre>
+  <p class="small muted"><code>find</code> honours the soft-delete filter; <code>findDeleted</code> inverts it. That pair is what lets the Actions express different not-found rules.</p>
+</section>
+
+<section id="update" data-part="2" data-cue="update is the method a .NET developer should read twice">
+  <h2>update(): one statement, every column</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="3,4,6,9,11">public function update(Todo $todo, array $columns): Todo
+{
+    // A query-level update writes every given column in one statement, even one
+    // that matches a stale read, which a model save() would skip as clean.
+    $values = array_map(
+        fn (mixed $value): mixed =&gt; $value instanceof DateTimeInterface ? $todo-&gt;fromDateTime($value) : $value,
+        $columns,
+    );
+    Todo::query()-&gt;whereKey($todo-&gt;getKey())-&gt;update($values);
+
+    return $todo-&gt;refresh();
+}</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li><code>save()</code> writes only dirty attributes, like <code>SaveChanges</code>; a concurrent patch could skip a column it considers clean</li>
+        <li>L2-043: every given column in one <code>UPDATE</code>. That is <code>ExecuteUpdateAsync</code>, not change tracking</li>
+        <li>Query-level updates bypass casts: dates go through <code>fromDateTime</code> (UTC)</li>
+        <li><code>refresh()</code> returns the row as stored</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="update-test" data-part="2" data-cue="UpdateTodoTest races two patches in separate PHP processes">
+  <h2>The test races two processes</h2>
+  <div class="file">backend/tests/Feature/Api/V1/UpdateTodoTest.php</div>
+<pre class="code xtight" data-lang="php" data-mark="1,10,11,15">$patch = fn (string $title, string $completed): array =&gt; [
+    PHP_BINARY, 'artisan', 'tinker', '--execute',
+    "app(App\\Actions\\Todos\\UpdateTodo::class)-&gt;handle('{$todo-&gt;id}', ['title' =&gt; '{$title}', 'completed' =&gt; {$completed}]);",
+];
+$env = ['DB_DATABASE' =&gt; config('database.connections.mysql.database'), 'APP_ENV' =&gt; 'testing'];
+
+$results = Process::pool(function ($pool) use ($patch, $env): void {
+    $pool-&gt;path(base_path())-&gt;env($env)-&gt;command($patch('First', 'true'));
+    $pool-&gt;path(base_path())-&gt;env($env)-&gt;command($patch('Second', 'false'));
+})-&gt;start()-&gt;wait();
+
+$final = Todo::on('committed')-&gt;findOrFail($todo-&gt;id);
+expect($results-&gt;successful())-&gt;toBeTrue()
+    -&gt;and([$final-&gt;title, $final-&gt;completed])-&gt;toBeIn([['First', true], ['Second', false]]);</pre>
+  <p class="small muted">Two real PHP processes, one row, and the final state must equal one request in full, never a mix.</p>
+</section>
+
+<section id="cap" data-part="3" data-cue="createWithinLimit is the heart of the file">
+  <h2>createWithinLimit(): a locking read in a retried transaction</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="6,7,8,12">public function createWithinLimit(string $title, int $limit): Todo
+{
+    // The locking read takes next-key locks on the scanned index range, so a
+    // concurrent create waits here until this transaction commits, then counts
+    // the new row. A deadlock is retried by the transaction attempts.
+    return DB::transaction(function () use ($title, $limit): Todo {
+        if (Todo::query()-&gt;lockForUpdate()-&gt;count() &gt;= $limit) {
+            throw new TodoLimitReached($limit);
+        }
+
+        return Todo::query()-&gt;create(['title' =&gt; $title]);
+    }, attempts: 3);
+}</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Repeatable read alone lets two transactions both count 499 and both insert</li>
+        <li><code>lockForUpdate()</code> → <code>SELECT ... FOR UPDATE</code>: next-key locks on the scanned range</li>
+        <li>The second create blocks until the first commits, then counts 500</li>
+        <li>A deadlock aborts one transaction; <code>attempts: 3</code> retries the closure</li>
+        <li>Exceptions roll back and propagate: <code>TodoLimitReached</code> → 422</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="cap-diagram" data-part="3" data-cue="In EF Core you would reach for one of three things">
+  <h2>Two creates, one cap</h2>
+  <div class="figure-wrap">
+    <img class="figure" src="../../detailed-designs/api-platform/persist-todos/diagrams/sequence-create-with-cap.png" alt="Sequence diagram of concurrent creates against the cap">
+    <div class="caption">docs/detailed-designs/api-platform/persist-todos/diagrams/sequence-create-with-cap.png</div>
+  </div>
+</section>
+
+<section id="cap-compare" data-part="3" data-cue="EF has no portable lock hint">
+  <h2>The same guarantees in EF Core</h2>
+  <table>
+    <tr><th>Need</th><th>EF Core</th><th>Eloquent</th></tr>
+    <tr><td>Lock the scanned rows</td><td>Serializable transaction, or a raw <code>UPDLOCK, HOLDLOCK</code> hint</td><td><code>lockForUpdate()</code></td></tr>
+    <tr><td>Retry a deadlock</td><td>Execution strategy with retry on failure</td><td><code>attempts: 3</code></td></tr>
+    <tr><td>Atomic check and insert</td><td><code>BeginTransactionAsync</code> around both</td><td><code>DB::transaction(fn)</code></td></tr>
+    <tr><td>Prove it</td><td>Integration test with real SQL Server and parallel tasks</td><td><code>TodoLimitTest</code>: six <code>tinker</code> processes against MySQL</td></tr>
+  </table>
+</section>
+
+<section id="cap-test" data-part="3" data-cue="TodoLimitTest proves it">
+  <h2>Six processes race for the last slot</h2>
+  <div class="file">backend/tests/Feature/Api/V1/TodoLimitTest.php</div>
+<pre class="code tight" data-lang="php" data-mark="3,4,11,12,16,18">it('never exceeds the limit under concurrent creates', function (): void {
+    // Rows must be committed for other processes to see them, so this test writes
+    // through a second connection that RefreshDatabase does not wrap in a transaction.
+    config(['database.connections.committed' =&gt; config('database.connections.mysql')]);
+    Todo::factory()-&gt;count(499)-&gt;connection('committed')-&gt;create();
+
+    try {
+        $command = [PHP_BINARY, 'artisan', 'tinker', '--execute',
+            'app(App\Actions\Todos\CreateTodo::class)-&gt;handle("racer");'];
+        $env = ['DB_DATABASE' =&gt; config('database.connections.mysql.database'), 'APP_ENV' =&gt; 'testing'];
+
+        Process::pool(function ($pool) use ($command, $env): void {
+            foreach (range(1, 6) as $_) {
+                $pool-&gt;path(base_path())-&gt;env($env)-&gt;command($command);
+            }
+        })-&gt;start()-&gt;wait();
+
+        expect(Todo::on('committed')-&gt;count())-&gt;toBe(500)
+            -&gt;and(Todo::on('committed')-&gt;where('title', 'racer')-&gt;count())-&gt;toBe(1);
+    } finally {
+        Todo::on('committed')-&gt;withTrashed()-&gt;forceDelete();
+    }
+});</pre>
+</section>
+
+<section id="bulk" data-part="4" data-cue="deleteCompleted opens a transaction">
+  <h2>Bulk operations: lock, change, return, in one transaction</h2>
+  <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code xtight" data-lang="php" data-mark="3,5,8,16,17,20,23">public function deleteCompleted(): array
+{
+    return DB::transaction(function (): array {
+        /** @var list&lt;string&gt; $ids */
+        $ids = Todo::query()-&gt;completed()-&gt;lockForUpdate()-&gt;pluck('id')-&gt;all();
+
+        if ($ids !== []) {
+            Todo::query()-&gt;whereIn('id', $ids)-&gt;delete();
+        }
+
+        return $ids;
+    });
+}
+
+public function restoreMany(array $ids): Collection
+{
+    return DB::transaction(function () use ($ids): Collection {
+        $found = Todo::onlyTrashed()-&gt;whereIn('id', $ids)-&gt;lockForUpdate()-&gt;pluck('id');
+
+        if ($found-&gt;isNotEmpty()) {
+            Todo::onlyTrashed()-&gt;whereIn('id', $found)-&gt;restore();
+        }
+
+        return Todo::query()-&gt;whereIn('id', $found)-&gt;get()-&gt;toBase();
+    });
+}</pre>
+  <p class="small muted">A single <code>whereIn</code> statement each way; the locking reads make a concurrent clear and restore serialise.</p>
+</section>
+
+<section id="fault" data-part="4" data-cue="The transaction gives the all-or-nothing guarantee">
+  <h2>Fault injection at the query log</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/tests/Feature/Api/V1/ClearCompletedTodosTest.php</div>
+<pre class="code tight" data-lang="php" data-mark="3,4,5,9,11">it('deletes all completed todos or none', function (): void {
+    Todo::factory()-&gt;completed()-&gt;count(3)-&gt;create();
+    DB::listen(function (QueryExecuted $query): void {
+        if (str_starts_with(strtolower($query-&gt;sql), 'update')) {
+            throw new RuntimeException('Simulated failure after the bulk update');
+        }
+    });
+
+    $this-&gt;deleteJson('/api/v1/todos/completed')-&gt;assertStatus(500);
+
+    expect(Todo::query()-&gt;completed()-&gt;count())-&gt;toBe(3);
+});</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>DB::listen</code> sees every executed statement; throwing on the first <code>UPDATE</code> aborts the transaction</li>
+        <li>No database mock: the real transaction rolls back</li>
+        <li>The .NET analogue: a <code>SaveChangesInterceptor</code> that throws</li>
+        <li><code>RestoreTodosTest</code> does the same for restore (L2-017, L2-043)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="purge" data-part="4" data-cue="purgeDeletedBefore is the only hard delete">
+  <h2>purgeDeletedBefore(): small batches, short locks</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="3,4,5,6">public function purgeDeletedBefore(CarbonImmutable $cutoff, int $limit): int
+{
+    return Todo::onlyTrashed()
+        -&gt;where('deleted_at', '&lt;', $cutoff)
+        -&gt;limit($limit)
+        -&gt;forceDelete();
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>The only hard delete in the backend</li>
+        <li><code>forceDelete()</code> returns the number of rows removed</li>
+        <li>The command loops in batches of 500 until a batch comes back short (video 09)</li>
+        <li>Each <code>DELETE</code> is small, so no long locks (L2-016 criterion 4)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="latency" data-part="4" data-cue="One more test shapes this file">
+  <h2>The 200 ms budget</h2>
+  <div class="file">backend/tests/Feature/Api/V1/LatencyTest.php</div>
+<pre class="code tight" data-lang="php" data-mark="1,2,3,5,13">it('answers every endpoint in under 200 ms with 500 todos', function (): void {
+    Todo::factory()-&gt;count(250)-&gt;create();
+    Todo::factory()-&gt;completed()-&gt;count(249)-&gt;create();
+    $todo = Todo::query()-&gt;firstOrFail();
+    $this-&gt;getJson('/api/v1/todos'); // warm the framework so the first timing is fair
+
+    $timings = [
+        'list' =&gt; elapsedMs(fn () =&gt; $this-&gt;getJson('/api/v1/todos')-&gt;assertOk()),
+        'create' =&gt; elapsedMs(fn () =&gt; $this-&gt;postJson('/api/v1/todos', ['title' =&gt; 'Number 500'])-&gt;assertCreated()),
+        // ... update, delete, restore, clear completed, restore many
+    ];
+
+    foreach ($timings as $endpoint =&gt; $ms) {
+        expect($ms)-&gt;toBeLessThan(200, "{$endpoint} took {$ms} ms");
+    }
+})-&gt;group('performance'); // timed without coverage instrumentation; see composer.json `test`</pre>
+  <p class="small muted">Why the list follows the index, why <code>TodoResource</code> avoids per-row date parsing, and why the duplicate check is one pass.</p>
+</section>
+
+<section id="pitfalls" data-part="4" data-cue="in update and reintroducing the dirty-tracking gap">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li><code>$todo-&gt;fill($columns)-&gt;save()</code> in <code>update</code>: the dirty-tracking gap is back</li>
+    <li>Counting without <code>lockForUpdate()</code> inside the transaction: the cap is racy again</li>
+    <li>Dropping <code>attempts: 3</code>: a deadlock becomes a 500</li>
+    <li>Returning an Eloquent collection where the interface says the base collection (Larastan catches it)</li>
+    <li>Loading and deleting one model at a time in a bulk operation</li>
+    <li>Testing concurrency with mocks instead of racing real processes against MySQL</li>
+  </ol>
+</section>
+
+<section id="recap" data-part="5" data-cue="The repository is the only class that queries">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Queries:</b> scopes compose like <code>IQueryable</code> predicates; <code>toBase</code> narrows the type</li>
+    <li><b>Update:</b> one statement, every column, like <code>ExecuteUpdate</code></li>
+    <li><b>Cap:</b> a locking read in a transaction retried three times</li>
+    <li><b>Bulk:</b> lock, change, return in one transaction; fault-injection tests prove rollback</li>
+    <li><b>Purge:</b> small batches; <b>latency:</b> 200 ms keeps it honest</li>
+  </ul>
+</section>
+
+<section id="next" data-part="5" data-cue="Next, the API Resources that turn models into the JSON contract">
+  <div class="kicker">Next</div>
+  <h2>07 · API Resources and the JSON contract</h2>
+  <p class="lead">DTOs and System.Text.Json, mapped onto TodoResource, TodoCollection and ClearedTodosResource.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

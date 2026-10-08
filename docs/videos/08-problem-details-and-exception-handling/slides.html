@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 08 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="08" data-video-title="Problem details and exception handling" data-parts="Introduction|Registration|The renderer|Body and tests|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 08</div>
+  <h1>Problem details and exception handling</h1>
+  <p class="lead">IExceptionHandler and ProblemDetails, mapped onto ProblemDetailsRenderer and the domain exceptions</p>
+</section>
+
+<section id="defaults" data-part="0" data-cue="Laravel's defaults are different">
+  <h2>What the defaults would do</h2>
+  <div class="cols">
+    <div class="card cs">
+      <h3>ASP.NET Core</h3>
+      <ul>
+        <li><code>[ApiController]</code>: 400 <code>ValidationProblemDetails</code> for free</li>
+        <li><code>AddProblemDetails()</code> + <code>UseExceptionHandler()</code></li>
+        <li>Custom mapping in an <code>IExceptionHandler</code></li>
+      </ul>
+    </div>
+    <div class="card php">
+      <h3>Laravel, out of the box</h3>
+      <ul>
+        <li>Validation: Laravel's own JSON shape (<code>message</code> + <code>errors</code>)</li>
+        <li>Unknown route: an HTML page unless the client asks for JSON</li>
+        <li>Crash: an HTML error page</li>
+      </ul>
+      <p class="small muted">One class, <code>ProblemDetailsRenderer</code>, replaces all three with RFC 9457 (L2-020).</p>
+    </div>
+  </div>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>Where exception rendering is registered, versus <code>IExceptionHandler</code></li>
+    <li>How every error class maps to status, title, detail, and extensions</li>
+    <li>Why the renderer checks the request path, not the <code>Accept</code> header</li>
+    <li>How a 500 avoids leaking internals</li>
+    <li>How the tests prove it without a running server</li>
+  </ol>
+</section>
+
+<section id="registration" data-part="1" data-cue="Video two showed bootstrap/app.php">
+  <h2>Registration: one callback</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/bootstrap/app.php</div>
+<pre class="code" data-lang="php" data-mark="2">->withExceptions(function (Exceptions $exceptions): void {
+    $exceptions-&gt;render(new ProblemDetailsRenderer);
+})-&gt;create();</pre>
+      <div class="file">backend/app/Exceptions/ProblemDetailsRenderer.php</div>
+<pre class="code tight" data-lang="php" data-mark="5,7">/**
+ * Renders every exception on an API path as RFC 9457 problem details (L2-020).
+ * It only shapes the response; reporting still happens through Laravel's handler.
+ */
+final class ProblemDetailsRenderer
+{
+    public function __invoke(Throwable $e, Request $request): ?JsonResponse</pre>
+    </div>
+    <div>
+      <table class="small">
+        <tr><th>Laravel</th><th>ASP.NET Core</th></tr>
+        <tr><td>Invokable class (<code>__invoke</code>)</td><td>class implementing <code>IExceptionHandler</code></td></tr>
+        <tr><td><code>$exceptions-&gt;render(...)</code></td><td><code>AddExceptionHandler</code> + <code>UseExceptionHandler</code></td></tr>
+        <tr><td>return <code>null</code> → default rendering</td><td><code>TryHandleAsync</code> returns <code>false</code></td></tr>
+        <tr><td>Reporting (logging) untouched</td><td>Logging middleware untouched</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="path" data-part="2" data-cue="Open app/Exceptions/ProblemDetailsRenderer.php">
+  <h2>By path, not by Accept header</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Exceptions/ProblemDetailsRenderer.php</div>
+<pre class="code" data-lang="php" data-mark="3,4,5">public function __invoke(Throwable $e, Request $request): ?JsonResponse
+{
+    if (! $request-&gt;is('api', 'api/*')) {
+        return null;
+    }
+
+    return match (true) {</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Any path under <code>api/</code> gets problem details, whatever the client accepts</li>
+        <li>L2-020: the API never returns an HTML page</li>
+        <li><code>ProblemDetailsTest</code> sends <code>Accept: text/html</code> and still gets JSON</li>
+        <li><code>match (true)</code>: the ordered type switch, like C# type patterns; order matters as with <code>catch</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="arms" data-part="2" data-cue="A ValidationException, thrown by any Form Request">
+  <h2>The arms, in order</h2>
+  <div class="file">backend/app/Exceptions/ProblemDetailsRenderer.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,5,9,10,15,16,17">return match (true) {
+    $e instanceof ValidationException =&gt; self::problem(422, 'One or more fields are invalid.', [
+        'errors' =&gt; $e-&gt;errors(),
+    ]),
+    $e instanceof TodoLimitReached =&gt; self::problem(422, $e-&gt;getMessage(), [
+        'code' =&gt; 'todo_limit_reached',
+        'errors' =&gt; ['title' =&gt; [$e-&gt;getMessage()]],
+    ]),
+    $e instanceof TodoNotFound, $e instanceof ModelNotFoundException =&gt; self::problem(404, 'The requested resource was not found.'),
+    $e instanceof MethodNotAllowedHttpException =&gt; self::problem(
+        405,
+        "The {$request-&gt;method()} method is not supported for this route.",
+        headers: $e-&gt;getHeaders(),
+    ),
+    $e instanceof HttpExceptionInterface &amp;&amp; $e-&gt;getStatusCode() === 404 =&gt; self::problem(404, 'The requested resource was not found.'),
+    $e instanceof HttpExceptionInterface =&gt; self::problem($e-&gt;getStatusCode(), $e-&gt;getMessage(), headers: $e-&gt;getHeaders()),
+    default =&gt; self::problem(500, 'An unexpected error occurred. Try again later.'),
+};</pre>
+</section>
+
+<section id="mapping" data-part="2" data-cue="A TodoNotFound or Laravel's own ModelNotFoundException">
+  <h2>The mapping table</h2>
+  <table class="small">
+    <tr><th>Cause</th><th>Status</th><th>Detail</th><th>Extras</th></tr>
+    <tr><td><code>ValidationException</code> (any Form Request)</td><td>422</td><td>One or more fields are invalid.</td><td><code>errors</code>: field → messages</td></tr>
+    <tr><td><code>TodoLimitReached</code></td><td>422</td><td>You have 500 tasks. Finish or delete some to add more.</td><td><code>code: todo_limit_reached</code>, <code>errors.title</code></td></tr>
+    <tr><td><code>TodoNotFound</code>, <code>ModelNotFoundException</code></td><td>404</td><td>The requested resource was not found.</td><td>none</td></tr>
+    <tr><td><code>MethodNotAllowedHttpException</code></td><td>405</td><td>The PUT method is not supported for this route.</td><td><code>Allow</code> header forwarded</td></tr>
+    <tr><td>Router 404 (unknown path, bad ULID)</td><td>404</td><td>The requested resource was not found.</td><td>same as a missing row: no information leak</td></tr>
+    <tr><td>Other <code>HttpExceptionInterface</code></td><td>its status</td><td>its message</td><td>its headers</td></tr>
+    <tr><td>Anything else</td><td>500</td><td>An unexpected error occurred. Try again later.</td><td>never the message, class, or trace</td></tr>
+  </table>
+</section>
+
+<section id="body" data-part="3" data-cue="The private problem method builds the response">
+  <h2>The body: four members plus extensions</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Exceptions/ProblemDetailsRenderer.php</div>
+<pre class="code tight" data-lang="php" data-mark="5,6,7,8,9,12">private static function problem(int $status, string $detail, array $extensions = [], array $headers = []): JsonResponse
+{
+    return new JsonResponse(
+        [
+            'type' =&gt; 'about:blank',
+            'title' =&gt; Response::$statusTexts[$status] ?? 'Error',
+            'status' =&gt; $status,
+            'detail' =&gt; $detail,
+            ...$extensions,
+        ],
+        $status,
+        ['Content-Type' =&gt; 'application/problem+json', ...$headers],
+    );
+}</pre>
+    </div>
+    <div>
+<pre class="code tight" data-lang="json">{
+  "type": "about:blank",
+  "title": "Unprocessable Content",
+  "status": 422,
+  "detail": "One or more fields are invalid.",
+  "errors": {
+    "title": ["The title field is required."]
+  }
+}</pre>
+      <ul class="small">
+        <li>Same four members and <code>Extensions</code> as .NET's <code>ProblemDetails</code></li>
+        <li><code>title</code> is the reason phrase from Symfony's status table</li>
+        <li>Media type <code>application/problem+json</code>; extra headers spread in</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="tests" data-part="3" data-cue="ProblemDetailsTest has a helper">
+  <h2>Every status has a test</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/tests/Feature/Api/V1/ProblemDetailsTest.php</div>
+<pre class="code xtight" data-lang="php" data-mark="1,4,11,14,24,27">function assertProblem(Illuminate\Testing\TestResponse $response, int $status, string $title, string $detail): void
+{
+    $response-&gt;assertStatus($status)
+        -&gt;assertHeader('Content-Type', 'application/problem+json')
+        -&gt;assertJsonPath('type', 'about:blank')
+        -&gt;assertJsonPath('title', $title)
+        -&gt;assertJsonPath('status', $status)
+        -&gt;assertJsonPath('detail', $detail);
+}
+
+it('renders unknown API routes as 404 problem details, never HTML', function (string $uri): void {
+    $response = $this-&gt;get($uri, ['Accept' =&gt; 'text/html']);
+
+    assertProblem($response, 404, 'Not Found', 'The requested resource was not found.');
+})-&gt;with([
+    'unknown v1 path' =&gt; '/api/v1/nope',
+    'unsupported version' =&gt; '/api/v2/todos',
+]);
+
+it('renders unhandled exceptions as 500 problem details without leaking the message', function (): void {
+    Route::get('api/v1/boom', fn () =&gt; throw new RuntimeException('secret internals'));
+
+    $response = $this-&gt;get('/api/v1/boom', ['Accept' =&gt; 'text/html']);
+
+    assertProblem($response, 500, 'Internal Server Error', 'An unexpected error occurred. Try again later.');
+    expect($response-&gt;getContent())-&gt;not-&gt;toContain('secret internals');
+});</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Full pipeline in-process: router, middleware, renderer. <code>WebApplicationFactory</code> without the factory</li>
+        <li>A throwaway route that throws proves the 500 never echoes internals</li>
+        <li>405 test checks the <code>Allow</code> header contains GET</li>
+        <li><code>TodoLimitTest</code> pins <code>code</code> and the exact sentence</li>
+        <li>Every error-path test in the suite asserts <code>application/problem+json</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pitfalls" data-part="3" data-cue="Catching exceptions in a controller or an Action to return a JSON error by hand">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li>Hand-built JSON errors in a controller or Action: a second error shape</li>
+    <li><code>expectsJson()</code> or the <code>Accept</code> header instead of the path: a browser gets HTML</li>
+    <li>The generic <code>HttpExceptionInterface</code> arm before the specific 404 and 405 arms</li>
+    <li>A 500 that echoes <code>getMessage()</code></li>
+    <li>A new domain exception with no arm and no test: a meaningful failure becomes a generic 500</li>
+  </ol>
+</section>
+
+<section id="recap" data-part="4" data-cue="One invokable renderer, registered in bootstrap/app.php">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Registration:</b> one invokable renderer in <code>bootstrap/app.php</code>; reporting stays with Laravel</li>
+    <li><b>Scope:</b> by path, so the API never returns HTML</li>
+    <li><b>Mapping:</b> <code>match (true)</code>: 422 + <code>errors</code>, 422 + <code>code</code>, fixed 404, 405 + <code>Allow</code>, fixed 500</li>
+    <li><b>Body:</b> four RFC 9457 members plus extensions, <code>application/problem+json</code></li>
+    <li><b>Tests:</b> every status pinned in-process</li>
+  </ul>
+</section>
+
+<section id="next" data-part="4" data-cue="Next, the Artisan command and the scheduler">
+  <div class="kicker">Next</div>
+  <h2>09 · Artisan commands and the scheduler</h2>
+  <p class="lead">Hosted services and background jobs, mapped onto PurgeDeletedTodos and routes/console.php.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

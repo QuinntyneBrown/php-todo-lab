@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 11 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="11" data-video-title="Quality gates: Pint, Larastan and CI" data-parts="Introduction|Pint|Larastan|check and CI|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 11</div>
+  <h1>Quality gates: Pint, Larastan and CI</h1>
+  <p class="lead">dotnet format, analysers and nullable reference types, mapped onto pint.json, phpstan.neon, composer check and ci.yml</p>
+</section>
+
+<section id="three-gates" data-part="0" data-cue="PHP has no compiler step">
+  <h2>Three gates, built from tools</h2>
+  <table>
+    <tr><th>.NET</th><th>This backend</th><th>Runs as</th></tr>
+    <tr><td><code>dotnet format</code> + <code>.editorconfig</code></td><td>Laravel Pint (<code>pint.json</code>)</td><td><code>composer format</code> / <code>format:check</code></td></tr>
+    <tr><td>Nullable reference types, analysers, warnings as errors</td><td>Larastan level 8 (<code>phpstan.neon</code>)</td><td><code>composer analyse</code></td></tr>
+    <tr><td><code>dotnet test</code> against a service container</td><td>Pest against MySQL 8.4</td><td><code>composer test</code></td></tr>
+    <tr><td>A CI pipeline</td><td><code>.github/workflows/ci.yml</code></td><td><code>composer check</code>, same as local</td></tr>
+  </table>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>What Pint enforces, and why formatting commits are kept separate</li>
+    <li>What Larastan level 8 checks, and how docblocks feed it</li>
+    <li>What <code>composer check</code> runs, in which order</li>
+    <li>How CI reproduces it with a real MySQL service</li>
+    <li>Which editor and git settings keep the formatter stable across operating systems</li>
+  </ol>
+</section>
+
+<section id="pint" data-part="1" data-cue="Open backend/pint.json">
+  <h2>pint.json</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/pint.json</div>
+<pre class="code" data-lang="json" data-mark="2,4,5,8,9">{
+    "preset": "laravel",
+    "rules": {
+        "declare_strict_types": true,
+        "ordered_imports": {
+            "sort_algorithm": "alpha"
+        },
+        "no_unused_imports": true,
+        "fully_qualified_strict_types": true
+    },
+    "exclude": [
+        "bootstrap/cache",
+        "storage",
+        "vendor"
+    ]
+}</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li><strong>laravel preset:</strong> PSR-12 + PER coding style + Laravel conventions</li>
+        <li><strong>declare_strict_types:</strong> inserts the declaration in every file; L2-044 criterion 5 enforced without a test</li>
+        <li><strong>ordered_imports:</strong> alphabetical <code>use</code> statements</li>
+        <li><strong>no_unused_imports:</strong> removes dead imports</li>
+        <li><strong>fully_qualified_strict_types:</strong> FQCNs in signatures become imports</li>
+        <li>Pint rewrites code, not only whitespace</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pint-rules" data-part="1" data-cue="That is dotnet format with an .editorconfig">
+  <h2>Review rules that go with Pint (L2-056)</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>Before every commit</h3>
+<pre class="term"><span class="prompt">$</span> composer format         <span class="dim"># pint, rewrites files</span>
+<span class="prompt">$</span> composer format:check   <span class="dim"># pint --test, first step of composer check</span></pre>
+      <p class="small">An unformatted file fails CI before anything else runs.</p>
+    </div>
+    <div class="card">
+      <h3>In review</h3>
+      <ul class="small">
+        <li>A rule is never disabled without naming it and giving a reason</li>
+        <li>Formatting changes are committed separately from behaviour changes</li>
+        <li>A commit that mixes the two is a request for a split</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="larastan" data-part="2" data-cue="Open backend/phpstan.neon">
+  <h2>phpstan.neon</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/phpstan.neon</div>
+<pre class="code" data-lang="yaml" data-mark="2,5">includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 8
+    paths:
+        - app
+        - bootstrap/app.php
+        - config
+        - database
+        - routes
+        - tests/Fakes</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Larastan = PHPStan + Laravel knowledge: <code>Todo::query()</code> is a builder of <code>Todo</code>, scopes exist, facades forward, model docblocks declare attributes</li>
+        <li>Levels run 0 to 10 (as of 2026). Level 8: calling a method on a possibly-null value, passing nullable to non-null, returning the wrong shape are errors</li>
+        <li>Nullable reference types with warnings as errors, plus generic checking of docblock types</li>
+        <li>Zero errors, no baseline (L2-044 criterion 5)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="docblocks" data-part="2" data-cue="Watch how the code feeds it">
+  <h2>Load-bearing annotations</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Repositories/TodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="2,7">/**
+ * @return Collection&lt;int, Todo&gt;
+ */
+public function list(TodoStatus $status): Collection;
+
+/**
+ * @return array{active: int, completed: int}
+ */
+public function counts(): array;</pre>
+      <div class="file">backend/database/factories/TodoFactory.php</div>
+<pre class="code tight" data-lang="php" data-mark="2">/**
+ * @extends Factory&lt;Todo&gt;
+ */
+class TodoFactory extends Factory</pre>
+    </div>
+    <div>
+      <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="2">return DB::transaction(function (): array {
+    /** @var list&lt;string&gt; $ids */
+    $ids = Todo::query()-&gt;completed()-&gt;lockForUpdate()-&gt;pluck('id')-&gt;all();</pre>
+      <ul class="small">
+        <li>Inline <code>@var</code> narrows <code>array&lt;int, mixed&gt;</code> to <code>list&lt;string&gt;</code> where the code knows better</li>
+        <li>Remove the <code>@return</code> on <code>counts</code> and <code>ListTodos</code> fails: <code>$counts['active']</code> is no longer an int</li>
+        <li>Annotations are code. Review them like signatures.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="failure" data-part="2" data-cue="What does a failure look like">
+  <h2>What a level 8 failure looks like</h2>
+  <div class="cols">
+    <div>
+      <span class="tag">Illustrative change</span>
+<pre class="code tight" data-lang="php" data-mark="3">public function handle(string $id): void
+{
+    $this-&gt;todos-&gt;delete($this-&gt;todos-&gt;find($id));
+}</pre>
+<pre class="term"><span class="prompt">$</span> composer analyse
+ ------ --------------------------------------------------------------
+  Line   Actions/Todos/DeleteTodo.php
+ ------ --------------------------------------------------------------
+  17     Parameter #1 $todo of method App\Repositories\TodoRepository
+         ::delete() expects App\Models\Todo, App\Models\Todo|null given.
+ ------ --------------------------------------------------------------
+ <span class="err">[ERROR] Found 1 error</span></pre>
+    </div>
+    <div>
+      <span class="tag">The fix is the guard</span>
+<pre class="code tight" data-lang="php" data-mark="3">public function handle(string $id): void
+{
+    $this-&gt;todos-&gt;delete($this-&gt;todos-&gt;find($id) ?? throw new TodoNotFound($id));
+}</pre>
+      <ul class="small">
+        <li>The same bug nullable reference types catch in C#</li>
+        <li>Not an <code>@phpstan-ignore</code>, not a baseline entry</li>
+        <li>Output shape shown for illustration; the repository has zero errors</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="check" data-part="3" data-cue="composer check is the one command">
+  <h2>composer check: cheapest first</h2>
+  <div class="arrow-row">
+    <div class="node">format:check <span class="muted small">~1 s</span></div><span class="sep">→</span>
+    <div class="node">analyse <span class="muted small">seconds</span></div><span class="sep">→</span>
+    <div class="node">test <span class="muted small">a minute, with MySQL</span></div><span class="sep">→</span>
+    <div class="node hot">green</div>
+  </div>
+  <div class="file">backend/composer.json</div>
+<pre class="code" data-lang="json" data-mark="1,2,3,4,5">"check": [
+    "@format:check",
+    "@analyse",
+    "@test"
+]</pre>
+  <p>Stops at the first failure. Run it before every push; the pull request template asks you to confirm you did.</p>
+</section>
+
+<section id="ci" data-part="3" data-cue="Open .github/workflows/ci.yml">
+  <h2>CI runs the same command against MySQL 8.4</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">.github/workflows/ci.yml</div>
+<pre class="code xtight" data-lang="yaml" data-mark="8,9,13,14,16,17,22,23,25,26,27,28">jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE: todo_test
+          MYSQL_USER: todo
+          MYSQL_PASSWORD: secret
+        ports: ['3306:3306']
+        options: &gt;-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -psecret"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: pdo_mysql, mbstring, intl
+          coverage: pcov
+      - run: composer install --no-interaction --prefer-dist
+      - run: cp .env.example .env &amp;&amp; php artisan key:generate
+      - run: composer check</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li><code>backend</code> and <code>frontend</code> jobs run in parallel on every push to main and every pull request</li>
+        <li>A MySQL 8.4 service with <code>todo_test</code> and a health check: the job waits until it answers</li>
+        <li>PHP 8.4 with <code>pdo_mysql</code>, <code>mbstring</code>, <code>intl</code>, and <code>pcov</code> for the coverage gate</li>
+        <li>Then exactly what you ran locally: green CI means your machine was green</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="editor" data-part="3" data-cue="Two root files keep the formatter stable across machines">
+  <h2>.editorconfig and .gitattributes</h2>
+  <div class="cols">
+    <div>
+      <div class="file">.editorconfig</div>
+<pre class="code tight" data-lang="ini" data-mark="4,5,6,10,11">[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# PSR-12 / PER Coding Style: four-space indent for PHP (Laravel Pint enforces the rest).
+[*.php]
+indent_size = 4</pre>
+    </div>
+    <div>
+      <div class="file">.gitattributes</div>
+<pre class="code tight" data-lang="ini" data-mark="3,5,6,7"># Normalise every text file to LF in the repository and the working tree, on every OS.
+# Pint (PSR-12 line_ending) and Prettier (endOfLine: lf) both require LF.
+* text=auto eol=lf
+
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf</pre>
+      <p class="small muted">Without this, a Windows checkout with <code>core.autocrlf</code> would fail Pint's <code>line_ending</code> rule (L2-056 criterion 5).</p>
+    </div>
+  </div>
+</section>
+
+<section id="pitfalls" data-part="3" data-cue="Adding an ignore comment or a baseline to make Larastan pass">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li>An <code>@phpstan-ignore</code> comment or a baseline file</li>
+    <li>A Pint rule disabled without a name and a reason</li>
+    <li>Pint on one file, while CI formats the whole tree</li>
+    <li>A reformat mixed into a behaviour commit</li>
+    <li>Removing a docblock because "it compiles": nothing compiles; Larastan checks the docblock</li>
+    <li>Treating a nullable-access error as noise</li>
+  </ol>
+</section>
+
+<section id="recap" data-part="4" data-cue="Pint is the one formatter">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Pint:</b> Laravel preset + strict types, sorted imports, no unused imports, qualified types imported; format before committing, commit formatting separately</li>
+    <li><b>Larastan:</b> level 8, fed by mandatory docblocks, zero errors, no baseline</li>
+    <li><b>check:</b> format, analyse, test, cheapest first; CI runs the same against MySQL 8.4</li>
+    <li><b>Settings:</b> <code>.editorconfig</code> and <code>.gitattributes</code> keep indentation and LF stable everywhere</li>
+  </ul>
+</section>
+
+<section id="next" data-part="4" data-cue="Next, the last video">
+  <div class="kicker">Next</div>
+  <h2>12 · Reviewing a PHP pull request</h2>
+  <p class="lead">A checklist built from the whole series, and a worked example of adding a feature slice.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>
