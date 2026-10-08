@@ -21,6 +21,32 @@
     </span>
   </label>
   <div class="title">
-    <span class="title__text">{{ todo().title }}</span>
+    @if (editing()) {
+      <input
+        #editor
+        class="edit"
+        type="text"
+        [value]="todo().title"
+        [attr.aria-label]="strings.item.editLabel"
+        [attr.aria-invalid]="editError() === null ? null : 'true'"
+        [attr.aria-describedby]="editError() === null ? null : 'edit-error-' + todo().id"
+        (keydown)="onEditKey($event)"
+        (blur)="onEditBlur($event)"
+      />
+      @if (editError(); as message) {
+        <p class="edit__msg" role="alert" [id]="'edit-error-' + todo().id">{{ message }}</p>
+      }
+    } @else {
+      <button
+        #titleButton
+        class="title__btn"
+        type="button"
+        [disabled]="todo().pending"
+        [attr.aria-label]="strings.ariaLabels.edit(todo().title)"
+        (click)="startEdit()"
+      >
+        {{ todo().title }}
+      </button>
+    }
   </div>
 </div>

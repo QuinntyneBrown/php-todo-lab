@@ -14,7 +14,11 @@ import { TodoItemComponent } from '../todo-item/todo-item.component';
 export class TodoListComponent {
   readonly todos = input.required<readonly TodoView[]>();
   readonly loading = input(false);
+  readonly editingId = input<string | null>(null);
   readonly toggled = output<{ id: string; completed: boolean }>();
+  readonly editStarted = output<string>();
+  readonly titleSaved = output<{ id: string; title: string }>();
+  readonly editCancelled = output();
 
   protected readonly label = UI_STRINGS.list.label;
 }

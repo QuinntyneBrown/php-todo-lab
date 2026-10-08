@@ -99,6 +99,12 @@ export class TodoPageComponent implements OnChanges {
     );
   }
 
+  protected onTitleSaved(id: string, title: string): void {
+    if (this.store.saveTitle(id, title)) {
+      this.announcer.announce(UI_STRINGS.announcements.updated);
+    }
+  }
+
   /** One message with the action and the new count, so neither interrupts the other (L2-007). */
   private announce(action: string): void {
     const count =

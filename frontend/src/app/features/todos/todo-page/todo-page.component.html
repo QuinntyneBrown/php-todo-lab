@@ -32,7 +32,11 @@
       <app-todo-list
         [todos]="store.visibleTodos()"
         [loading]="store.loading()"
+        [editingId]="store.editingId()"
         (toggled)="onToggled($event.id, $event.completed)"
+        (editStarted)="store.beginEdit($event)"
+        (titleSaved)="onTitleSaved($event.id, $event.title)"
+        (editCancelled)="store.cancelEdit()"
       />
       @if (!store.loading() && store.visibleTodos().length === 0) {
         <app-todo-empty-state [kind]="emptyKind()" />

@@ -58,6 +58,9 @@ export class TodoStore {
   );
   readonly toast = signal<ToastState | null>(null);
 
+  /** The one task whose title is being edited (L2-012 criterion 6). */
+  readonly editingId = signal<string | null>(null);
+
   /** The selected filter; the page writes it from the `?filter=` query parameter. */
   readonly filter = signal<TodoFilter>('all');
 
@@ -135,6 +138,27 @@ export class TodoStore {
     );
   }
 
+  beginEdit(id: string): void {
+    this.editingId.set(id);
+  }
+
+  cancelEdit(): void {
+    this.editingId.set(null);
+  }
+
+  /**
+   * Ends editing and saves a changed title optimistically (L2-012). An unchanged title,
+   * after trimming, sends nothing (L2-013). Returns whether a save was sent.
+   */
+  saveTitle(id: string, title: string): boolean {
+    if (this.editingId() === id) this.editingId.set(null);
+    const todo = this.todos().find((t) => t.id === id);
+    const trimmed = title.trim();
+    if (!todo || trimmed === '' || trimmed === todo.title) return false;
+    void this.patch({ ...todo, title: trimmed }, { title: trimmed }, UI_STRINGS.toasts.saveFailed);
+    return true;
+  }
+
   /**
    * Shows `optimistic` at once and queues the PATCH behind any earlier one for the task.
    * When the queue drains after a failure, the task settles on the last state the server
@@ -167,7 +191,15 @@ export class TodoStore {
   }
 
   private settle(queue: PatchQueue): void {
-    this.patchQueues.delete(queue.confirmed.id);
+    const { id } = queue.confirmed;
+    this.patchQueues.delete(id);
+    const gone = queue.failure?.error instanceof ApiError && queue.failure.error.status === 404;
+    if (gone) {
+      // Deleted elsewhere: drop the row rather than show a task that no longer exists (L2-014).
+      this.todos.update((todos) => todos.filter((t) => t.id !== id));
+      this.showError(UI_STRINGS.toasts.gone);
+      return;
+    }
     this.replace(queue.confirmed);
     if (queue.failure) this.showError(queue.failure.message);
   }

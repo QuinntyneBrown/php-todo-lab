@@ -147,8 +147,17 @@
   padding: 10px 6px;
 }
 
+// The title is a button that starts editing; it reads as text (L2-012).
 // The strike-through wipes left to right, across every wrapped line (L2-011).
-.title__text {
+.title__btn {
+  display: inline;
+  max-width: 100%;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  border-radius: 4px;
+  text-align: left;
+  cursor: text;
   line-height: 1.4;
   overflow-wrap: anywhere;
   background: linear-gradient(currentcolor, currentcolor) 0 55% / 0% 2px no-repeat;
@@ -159,16 +168,44 @@
 }
 
 // Muted, and struck through: colour is never the only signal (L2-030 criterion 6).
-.item--done .title__text {
+.item--done .title__btn {
   color: var(--slate);
   background-size: 100% 2px;
+}
+
+// 16 px or more, so iOS does not zoom into the field (L2-028 criterion 3).
+.edit {
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+  border: 1.5px solid var(--sea);
+  border-radius: 10px;
+  background: var(--paper);
+  font-size: 1.0625rem;
+  box-shadow: 0 0 0 3px var(--sea-soft);
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &[aria-invalid='true'] {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px var(--danger-soft);
+  }
+}
+
+.edit__msg {
+  margin: 6px 2px 0;
+  color: var(--danger);
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 // State changes apply at once, colour only (L2-011 criterion 3, L2-024 criterion 2).
 @media (prefers-reduced-motion: reduce) {
   .check__box,
   .check__tick,
-  .title__text {
+  .title__btn {
     transition: none;
   }
 

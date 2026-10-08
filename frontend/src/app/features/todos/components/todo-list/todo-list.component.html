@@ -8,7 +8,14 @@
   <ul class="list" [attr.aria-label]="label">
     @for (todo of todos(); track todo.id) {
       <li class="list__row" animate.leave="list__row--leave">
-        <app-todo-item [todo]="todo" (toggled)="toggled.emit({ id: todo.id, completed: $event })" />
+        <app-todo-item
+          [todo]="todo"
+          [editing]="todo.id === editingId()"
+          (toggled)="toggled.emit({ id: todo.id, completed: $event })"
+          (editStarted)="editStarted.emit(todo.id)"
+          (titleSaved)="titleSaved.emit({ id: todo.id, title: $event })"
+          (editCancelled)="editCancelled.emit()"
+        />
       </li>
     }
   </ul>
