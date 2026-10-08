@@ -75,10 +75,8 @@ pest()-&gt;extend(TestCase::class)
 
 <section id="unit" data-part="2" data-cue="Open tests/Unit/Actions/UpdateTodoTest.php">
   <h2>Layer one: an Action around the fake</h2>
-  <div class="cols-wide">
-    <div>
-      <div class="file">backend/tests/Unit/Actions/UpdateTodoTest.php</div>
-<pre class="code xtight" data-lang="php" data-mark="2,8,9,12,15,16,20,23,25">/**
+  <div class="file">backend/tests/Unit/Actions/UpdateTodoTest.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,8,9,12,15,16,20,23">/**
  * Traces to: L2-009, L2-014
  */
 
@@ -101,26 +99,8 @@ it('keeps completedAt when completing twice', function (): void {
     $completedAt = $todo-&gt;completed_at;
 
     expect($this-&gt;action-&gt;handle($todo-&gt;id, ['completed' =&gt; true])-&gt;completed_at)-&gt;toEqual($completedAt);
-});
-
-it('throws TodoNotFound for an unknown or deleted id', function (): void {
-    $deleted = $this-&gt;repository-&gt;seed(title: 'Gone', deleted: true);
-
-    expect(fn () =&gt; $this-&gt;action-&gt;handle('01jz0000000000000000000000', ['completed' =&gt; true]))
-        -&gt;toThrow(TodoNotFound::class)
-        -&gt;and(fn () =&gt; $this-&gt;action-&gt;handle($deleted-&gt;id, ['completed' =&gt; true]))
-        -&gt;toThrow(TodoNotFound::class);
 });</pre>
-    </div>
-    <div>
-      <ul class="small">
-        <li>"Traces to" header: the requirement ids, checked in review, never parsed</li>
-        <li><code>seed(title:, completed:, deleted:)</code>: named arguments, a fixed clock advancing one second per row</li>
-        <li>No database, no container, no mocking library: milliseconds</li>
-        <li>L2-051: success, validation and not-found paths through the fake</li>
-      </ul>
-    </div>
-  </div>
+  <p class="small muted">"Traces to" header, checked in review and never parsed. <code>seed(title:, completed:, deleted:)</code> uses named arguments and a fixed clock. No database, no container, no mocking library: milliseconds (L2-051).</p>
 </section>
 
 <section id="fake" data-part="2" data-cue="The fake is in tests/Fakes">
@@ -154,10 +134,8 @@ final class InMemoryTodoRepository implements TodoRepository
 
 <section id="feature" data-part="3" data-cue="Open tests/Feature/Api/V1/CreateTodoTest.php">
   <h2>Layer two: real requests, real MySQL</h2>
-  <div class="cols-wide">
-    <div>
-      <div class="file">backend/tests/Feature/Api/V1/CreateTodoTest.php</div>
-<pre class="code xtight" data-lang="php" data-mark="2,3,4,5,6,9,10,14,15,16,19,20,21,22,23">it('creates a todo and returns 201 with a Location header', function (): void {
+  <div class="file">backend/tests/Feature/Api/V1/CreateTodoTest.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,3,4,9,10,14,15,16,18,19,20,21,22">it('creates a todo and returns 201 with a Location header', function (): void {
     $response = $this-&gt;postJson('/api/v1/todos', ['title' =&gt; 'Buy oat milk'])
         -&gt;assertCreated()
         -&gt;assertJsonPath('data.title', 'Buy oat milk')
@@ -180,16 +158,7 @@ it('rejects a missing, empty, whitespace-only, or non-string title', function (a
     'number' =&gt; [['title' =&gt; 42]],
     'array' =&gt; [['title' =&gt; ['x']]],
 ]);</pre>
-    </div>
-    <div>
-      <ul class="small">
-        <li><code>postJson</code>, <code>getJson</code>, <code>patchJson</code>, <code>deleteJson</code>: the whole pipeline in-process, no web server</li>
-        <li><code>assertCreated</code>, <code>assertJsonPath</code>, <code>assertHeader</code>, <code>assertUnprocessable</code>, <code>assertJsonValidationErrors</code></li>
-        <li>Then the model, to assert the row</li>
-        <li>One file per endpoint in <code>tests/Feature/Api/V1</code> (L2-051)</li>
-      </ul>
-    </div>
-  </div>
+  <p class="small muted"><code>postJson</code>, <code>getJson</code>, <code>patchJson</code>, <code>deleteJson</code> run the whole pipeline in-process, then the model asserts the row. One file per endpoint in <code>tests/Feature/Api/V1</code> (L2-051).</p>
 </section>
 
 <section id="refresh" data-part="3" data-cue="RefreshDatabase is how the database stays clean">
@@ -216,7 +185,7 @@ it('rejects a missing, empty, whitespace-only, or non-string title', function (a
   <div class="cols">
     <div>
       <div class="file">backend/composer.json</div>
-<pre class="code" data-lang="json" data-mark="2,3,4">"test": [
+<pre class="code tight" data-lang="json" data-mark="2,3,4">"test": [
     "@php artisan config:clear --ansi",
     "pest --coverage --min=90 --exclude-group=performance",
     "@php -d pcov.enabled=0 vendor/bin/pest --group=performance"
