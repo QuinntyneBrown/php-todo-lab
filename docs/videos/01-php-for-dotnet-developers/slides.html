@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 01 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="01" data-video-title="PHP 8.4 for .NET developers" data-parts="Introduction|Execution model|Types|Classes and enums|Syntax|Pitfalls|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 01</div>
+  <h1>PHP 8.4 for .NET developers</h1>
+  <p class="lead">The language, read through code that passes Larastan level 8</p>
+</section>
+
+<section id="series" data-part="0" data-cue="This first video is about the language itself">
+  <h2>What we are learning from</h2>
+  <div class="cols-wide">
+    <div>
+      <ul>
+        <li><strong>backend/</strong>: a Laravel JSON API under <code>/api/v1</code></li>
+        <li>Route → Form Request → Controller → Action → Repository → Resource</li>
+        <li>PHP 8.4, <code>declare(strict_types=1)</code> everywhere</li>
+        <li>Pest tests against MySQL, Larastan level 8, Pint</li>
+        <li>Twelve videos: language, framework, each layer, tests, tooling, and PR review</li>
+      </ul>
+    </div>
+    <div class="figure-wrap">
+      <img class="figure" src="../assets/screenshots/todo-mock.png" alt="The to-do app mock">
+      <div class="caption">docs/mocks/todo.html: the product the API serves</div>
+    </div>
+  </div>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end of this video you will be able to answer four questions">
+  <h2>Four questions</h2>
+  <ol class="steps">
+    <li>How does a PHP process run compared with a Kestrel process?</li>
+    <li>What does <code>declare(strict_types=1)</code> buy you, and what does it not?</li>
+    <li>Which PHP constructs map to records, enums, switch expressions, and lambdas?</li>
+    <li>Which C# habits will trip you up?</li>
+  </ol>
+</section>
+
+<section id="execution" data-part="1" data-cue="Start with the thing that surprises">
+  <h2>Execution model</h2>
+  <div class="cols">
+    <div class="card cs">
+      <h3>ASP.NET Core</h3>
+      <ul>
+        <li>One long-lived Kestrel process</li>
+        <li>Container built once at startup</li>
+        <li>Singletons and statics live for days</li>
+        <li>Compiled to assemblies</li>
+      </ul>
+    </div>
+    <div class="card php">
+      <h3>PHP (traditional)</h3>
+      <ul>
+        <li>Shared-nothing: every request starts empty</li>
+        <li>Framework boots on every request</li>
+        <li>Statics die with the request</li>
+        <li>No compile step: files loaded on demand</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="consequences" data-part="1" data-cue="That has consequences you will feel">
+  <h2>Consequences</h2>
+  <ul>
+    <li>No in-process cache unless you reach for one explicitly</li>
+    <li>A static property does not survive between requests</li>
+    <li>Boot cost is paid per request, so Laravel caches config and routes in production</li>
+    <li>Long-lived mode exists (Octane), but this repository does not use it</li>
+  </ul>
+</section>
+
+<section id="composer" data-part="1" data-cue="The second surprise is that there is no compile step">
+  <h2>Composer and PSR-4: namespaces are folders</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/composer.json</div>
+<pre class="code" data-lang="json">"autoload": {
+    "psr-4": {
+        "App\\": "app/",
+        "Database\\Factories\\": "database/factories/",
+        "Database\\Seeders\\": "database/seeders/"
+    }
+},
+"autoload-dev": {
+    "psr-4": {
+        "Tests\\": "tests/"
+    }
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Composer is PHP's NuGet; it also writes the autoloader</li>
+        <li><code>App\Actions\Todos\CreateTodo</code> must live at <code>app/Actions/Todos/CreateTodo.php</code></li>
+        <li>Namespace separator is a backslash</li>
+        <li><code>composer.lock</code> is committed, like a lockfile should be</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="mental-model" data-part="1" data-cue="So the mental model is">
+  <h2>The mental model</h2>
+  <p class="quote">A scripting language with a per-request lifecycle, loaded by convention from the file system, with a NuGet-like package manager.<cite>Everything else is closer to C# than you expect.</cite></p>
+</section>
+
+<section id="strict" data-part="2" data-cue="Open any file in this backend">
+  <h2>declare(strict_types=1)</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Actions/Todos/CreateTodo.php</div>
+<pre class="code" data-lang="php" data-mark="3">&lt;?php
+
+declare(strict_types=1);
+
+namespace App\Actions\Todos;
+
+use App\Models\Todo;
+use App\Repositories\TodoRepository;</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Default PHP coerces: <code>"5"</code> becomes <code>5</code> for an <code>int</code> parameter</li>
+        <li>Strict mode throws a <code>TypeError</code> instead</li>
+        <li>Applies to calls <em>made from that file</em>, so it must be in every file</li>
+        <li>Enforced here by the formatter (Pint), not by review</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="runtime-types" data-part="2" data-cue="PHP's types are real and checked at runtime">
+  <h2>Types on every signature</h2>
+  <div class="cols">
+    <div>
+      <div class="file">app/Actions/Todos/CreateTodo.php</div>
+<pre class="code" data-lang="php" data-mark="1">public function handle(string $title): Todo
+{
+    return $this-&gt;todos-&gt;createWithinLimit($title, self::LIMIT);
+}</pre>
+      <div class="file">app/Repositories/TodoRepository.php</div>
+<pre class="code" data-lang="php" data-mark="2">/** The non-deleted todo with this id, if any. */
+public function find(string $id): ?Todo;</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Parameter, return, and property types are checked at runtime</li>
+        <li><code>?Todo</code> is nullable, like <code>Todo?</code> in C# but enforced when called</li>
+        <li>Union types exist (<code>int|string</code>), and <code>mixed</code> is the escape hatch</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="docblocks" data-part="2" data-cue="Where PHP is weaker than C# is generics">
+  <h2>Docblocks are the generic type system</h2>
+  <div class="cols">
+    <div>
+      <div class="file">app/Actions/Todos/ClearCompletedTodos.php</div>
+<pre class="code tight" data-lang="php" data-mark="4">/**
+ * Soft-deletes every completed todo in one transaction (L2-017, L2-043).
+ *
+ * @return list&lt;string&gt; the ids deleted, so the client can undo
+ */
+public function handle(): array
+{
+    return $this-&gt;todos-&gt;deleteCompleted();
+}</pre>
+      <div class="file">app/Repositories/TodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="4">/**
+ * Counts of all non-deleted todos.
+ *
+ * @return array{active: int, completed: int}
+ */
+public function counts(): array;</pre>
+    </div>
+    <div>
+      <ul>
+        <li>One <code>array</code> type: ordered, int- or string-keyed, and a <strong>value type</strong></li>
+        <li>No <code>List&lt;T&gt;</code>: say <code>list&lt;string&gt;</code> in the docblock</li>
+        <li>Array shapes replace small DTOs: <code>array{active: int, completed: int}</code></li>
+        <li>Larastan checks every docblock type. Treat them as mandatory.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="readonly" data-part="3" data-cue="Now the pleasant part">
+  <h2>A readonly class is your sealed record</h2>
+  <div class="cols">
+    <div>
+      <span class="tag php">PHP · app/Actions/Todos/CreateTodo.php</span>
+<pre class="code" data-lang="php" data-mark="1,4,6">final readonly class CreateTodo
+{
+    /** The most non-deleted todos the list may hold (L2-003). */
+    public const int LIMIT = 500;
+
+    public function __construct(private TodoRepository $todos) {}
+
+    public function handle(string $title): Todo
+    {
+        return $this-&gt;todos-&gt;createWithinLimit($title, self::LIMIT);
+    }
+}</pre>
+    </div>
+    <div>
+      <span class="tag cs">C# · the shape you already know</span>
+<pre class="code" data-lang="cs">public sealed record CreateTodo(ITodoRepository Todos)
+{
+    public const int Limit = 500;
+
+    public Todo Handle(string title) =&gt;
+        Todos.CreateWithinLimit(title, Limit);
+}</pre>
+      <ul class="small">
+        <li>Constructor promotion (8.0), readonly classes (8.2), typed constants (8.3)</li>
+        <li><code>final</code> is <code>sealed</code>; <code>self::</code> reads the constant</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="enums" data-part="3" data-cue="Enums are the next thing to recognise">
+  <h2>Backed enums</h2>
+  <div class="cols">
+    <div>
+      <span class="tag php">PHP · app/Enums/TodoStatus.php</span>
+<pre class="code" data-lang="php" data-mark="1">enum TodoStatus: string
+{
+    case All = 'all';
+    case Active = 'active';
+    case Completed = 'completed';
+}</pre>
+    </div>
+    <div>
+      <span class="tag cs">C# · plus the conversion you hand-write</span>
+<pre class="code" data-lang="cs">public enum TodoStatus { All, Active, Completed }
+
+// ...plus a JsonStringEnumConverter or a
+// parse/format helper for 'completed'.</pre>
+      <ul class="small">
+        <li><code>TodoStatus::from('active')</code> and <code>tryFrom</code> are built in</li>
+        <li>Laravel validates request input against the enum (video 03)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="match" data-part="3" data-cue="match is PHP's switch expression">
+  <h2>match: the switch expression</h2>
+  <div class="cols">
+    <div>
+      <div class="file">app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code" data-lang="php" data-mark="5-9">public function list(TodoStatus $status): Collection
+{
+    $query = Todo::query()-&gt;orderByDesc('created_at')-&gt;orderByDesc('id');
+
+    match ($status) {
+        TodoStatus::All =&gt; null,
+        TodoStatus::Active =&gt; $query-&gt;active(),
+        TodoStatus::Completed =&gt; $query-&gt;completed(),
+    };
+
+    return $query-&gt;get()-&gt;toBase();
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Strict comparison, no fall-through</li>
+        <li>Must be exhaustive: an unmatched value throws <code>UnhandledMatchError</code></li>
+        <li>Returns a value, like C#'s <code>switch</code> expression</li>
+        <li>Prefer it over the old <code>switch</code> statement</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="null" data-part="3" data-cue="Null handling will feel familiar">
+  <h2>Null handling and throw as an expression</h2>
+  <div class="file">app/Actions/Todos/DeleteTodo.php</div>
+<pre class="code" data-lang="php" data-mark="7">/**
+ * Soft-deletes the todo so it can be restored until it is purged (L2-015, L2-016).
+ *
+ * @throws TodoNotFound
+ */
+public function handle(string $id): void
+{
+    $this-&gt;todos-&gt;delete($this-&gt;todos-&gt;find($id) ?? throw new TodoNotFound($id));
+}</pre>
+  <ul>
+    <li><code>??</code> null coalescing, <code>?-&gt;</code> null-safe: the same ideas as C#</li>
+    <li><code>throw</code> is an expression, so the not-found guard is one line in every Action that loads by id</li>
+  </ul>
+</section>
+
+<section id="lambdas" data-part="3" data-cue="Lambdas come in two flavours">
+  <h2>Closures and callables</h2>
+  <div class="cols">
+    <div>
+      <div class="file">app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="1">return DB::transaction(function () use ($title, $limit): Todo {
+    if (Todo::query()-&gt;lockForUpdate()-&gt;count() &gt;= $limit) {
+        throw new TodoLimitReached($limit);
+    }
+
+    return Todo::query()-&gt;create(['title' =&gt; $title]);
+}, attempts: 3);</pre>
+      <div class="file">app/Http/Requests/Api/V1/RestoreTodosRequest.php</div>
+<pre class="code tight" data-lang="php" data-mark="3">public function ids(): array
+{
+    return array_values(array_map(strtolower(...), $this-&gt;array('ids')));
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>fn ($x) =&gt; ...</code>: expression lambda, captures scope automatically</li>
+        <li><code>function () use ($a, $b)</code>: captures only what you name, by value</li>
+        <li><code>strtolower(...)</code>: first-class callable, the method-group conversion</li>
+        <li><code>attempts: 3</code>: a named argument</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="named" data-part="3" data-cue="Named arguments exist too">
+  <h2>Named arguments</h2>
+  <div class="file">database/migrations/2026_10_08_000000_create_todos_table.php</div>
+<pre class="code" data-lang="php" data-mark="3,4,5">$table-&gt;ulid('id')-&gt;primary();
+$table-&gt;string('title', 200);
+$table-&gt;timestamp('completed_at', precision: 3)-&gt;nullable();
+$table-&gt;timestamps(precision: 3);
+$table-&gt;softDeletes(precision: 3);</pre>
+  <p>Same idea as C#'s <code>precision: 3</code>, and the same review value: the reader sees what the magic number means.</p>
+</section>
+
+<section id="syntax" data-part="4" data-cue="A few syntax differences">
+  <h2>Reading the syntax</h2>
+  <table>
+    <tr><th>PHP</th><th>C#</th><th>Meaning</th></tr>
+    <tr><td><code>$title</code>, <code>$this</code></td><td><code>title</code>, <code>this</code></td><td>Variables carry a dollar sign</td></tr>
+    <tr><td><code>$this-&gt;todos</code></td><td><code>this.todos</code></td><td>Instance member access</td></tr>
+    <tr><td><code>self::LIMIT</code>, <code>TodoRepository::class</code></td><td><code>Limit</code>, <code>typeof(ITodoRepository)</code></td><td>Static access and the class-name string</td></tr>
+    <tr><td><code>"Purged {$purged} soft-deleted todos."</code></td><td><code>$"Purged {purged} ..."</code></td><td>Double quotes interpolate, single quotes never</td></tr>
+    <tr><td><code>App\Models\Todo</code></td><td><code>App.Models.Todo</code></td><td>Namespace separator</td></tr>
+    <tr><td><code>use App\Models\Todo;</code></td><td><code>using App.Models;</code></td><td>Import one class, not a namespace</td></tr>
+  </table>
+</section>
+
+<section id="arrays" data-part="4" data-cue="Array literals use square brackets">
+  <h2>Arrays and the standard library</h2>
+  <div class="cols">
+    <div>
+      <div class="file">app/Exceptions/ProblemDetailsRenderer.php</div>
+<pre class="code tight" data-lang="php" data-mark="7,10">return new JsonResponse(
+    [
+        'type' =&gt; 'about:blank',
+        'title' =&gt; Response::$statusTexts[$status] ?? 'Error',
+        'status' =&gt; $status,
+        'detail' =&gt; $detail,
+        ...$extensions,
+    ],
+    $status,
+    ['Content-Type' =&gt; 'application/problem+json', ...$headers],
+);</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>[]</code> literals, <code>=&gt;</code> between key and value</li>
+        <li><code>...$array</code> spreads, like a collection expression</li>
+        <li>Global functions are the standard library: <code>array_map</code>, <code>count</code>, <code>str_replace</code></li>
+        <li>No LINQ, but Laravel's <code>Collection</code> has <code>map</code>, <code>filter</code>, <code>pluck</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<template id="pitfalls">
+  <ol class="steps">
+    <li class="item"><strong>Comparison.</strong> <code>==</code> juggles types. Always write <code>===</code> and <code>!==</code>.</li>
+    <li class="item"><strong>Arrays are values.</strong> Modify a passed array and the caller never sees it.</li>
+    <li class="item"><strong>Truthiness.</strong> <code>""</code>, <code>"0"</code>, <code>[]</code> and <code>0</code> are all false. Compare explicitly.</li>
+    <li class="item"><strong>No static state.</strong> It dies with the request; use the cache or the database.</li>
+    <li class="item"><strong>strict_types is narrow.</strong> It covers scalar coercion only; docblocks plus Larastan cover shapes.</li>
+  </ol>
+</template>
+
+<section id="pitfall-1" data-part="5" data-cue="Five things that will bite you" data-template="pitfalls" data-show="1"><h2>Pitfalls for C# hands</h2></section>
+<section id="pitfall-2" data-part="5" data-cue="Second, arrays are values" data-template="pitfalls" data-show="2"><h2>Pitfalls for C# hands</h2></section>
+<section id="pitfall-3" data-part="5" data-cue="Third, truthiness" data-template="pitfalls" data-show="3"><h2>Pitfalls for C# hands</h2></section>
+<section id="pitfall-4" data-part="5" data-cue="Fourth, static state does not persist" data-template="pitfalls" data-show="4"><h2>Pitfalls for C# hands</h2></section>
+<section id="pitfall-5" data-part="5" data-cue="Fifth, strict types only covers scalar coercion" data-template="pitfalls" data-show="5"><h2>Pitfalls for C# hands</h2></section>
+
+<section id="recap" data-part="6" data-cue="Shared-nothing per request, no compile step">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Runtime:</b> shared-nothing per request, no compile step, PSR-4 maps namespaces to folders</li>
+    <li><b>Types:</b> <code>strict_types</code> in every file, typed signatures, docblocks checked by Larastan</li>
+    <li><b>Constructs:</b> readonly classes are records, backed enums convert for free, <code>match</code> is the switch expression</li>
+    <li><b>Habits:</b> <code>===</code>, arrays are values, no static state</li>
+  </ul>
+</section>
+
+<section id="next" data-part="6" data-cue="Next, we look at how Laravel itself boots">
+  <div class="kicker">Next</div>
+  <h2>02 · Laravel through ASP.NET Core eyes</h2>
+  <p class="lead">bootstrap/app.php as Program.cs, the service container as IServiceCollection, config and .env, and the artisan CLI.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 05 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="05" data-video-title="The Eloquent model, migrations and factories" data-parts="Introduction|Model|Dates and scopes|Migration|Factories|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 05</div>
+  <h1>The Eloquent model, migrations and factories</h1>
+  <p class="lead">An EF Core entity, its configuration and its migrations, mapped onto Todo, create_todos_table and TodoFactory</p>
+</section>
+
+<section id="active-record" data-part="0" data-cue="The important difference is a pattern, not a syntax">
+  <h2>Active Record versus Data Mapper</h2>
+  <div class="cols">
+    <div class="card cs">
+      <h3>EF Core (Data Mapper)</h3>
+      <ul>
+        <li>Plain entity class</li>
+        <li>Mapping in <code>IEntityTypeConfiguration</code> or <code>OnModelCreating</code></li>
+        <li><code>DbContext</code> tracks and saves</li>
+      </ul>
+    </div>
+    <div class="card php">
+      <h3>Eloquent (Active Record)</h3>
+      <ul>
+        <li>The model is the entity <em>and</em> the mapper</li>
+        <li>Mapping is traits, properties, and a docblock on the model</li>
+        <li><code>Todo::query()</code>, <code>$todo-&gt;save()</code>, <code>$todo-&gt;delete()</code> on the model itself</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>What each trait and property on <code>Todo</code> does, and its EF Core equivalent</li>
+    <li>How soft deletes and ULIDs work with no configuration class</li>
+    <li>Why the model overrides two date methods</li>
+    <li>How a migration is written by hand, and why it is the only way the schema changes</li>
+    <li>How factories replace Bogus and test builders</li>
+  </ol>
+</section>
+
+<section id="traits" data-part="1" data-cue="Open app/Models/Todo.php">
+  <h2>Three traits</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Models/Todo.php</div>
+<pre class="code tight" data-lang="php" data-mark="10,11,13,15">/**
+ * @property string $id
+ * @property string $title
+ * @property CarbonImmutable|null $completed_at
+ * @property CarbonImmutable $created_at
+ * @property CarbonImmutable $updated_at
+ * @property CarbonImmutable|null $deleted_at
+ * @property-read bool $completed
+ */
+class Todo extends Model
+{
+    /** @use HasFactory&lt;TodoFactory&gt; */
+    use HasFactory;
+
+    use HasUlids;
+    use SoftDeletes;</pre>
+    </div>
+    <div>
+      <table class="small">
+        <tr><th>Trait</th><th>Gives you</th><th>EF Core</th></tr>
+        <tr><td><code>HasFactory</code></td><td><code>Todo::factory()</code></td><td>Bogus + a builder</td></tr>
+        <tr><td><code>HasUlids</code></td><td>26-char ULID key generated on create</td><td><code>ValueGeneratedOnAdd</code> + a generator</td></tr>
+        <tr><td><code>SoftDeletes</code></td><td><code>delete()</code> stamps <code>deleted_at</code>; queries exclude it; <code>withTrashed</code>, <code>onlyTrashed</code>, <code>restore</code>, <code>forceDelete</code></td><td><code>HasQueryFilter</code> + <code>IgnoreQueryFilters</code>, by hand</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="docblock" data-part="1" data-cue="Above the class is a docblock listing every property">
+  <h2>The docblock is the property declaration</h2>
+  <div class="cols">
+    <div>
+<pre class="code" data-lang="php" data-mark="2,4,8">/**
+ * @property string $id
+ * @property string $title
+ * @property CarbonImmutable|null $completed_at
+ * @property CarbonImmutable $created_at
+ * @property CarbonImmutable $updated_at
+ * @property CarbonImmutable|null $deleted_at
+ * @property-read bool $completed
+ */</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Eloquent reads attributes from an array through magic methods</li>
+        <li>Without the block, Larastan cannot type <code>$todo-&gt;title</code></li>
+        <li><code>@property-read</code> for the derived <code>completed</code></li>
+        <li><strong>Review rule:</strong> a new column changes this block in the same commit</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="fillable" data-part="1" data-cue="Now the properties">
+  <h2>$dateFormat, $fillable, casts()</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/app/Models/Todo.php</div>
+<pre class="code tight" data-lang="php" data-mark="2,5,12,13,14,15">/** Keeps the millisecond precision of the TIMESTAMP(3) columns. */
+protected $dateFormat = 'Y-m-d H:i:s.v';
+
+/** `id` is absent, so a client-supplied id never reaches the row (L2-021). */
+protected $fillable = ['title', 'completed_at'];
+
+/**
+ * @return array&lt;string, string&gt;
+ */
+protected function casts(): array
+{
+    return [
+        'completed_at' =&gt; 'immutable_datetime',
+        'created_at' =&gt; 'immutable_datetime',
+        'updated_at' =&gt; 'immutable_datetime',
+        'deleted_at' =&gt; 'immutable_datetime',
+    ];
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>$fillable</code> is the mass-assignment whitelist for <code>create([...])</code> and <code>update([...])</code></li>
+        <li>No EF equivalent: EF never binds request arrays to entities. Here the whitelist is the over-posting defence</li>
+        <li>Adding <code>id</code>, or switching to <code>$guarded = []</code>, removes it</li>
+        <li>Casts are <code>HasConversion</code>: timestamps read as <code>CarbonImmutable</code> (L2-045)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="utc" data-part="2" data-cue="Two overridden methods follow">
+  <h2>Every timestamp is UTC, three layers deep</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/app/Models/Todo.php</div>
+<pre class="code xtight" data-lang="php" data-mark="4,8,15,16">/**
+ * Writes every timestamp as UTC, whatever PHP's default timezone is (L2-043).
+ */
+public function fromDateTime(mixed $value): mixed
+{
+    return $value === null || $value === ''
+        ? $value
+        : $this-&gt;asDateTime($value)-&gt;utc()-&gt;format($this-&gt;getDateFormat());
+}
+
+/**
+ * Reads stored timestamps as UTC: the connection runs at +00:00 (config/database.php).
+ * Naming the zone also spares Carbon a default-zone lookup on every parse.
+ */
+protected function asDateTime(mixed $value): Carbon
+{
+    if (is_string($value)) {
+        $parsed = Carbon::createFromFormat($this-&gt;getDateFormat(), $value, 'UTC');
+        if ($parsed !== null) {
+            return $parsed;
+        }
+    }
+
+    return parent::asDateTime($value);
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>config/app.php</code>: <code>'timezone' =&gt; 'UTC'</code></li>
+        <li><code>config/database.php</code>: <code>'timezone' =&gt; '+00:00'</code> on the connection</li>
+        <li>The model converts on write and parses as UTC on read</li>
+        <li><code>UtcTimestampsTest</code> switches PHP to Asia/Tokyo and checks stored and returned values</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="accessor" data-part="2" data-cue="Then the computed property">
+  <h2>A derived property and two scopes</h2>
+  <div class="file">backend/app/Models/Todo.php</div>
+<pre class="code tight" data-lang="php" data-mark="6,8,14,16">/**
+ * Derived from the stored column, not stored itself (L2-019).
+ *
+ * @return Attribute&lt;bool, never&gt;
+ */
+protected function completed(): Attribute
+{
+    return Attribute::get(fn (): bool =&gt; ($this-&gt;getAttributes()['completed_at'] ?? null) !== null);
+}
+
+/**
+ * @param  Builder&lt;Todo&gt;  $query
+ */
+public function scopeActive(Builder $query): void
+{
+    $query-&gt;whereNull('completed_at');
+}</pre>
+  <ul class="small">
+    <li><code>$todo-&gt;completed</code>: get-only, never stored; a <code>[NotMapped]</code> property. Reads the raw attribute to skip the cast cost.</li>
+    <li><code>scopeActive</code> → <code>Todo::query()-&gt;active()</code>; <code>scopeCompleted</code> mirrors it with <code>whereNotNull</code>. Reusable <code>IQueryable</code> extensions, each tested alone in <code>TodoTest</code>.</li>
+  </ul>
+</section>
+
+<section id="migration" data-part="3" data-cue="Open the migration under database/migrations">
+  <h2>The migration</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/database/migrations/2026_10_08_000000_create_todos_table.php</div>
+<pre class="code xtight" data-lang="php" data-mark="9,11,12,17,19">return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('todos', function (Blueprint $table): void {
+            $table-&gt;charset('utf8mb4');
+            $table-&gt;collation('utf8mb4_0900_ai_ci');
+
+            $table-&gt;ulid('id')-&gt;primary();
+            $table-&gt;string('title', 200);
+            $table-&gt;timestamp('completed_at', precision: 3)-&gt;nullable();
+            $table-&gt;timestamps(precision: 3);
+            $table-&gt;softDeletes(precision: 3);
+
+            // Serves the list query: non-deleted, newest first, ties by id (L2-005).
+            $table-&gt;index(['deleted_at', 'created_at', 'id'], 'todos_deleted_at_created_at_id_index');
+            // Serves counts and bulk operations by completion (L2-005, L2-017).
+            $table-&gt;index(['deleted_at', 'completed_at'], 'todos_deleted_at_completed_at_index');
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('todos');
+    }
+};</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Timestamp-prefixed file name orders migrations</li>
+        <li>Anonymous class, <code>up()</code> and <code>down()</code></li>
+        <li><code>ulid</code> key, <code>TIMESTAMP(3)</code> columns, two named indexes with the query they serve</li>
+        <li>Resulting schema matches L2-021 column by column</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="migration-compare" data-part="3" data-cue="Compare this with EF Core">
+  <h2>Hand-written, and the only way the schema changes</h2>
+  <div class="cols">
+    <div class="card cs">
+      <h3>EF Core</h3>
+      <ul>
+        <li>Change the entity, run <code>dotnet ef migrations add</code></li>
+        <li>Generated migration; model snapshot keeps them in sync</li>
+      </ul>
+    </div>
+    <div class="card php">
+      <h3>Laravel</h3>
+      <ul>
+        <li>Write the migration and the model separately</li>
+        <li>Nothing enforces agreement except tests and Larastan</li>
+        <li>Upside: the migration is readable and reviewable; the index and its reason are visible</li>
+        <li>Never edit an applied migration; add a new one</li>
+      </ul>
+    </div>
+  </div>
+<pre class="term"><span class="prompt">$</span> php artisan migrate            <span class="dim"># applies pending migrations, records them in `migrations`</span>
+<span class="prompt">$</span> php artisan migrate:rollback   <span class="dim"># runs down(); TodoTest proves the round trip</span></pre>
+</section>
+
+<section id="factory" data-part="4" data-cue="Open database/factories/TodoFactory.php">
+  <h2>Factories: Bogus plus a builder, shipped with the ORM</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/database/factories/TodoFactory.php</div>
+<pre class="code tight" data-lang="php" data-mark="4,12,17">/**
+ * @extends Factory&lt;Todo&gt;
+ */
+class TodoFactory extends Factory
+{
+    /**
+     * @return array&lt;string, mixed&gt;
+     */
+    public function definition(): array
+    {
+        return [
+            'title' =&gt; rtrim(fake()-&gt;sentence(4), '.'),
+            'completed_at' =&gt; null,
+        ];
+    }
+
+    public function completed(): static
+    {
+        return $this-&gt;state(fn (): array =&gt; ['completed_at' =&gt; now()]);
+    }
+}</pre>
+    </div>
+    <div>
+      <div class="file">usage in backend/tests/Feature/Api/V1/ListTodosTest.php</div>
+<pre class="code tight" data-lang="php">Todo::factory()-&gt;count(3)-&gt;create();
+Todo::factory()-&gt;completed()-&gt;count(2)-&gt;create();
+Todo::factory()-&gt;create()-&gt;delete();</pre>
+      <ul class="small">
+        <li><code>definition()</code> is the default row; <code>completed()</code> is a state</li>
+        <li><code>create([...])</code> overrides attributes</li>
+        <li>L2-045: factories are the <strong>only</strong> way tests create data. Raw SQL or <code>DB::table</code> inserts fail review</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="seeder" data-part="4" data-cue="The seeder in database/seeders/DatabaseSeeder.php">
+  <h2>The seeder</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/database/seeders/DatabaseSeeder.php</div>
+<pre class="code tight" data-lang="php" data-mark="9,11,12">$samples = [
+    ['Water the plants', true],
+    ['Book a dentist appointment', true],
+    ['Call mom', false],
+    ['Buy oat milk', false],
+    ['Read chapter 3 of the Laravel docs', false],
+];
+
+foreach ($samples as $index =&gt; [$title, $completed]) {
+    $createdAt = now()-&gt;subMinutes(count($samples) - $index);
+
+    Todo::factory()-&gt;create([
+        'title' =&gt; $title,
+        'completed_at' =&gt; $completed ? $createdAt-&gt;copy()-&gt;addSeconds(30) : null,
+        'created_at' =&gt; $createdAt,
+        'updated_at' =&gt; $createdAt,
+    ]);
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Same factory, five sample tasks, two completed, staggered <code>created_at</code></li>
+        <li><code>php artisan migrate --seed</code></li>
+        <li><code>SeederTest</code> checks a handful of rows with both states</li>
+        <li>Array destructuring in <code>foreach</code>: <code>[$title, $completed]</code> is a tuple deconstruction</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pitfalls" data-part="4" data-cue="Adding id to $fillable">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li><code>id</code> in <code>$fillable</code>, or <code>$guarded = []</code>: mass assignment of the key is open again</li>
+    <li>Missing class docblock or factory <code>@use</code>: Larastan fails</li>
+    <li><code>datetime</code> instead of <code>immutable_datetime</code></li>
+    <li>Editing an applied migration instead of adding one</li>
+    <li>Test data through <code>DB::table</code> or SQL instead of a factory</li>
+    <li>Expecting a soft delete from a model without <code>SoftDeletes</code></li>
+  </ol>
+</section>
+
+<section id="recap" data-part="5" data-cue="The model is entity and mapper">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Model:</b> traits for factories, ULIDs and soft deletes; the docblock types the properties; <code>$fillable</code> excludes <code>id</code>; casts are immutable</li>
+    <li><b>Dates:</b> two overrides pin every timestamp to UTC; <code>completed</code> is derived</li>
+    <li><b>Scopes:</b> reusable query extensions, tested alone</li>
+    <li><b>Migration:</b> hand-written, timestamp-ordered, reversible, the only way the schema changes</li>
+    <li><b>Factories:</b> the only way tests create data</li>
+  </ul>
+</section>
+
+<section id="next" data-part="5" data-cue="Next, the Eloquent repository">
+  <div class="kicker">Next</div>
+  <h2>06 · The Eloquent repository: queries, transactions and locks</h2>
+  <p class="lead">Scopes, one-statement updates, DB::transaction, lockForUpdate, and the bulk operations, compared with EF Core transactions and ExecuteUpdate.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

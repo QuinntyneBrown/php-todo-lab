@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 04 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="04" data-video-title="Actions and the repository port" data-parts="Introduction|Actions|Use cases|Repository|Exceptions|Extending|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 04</div>
+  <h1>Actions and the repository port</h1>
+  <p class="lead">MediatR handlers and Clean Architecture use cases, mapped onto app/Actions/Todos and TodoRepository</p>
+</section>
+
+<section id="map" data-part="0" data-cue="This video reads all seven Actions">
+  <h2>Where we are</h2>
+  <div class="figure-wrap">
+    <img class="figure" src="../../detailed-designs/architecture/backend-layering/diagrams/class-structure.png" alt="Class diagram of the backend layering">
+    <div class="caption">docs/detailed-designs/architecture/backend-layering/diagrams/class-structure.png</div>
+  </div>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>How an Action compares with a MediatR handler, and what you give up without a mediator</li>
+    <li>Where business rules live, and where they deliberately do not</li>
+    <li>What the repository interface promises and why it owns the transactions</li>
+    <li>How a new use case or filter is added without touching existing Actions</li>
+  </ol>
+</section>
+
+<section id="action-vs-handler" data-part="1" data-cue="Open CreateTodo. A final readonly class">
+  <h2>An Action is a handler without the mediator</h2>
+  <div class="cols">
+    <div>
+      <span class="tag php">PHP · app/Actions/Todos/CreateTodo.php</span>
+<pre class="code tight" data-lang="php" data-mark="1,6,8">final readonly class CreateTodo
+{
+    /** The most non-deleted todos the list may hold (L2-003). */
+    public const int LIMIT = 500;
+
+    public function __construct(private TodoRepository $todos) {}
+
+    public function handle(string $title): Todo
+    {
+        return $this-&gt;todos-&gt;createWithinLimit($title, self::LIMIT);
+    }
+}</pre>
+    </div>
+    <div>
+      <span class="tag cs">C# · MediatR</span>
+<pre class="code tight" data-lang="cs">public record CreateTodoCommand(string Title) : IRequest&lt;Todo&gt;;
+
+public sealed class CreateTodoHandler(ITodoRepository todos)
+    : IRequestHandler&lt;CreateTodoCommand, Todo&gt;
+{
+    public const int Limit = 500;
+
+    public Task&lt;Todo&gt; Handle(CreateTodoCommand c, CancellationToken ct) =&gt;
+        todos.CreateWithinLimitAsync(c.Title, Limit, ct);
+}
+
+// controller: await mediator.Send(new CreateTodoCommand(title));</pre>
+      <ul class="small">
+        <li>No command object: the <code>handle</code> parameters are the command</li>
+        <li>No <code>Send</code>: the controller calls the injected Action directly</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pipeline" data-part="1" data-cue="What you lose is the pipeline">
+  <h2>What you lose, what you keep</h2>
+  <div class="cols">
+    <div class="card bad">
+      <h3>Not here</h3>
+      <ul>
+        <li>Pipeline behaviours for logging, validation, transactions</li>
+        <li>A mediator decoupling caller from handler</li>
+      </ul>
+      <p class="small muted">Each concern has an explicit home instead: Form Requests validate, the repository owns transactions.</p>
+    </div>
+    <div class="card good">
+      <h3>Kept</h3>
+      <ul>
+        <li>One class, one public <code>handle</code>, one interface dependency (L2-044)</li>
+        <li>Unit tests build an Action with <code>new InMemoryTodoRepository</code>: no database, no mocks</li>
+      </ul>
+    </div>
+  </div>
+  <div class="file">backend/tests/Unit/Actions/CreateTodoTest.php</div>
+<pre class="code tight" data-lang="php" data-mark="2,4">it('creates an active todo', function (): void {
+    $repository = new InMemoryTodoRepository;
+
+    $todo = (new CreateTodo($repository))-&gt;handle('Buy oat milk');</pre>
+</section>
+
+<section id="list" data-part="2" data-cue="ListTodos takes a TodoStatus enum">
+  <h2>ListTodos and its result record</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Actions/Todos/ListTodos.php</div>
+<pre class="code tight" data-lang="php" data-mark="5,7">final readonly class ListTodos
+{
+    public function __construct(private TodoRepository $todos) {}
+
+    public function handle(TodoStatus $status): TodoList
+    {
+        $counts = $this-&gt;todos-&gt;counts();
+
+        return new TodoList($this-&gt;todos-&gt;list($status), $counts['active'], $counts['completed']);
+    }
+}</pre>
+    </div>
+    <div>
+      <div class="file">backend/app/Actions/Todos/TodoList.php</div>
+<pre class="code tight" data-lang="php" data-mark="6,7,8">final readonly class TodoList
+{
+    /**
+     * @param  Collection&lt;int, Todo&gt;  $todos
+     */
+    public function __construct(
+        public Collection $todos,
+        public int $active,
+        public int $completed,
+    ) {}
+}</pre>
+      <p class="small muted">A positional record as a query result. Counts ignore the filter because the contract's <code>meta</code> does.</p>
+    </div>
+  </div>
+</section>
+
+<section id="update" data-part="2" data-cue="UpdateTodo is the most interesting">
+  <h2>UpdateTodo: a rule, a comment, a requirement id</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/app/Actions/Todos/UpdateTodo.php</div>
+<pre class="code tight" data-lang="php" data-mark="3,11,12,13">public function handle(string $id, array $changes): Todo
+{
+    $todo = $this-&gt;todos-&gt;find($id) ?? throw new TodoNotFound($id);
+
+    $columns = [];
+    if (array_key_exists('title', $changes)) {
+        $columns['title'] = $changes['title'];
+    }
+    // Always written when requested, so a concurrent request cannot leave this
+    // one half-applied (L2-043); `??` keeps an existing completedAt (L2-009).
+    if (array_key_exists('completed', $changes)) {
+        $columns['completed_at'] = $changes['completed'] ? ($todo-&gt;completed_at ?? now()) : null;
+    }
+
+    return $this-&gt;todos-&gt;update($todo, $columns);
+}</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Load or throw <code>TodoNotFound</code></li>
+        <li>Only the keys that were sent become columns</li>
+        <li><code>??</code> keeps an existing <code>completed_at</code>: completing twice is idempotent (L2-009 criterion 3)</li>
+        <li>Always written when requested, so concurrent PATCHes apply in full (L2-043)</li>
+        <li><strong>Review pattern:</strong> a short comment citing the L2 id next to the non-obvious line</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="delete-restore" data-part="2" data-cue="DeleteTodo and RestoreTodo are mirror images">
+  <h2>Delete and Restore: different not-found rules for the same id</h2>
+  <div>
+    <div>
+      <div class="file">backend/app/Actions/Todos/DeleteTodo.php</div>
+<pre class="code tight" data-lang="php" data-mark="3">public function handle(string $id): void
+{
+    $this-&gt;todos-&gt;delete($this-&gt;todos-&gt;find($id) ?? throw new TodoNotFound($id));
+}</pre>
+    </div>
+    <div>
+      <div class="file">backend/app/Actions/Todos/RestoreTodo.php</div>
+<pre class="code tight" data-lang="php" data-mark="3">public function handle(string $id): Todo
+{
+    return $this-&gt;todos-&gt;restore($this-&gt;todos-&gt;findDeleted($id) ?? throw new TodoNotFound($id));
+}</pre>
+    </div>
+  </div>
+  <ul>
+    <li><code>find</code> sees live rows; <code>findDeleted</code> sees trashed rows. Same id, opposite answers.</li>
+    <li>This is why the controller passes a string and never binds a model</li>
+  </ul>
+</section>
+
+<section id="bulk" data-part="2" data-cue="ClearCompletedTodos and RestoreTodos are the bulk pair">
+  <h2>The bulk pair</h2>
+  <div>
+    <div>
+      <div class="file">backend/app/Actions/Todos/ClearCompletedTodos.php</div>
+<pre class="code xtight" data-lang="php" data-mark="4,6">/**
+ * Soft-deletes every completed todo in one transaction (L2-017, L2-043).
+ *
+ * @return list&lt;string&gt; the ids deleted, so the client can undo
+ */
+public function handle(): array
+{
+    return $this-&gt;todos-&gt;deleteCompleted();
+}</pre>
+    </div>
+    <div>
+      <div class="file">backend/app/Actions/Todos/RestoreTodos.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,7">/**
+ * Restores the soft-deleted todos among `$ids` in one transaction; others are ignored.
+ *
+ * @param  list&lt;string&gt;  $ids
+ * @return Collection&lt;int, Todo&gt;
+ */
+public function handle(array $ids): Collection
+{
+    return $this-&gt;todos-&gt;restoreMany($ids);
+}</pre>
+    </div>
+  </div>
+  <p>Each delegates to one repository method, because each needs a transaction the Action must not know about.</p>
+</section>
+
+<section id="never" data-part="2" data-cue="Notice what no Action does">
+  <h2>What no Action does</h2>
+  <ul class="recap">
+    <li>Imports the <code>Todo</code> query builder</li>
+    <li>Uses a facade</li>
+    <li>Catches an exception to return <code>null</code></li>
+    <li>Has a second public method</li>
+  </ul>
+  <p class="quote">If a pull request adds any of these, the layering is broken, and the unit tests with the fake are the first thing to fail.</p>
+</section>
+
+<section id="interface" data-part="3" data-cue="Open app/Repositories/TodoRepository.php">
+  <h2>TodoRepository: eleven methods, each a sentence</h2>
+  <div class="file">backend/app/Repositories/TodoRepository.php</div>
+<pre class="code xtight" data-lang="php" data-mark="6,13,19,20,22">interface TodoRepository
+{
+    /**
+     * Non-deleted todos matching the status, newest first, ties broken by id descending.
+     *
+     * @return Collection&lt;int, Todo&gt;
+     */
+    public function list(TodoStatus $status): Collection;
+
+    /**
+     * Counts of all non-deleted todos.
+     *
+     * @return array{active: int, completed: int}
+     */
+    public function counts(): array;
+
+    /**
+     * Creates a todo unless `$limit` non-deleted todos already exist. The check and the
+     * insert are atomic, so concurrent creates cannot exceed the limit (L2-043).
+     *
+     * @throws TodoLimitReached
+     */
+    public function createWithinLimit(string $title, int $limit): Todo;
+
+    /** The non-deleted todo with this id, if any. */
+    public function find(string $id): ?Todo;
+
+    // ... update, delete, findDeleted, restore, deleteCompleted, restoreMany, purgeDeletedBefore</pre>
+</section>
+
+<section id="interface-compare" data-part="3" data-cue="Three things to compare with an ITodoRepository">
+  <h2>Compared with ITodoRepository in Application</h2>
+  <div class="cols-3">
+    <div class="card">
+      <h3>Shaped by use cases</h3>
+      <p class="small">No generic <code>GetAll</code>/<code>Save</code>. <code>createWithinLimit</code>, <code>deleteCompleted</code>, <code>purgeDeletedBefore</code>: one method per need, so the fake stays small and honest.</p>
+    </div>
+    <div class="card">
+      <h3>Owns transactions</h3>
+      <p class="small">No unit-of-work behaviour in a pipeline. The repository method opens the transaction; the in-memory fake simply does not need one.</p>
+    </div>
+    <div class="card">
+      <h3>Returns Eloquent models</h3>
+      <p class="small">Active Record: the model is entity and mapper. A choice, not an accident. The model carries only a <code>completed</code> accessor and two scopes; Actions treat it as data.</p>
+    </div>
+  </div>
+</section>
+
+<section id="exceptions" data-part="4" data-cue="TodoNotFound and TodoLimitReached live in app/Exceptions">
+  <h2>Domain exceptions carry data</h2>
+  <div>
+    <div>
+      <div class="file">backend/app/Exceptions/TodoNotFound.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,4">/** No non-deleted todo has the given id (L2-014). */
+final class TodoNotFound extends RuntimeException
+{
+    public function __construct(public readonly string $id)
+    {
+        parent::__construct("No todo with id {$id}.");
+    }
+}</pre>
+    </div>
+    <div>
+      <div class="file">backend/app/Exceptions/TodoLimitReached.php</div>
+<pre class="code xtight" data-lang="php" data-mark="2,6">/** Creating another todo would exceed the cap on non-deleted todos (L2-003). */
+final class TodoLimitReached extends RuntimeException
+{
+    public function __construct(public readonly int $limit)
+    {
+        parent::__construct("You have {$limit} tasks. Finish or delete some to add more.");
+    }
+}</pre>
+    </div>
+  </div>
+  <ul>
+    <li>Mapped once in <code>ProblemDetailsRenderer</code>: 404 and 422 (video 08)</li>
+    <li>A <code>Result</code> type is not idiomatic here; exceptions plus one renderer keep signatures clean</li>
+  </ul>
+</section>
+
+<section id="binding" data-part="4" data-cue="The binding is the one line in AppServiceProvider">
+  <h2>One binding, one fake</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Providers/AppServiceProvider.php</div>
+<pre class="code tight" data-lang="php" data-mark="2">public array $bindings = [
+    TodoRepository::class =&gt; EloquentTodoRepository::class,
+];</pre>
+    </div>
+    <div>
+      <div class="file">backend/tests/Fakes/InMemoryTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="2,5">/** A database-free TodoRepository for unit tests of the Actions (L2-044 criterion 3). */
+final class InMemoryTodoRepository implements TodoRepository
+{
+    /** @var array&lt;string, Todo&gt; */
+    private array $rows = [];</pre>
+    </div>
+  </div>
+  <p>Unit tests pass <code>new InMemoryTodoRepository</code> into the constructor. No container, no mocking library.</p>
+</section>
+
+<section id="extending" data-part="5" data-cue="To add a use case, you add an Action class">
+  <h2>Adding a use case, adding a filter</h2>
+  <div class="cols">
+    <div class="card">
+      <h3>New use case</h3>
+      <ol class="small">
+        <li>Action class in <code>app/Actions/Todos</code></li>
+        <li>Repository method, if the contract needs one, plus the fake</li>
+        <li>Route, Form Request, controller method</li>
+        <li>Unit test with the fake, feature test over HTTP</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>New filter (L2-044 criterion 6)</h3>
+      <ol class="small">
+        <li>New <code>TodoStatus</code> case</li>
+        <li>New scope on <code>Todo</code></li>
+        <li>One new arm in the repository's <code>match</code></li>
+        <li>A test</li>
+      </ol>
+      <p class="small muted"><code>ListTodos</code>, <code>ListTodosRequest</code>, and the controller do not change.</p>
+    </div>
+  </div>
+</section>
+
+<section id="pitfalls" data-part="5" data-cue="Injecting the Todo model or a query builder into an Action">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li>Injecting the <code>Todo</code> model or a query builder instead of the interface</li>
+    <li>A second public method because two endpoints felt related</li>
+    <li>A loose array where a readonly result class like <code>TodoList</code> belongs</li>
+    <li>Catching <code>TodoNotFound</code> to return <code>null</code>: hides the 404 from the renderer</li>
+    <li><code>DB::transaction</code> in an Action: couples it to the database and breaks the in-memory tests</li>
+  </ol>
+</section>
+
+<section id="recap" data-part="6" data-cue="An Action is a MediatR handler without the mediator">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Action:</b> a handler without the mediator; one class, one <code>handle</code>, one interface; parameters are the command</li>
+    <li><b>Rules:</b> business rules in Actions; atomic persistence mechanics in the repository</li>
+    <li><b>Port:</b> shaped by use cases, owns transactions, returns Eloquent models by choice</li>
+    <li><b>Exceptions:</b> carry data, mapped once in the renderer</li>
+    <li><b>Extending:</b> add code, modify no existing Action</li>
+  </ul>
+</section>
+
+<section id="next" data-part="6" data-cue="Next, the Todo model, the migration, and the factory">
+  <div class="kicker">Next</div>
+  <h2>05 · The Eloquent model, migrations and factories</h2>
+  <p class="lead">An EF Core entity, its configuration and its migrations, mapped onto Todo, create_todos_table and TodoFactory.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

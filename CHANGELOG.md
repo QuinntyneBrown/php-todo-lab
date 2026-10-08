@@ -19,5 +19,8 @@ and this project adheres to
   axe-core checks, run in CI on every pull request.
 - Requirements, detailed designs, HTML mocks, and a design system under
   `docs/`.
+- A twelve-part narrated video series on the PHP backend for .NET developers
+  under `docs/videos/`, with the `tools/video-audio` and `tools/video-build`
+  generators.
 
 [Unreleased]: https://github.com/QuinntyneBrown/php-todo-lab/commits/main

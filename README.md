@@ -162,6 +162,7 @@ incompatibly.
 | [docs/detailed-designs/](docs/detailed-designs/) | Detailed designs per subsystem and feature, with C4, class, and sequence diagrams. |
 | [docs/mocks/](docs/mocks/README.md) | HTML mocks: the visual design target. Open `index.html` in a browser. |
 | [docs/design-system/](docs/design-system/README.md) | Design tokens, foundations, components, and patterns extracted from the mocks. |
+| [docs/videos/](docs/videos/README.md) | Narrated video series on the PHP backend for .NET developers, with transcripts and slides. |
 | [AGENTS.md](AGENTS.md) | Repository layout and engineering conventions for contributors and coding agents. |
 
 ## Contributing

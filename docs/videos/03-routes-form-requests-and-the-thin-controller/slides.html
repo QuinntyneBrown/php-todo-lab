@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 03 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="03" data-video-title="Routes, Form Requests and the thin controller" data-parts="Introduction|Routes|Form Requests|Controller|End to end|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 03</div>
+  <h1>Routes, Form Requests and the thin controller</h1>
+  <p class="lead">Attribute routing, model binding and FluentValidation, mapped onto the HTTP layer</p>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>How the seven endpoints are declared, and why their order matters</li>
+    <li>What a Form Request is, versus data annotations or FluentValidation</li>
+    <li>How a controller method receives validated input and a use case with no registration</li>
+    <li>Why the controller takes the id as a string instead of binding a model</li>
+  </ol>
+</section>
+
+<section id="routes" data-part="1" data-cue="Open routes/api.php">
+  <h2>routes/api.php</h2>
+  <div class="file">backend/routes/api.php</div>
+<pre class="code" data-lang="php" data-mark="1,2,3">Route::prefix('v1')-&gt;group(function (): void {
+    Route::get('todos', [TodoController::class, 'index']);
+    Route::post('todos', [TodoController::class, 'store']);
+    // Static paths first, so `completed` and `restore` are never read as an id.
+    Route::delete('todos/completed', [TodoController::class, 'destroyCompleted']);
+    Route::post('todos/restore', [TodoController::class, 'restoreMany']);
+    Route::patch('todos/{todo}', [TodoController::class, 'update'])-&gt;whereUlid('todo');
+    Route::delete('todos/{todo}', [TodoController::class, 'destroy'])-&gt;whereUlid('todo');
+    Route::post('todos/{todo}/restore', [TodoController::class, 'restore'])-&gt;whereUlid('todo');
+});</pre>
+  <ul>
+    <li>Attribute routing moved into one file: <code>[Controller::class, 'method']</code> per route, controllers only, never closures</li>
+    <li>Mounted under <code>/api</code> by <code>withRouting(api:)</code>, so the group yields <code>/api/v1/...</code></li>
+  </ul>
+</section>
+
+<section id="order" data-part="1" data-cue="Two details carry design weight">
+  <h2>Order matters</h2>
+  <div class="cols">
+    <div class="card cs">
+      <h3>ASP.NET Core endpoint routing</h3>
+      <ul>
+        <li>Literal segments score above parameters automatically</li>
+        <li><code>todos/completed</code> wins over <code>todos/{id}</code> whatever the declaration order</li>
+      </ul>
+    </div>
+    <div class="card php">
+      <h3>Laravel</h3>
+      <ul>
+        <li>First registered match wins</li>
+        <li><code>todos/{todo}</code> declared first would read <code>completed</code> as an id</li>
+        <li>Hence the comment: a tidy-up reorder would break the API</li>
+      </ul>
+    </div>
+  </div>
+  <div class="file">backend/routes/api.php</div>
+<pre class="code tight" data-lang="php" data-mark="1">    // Static paths first, so `completed` and `restore` are never read as an id.
+    Route::delete('todos/completed', [TodoController::class, 'destroyCompleted']);
+    Route::post('todos/restore', [TodoController::class, 'restoreMany']);
+    Route::patch('todos/{todo}', [TodoController::class, 'update'])-&gt;whereUlid('todo');</pre>
+</section>
+
+<section id="constraint" data-part="1" data-cue="Second, the whereUlid('todo') constraint">
+  <h2>whereUlid is your {id:guid}</h2>
+  <div class="cols">
+    <div>
+<pre class="code" data-lang="php" data-mark="1">Route::patch('todos/{todo}', [TodoController::class, 'update'])-&gt;whereUlid('todo');</pre>
+      <span class="tag cs">C#</span>
+<pre class="code" data-lang="cs">[HttpPatch("{id:guid}")]
+public IActionResult Update(Guid id, UpdateTodoRequest body)</pre>
+    </div>
+    <div>
+      <ul>
+        <li>A malformed id matches no route: 404 before any database work</li>
+        <li>Requirement L2-014 criterion 4: a bad id is a 404, not a 500</li>
+        <li>Verified by <code>UpdateTodoTest</code>: "returns 404 problem details for an unknown, deleted, or malformed id"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="form-requests" data-part="2" data-cue="Every endpoint with input has a Form Request">
+  <h2>Form Requests</h2>
+  <div class="cols">
+    <div>
+      <ul>
+        <li>One class per endpoint with input, in <code>app/Http/Requests/Api/V1</code></li>
+        <li><code>rules()</code> returns field → rule list</li>
+        <li>Validated when the container resolves it for the controller method</li>
+        <li>Failure throws <code>ValidationException</code> → 422 problem details with <code>errors</code></li>
+        <li>No <code>ModelState</code> checks, ever</li>
+      </ul>
+    </div>
+    <div>
+      <table class="small">
+        <tr><th>Approach</th><th>Rules live in</th><th>Typed values</th></tr>
+        <tr><td>Data annotations</td><td>DTO attributes</td><td>the DTO</td></tr>
+        <tr><td>FluentValidation</td><td>a validator class</td><td>the DTO</td></tr>
+        <tr><td>Form Request</td><td>a request class</td><td><strong>the same class</strong>, via accessors</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="store-request" data-part="2" data-cue="Compare the three options you know">
+  <h2>StoreTodoRequest</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Http/Requests/Api/V1/StoreTodoRequest.php</div>
+<pre class="code tight" data-lang="php" data-mark="12,17">/**
+ * A title is 1 to 200 characters after trimming (L2-002). The global TrimStrings
+ * and ConvertEmptyStringsToNull middleware trim it first, and `max` counts characters.
+ */
+final class StoreTodoRequest extends FormRequest
+{
+    /**
+     * @return array&lt;string, mixed&gt;
+     */
+    public function rules(): array
+    {
+        return [
+            'title' =&gt; ['required', 'string', 'max:200'],
+        ];
+    }
+
+    public function title(): string
+    {
+        return $this-&gt;string('title')-&gt;toString();
+    }
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Whitespace-only becomes <code>null</code> through the middleware and fails <code>required</code></li>
+        <li><code>max:200</code> counts Unicode characters: 200 emoji pass</li>
+        <li>The controller calls <code>$request-&gt;title()</code>: never <code>all()</code>, never <code>input('title')</code></li>
+        <li>Larastan sees a <code>string</code> at the call site</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="list-request" data-part="2" data-cue="ListTodosRequest validates the status query parameter">
+  <h2>ListTodosRequest: an enum as the binder</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Http/Requests/Api/V1/ListTodosRequest.php</div>
+<pre class="code" data-lang="php" data-mark="4,10">public function rules(): array
+{
+    return [
+        'status' =&gt; ['sometimes', 'string', Rule::enum(TodoStatus::class)],
+    ];
+}
+
+public function status(): TodoStatus
+{
+    return $this-&gt;enum('status', TodoStatus::class) ?? TodoStatus::All;
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>sometimes</code>: validate only when present</li>
+        <li><code>Rule::enum</code>: the value must be a backing value of <code>TodoStatus</code></li>
+        <li>The accessor returns the enum, defaulting to <code>All</code></li>
+        <li><code>?status=bogus</code> → 422 with a <code>status</code> error (<code>ListTodosTest</code>)</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="update-request" data-part="2" data-cue="UpdateTodoRequest is the partial update">
+  <h2>UpdateTodoRequest: a partial update</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Http/Requests/Api/V1/UpdateTodoRequest.php</div>
+<pre class="code tight" data-lang="php" data-mark="4,5,14,17">public function rules(): array
+{
+    return [
+        'title' =&gt; ['required_without:completed', 'string', 'max:200'],
+        'completed' =&gt; ['required_without:title', 'boolean:strict'],
+    ];
+}
+
+/**
+ * @return array{title?: string, completed?: bool}
+ */
+public function changes(): array
+{
+    $changes = [];
+    if ($this-&gt;has('title')) {
+        $changes['title'] = $this-&gt;string('title')-&gt;toString();
+    }
+    if ($this-&gt;has('completed')) {
+        $changes['completed'] = $this-&gt;boolean('completed');
+    }
+
+    return $changes;
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li>Each field is required only when the other is absent: <code>{}</code> fails</li>
+        <li><code>boolean:strict</code> rejects <code>"yes"</code> and <code>1</code>; JSON <code>true</code> passes</li>
+        <li><code>changes()</code> carries only the keys that were sent, typed by an array shape</li>
+        <li>.NET: nullable properties with a <code>JsonIgnore</code> condition, or JSON Patch</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="restore-request" data-part="2" data-cue="RestoreTodosRequest is the interesting one">
+  <h2>RestoreTodosRequest: wildcard rules and a custom rule</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Http/Requests/Api/V1/RestoreTodosRequest.php</div>
+<pre class="code tight" data-lang="php" data-mark="4,5,13">public function rules(): array
+{
+    return [
+        'ids' =&gt; ['required', 'array', 'list', 'min:1', 'max:500', $this-&gt;distinct(...)],
+        'ids.*' =&gt; ['required', 'string', 'ulid'],
+    ];
+}
+
+/**
+ * One pass over the list; the per-item `distinct` rule compares every pair, which
+ * costs too much at 500 ids (L2-038).
+ */
+private function distinct(string $attribute, mixed $value, Closure $fail): void
+{
+    if (is_array($value) &amp;&amp; count($value) !== count(array_unique(array_map(
+        fn (mixed $id): mixed =&gt; is_string($id) ? strtolower($id) : $id,
+        $value,
+    ), SORT_REGULAR))) {
+        $fail('The :attribute field must not contain duplicates.');
+    }
+}</pre>
+    </div>
+    <div>
+      <ul>
+        <li><code>ids.*</code> validates every element</li>
+        <li>A closure rule receives the attribute, the value, and a <code>$fail</code> callback</li>
+        <li>The comment names the rejected alternative and why: the built-in <code>distinct</code> is quadratic</li>
+        <li>No <code>authorize()</code>: single-user project, and a missing method means authorised</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="controller" data-part="3" data-cue="TodoController has seven methods and no logic">
+  <h2>The thin controller</h2>
+  <div class="file">backend/app/Http/Controllers/Api/V1/TodoController.php</div>
+<pre class="code xtight" data-lang="php" data-mark="3,8,19">final class TodoController extends Controller
+{
+    public function index(ListTodosRequest $request, ListTodos $listTodos): TodoCollection
+    {
+        return new TodoCollection($listTodos-&gt;handle($request-&gt;status()));
+    }
+
+    public function store(StoreTodoRequest $request, CreateTodo $createTodo): JsonResponse
+    {
+        $todo = $createTodo-&gt;handle($request-&gt;title());
+
+        return (new TodoResource($todo))-&gt;response()
+            -&gt;setStatusCode(201)
+            -&gt;header('Location', url("/api/v1/todos/{$todo-&gt;id}"));
+    }
+
+    public function update(UpdateTodoRequest $request, string $todo, UpdateTodo $updateTodo): TodoResource
+    {
+        return new TodoResource($updateTodo-&gt;handle($todo, $request-&gt;changes()));
+    }
+
+    public function destroy(string $todo, DeleteTodo $deleteTodo): Response
+    {
+        $deleteTodo-&gt;handle($todo);
+
+        return response()-&gt;noContent();
+    }</pre>
+</section>
+
+<section id="controller-map" data-part="3" data-cue="Look at store">
+  <h2>Each method, mapped</h2>
+  <table class="small">
+    <tr><th>Method</th><th>Receives</th><th>Returns</th><th>.NET analogue</th></tr>
+    <tr><td><code>index</code></td><td><code>ListTodosRequest</code>, <code>ListTodos</code></td><td><code>TodoCollection</code> (200)</td><td><code>Ok(dto)</code></td></tr>
+    <tr><td><code>store</code></td><td><code>StoreTodoRequest</code>, <code>CreateTodo</code></td><td><code>JsonResponse</code> 201 + <code>Location</code></td><td><code>CreatedAtAction</code></td></tr>
+    <tr><td><code>update</code></td><td><code>UpdateTodoRequest</code>, <code>string $todo</code>, <code>UpdateTodo</code></td><td><code>TodoResource</code> (200)</td><td><code>Ok(dto)</code></td></tr>
+    <tr><td><code>destroy</code></td><td><code>string $todo</code>, <code>DeleteTodo</code></td><td><code>response()-&gt;noContent()</code> (204)</td><td><code>NoContent()</code></td></tr>
+    <tr><td><code>restore</code></td><td><code>string $todo</code>, <code>RestoreTodo</code></td><td><code>TodoResource</code> (200)</td><td><code>Ok(dto)</code></td></tr>
+    <tr><td><code>destroyCompleted</code></td><td><code>ClearCompletedTodos</code></td><td><code>ClearedTodosResource</code> (200)</td><td><code>Ok(dto)</code></td></tr>
+    <tr><td><code>restoreMany</code></td><td><code>RestoreTodosRequest</code>, <code>RestoreTodos</code></td><td><code>TodoResource::collection</code> (200)</td><td><code>Ok(dtos)</code></td></tr>
+  </table>
+  <p class="small muted">Return types on every method; L2-044 caps each method at ten lines, no logic, no queries.</p>
+</section>
+
+<section id="no-binding" data-part="3" data-cue="Now the deliberate choice">
+  <h2>Why the id stays a string</h2>
+  <div class="cols">
+    <div class="card bad">
+      <h3>Implicit route model binding (not used)</h3>
+<pre class="code tight" data-lang="php">public function update(
+    UpdateTodoRequest $request,
+    Todo $todo,
+)</pre>
+      <ul>
+        <li>Framework loads the row and 404s if missing</li>
+        <li>Cannot express "deleted is 404 for update, but valid for restore" per route without configuration</li>
+        <li>Pulls Eloquent into the HTTP layer</li>
+      </ul>
+    </div>
+    <div class="card good">
+      <h3>What this backend does</h3>
+<pre class="code tight" data-lang="php">public function update(
+    UpdateTodoRequest $request,
+    string $todo,
+    UpdateTodo $updateTodo,
+)</pre>
+      <ul>
+        <li>The Action owns the not-found rule: <code>find()</code> or <code>findDeleted()</code>, then <code>TodoNotFound</code></li>
+        <li>Unit-testable with the in-memory fake</li>
+        <li>Same instinct as passing an id, not an entity, to a MediatR handler</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="sequence" data-part="4" data-cue="Put it together for PATCH">
+  <h2>PATCH /api/v1/todos/{id}, end to end</h2>
+  <div class="figure-wrap">
+    <img class="figure" src="../../detailed-designs/architecture/backend-layering/diagrams/sequence-patch-through-layers.png" alt="Sequence diagram of a PATCH request through the layers">
+    <div class="caption">docs/detailed-designs/architecture/backend-layering/diagrams/sequence-patch-through-layers.png</div>
+  </div>
+</section>
+
+<section id="pitfalls" data-part="4" data-cue="Reordering routes so a parameterised route precedes a static one">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li>Reordering routes so <code>{todo}</code> precedes <code>completed</code> or <code>restore</code></li>
+    <li><code>$request-&gt;all()</code> or <code>input()</code> in a controller: unvalidated keys slip through</li>
+    <li><code>boolean</code> instead of <code>boolean:strict</code>: "yes" becomes a completion flag</li>
+    <li>Route model binding, then a 404 on restore for a deleted todo</li>
+    <li>"Just one line" of logic in a controller: the ten-line cap makes it visible in review</li>
+  </ol>
+</section>
+
+<section id="recap" data-part="5" data-cue="Routes are explicit, ordered, and constrained">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Routes:</b> explicit, ordered, constrained with <code>whereUlid</code>, controllers only</li>
+    <li><b>Form Requests:</b> FluentValidation plus typed accessors, validated before the controller runs</li>
+    <li><b>Controller:</b> method injection, one Action call, one Resource, ten lines</li>
+    <li><b>Ids:</b> stay strings so the Action owns the not-found rule</li>
+  </ul>
+</section>
+
+<section id="next" data-part="5" data-cue="Next, the Actions themselves">
+  <div class="kicker">Next</div>
+  <h2>04 · Actions and the repository port</h2>
+  <p class="lead">MediatR handlers and Clean Architecture use cases, mapped onto app/Actions/Todos and TodoRepository.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>

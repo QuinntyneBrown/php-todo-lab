@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video 07 Slides</title>
+<link rel="stylesheet" href="../assets/slides.css">
+</head>
+<body data-video-number="07" data-video-title="API Resources and the JSON contract" data-parts="Introduction|Resources|TodoResource|Collections|Versioning|Recap">
+
+<section id="title" data-part="0">
+  <div class="kicker">php-todo-lab · Video 07</div>
+  <h1>API Resources and the JSON contract</h1>
+  <p class="lead">DTOs and System.Text.Json, mapped onto TodoResource, TodoCollection and ClearedTodosResource</p>
+</section>
+
+<section id="questions" data-part="0" data-cue="By the end you will be able to answer">
+  <h2>What you will be able to answer</h2>
+  <ol class="steps">
+    <li>What an API Resource is, and why the controller never returns a model</li>
+    <li>How the todo contract (L2-019) is enforced key by key</li>
+    <li>Why timestamps are rewritten as strings rather than formatted through Carbon</li>
+    <li>How the list and clear-completed responses carry <code>meta</code></li>
+    <li>How the <code>V1</code> namespace supports versioning</li>
+  </ol>
+</section>
+
+<section id="why" data-part="1" data-cue="Eloquent models can serialise themselves">
+  <h2>Why a Resource and not the model</h2>
+  <div class="cols">
+    <div class="card bad">
+      <h3>return $todo;</h3>
+<pre class="code tight" data-lang="json">{
+  "id": "01k6...",
+  "title": "Call mom",
+  "completed_at": "2026-10-08 04:33:59.123",
+  "created_at": "2026-10-08 04:33:29.001",
+  "updated_at": "2026-10-08 04:33:59.123",
+  "deleted_at": null
+}</pre>
+      <p class="small muted">Every attribute, snake_case, <code>deleted_at</code> included. The entity leak you never allow in .NET.</p>
+    </div>
+    <div class="card good">
+      <h3>return new TodoResource($todo);</h3>
+<pre class="code tight" data-lang="json">{
+  "data": {
+    "id": "01k6...",
+    "title": "Call mom",
+    "completed": true,
+    "completedAt": "2026-10-08T04:33:59.123Z",
+    "createdAt": "2026-10-08T04:33:29.001Z",
+    "updatedAt": "2026-10-08T04:33:59.123Z"
+  }
+}</pre>
+      <p class="small muted">Only what <code>toArray</code> names. The DTO and the mapping in one explicit class, no AutoMapper.</p>
+    </div>
+  </div>
+</section>
+
+<section id="resource" data-part="2" data-cue="Open app/Http/Resources/V1/TodoResource.php">
+  <h2>TodoResource, key by key</h2>
+  <div class="cols-wide">
+    <div>
+      <div class="file">backend/app/Http/Resources/V1/TodoResource.php</div>
+<pre class="code xtight" data-lang="php" data-mark="4,16,17,18,19,20,21">/**
+ * Serialises a todo exactly as the v1 contract defines it (L2-019).
+ *
+ * @property Todo $resource
+ */
+final class TodoResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        // Reads the stored values in one pass. Casting each timestamp through Carbon
+        // costs too much for a 500-row list (L2-038), and stored timestamps are already
+        // UTC strings in the model's date format (Todo::fromDateTime), so turning them
+        // into ISO-8601 is a string rewrite.
+        $stored = $this-&gt;resource-&gt;getAttributes();
+
+        return [
+            'id' =&gt; $stored['id'],
+            'title' =&gt; $stored['title'],
+            'completed' =&gt; $this-&gt;resource-&gt;completed,
+            'completedAt' =&gt; self::iso($stored['completed_at'] ?? null),
+            'createdAt' =&gt; self::iso($stored['created_at']),
+            'updatedAt' =&gt; self::iso($stored['updated_at']),
+        ];
+    }</pre>
+    </div>
+    <div>
+      <ul class="small">
+        <li>Six keys, fixed order, camelCase; <code>deletedAt</code> absent</li>
+        <li><code>ListTodosTest</code> asserts the exact key list: adding one is a contract change</li>
+        <li><code>completed</code> comes from the model accessor, not recomputed here</li>
+        <li>Raw <code>getAttributes()</code> instead of cast <code>CarbonImmutable</code> values: a measured choice (L2-038)</li>
+        <li>The <code>@property</code> docblock types <code>$this-&gt;resource</code> for Larastan</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="iso" data-part="2" data-cue="The iso method replaces the space with a T">
+  <h2>ISO 8601 by string rewrite</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Http/Resources/V1/TodoResource.php</div>
+<pre class="code" data-lang="php" data-mark="6">/**
+ * "2026-10-08 04:33:59.123" (UTC) becomes "2026-10-08T04:33:59.123Z".
+ */
+private static function iso(mixed $stored): ?string
+{
+    return is_string($stored) ? str_replace(' ', 'T', $stored).'Z' : null;
+}</pre>
+      <div class="file">backend/tests/Feature/Api/V1/ListTodosTest.php</div>
+<pre class="code tight" data-lang="php">const ISO_8601_UTC = '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/';</pre>
+    </div>
+    <div>
+      <table class="small">
+        <tr><th>Serializer</th><th>Emits</th></tr>
+        <tr><td><code>System.Text.Json</code>, <code>DateTime</code> Kind=Utc</td><td><code>2026-10-08T04:33:59.1230000Z</code></td></tr>
+        <tr><td><code>System.Text.Json</code>, <code>DateTimeOffset</code></td><td><code>2026-10-08T04:33:59.123+00:00</code></td></tr>
+        <tr><td>Carbon <code>toIso8601String()</code></td><td><code>2026-10-08T04:33:59+00:00</code></td></tr>
+        <tr><td><strong>This backend</strong></td><td><code>2026-10-08T04:33:59.123Z</code>, pinned by hand</td></tr>
+      </table>
+      <p class="small muted">Stored strings are already UTC (video 05), so the rewrite is safe. <code>null</code> stays <code>null</code> for active todos.</p>
+    </div>
+  </div>
+</section>
+
+<section id="collection" data-part="3" data-cue="A single Resource becomes">
+  <h2>TodoCollection: data plus meta</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Http/Resources/V1/TodoCollection.php</div>
+<pre class="code xtight" data-lang="php" data-mark="3,5,7,15">final class TodoCollection extends ResourceCollection
+{
+    public $collects = TodoResource::class;
+
+    public function __construct(private readonly TodoList $list)
+    {
+        parent::__construct($list-&gt;todos);
+    }
+
+    /**
+     * @return array{meta: array{active: int, completed: int}}
+     */
+    public function with(Request $request): array
+    {
+        return ['meta' =&gt; ['active' =&gt; $this-&gt;list-&gt;active, 'completed' =&gt; $this-&gt;list-&gt;completed]];
+    }
+}</pre>
+    </div>
+    <div>
+<pre class="code tight" data-lang="json">{
+  "data": [
+    { "id": "01k6...", "title": "Call mom", ... },
+    { "id": "01k5...", "title": "Buy oat milk", ... }
+  ],
+  "meta": { "active": 3, "completed": 2 }
+}</pre>
+      <ul class="small">
+        <li>Laravel wraps resources in <code>data</code> by default</li>
+        <li><code>$collects</code>: each item goes through <code>TodoResource</code></li>
+        <li><code>with()</code> adds top-level members beside <code>data</code></li>
+        <li><code>ListTodosTest</code>: <code>assertExactJsonStructure(['data', 'meta' =&gt; ['active', 'completed']])</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="cleared" data-part="3" data-cue="ClearedTodosResource is the third shape">
+  <h2>ClearedTodosResource</h2>
+  <div class="cols">
+    <div>
+      <div class="file">backend/app/Http/Resources/V1/ClearedTodosResource.php</div>
+<pre class="code xtight" data-lang="php" data-mark="4,9,16,24">/**
+ * The clear-completed response: the deleted ids, for undo, and their count (L2-017).
+ *
+ * @property list&lt;string&gt; $resource
+ */
+final class ClearedTodosResource extends JsonResource
+{
+    /**
+     * @param  list&lt;string&gt;  $ids
+     */
+    public function __construct(array $ids)
+    {
+        parent::__construct($ids);
+    }
+
+    public function toArray(Request $request): array
+    {
+        return ['ids' =&gt; $this-&gt;resource];
+    }
+
+    /**
+     * @return array{meta: array{deleted: int}}
+     */
+    public function with(Request $request): array
+    {
+        return ['meta' =&gt; ['deleted' =&gt; count($this-&gt;resource)]];
+    }
+}</pre>
+    </div>
+    <div>
+<pre class="code tight" data-lang="json">{
+  "data": {
+    "ids": ["01k6...", "01k5...", "01k4..."]
+  },
+  "meta": { "deleted": 3 }
+}</pre>
+      <ul class="small">
+        <li>A Resource over a plain list, not a model</li>
+        <li>The <code>@property</code> docblock narrows <code>mixed</code> to <code>list&lt;string&gt;</code>: the price of a generic base class, and what lets level 8 pass</li>
+        <li><code>ClearCompletedTodosTest</code>: <code>json('data.ids')</code> and <code>assertJsonPath('meta.deleted', 3)</code></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="controller" data-part="3" data-cue="Resources decide the body">
+  <h2>Body in the Resource, status and headers in the controller</h2>
+  <div class="file">backend/app/Http/Controllers/Api/V1/TodoController.php</div>
+<pre class="code" data-lang="php" data-mark="5,6,7,14">public function store(StoreTodoRequest $request, CreateTodo $createTodo): JsonResponse
+{
+    $todo = $createTodo-&gt;handle($request-&gt;title());
+
+    return (new TodoResource($todo))-&gt;response()
+        -&gt;setStatusCode(201)
+        -&gt;header('Location', url("/api/v1/todos/{$todo-&gt;id}"));
+}
+
+public function destroy(string $todo, DeleteTodo $deleteTodo): Response
+{
+    $deleteTodo-&gt;handle($todo);
+
+    return response()-&gt;noContent();
+}</pre>
+  <p>The same <code>TodoResource</code> serves create, update, restore, and every list item. <code>CreatedAtAction</code> and <code>NoContent()</code> stay where they belong.</p>
+</section>
+
+<section id="versioning" data-part="4" data-cue="Every Resource lives in App\Http\Resources\V1">
+  <h2>Versioning</h2>
+  <div class="cols">
+    <div>
+<pre class="code tight" data-lang="md">backend/app/Http/
+├── Controllers/Api/V1/TodoController.php
+├── Requests/Api/V1/
+│   ├── ListTodosRequest.php
+│   ├── RestoreTodosRequest.php
+│   ├── StoreTodoRequest.php
+│   └── UpdateTodoRequest.php
+└── Resources/V1/
+    ├── ClearedTodosResource.php
+    ├── TodoCollection.php
+    └── TodoResource.php
+
+backend/routes/api.php      Route::prefix('v1')</pre>
+    </div>
+    <div>
+      <ul>
+        <li>A breaking contract change means a <code>V2</code> namespace and routes; v1 is never edited incompatibly (<code>AGENTS.md</code>)</li>
+        <li>The SPA mirrors the contract in <code>frontend/src/app/core/api/models</code></li>
+        <li>The JSON is the only coupling between the tiers, so keys and formats are tested precisely</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="pitfalls" data-part="4" data-cue="Returning a model or a collection of models from a controller">
+  <h2>Pitfalls</h2>
+  <ol class="steps">
+    <li>Returning a model from a controller: snake_case columns and <code>deletedAt</code> leak</li>
+    <li><code>toIso8601String()</code> per row: slower, and <code>+00:00</code> instead of <code>Z</code></li>
+    <li>A new key in <code>toArray</code> without the spec and the frontend models</li>
+    <li>A collection without <code>with()</code>: no <code>meta</code></li>
+    <li>Missing <code>@property</code> docblock: Larastan reports access on <code>mixed</code></li>
+  </ol>
+</section>
+
+<section id="recap" data-part="5" data-cue="A Resource is the DTO and the mapping in one explicit class">
+  <h2>Things to remember</h2>
+  <ul class="recap">
+    <li><b>Resource:</b> DTO and mapping in one class; the controller never returns a model</li>
+    <li><b>TodoResource:</b> six camelCase keys, derived <code>completed</code>, UTC timestamps rewritten to ISO 8601 with <code>Z</code></li>
+    <li><b>Collections:</b> <code>with()</code> adds <code>meta</code></li>
+    <li><b>Controller:</b> owns status codes and headers</li>
+    <li><b>Versioning:</b> everything under <code>V1</code>; breaking means <code>V2</code></li>
+  </ul>
+</section>
+
+<section id="next" data-part="5" data-cue="Next, errors">
+  <div class="kicker">Next</div>
+  <h2>08 · Problem details and exception handling</h2>
+  <p class="lead">IExceptionHandler and ProblemDetails, mapped onto ProblemDetailsRenderer and the domain exceptions.</p>
+</section>
+
+<script src="../assets/slides.js"></script>
+</body>
+</html>
