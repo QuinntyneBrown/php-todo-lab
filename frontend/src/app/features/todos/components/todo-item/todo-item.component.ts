@@ -68,6 +68,12 @@ export class TodoItemComponent {
     afterRenderEffect(() => {
       if (this.focusRequest() !== null) this.checkbox().nativeElement.focus();
     });
+    // The store decides what is checked. A rollback can land before the optimistic state
+    // ever renders, leaving the [checked] binding unchanged; syncing after each render of a
+    // new todo puts the box right.
+    afterRenderEffect(() => {
+      this.checkbox().nativeElement.checked = this.todo().completed;
+    });
   }
 
   protected onDelete(event: MouseEvent): void {
@@ -76,11 +82,7 @@ export class TodoItemComponent {
   }
 
   protected onChange(event: Event): void {
-    const checkbox = event.target as HTMLInputElement;
-    const completed = checkbox.checked;
-    // The store decides what is checked; a rollback that lands before the next render
-    // would otherwise leave the box showing the user's click.
-    checkbox.checked = this.todo().completed;
+    const completed = (event.target as HTMLInputElement).checked;
     this.celebrating.set(completed);
     this.toggled.emit(completed);
   }

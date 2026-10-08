@@ -306,7 +306,8 @@ export class TodoStore {
       this.showError(UI_STRINGS.toasts.gone);
       return;
     }
-    this.replace(queue.confirmed);
+    // A fresh object, so views re-sync even when the optimistic state never rendered.
+    this.replace({ ...queue.confirmed });
     if (queue.failure) this.showError(queue.failure.message);
   }
 

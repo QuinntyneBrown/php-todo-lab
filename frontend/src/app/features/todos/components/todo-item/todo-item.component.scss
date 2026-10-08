@@ -62,7 +62,9 @@
   cursor: pointer;
 }
 
+// Decoration only: the native input underneath takes every click (L2-028 criterion 1).
 .check__box {
+  pointer-events: none;
   width: 26px;
   height: 26px;
   border-radius: 50%;
