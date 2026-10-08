@@ -22,6 +22,9 @@ import { type RowFocus, TodoListComponent } from '../components/todo-list/todo-l
 import { type RefusedAdd, type TodoFilter, TodoStore, parseFilter } from '../todo.store';
 import { UI_STRINGS } from '../ui-strings';
 
+/** Where a typed `/` is text rather than the composer shortcut (L2-023 criterion 1). */
+const TEXT_ENTRY = 'textarea, [contenteditable], input:not([type=checkbox], [type=radio])';
+
 /** The one screen (L2-022): header, composer, toolbar, list, and toasts. */
 @Component({
   selector: 'app-todo-page',
@@ -122,10 +125,14 @@ export class TodoPageComponent implements OnChanges {
     this.announce(UI_STRINGS.announcements.restored);
   }
 
-  /** Ctrl/Cmd+Z undoes while a toast offers Undo (L2-015 criterion 6). */
+  /** `/` jumps to the composer (L2-023); Ctrl/Cmd+Z undoes while a toast offers it (L2-015). */
   protected onKeydown(event: KeyboardEvent): void {
+    const typing = event.target instanceof HTMLElement && event.target.matches(TEXT_ENTRY);
     const undoKey = (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z';
-    if (undoKey && this.store.toast()?.undo) {
+    if (event.key === '/' && !typing) {
+      event.preventDefault();
+      this.focusComposer();
+    } else if (undoKey && this.store.toast()?.undo) {
       event.preventDefault();
       this.onUndo();
     }
