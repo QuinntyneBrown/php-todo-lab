@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Carbon;
 
 /**
  * @property string $id
@@ -50,11 +51,39 @@ class Todo extends Model
     }
 
     /**
+     * Writes every timestamp as UTC, whatever PHP's default timezone is (L2-043).
+     */
+    public function fromDateTime(mixed $value): mixed
+    {
+        return $value === null || $value === ''
+            ? $value
+            : $this->asDateTime($value)->utc()->format($this->getDateFormat());
+    }
+
+    /**
+     * Reads stored timestamps as UTC: the connection runs at +00:00 (config/database.php).
+     * Naming the zone also spares Carbon a default-zone lookup on every parse.
+     */
+    protected function asDateTime(mixed $value): Carbon
+    {
+        if (is_string($value)) {
+            $parsed = Carbon::createFromFormat($this->getDateFormat(), $value, 'UTC');
+            if ($parsed !== null) {
+                return $parsed;
+            }
+        }
+
+        return parent::asDateTime($value);
+    }
+
+    /**
+     * Derived from the stored column, not stored itself (L2-019).
+     *
      * @return Attribute<bool, never>
      */
     protected function completed(): Attribute
     {
-        return Attribute::get(fn (): bool => $this->completed_at !== null);
+        return Attribute::get(fn (): bool => ($this->getAttributes()['completed_at'] ?? null) !== null);
     }
 
     /**

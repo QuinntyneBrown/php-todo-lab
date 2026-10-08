@@ -12,9 +12,11 @@
             <directory>tests/Feature</directory>
         </testsuite>
     </testsuites>
+    <!-- The coverage gate (L2-051 criterion 3) covers Action and repository code. -->
     <source>
         <include>
-            <directory>app</directory>
+            <directory>app/Actions</directory>
+            <directory>app/Repositories</directory>
         </include>
     </source>
     <php>

@@ -5,6 +5,7 @@ Laravel JSON API for php-todo-lab. Every route lives under `/api/v1`; every erro
 ## Requirements
 
 - PHP 8.4+ with `pdo_mysql`, `mbstring`, `intl`, `fileinfo`, `openssl`, `zip`, `curl`
+- The `pcov` extension (or Xdebug in coverage mode) for the coverage gate in `composer test`
 - Composer 2
 - MySQL 8.4 (installed locally, or `docker compose up -d` from the repository root)
 
@@ -39,7 +40,7 @@ The Angular dev server proxies `/api` here, so no CORS configuration is needed.
 | `composer format` | Laravel Pint, rewriting files |
 | `composer format:check` | Pint in `--test` mode |
 | `composer analyse` | Larastan at level 8 |
-| `composer test` | Pest: feature tests over HTTP against MySQL, unit tests against the in-memory repository |
+| `composer test` | Pest with a 90% coverage gate on Actions and repositories, then the `performance` group (the L2-038 latency check) without coverage instrumentation |
 
 ## Layout
 

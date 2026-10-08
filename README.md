@@ -9,7 +9,7 @@ A deliberately small to-do app for learning PHP and Angular practice: a Laravel 
 
 ## Prerequisites
 
-PHP 8.4+ (with `pdo_mysql`, `mbstring`, `intl`), Composer 2, Node.js LTS, and MySQL 8.4. If you would rather not install MySQL, `docker compose up -d` starts MySQL only, with the `todo` and `todo_test` databases.
+PHP 8.4+ (with `pdo_mysql`, `mbstring`, `intl`, and `pcov` for the coverage gate), Composer 2, Node.js LTS, and MySQL 8.4. If you would rather not install MySQL, `docker compose up -d` starts MySQL only, with the `todo` and `todo_test` databases.
 
 ## Run it
 

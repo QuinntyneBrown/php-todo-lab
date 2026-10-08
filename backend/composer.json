@@ -39,7 +39,8 @@
     "scripts": {
         "test": [
             "@php artisan config:clear --ansi",
-            "pest"
+            "pest --coverage --min=90 --exclude-group=performance",
+            "@php -d pcov.enabled=0 vendor/bin/pest --group=performance"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
