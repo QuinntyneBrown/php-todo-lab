@@ -1,0 +1,35 @@
+@startuml
+title UML sequence behaviour — Show and remove the offline banner
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+participant "Browser connectivity events" as browser
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+  participant "Offline banner (class name TO SUPPLY)" as banner
+end box
+browser -> page : offline event
+page -> page : Set offline state
+page -> banner : Show
+banner --> user : "You're offline. Changes will fail until you reconnect." (L2-042)
+note over banner
+  The banner is non-blocking. The composer, the list, and the
+  controls stay usable, and writes that fail follow L2-042.
+end note
+browser -> page : online event
+page -> page : Clear offline state
+page -> banner : Remove
+banner --> user : Banner removed (L2-042)
+@enduml

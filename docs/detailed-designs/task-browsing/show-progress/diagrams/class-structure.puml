@@ -1,0 +1,64 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Show progress
+
+class TodoStore <<providedIn root>> {
+  +todos: Signal<TodoView[]>
+  +activeCount: Signal<number>
+  +completedCount: Signal<number>
+  +progress: Signal<number>
+}
+
+class TodoView {
+  +id: string
+  +title: string
+  +completed: boolean
+  +pending: boolean
+}
+
+class TodoPageComponent <<smart>> {
+  +store: TodoStore
+}
+
+class TodoHeaderComponent <<presentational>> {
+  +activeCount: input<number>
+  +completedCount: input<number>
+  +progress: input<number>
+}
+
+class TodoFilterComponent <<presentational>> {
+  +allCount: input<number>
+  +activeCount: input<number>
+  +completedCount: input<number>
+}
+
+class PoliteLiveRegion <<TO SUPPLY>> {
+  +announce(message: string): void
+}
+
+class UI_STRINGS <<const>>
+
+TodoStore "1" o-- "*" TodoView : holds
+TodoPageComponent --> TodoStore : reads counts
+TodoPageComponent ..> TodoHeaderComponent : binds
+TodoPageComponent ..> TodoFilterComponent : binds
+TodoPageComponent --> PoliteLiveRegion : announces through
+TodoHeaderComponent ..> UI_STRINGS : reads
+
+note bottom of TodoStore
+  activeCount and completedCount are computed from todos.
+  progress is completed divided by total, 0 when no tasks exist.
+  Member and class names that the specs do not fix are provisional (TO SUPPLY).
+end note
+@enduml

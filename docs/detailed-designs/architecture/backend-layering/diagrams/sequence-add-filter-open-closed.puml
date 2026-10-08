@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — A new filter reaches the database without changing an existing Action
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "HttpTodoApi" as client
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "routes/api.php" as routes
+  participant "ListTodosRequest" as req
+  participant "TodoController" as ctrl
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "ListTodos" as action
+  participant "Todo" as model
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+note over client, db : Illustrative new filter "overdue". Added in this change: TodoStatus case, Todo scope, one repository mapping, one test. Unchanged: every Action (L2-044 criterion 6).
+client -> routes : GET /api/v1/todos?status=overdue
+routes -> req : Resolve the Form Request for the route
+req -> req : Validate status against all TodoStatus cases, including the new case
+req -> ctrl : Call the controller method with the TodoStatus value
+ctrl -> action : Call ListTodos, unchanged
+action -> repo : list(TodoStatus) through the TodoRepository interface
+repo -> model : Apply the scope that the repository maps to the new case
+model -> db : SELECT with the new scope's conditions
+db --> model : Rows
+model --> repo : Todos
+repo --> action : Todos
+action --> ctrl : Todos
+ctrl --> client : 200 JSON response
+@enduml

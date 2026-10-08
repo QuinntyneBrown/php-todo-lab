@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Handle connectivity failures
+
+Container(api, "Laravel API", "PHP 8.4, Laravel", "Serves /api/v1/todos requests")
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Angular smart component", "Hosts the offline banner and the toast area")
+  Component(banner, "Offline banner", "Angular element, class name TO SUPPLY", "Shows the offline message without blocking the page")
+  Component(store, "TodoStore", "Angular service, Signals", "Applies optimistic updates and rolls them back when a write fails")
+  Component(toast, "ToastComponent", "Angular presentational component", "Shows the rollback error toast")
+  Component(port, "TodoApi", "Abstract class, DI token", "Port that the store depends on")
+  Component(adapter, "HttpTodoApi", "Angular HTTP adapter", "Only class using HttpClient. Applies the 10 second timeout and the read retry delays")
+  Component(strings, "UI_STRINGS", "TypeScript constants in ui-strings.ts", "Holds the offline and rollback messages")
+}
+
+Rel(page, banner, "Shows or removes")
+Rel(page, store, "Reads state from")
+Rel(page, toast, "Hosts")
+Rel(store, port, "Calls")
+Rel(adapter, port, "Implements")
+Rel(adapter, api, "Sends requests to", "JSON/HTTP")
+Rel(store, toast, "Sets toast signal for")
+Rel(page, strings, "Reads banner text from")
+Rel(store, strings, "Reads toast text from")
+@enduml

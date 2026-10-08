@@ -1,0 +1,84 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Responsive layout
+
+enum Breakpoint {
+  XS : below 576 px
+  SM : 576 px and above
+  MD : 768 px and above
+  LG : 992 px and above
+  XL : 1200 px and above
+}
+
+enum PointerCapability {
+  HoverHover
+  HoverNone
+}
+
+class TodoPageComponent <<smart component>> {
+  +editingId: Signal<string or null>
+  +toast: Signal<ToastState or null>
+}
+
+class TodoHeaderComponent <<presentational>> {
+  +date: InputSignal<Date>
+  +progress: InputSignal<number>
+}
+
+class TodoComposerComponent <<presentational>> {
+  +submitted: OutputEmitterRef<string>
+}
+
+class TodoFilterComponent <<presentational>> {
+  +filter: InputSignal<string>
+  +filterChange: OutputEmitterRef<string>
+}
+
+class TodoListComponent <<presentational>> {
+  +todos: InputSignal<Todo[]>
+}
+
+class TodoItemComponent <<presentational>> {
+  +todo: InputSignal<Todo>
+  +editing: InputSignal<boolean>
+  +deleted: OutputEmitterRef<void>
+}
+
+class ToastComponent <<presentational>> {
+  +toast: InputSignal<ToastState>
+}
+
+class TodoStore <<providedIn root>> {
+  +editingId: WritableSignal<string or null>
+}
+
+class "tokens.scss" as Tokens <<design tokens>> {
+  light and dark colour sets
+}
+
+TodoPageComponent *-- TodoHeaderComponent
+TodoPageComponent *-- TodoComposerComponent
+TodoPageComponent *-- TodoFilterComponent
+TodoPageComponent *-- TodoListComponent
+TodoPageComponent *-- ToastComponent
+TodoListComponent "1" o-- "*" TodoItemComponent
+TodoPageComponent --> TodoStore : reads
+TodoPageComponent ..> Breakpoint : column rules per
+TodoHeaderComponent ..> Breakpoint : ring size per
+TodoFilterComponent ..> Breakpoint : full width at XS
+TodoItemComponent ..> PointerCapability : delete reveal per
+TodoPageComponent ..> Tokens : uses
+TodoItemComponent ..> Tokens : uses
+ToastComponent ..> Tokens : uses
+@enduml

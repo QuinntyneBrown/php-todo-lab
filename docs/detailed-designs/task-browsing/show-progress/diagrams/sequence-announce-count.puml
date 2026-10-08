@@ -1,0 +1,34 @@
+@startuml
+title UML sequence behaviour — Announce a count change
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+  participant "Polite live region" as live
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+store -> store : Recompute activeCount and completedCount after a change
+store --> page : Count signal changed
+page -> page : Effect reads the counts, a side effect outside Angular state (L2-007)
+alt Count value differs from the last announced value
+  page -> live : Write the announcement text (text TO SUPPLY)
+  live --> user : Assistive technology announces the change politely (L2-007)
+else Count value is unchanged
+  page --> store : No announcement
+end
+@enduml

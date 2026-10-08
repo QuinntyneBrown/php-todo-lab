@@ -1,0 +1,44 @@
+@startuml
+title UML sequence behaviour — Bulk operation in one transaction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "ClearCompletedTodos or RestoreTodos" as action
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+ctrl -> action : Invoke the bulk Action
+action -> repo : Soft-delete all completed todos or restore the given ids
+repo -> db : Begin transaction (L2-043 criterion 1)
+repo -> db : Select the affected ids
+db --> repo : Ids
+repo -> db : Update every affected row
+alt Every statement succeeds
+  repo -> db : Commit
+  db --> repo : Committed, all rows changed
+  repo --> action : Affected todos
+  action --> ctrl : Affected todos
+else A statement fails
+  repo -> db : Roll back
+  db --> repo : No row changed
+  repo --> action : Rethrow the failure
+  action --> ctrl : Failure reaches exception rendering
+end
+@enduml

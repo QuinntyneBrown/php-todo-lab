@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Responsive layout
+
+Person(user, "User", "Manages a personal task list on a phone, tablet, or desktop")
+System(app, "php-todo-lab", "Single-screen to-do app with a single centred column that adapts from 320 px to 1920 px")
+
+Rel(user, app, "Views and edits tasks on any viewport using", "Browser")
+@enduml

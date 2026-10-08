@@ -1,0 +1,44 @@
+@startuml
+title UML sequence behaviour — Update count and ring on change
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "TodoPageComponent" as page
+  participant "TodoHeaderComponent" as header
+  participant "TodoFilterComponent" as filter
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+user -> item : Complete a task (example: 3 active and 2 completed become 2 active and 3 completed)
+item -> page : Emit change
+page -> store : Apply change optimistically to todos signal
+store -> store : Recompute activeCount, completedCount (L2-007)
+store -> store : Recompute progress, completed divided by total (L2-007)
+store --> page : New counts and progress
+page -> header : Bind activeCount, completedCount, progress
+alt Tasks exist and all are completed
+  header --> user : Show "All done" instead of a number (L2-007)
+else Tasks exist and some are active
+  header --> user : Show "n left", for example "2 left" with the ring 60% filled (L2-007)
+else No tasks exist
+  header --> user : Show "0 left" with an empty ring (L2-007)
+end
+header -> header : Animate ring to the new value within 300 ms (L2-007)
+page -> filter : Bind counts from the same signals
+filter --> user : Show "All 5", "Active 2", "Done 3" style counts (L2-007)
+@enduml

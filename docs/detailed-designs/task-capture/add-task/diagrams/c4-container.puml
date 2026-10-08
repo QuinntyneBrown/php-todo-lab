@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Add a task
+
+Person(user, "User", "Single local user who captures tasks")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Composer, optimistic list, toasts. Served by ng serve on :4200 with an /api proxy")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "Validates the title, enforces the 500-task cap, creates the todo. Served by php artisan serve on :8000")
+  ContainerDb(db, "MySQL database", "MySQL 8.4, utf8mb4", "Stores the todos table")
+}
+Rel(user, spa, "Uses", "HTTP")
+Rel(spa, api, "Sends POST /api/v1/todos", "JSON/HTTP")
+Rel(api, db, "Counts and inserts todos in one transaction", "Eloquent")
+@enduml

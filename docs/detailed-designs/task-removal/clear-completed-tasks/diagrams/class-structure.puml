@@ -1,0 +1,96 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Clear completed tasks
+
+package "Angular SPA" {
+  class TodoPageComponent {
+    -store: TodoStore
+    +onClearCompleted(): void
+    +onUndo(): void
+  }
+  class TodoStore {
+    +todos: WritableSignal<TodoDto[]>
+    +filter: WritableSignal<string>
+    +toast: WritableSignal<ToastState | null>
+    +completedCount: Signal<number>
+    +visibleTodos: Signal<TodoDto[]>
+    +clearCompleted(): void
+    +undo(): void
+  }
+  class ToastState {
+    +message: string
+    +undoTarget: string[] | null
+  }
+  abstract class TodoApi {
+    +clearCompleted(): Promise<ClearCompletedResponse>
+    +restoreTodos(ids: string[]): Promise<void>
+  }
+  class ClearCompletedResponse {
+    +meta.deleted: number
+    +ids: string[]
+  }
+  class HttpTodoApi
+  class InMemoryTodoApi
+  class TodoDto
+}
+
+package "Laravel API" {
+  class TodoController {
+    +destroyCompleted(): JsonResponse
+    +restoreMany(request: RestoreTodosRequest): JsonResponse
+  }
+  class RestoreTodosRequest {
+    +rules(): array
+  }
+  class ClearCompletedTodos {
+    +__invoke(): array
+  }
+  class RestoreTodos {
+    +__invoke(ids: string[]): void
+  }
+  interface TodoRepository {
+    +deleteCompleted(): string[]
+    +restoreMany(ids: string[]): void
+  }
+  class EloquentTodoRepository {
+    +deleteCompleted(): string[]
+    +restoreMany(ids: string[]): void
+  }
+  class InMemoryTodoRepository
+  class Todo {
+    +id: string
+    +completed_at: CarbonImmutable | null
+    +deleted_at: CarbonImmutable | null
+    +scopeCompleted(): Builder
+  }
+}
+
+TodoPageComponent --> TodoStore : calls
+TodoStore --> TodoApi : depends on
+TodoStore "1" o-- "*" TodoDto : todos
+TodoStore "1" o-- "0..1" ToastState : toast
+TodoApi <|-- HttpTodoApi
+TodoApi <|-- InMemoryTodoApi
+TodoApi ..> ClearCompletedResponse : returns
+HttpTodoApi ..> TodoController : DELETE completed and POST restore
+
+TodoController ..> RestoreTodosRequest : validates with
+TodoController --> ClearCompletedTodos : invokes
+TodoController --> RestoreTodos : invokes
+ClearCompletedTodos --> TodoRepository : depends on
+RestoreTodos --> TodoRepository : depends on
+TodoRepository <|.. EloquentTodoRepository
+TodoRepository <|.. InMemoryTodoRepository
+EloquentTodoRepository ..> Todo : persists in one transaction
+@enduml

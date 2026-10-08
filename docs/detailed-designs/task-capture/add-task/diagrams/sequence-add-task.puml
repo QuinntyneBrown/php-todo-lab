@@ -1,0 +1,66 @@
+@startuml
+title UML sequence behaviour — Add a task
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoComposerComponent" as composer
+  participant "TodoPageComponent" as page
+  participant "TodoListComponent" as list
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+  participant "StoreTodoRequest" as request
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "CreateTodo" as action
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+user -> composer : Type "Buy oat milk", press Enter or click "Add task" (L2-001)
+composer -> composer : Trim title, check 1 to 200 characters (L2-002)
+composer -> page : Emit trimmed title
+page -> store : Add task
+opt Filter is "Done"
+  store -> store : Switch filter to "All" (L2-001)
+end
+store -> store : Insert pending task with temporary id at top (L2-004)
+store --> list : Pending task shown dimmed, not completable or editable (L2-004)
+page -> composer : Clear field and keep keyboard focus (L2-001)
+store -> api : Create task
+api -> controller : POST /api/v1/todos with body {"title": string}
+controller -> request : Validate title: required, string, 1 to 200 characters (L2-002)
+request --> controller : Valid, trimmed title
+controller -> action : Handle create
+action -> repo : Create todo within the 500-task cap
+repo -> db : Begin transaction
+repo -> db : Count non-deleted todos under a lock (L2-003, L2-043)
+db --> repo : Count below 500
+repo -> db : Insert todo with ULID id (L2-043)
+repo -> db : Commit
+db --> repo : Committed
+repo --> action : Todo
+action --> controller : Todo
+controller --> api : 201 Created, Location header, data with completed false and completedAt null (L2-001)
+api --> store : Todo from server
+store -> store : Replace pending task with server task, real id (L2-004)
+store --> list : Row updated in place, no visible jump (L2-004)
+@enduml

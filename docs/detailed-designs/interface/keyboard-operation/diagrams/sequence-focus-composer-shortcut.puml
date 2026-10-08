@@ -1,0 +1,31 @@
+@startuml
+title UML sequence behaviour — Focus the composer with the slash key
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+  participant "TodoComposerComponent" as composer
+end box
+user -> page : Press / while focus is somewhere on the page
+page -> page : Inspect the focused element
+alt Focus is outside a text field
+  page -> page : Prevent the default key action so / is not typed (L2-023)
+  page -> composer : Request focus (L2-023)
+  composer --> user : Composer has focus
+else Focus is in a text field
+  page --> user : Ignore the key so / is typed into the field (L2-023)
+end
+@enduml

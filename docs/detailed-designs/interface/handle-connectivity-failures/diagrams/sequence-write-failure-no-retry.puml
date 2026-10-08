@@ -1,0 +1,55 @@
+@startuml
+title UML sequence behaviour — Write failure with no retry and rollback
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+end box
+user -> page : Add, toggle, edit, or delete a task
+page -> store : Apply the action optimistically
+store --> page : UI already updated
+store -> api : create(), update(), or delete()
+api -> controller : POST, PATCH, or DELETE under /api/v1/todos (single attempt)
+controller --> api : Network error or 5xx
+note over api
+  No automatic retry for writes, because a retried write
+  can duplicate or reorder changes (L2-042).
+end note
+api --> store : Failure
+alt add failed
+  store -> store : Remove the pending task and restore the typed title (L2-004)
+  store --> page : toast "Couldn't add that task. Try again."
+else toggle failed
+  store -> store : Revert the task and the counts (L2-010)
+  store --> page : toast "Couldn't update that task."
+else edit failed
+  store -> store : Restore the previous title (L2-013)
+  store --> page : toast "Couldn't save that change."
+else delete failed
+  store -> store : Make the row reappear (L2-015)
+  store --> page : toast "Couldn't delete that task."
+end
+page -> toast : toast input
+toast --> user : Error toast shown
+@enduml

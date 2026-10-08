@@ -1,0 +1,58 @@
+@startuml
+title UML sequence behaviour — Retry the idempotent list read before showing the error state
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+end box
+user -> page : Open the page or press Try again
+page -> store : Load tasks
+store -> api : list()
+api -> controller : GET /api/v1/todos (attempt 1)
+alt attempt 1 succeeds
+  controller --> api : 200 with data and meta
+  api --> store : Task list
+else attempt 1 fails with a network error or 5xx (L2-042)
+  controller --> api : Network error or 5xx
+  api -> api : Wait 300 ms (L2-042)
+  api -> controller : GET /api/v1/todos (retry 1)
+  alt retry 1 succeeds
+    controller --> api : 200 with data and meta
+    api --> store : Task list
+  else retry 1 fails with a network error or 5xx
+    controller --> api : Network error or 5xx
+    api -> api : Wait 900 ms (L2-042)
+    api -> controller : GET /api/v1/todos (retry 2, the last)
+    alt retry 2 succeeds
+      controller --> api : 200 with data and meta
+      api --> store : Task list
+    else retry 2 fails
+      controller --> api : Network error or 5xx
+      api --> store : Failure after 2 retries (L2-042)
+      store --> page : List resource in error state
+      page --> user : Error state shown
+    end
+  end
+end
+store --> page : Task list when any attempt succeeded
+@enduml

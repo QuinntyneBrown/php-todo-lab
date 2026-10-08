@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Purge old soft-deleted tasks
+
+Container_Boundary(api, "Laravel API") {
+  Component(scheduler, "Laravel scheduler", "Laravel Schedule, routes/console.php", "Registers todos:purge-deleted to run hourly")
+  Component(cmd, "PurgeDeletedTodos", "Artisan command", "Computes the cutoff, purges in chunks of 500, logs the count, exits 0")
+  Component(repoi, "TodoRepository", "PHP interface", "Declares the purge operation")
+  Component(repo, "EloquentTodoRepository", "Eloquent repository", "Force-deletes one chunk of expired soft-deleted rows per call")
+  Component(model, "Todo", "Eloquent model", "SoftDeletes model for the todos table")
+}
+ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
+
+Rel(scheduler, cmd, "Runs every hour")
+Rel(cmd, repoi, "Requests chunked purge from")
+Rel(repo, repoi, "Implements")
+Rel(repo, model, "Queries soft-deleted rows through")
+Rel(model, db, "Permanently deletes rows in", "SQL")
+@enduml

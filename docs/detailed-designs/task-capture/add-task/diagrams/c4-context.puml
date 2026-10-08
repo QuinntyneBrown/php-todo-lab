@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Add a task
+
+Person(user, "User", "Single local user who captures tasks")
+System(app, "php-todo-lab", "Single-screen to-do application for learning PHP coding practices")
+
+Rel(user, app, "Types a task title and adds it using")
+@enduml

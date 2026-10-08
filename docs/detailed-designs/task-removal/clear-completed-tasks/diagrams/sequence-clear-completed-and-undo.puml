@@ -1,0 +1,94 @@
+@startuml
+title UML sequence behaviour — Clear completed tasks and undo
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+  participant "TodoListComponent" as list
+  participant "TodoEmptyStateComponent" as empty
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+  participant "RestoreTodosRequest" as req
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "ClearCompletedTodos" as clear
+  participant "RestoreTodos" as restore
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+user -> page : Click "Clear completed" (L2-017)
+page -> store : clearCompleted()
+store -> store : Keep the completed todos, remove them from the todos signal (L2-017)
+store --> list : Completed rows leave, active rows remain (L2-017)
+opt Filter is "Done"
+  store --> empty : Empty state for the Done filter shown (L2-017)
+end
+store --> toast : Toast "n tasks cleared" with Undo (L2-017)
+store -> api : clearCompleted()
+api -> ctrl : DELETE /api/v1/todos/completed
+ctrl -> clear : Invoke
+clear -> repo : Soft delete all completed todos
+group One database transaction (L2-017, L2-043)
+  repo -> db : BEGIN
+  repo -> db : UPDATE deleted_at WHERE completed and not deleted
+  alt All statements succeed
+    repo -> db : COMMIT
+    db --> repo : Committed
+  else Any statement fails
+    repo -> db : ROLLBACK
+    db --> repo : No todo deleted
+    repo --> clear : Failure
+    clear --> ctrl : Failure
+    ctrl --> api : 5xx problem details
+    api --> store : Rejected request
+    note over store : Rollback and toast copy for a failed clear are TO SUPPLY
+  end
+end
+repo --> clear : Deleted ids
+clear --> ctrl : Count and ids
+ctrl --> api : 200 OK with meta.deleted n and the deleted ids (L2-017)
+api --> store : Count and ids
+user -> toast : Click Undo (L2-017)
+toast -> page : undone
+page -> store : undo()
+store -> api : restoreTodos(ids)
+api -> ctrl : POST /api/v1/todos/restore with ids
+ctrl -> req : Validate ids
+req --> ctrl : Valid
+ctrl -> restore : Invoke with ids
+restore -> repo : Restore todos by ids
+group One database transaction (L2-043)
+  repo -> db : BEGIN
+  repo -> db : UPDATE deleted_at to null WHERE id in ids
+  repo -> db : COMMIT
+  db --> repo : Committed
+end
+repo --> restore : Done
+restore --> ctrl : Done
+ctrl --> api : 200 OK
+api --> store : Restore confirmed
+store -> store : Insert the todos back by createdAt descending, then id descending
+store -> store : Clear the toast
+store --> list : All cleared tasks return (L2-017)
+@enduml

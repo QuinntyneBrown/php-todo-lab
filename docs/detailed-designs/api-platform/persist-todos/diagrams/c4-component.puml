@@ -1,0 +1,24 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Persist todos
+
+Container_Boundary(api, "Laravel API") {
+  Component(artisan, "Artisan migrate commands", "php artisan migrate, migrate:rollback", "Run and reverse migrations")
+  Component(migration, "create_todos_table", "Laravel migration", "Creates and drops the todos table and its indexes")
+  Component(config, "Timezone and charset configuration", "config/app.php, config/database.php", "Fixes the application time zone and the MySQL session time zone to UTC and sets utf8mb4")
+  Component(actions, "CreateTodo, UpdateTodo, ClearCompletedTodos, RestoreTodos", "Action classes", "Call the repository for each write use case")
+  Component(repoi, "TodoRepository", "PHP interface", "Declares the write operations")
+  Component(repo, "EloquentTodoRepository", "Eloquent repository", "Opens the transactions for create-with-cap and bulk operations")
+  Component(model, "Todo", "Eloquent model", "HasUlids, SoftDeletes, HasFactory, millisecond date format, fillable title")
+}
+ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
+
+Rel(artisan, migration, "Runs up and down on")
+Rel(migration, db, "Creates and drops table and indexes in", "SQL")
+Rel(actions, repoi, "Call")
+Rel(repo, repoi, "Implements")
+Rel(repo, model, "Reads and writes through")
+Rel(repo, db, "Wraps writes in transactions on", "Eloquent")
+Rel(config, db, "Sets session time zone and charset for", "PDO")
+@enduml

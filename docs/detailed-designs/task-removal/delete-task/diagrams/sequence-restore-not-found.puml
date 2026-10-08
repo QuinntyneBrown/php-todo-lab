@@ -1,0 +1,45 @@
+@startuml
+title UML sequence behaviour — Restore a todo that is purged or never deleted
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "RestoreTodo" as rest
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+end box
+user -> toast : Click Undo (L2-015)
+toast -> store : undo() through TodoPageComponent
+store -> api : restoreTodo(id)
+api -> ctrl : POST /api/v1/todos/{id}/restore
+ctrl -> rest : Invoke with id
+rest -> repo : Find soft-deleted todo by id
+repo --> rest : Not found, purged or never deleted
+rest --> ctrl : Not-found condition
+ctrl --> api : 404 problem details (L2-015)
+api --> store : Rejected request with status 404
+note over store : UI treatment of a failed restore is TO SUPPLY
+@enduml

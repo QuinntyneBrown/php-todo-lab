@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Filter tasks
+
+Person(user, "User", "Single local user who narrows the list to active or done tasks")
+System(app, "php-todo-lab", "Single-screen to-do application for learning PHP coding practices")
+
+Rel(user, app, "Selects a status filter in")
+@enduml

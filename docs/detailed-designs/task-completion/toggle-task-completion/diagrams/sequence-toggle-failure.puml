@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Toggle task completion, failure and rollback
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+end box
+user -> item : Check or uncheck the checkbox (L2-009)
+item -> store : toggle(id, completed) through TodoPageComponent
+store -> store : Remember previous state, apply optimistic toggle, counts recompute (L2-010)
+store --> item : Checked state and strike-through update
+store -> api : updateTodo(id, completed)
+api -> ctrl : PATCH /api/v1/todos/{id}
+alt Network error or 5xx response
+  ctrl --> api : 5xx or no response
+  api --> store : Rejected request
+  store -> store : Revert the task to its previous state, counts revert (L2-010)
+  store --> item : Previous checked state restored
+  store -> toast : Set toast to "Couldn't update that task." (L2-010)
+  toast --> user : Error toast shown
+end
+@enduml

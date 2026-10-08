@@ -1,0 +1,58 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Theme and motion
+
+class "tokens.scss" as Tokens <<stylesheet>> {
+  light set on root
+  dark set under prefers-color-scheme dark
+  colour custom properties such as --paper, --ink, --sea, --danger
+  no manual theme toggle
+}
+
+class "Component stylesheets" as ComponentCss <<stylesheet>> {
+  colour tokens only, no colour literals
+  animate transform and opacity
+  plus background-size and stroke-dashoffset
+}
+
+class "Motion budget" as Budget <<constraint>> {
+  micro-interactions 120 to 200 ms
+  completion 500 ms or less
+  row enter and exit 250 ms or less
+  ease-out curves
+  nothing animates on load except the skeleton shimmer
+}
+
+class "Reduced-motion rules" as Reduced <<stylesheet>> {
+  prefers-reduced-motion reduce
+  transitions and animations disabled or opacity 100 ms or less
+  skeleton shimmer replaced by a static tone
+}
+
+class TodoItemComponent <<presentational>> {
+  row enter animation for a new task
+}
+
+class "Skeleton rows" as Skeleton {
+  shimmer animation
+  host component TO SUPPLY
+}
+
+ComponentCss --> Tokens : reads
+ComponentCss ..> Budget : conforms to
+TodoItemComponent --> ComponentCss : styled by
+Skeleton --> ComponentCss : styled by
+Reduced ..> TodoItemComponent : overrides enter animation
+Reduced ..> Skeleton : replaces shimmer
+@enduml

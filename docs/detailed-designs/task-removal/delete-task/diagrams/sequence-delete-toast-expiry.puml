@@ -1,0 +1,29 @@
+@startuml
+title UML sequence behaviour — Delete task, toast expiry
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+note over store : Task already removed and toast "Task deleted" shown with Undo (L2-015)
+store -> store : 6 s timer elapses without Undo (L2-015)
+store -> store : Clear the toast signal
+store --> toast : Toast dismissed
+toast --> user : Toast gone, the deletion stands (L2-015)
+@enduml

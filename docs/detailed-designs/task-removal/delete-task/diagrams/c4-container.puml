@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Delete task
+
+Person(user, "User", "Single user of the to-do app")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Single-screen UI served by ng serve on :4200 with an /api proxy")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "JSON API under /api/v1 served by php artisan serve on :8000")
+  ContainerDb(db, "MySQL database", "MySQL 8.4, utf8mb4", "Stores the todos table")
+}
+
+Rel(user, spa, "Deletes a task and presses Undo in", "Browser")
+Rel(spa, api, "Sends DELETE /api/v1/todos/{id} and POST /api/v1/todos/{id}/restore", "JSON over HTTP")
+Rel(api, db, "Reads and writes todos", "Eloquent")
+@enduml

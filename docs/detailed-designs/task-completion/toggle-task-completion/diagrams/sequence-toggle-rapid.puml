@@ -1,0 +1,53 @@
+@startuml
+title UML sequence behaviour — Toggle task completion, rapid toggling
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "UpdateTodo" as action
+end box
+user -> item : Check the task (first toggle)
+item -> store : toggle(id, true)
+store -> store : Apply optimistic state, enqueue write 1 for the task (L2-010)
+user -> item : Uncheck the task (second toggle)
+item -> store : toggle(id, false)
+store -> store : Apply optimistic state, enqueue write 2 behind write 1 (L2-010)
+store --> item : UI shows the latest state at once (L2-010)
+store -> api : updateTodo(id, completed true), write 1
+api -> ctrl : PATCH with completed true
+ctrl -> action : Invoke, completed_at set
+action --> ctrl : Todo
+ctrl --> api : 200 OK
+api --> store : Todo with completed true
+store -> store : Write 2 is pending, so keep the optimistic UI state
+store -> api : updateTodo(id, completed false), write 2 starts after write 1 settles
+api -> ctrl : PATCH with completed false
+ctrl -> action : Invoke, completed_at cleared
+action --> ctrl : Todo
+ctrl --> api : 200 OK
+api --> store : Todo with completed false
+store -> store : No write pending, merge server version
+note over store, action : Writes apply in order, so the final server state equals the final UI state (L2-010)
+@enduml

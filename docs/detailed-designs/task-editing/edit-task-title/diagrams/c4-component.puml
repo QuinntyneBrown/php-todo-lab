@@ -1,0 +1,34 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Edit task title
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Angular smart component", "Routes edit events to the store")
+  Component(item, "TodoItemComponent", "Angular presentational component", "Renders the title and the edit field")
+  Component(store, "TodoStore", "Signal store", "Holds editingId, applies optimistic title, rolls back")
+  Component(toast, "ToastComponent", "Angular presentational component", "Shows failure toasts")
+  Component(port, "TodoApi", "Abstract class (port)", "Contract for todo requests")
+  Component(http, "HttpTodoApi", "Adapter", "Sends the PATCH request through HttpClient")
+}
+Container_Boundary(api, "Laravel API") {
+  Component(ctrl, "TodoController", "Laravel controller", "Receives PATCH /api/v1/todos/{id}")
+  Component(req, "UpdateTodoRequest", "Form Request", "Validates title and rejects an empty body")
+  Component(action, "UpdateTodo", "Action", "Applies a partial update")
+  Component(repo, "EloquentTodoRepository", "TodoRepository implementation", "Loads and saves the Todo model")
+  Component(res, "TodoResource", "API Resource", "Serialises the updated todo")
+}
+ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
+
+Rel(item, page, "Emits edit events")
+Rel(page, store, "Calls begin, save, cancel")
+Rel(store, port, "Depends on")
+Rel(store, toast, "Supplies toast signal")
+Rel(http, port, "Implements")
+Rel(http, ctrl, "PATCH /api/v1/todos/{id}", "JSON over HTTP")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, action, "Invokes")
+Rel(action, repo, "Loads and saves through TodoRepository")
+Rel(ctrl, res, "Returns")
+Rel(repo, db, "Reads and writes", "Eloquent")
+@enduml

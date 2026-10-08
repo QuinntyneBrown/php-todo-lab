@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Clear completed tasks
+
+Person(user, "User", "Single user of the to-do app")
+System(app, "php-todo-lab", "Single-screen to-do app, local only, no authentication")
+
+Rel(user, app, "Clears completed tasks and undoes the clearing using")
+@enduml

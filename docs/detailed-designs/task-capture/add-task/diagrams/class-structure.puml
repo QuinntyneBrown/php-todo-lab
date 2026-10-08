@@ -1,0 +1,102 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Add a task
+
+package "Angular SPA" {
+  class TodoPageComponent <<smart>> {
+    +store: TodoStore
+  }
+  class TodoComposerComponent <<presentational>> {
+    +title: string
+    +errorMessage: string
+    +validate(title: string): boolean
+  }
+  class TodoStore <<providedIn root>> {
+    +todos: Signal<TodoView[]>
+    +filter: Signal<string>
+    +toast: Signal<ToastView>
+    +addTask(title: string): Promise<void>
+  }
+  abstract class TodoApi {
+    +create(title: string): Promise<Todo>
+  }
+  class HttpTodoApi {
+    +create(title: string): Promise<Todo>
+  }
+  class InMemoryTodoApi <<test fake>> {
+    +create(title: string): Promise<Todo>
+  }
+  class TodoView {
+    +id: string
+    +title: string
+    +pending: boolean
+  }
+}
+
+package "Laravel API" {
+  class TodoController {
+    +store(request: StoreTodoRequest, action: CreateTodo): TodoResource
+  }
+  class StoreTodoRequest {
+    +rules(): array
+  }
+  class CreateTodo {
+    +handle(title: string): Todo
+  }
+  interface TodoRepository {
+    +createWithinLimit(title: string): Todo
+  }
+  class EloquentTodoRepository {
+    +createWithinLimit(title: string): Todo
+  }
+  class InMemoryTodoRepository <<test fake>> {
+    +createWithinLimit(title: string): Todo
+  }
+  class Todo <<Eloquent>> {
+    +id: string
+    +title: string
+    +completed_at: CarbonImmutable
+    +completed: bool
+  }
+  class TodoResource {
+    +toArray(): array
+  }
+  class TodoLimitReached <<exception>> {
+    +code: todo_limit_reached
+  }
+}
+
+TodoPageComponent --> TodoStore : calls
+TodoPageComponent ..> TodoComposerComponent : binds
+TodoStore --> TodoApi : depends on
+TodoStore "1" o-- "*" TodoView : holds
+HttpTodoApi ..|> TodoApi
+InMemoryTodoApi ..|> TodoApi
+HttpTodoApi ..> TodoController : POST /api/v1/todos
+
+TodoController ..> StoreTodoRequest : validates with
+TodoController --> CreateTodo : calls
+TodoController ..> TodoResource : returns
+CreateTodo --> TodoRepository : depends on
+EloquentTodoRepository ..|> TodoRepository
+InMemoryTodoRepository ..|> TodoRepository
+EloquentTodoRepository --> Todo : creates
+EloquentTodoRepository ..> TodoLimitReached : throws at 500
+TodoResource ..> Todo : serialises
+
+note bottom of TodoRepository
+  Method, exception, and field names that the specs
+  do not fix are provisional (TO SUPPLY).
+end note
+@enduml

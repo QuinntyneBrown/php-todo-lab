@@ -1,0 +1,46 @@
+@startuml
+title UML sequence behaviour — Status parameter validation on the API
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+  participant "ListTodosRequest" as request
+  participant "Exception handler" as errs
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "ListTodos" as action
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+user -> controller : GET /api/v1/todos?status=value sent directly to the API
+controller -> request : Validate status against TodoStatus (default all) (L2-006)
+alt status is all, active, or completed
+  request --> controller : Valid
+  controller -> action : Handle with the TodoStatus
+  action -> repo : List non-deleted todos for the status
+  repo -> db : Select rows, with the active or completed scope when requested
+  db --> repo : Rows
+  repo --> action : Todos
+  action --> controller : Todos and counts
+  controller --> user : 200 with data and meta (L2-006)
+else status is bogus
+  request --> controller : Validation failed
+  controller -> errs : Render validation failure
+  errs --> user : 422 problem details with errors.status (L2-006)
+end
+@enduml

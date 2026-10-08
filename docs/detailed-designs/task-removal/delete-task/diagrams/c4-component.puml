@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Delete task
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Angular smart component", "Routes delete and undo events, handles Ctrl or Cmd+Z")
+  Component(item, "TodoItemComponent", "Angular presentational component", "Renders the delete control")
+  Component(list, "TodoListComponent", "Angular presentational component", "Renders rows and the row exit")
+  Component(toastc, "ToastComponent", "Angular presentational component", "Renders the toast and the Undo button")
+  Component(store, "TodoStore", "Signal store", "Removes the row, owns the toast and its 6 s timer, restores")
+  Component(port, "TodoApi", "Abstract class (port)", "Contract for todo requests")
+  Component(http, "HttpTodoApi", "Adapter", "Sends DELETE and restore requests through HttpClient")
+}
+Container_Boundary(api, "Laravel API") {
+  Component(ctrl, "TodoController", "Laravel controller", "Receives DELETE and restore requests")
+  Component(del, "DeleteTodo", "Action", "Soft-deletes a todo")
+  Component(rest, "RestoreTodo", "Action", "Restores a soft-deleted todo")
+  Component(repo, "EloquentTodoRepository", "TodoRepository implementation", "Soft-deletes and restores the Todo model")
+  Component(res, "TodoResource", "API Resource", "Serialises the restored todo")
+}
+ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
+
+Rel(item, list, "Emits deleted")
+Rel(list, page, "Forwards deleted")
+Rel(toastc, page, "Emits undone")
+Rel(page, store, "Calls delete and undo")
+Rel(store, port, "Depends on")
+Rel(store, toastc, "Supplies toast signal")
+Rel(http, port, "Implements")
+Rel(http, ctrl, "DELETE /api/v1/todos/{id}, POST /api/v1/todos/{id}/restore", "JSON over HTTP")
+Rel(ctrl, del, "Invokes")
+Rel(ctrl, rest, "Invokes")
+Rel(del, repo, "Soft-deletes through TodoRepository")
+Rel(rest, repo, "Restores through TodoRepository")
+Rel(ctrl, res, "Returns restored todo")
+Rel(repo, db, "Reads and writes", "Eloquent")
+@enduml

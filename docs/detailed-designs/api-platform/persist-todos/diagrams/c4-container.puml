@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Persist todos
+
+Person(user, "User", "Single local user of the to-do app")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular", "Single-screen UI served by ng serve on :4200 with an /api proxy")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "JSON API on :8000 that owns the migration, the model, and all transactions")
+  ContainerDb(db, "MySQL database", "MySQL 8.4, utf8mb4", "todos table created by the create_todos_table migration")
+}
+
+Rel(user, spa, "Uses", "HTTP")
+Rel(spa, api, "Calls /api/v1 endpoints", "JSON/HTTPS")
+Rel(api, db, "Reads and writes in UTC, inside transactions where required", "Eloquent")
+@enduml

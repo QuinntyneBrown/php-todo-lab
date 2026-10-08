@@ -1,0 +1,81 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Handle connectivity failures
+
+enum FailureKind {
+  Network
+  Server
+  Client
+}
+
+class ResiliencePolicy <<placement in code to supply>> {
+  +maxReadRetries: 2
+  +readRetryDelays: 300 ms, 900 ms
+  +requestTimeout: 10 seconds
+  +retriesWrites: false
+  +isRetryable(kind: FailureKind): boolean
+}
+
+abstract class TodoApi {
+  +list(): Promise<TodoList>
+  +create(title: string): Promise<Todo>
+  +update(id: string, changes: TodoChanges): Promise<Todo>
+  +delete(id: string): Promise<void>
+  +restore(id: string): Promise<Todo>
+}
+
+class HttpTodoApi {
+  -http: HttpClient
+  -policy: ResiliencePolicy
+  +list(): Promise<TodoList>
+  +create(title: string): Promise<Todo>
+  +update(id: string, changes: TodoChanges): Promise<Todo>
+  +delete(id: string): Promise<void>
+  +restore(id: string): Promise<Todo>
+}
+
+class InMemoryTodoApi <<test fake>> {
+  +failOnDemand: boolean
+}
+
+class TodoStore <<providedIn root>> {
+  +todos: WritableSignal<Todo[]>
+  +toast: WritableSignal<ToastState or null>
+  +rollbackAdd(): void
+  +rollbackToggle(id: string): void
+  +rollbackEdit(id: string): void
+  +rollbackDelete(id: string): void
+}
+
+class TodoPageComponent <<smart component>> {
+  +isOffline: Signal<boolean>
+}
+
+class OfflineBanner <<class name to supply>> {
+  +message: "You're offline. Changes will fail until you reconnect."
+}
+
+class ToastComponent <<presentational>> {
+  +toast: InputSignal<ToastState>
+}
+
+TodoApi <|.. HttpTodoApi
+TodoApi <|.. InMemoryTodoApi
+HttpTodoApi --> ResiliencePolicy : applies
+ResiliencePolicy ..> FailureKind : classifies
+TodoStore --> TodoApi : depends on
+TodoPageComponent --> TodoStore : reads
+TodoPageComponent *-- OfflineBanner
+TodoPageComponent *-- ToastComponent
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Responsive layout
+
+Person(user, "User", "Uses the app on touch and pointer devices")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Renders the layout and evaluates breakpoint, hover, and safe-area rules in the browser")
+}
+
+Rel(user, spa, "Views, rotates, taps, and hovers", "Browser")
+@enduml

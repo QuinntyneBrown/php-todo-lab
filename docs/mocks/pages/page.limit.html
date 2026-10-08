@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tasks · 500-task limit</title>
+<meta name="description" content="Limit reached; typed text is kept">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
+<script src="../app.js"></script>
+</head>
+<body>
+<main class="app">
+<header class="head">
+  <div>
+    <h1 class="head__day" data-today="weekday">Wednesday</h1>
+    <p class="head__date" data-today="date">7 October</p>
+  </div>
+  <div class="progress">
+    <div class="progress__text">
+      <span class="progress__num">312</span>
+      <span class="progress__label">left</span>
+    </div>
+    <div class="ring-wrap" aria-hidden="true">
+      <svg class="ring" viewBox="0 0 48 48"><circle class="ring__track" cx="24" cy="24" r="20"/><circle class="ring__fill" cx="24" cy="24" r="20" data-progress="0.376"/></svg>
+      <svg class="ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg>
+    </div>
+  </div>
+</header>
+
+<section class="card" aria-label="Tasks">
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="newTask">New task</label>
+    <input class="composer__input" id="newTask" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Plan the team offsite" aria-invalid="true" aria-describedby="newTaskError">
+    <span class="composer__count" hidden>21/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="newTaskError" role="alert">You have 500 tasks. Finish or delete some to add more.</p>
+<div class="toolbar">
+  <div class="seg" role="group" aria-label="Show tasks" data-selected="all">
+    <span class="seg__pill" aria-hidden="true"></span>
+    <button class="seg__btn" type="button" aria-pressed="true" aria-label="All, 500">All <span class="seg__n">500</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Active, 312">Active <span class="seg__n">312</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Done, 188">Done <span class="seg__n">188</span></button>
+  </div>
+  <button class="link-btn" type="button" aria-disabled="false">Clear completed</button>
+</div>
+<ul class="list">
+<li class="item is-done">
+  <label class="check"><input class="check__input" type="checkbox" checked aria-label="Renew passport"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Renew passport">Renew passport</button></div>
+  <button class="del" type="button" aria-label="Delete Renew passport"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Draft the Q4 budget outline"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Draft the Q4 budget outline">Draft the Q4 budget outline</button></div>
+  <button class="del" type="button" aria-label="Delete Draft the Q4 budget outline"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+<li class="item is-done">
+  <label class="check"><input class="check__input" type="checkbox" checked aria-label="Water the plants"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Water the plants">Water the plants</button></div>
+  <button class="del" type="button" aria-label="Delete Water the plants"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Reply to Priya about the venue"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Reply to Priya about the venue">Reply to Priya about the venue</button></div>
+  <button class="del" type="button" aria-label="Delete Reply to Priya about the venue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Book dentist appointment"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div>
+  <button class="del" type="button" aria-label="Delete Book dentist appointment"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</section>
+<aside class="mock" aria-label="Mock notes">
+  <p><strong>Mock</strong> · L2-003.2 · <a href="../index.html">All mocks</a></p>
+  <p>Counts reflect 500 tasks; the mock shows the first five rows only. The typed title stays in the composer.</p>
+</aside>
+</main>
+<div class="sr-only" aria-live="polite"></div>
+</body>
+</html>

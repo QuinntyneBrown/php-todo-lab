@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Accessible interface
+
+Person(user, "User", "Uses the app with a keyboard, a screen reader, zoom, or other assistive technology")
+System(app, "php-todo-lab", "Single-screen to-do app that meets WCAG 2.2 AA")
+
+Rel(user, app, "Operates and perceives tasks using", "Browser and assistive technology")
+@enduml

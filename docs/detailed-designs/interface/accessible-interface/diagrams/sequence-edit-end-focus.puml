@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Return focus to the row title when edit mode ends
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "TodoPageComponent" as page
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+user -> item : Activate the title (click, or Enter on the focused title)
+item -> page : Edit started
+page -> store : Set editingId
+store --> page : editingId set
+item --> user : Text field with the title selected and focused
+alt user presses Enter
+  user -> item : Enter
+  item -> page : editEnded output (save)
+  page -> store : Save title and clear editingId
+  store --> page : editingId cleared
+else user presses Escape
+  user -> item : Escape
+  item -> page : editEnded output (cancel)
+  page -> store : Clear editingId without saving
+  store --> page : editingId cleared
+end
+item -> item : Replace the text field with the title element
+item --> user : Focus returns to the row title (L2-031)
+note over item
+  Ending edit mode by blur leaves focus where the user moved it.
+  L2-031 requires the return of focus for Enter and Escape only.
+end note
+@enduml

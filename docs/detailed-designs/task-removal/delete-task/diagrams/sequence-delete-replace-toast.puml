@@ -1,0 +1,41 @@
+@startuml
+title UML sequence behaviour — Delete a second task while a toast is visible
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+end box
+note over store : Task A deleted earlier, toast "Task deleted" shows Undo for task A
+user -> item : Click the delete control on task B (L2-015)
+item -> store : delete(idB) through TodoPageComponent
+store -> store : Remove row B, keep todo B and its position (L2-015)
+store -> store : Replace the toast value, Undo target is now task B only (L2-015)
+store --> toast : Toast updated to the latest deletion
+note over store : Timer restart on replacement is TO SUPPLY
+store -> api : deleteTodo(idB)
+api -> ctrl : DELETE /api/v1/todos/{idB}
+ctrl --> api : 204 No Content
+api --> store : Delete confirmed
+note over store, toast : Task A can no longer be restored from the UI, its deletion stands (L2-015)
+@enduml

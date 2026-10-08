@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — List tasks
+
+Person(user, "User", "Single local user who reviews tasks")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Loads the list and shows skeleton, empty, error, and loaded states. Served by ng serve on :4200 with an /api proxy")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "Returns non-deleted todos newest first with active and completed counts. Served by php artisan serve on :8000")
+  ContainerDb(db, "MySQL database", "MySQL 8.4, utf8mb4", "Stores the todos table")
+}
+Rel(user, spa, "Opens the page", "HTTP")
+Rel(spa, api, "Sends GET /api/v1/todos", "JSON/HTTP")
+Rel(api, db, "Reads todos and counts", "Eloquent")
+@enduml

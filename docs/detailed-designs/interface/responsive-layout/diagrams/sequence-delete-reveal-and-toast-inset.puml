@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Reveal delete control by hover capability and place the toast above the safe-area inset
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "Component stylesheets and tokens.scss" as css
+  participant "TodoItemComponent" as item
+  participant "TodoPageComponent" as page
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+css -> item : Apply 44 x 44 CSS px hit area to the delete control (L2-028)
+alt device reports hover: hover
+  css -> item : Hide the delete control until row hover or focus-within (L2-028)
+  user -> item : Hover the row or move keyboard focus into it
+  item --> user : Delete control revealed (L2-028)
+else device reports hover: none
+  css -> item : Keep the delete control always visible (L2-028)
+  item --> user : Delete control visible without hover (L2-028)
+end
+user -> item : Activate the delete control
+item -> page : deleted output
+page -> store : Delete task (behaviour owned by the delete feature)
+store --> page : toast signal set to "Task deleted" with Undo
+page -> toast : toast input
+alt device has a bottom safe-area inset
+  css -> toast : Offset bottom by env(safe-area-inset-bottom) (L2-028)
+else no inset
+  css -> toast : Inset resolves to 0 px, base bottom offset only (L2-028)
+end
+toast --> user : Toast fully visible above the inset
+@enduml

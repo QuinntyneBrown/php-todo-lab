@@ -1,0 +1,100 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Delete task
+
+package "Angular SPA" {
+  class TodoItemComponent {
+    +todo: InputSignal<TodoDto>
+    +deleted: OutputEmitterRef<void>
+  }
+  class TodoListComponent {
+    +todos: InputSignal<TodoDto[]>
+    +deleted: OutputEmitterRef<string>
+  }
+  class ToastComponent {
+    +toast: InputSignal<ToastState | null>
+    +undone: OutputEmitterRef<void>
+  }
+  class TodoPageComponent {
+    -store: TodoStore
+    +onDeleted(id: string): void
+    +onUndo(): void
+  }
+  class TodoStore {
+    +todos: WritableSignal<TodoDto[]>
+    +toast: WritableSignal<ToastState | null>
+    +delete(id: string): void
+    +undo(): void
+  }
+  class ToastState {
+    +message: string
+    +undoTarget: string | null
+  }
+  abstract class TodoApi {
+    +deleteTodo(id: string): Promise<void>
+    +restoreTodo(id: string): Promise<TodoDto>
+  }
+  class HttpTodoApi
+  class InMemoryTodoApi
+  class TodoDto
+}
+
+package "Laravel API" {
+  class TodoController {
+    +destroy(id: string): Response
+    +restore(id: string): TodoResource
+  }
+  class DeleteTodo {
+    +__invoke(id: string): void
+  }
+  class RestoreTodo {
+    +__invoke(id: string): Todo
+  }
+  interface TodoRepository {
+    +find(id: string): Todo
+    +findDeleted(id: string): Todo
+    +delete(todo: Todo): void
+    +restore(todo: Todo): Todo
+  }
+  class EloquentTodoRepository
+  class InMemoryTodoRepository
+  class Todo {
+    +id: string
+    +deleted_at: CarbonImmutable | null
+  }
+  class TodoResource
+}
+
+TodoItemComponent ..> TodoDto : reads
+TodoListComponent *-- TodoItemComponent : renders rows
+TodoPageComponent --> TodoStore : calls
+TodoPageComponent ..> TodoListComponent : handles deleted
+TodoPageComponent ..> ToastComponent : handles undone
+TodoStore --> TodoApi : depends on
+TodoStore "1" o-- "*" TodoDto : todos
+TodoStore "1" o-- "0..1" ToastState : toast
+TodoApi <|-- HttpTodoApi
+TodoApi <|-- InMemoryTodoApi
+HttpTodoApi ..> TodoController : DELETE and POST restore
+
+TodoController --> DeleteTodo : invokes
+TodoController --> RestoreTodo : invokes
+TodoController ..> TodoResource : returns
+DeleteTodo --> TodoRepository : depends on
+RestoreTodo --> TodoRepository : depends on
+TodoRepository <|.. EloquentTodoRepository
+TodoRepository <|.. InMemoryTodoRepository
+EloquentTodoRepository ..> Todo : persists
+TodoResource ..> Todo : serialises
+@enduml

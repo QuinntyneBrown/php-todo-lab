@@ -1,0 +1,25 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Keyboard operation
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Angular smart component", "Hosts the document-level keydown handling for the / shortcut and calls TodoStore")
+  Component(composer, "TodoComposerComponent", "Presentational", "Text field and Add task button. Enter on valid text emits the add output")
+  Component(filter, "TodoFilterComponent", "Presentational", "Filter tabs, native buttons in tab order")
+  Component(clear, "Clear completed control", "Native button", "Toolbar button. Host component is TO SUPPLY")
+  Component(list, "TodoListComponent", "Presentational", "Renders rows in list order")
+  Component(item, "TodoItemComponent", "Presentational", "Checkbox, title, delete control. Enter edits and Escape cancels")
+  Component(store, "TodoStore", "Injectable, providedIn root", "Applies add, toggle, edit, and delete")
+}
+
+Rel(page, composer, "Renders and focuses on /")
+Rel(page, filter, "Renders")
+Rel(page, clear, "Renders")
+Rel(page, list, "Renders")
+Rel(list, item, "Renders one per task")
+Rel(composer, page, "Emits add through output()")
+Rel(item, list, "Emits toggle, edit, delete through output()")
+Rel(list, page, "Re-emits item outputs")
+Rel(page, store, "Calls")
+@enduml

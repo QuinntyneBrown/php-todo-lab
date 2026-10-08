@@ -1,0 +1,32 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Accessible interface
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Angular smart component", "Renders the main landmark, hosts the polite live region, and decides the focus target after a keyboard delete")
+  Component(live, "Polite live region", "aria-live polite element, class name TO SUPPLY", "Announces task actions to assistive technology")
+  Component(header, "TodoHeaderComponent", "Angular presentational component", "Renders the single h1 with the date")
+  Component(composer, "TodoComposerComponent", "Angular presentational component", "Renders the input labelled New task")
+  Component(filter, "TodoFilterComponent", "Angular presentational component", "Renders a role group of buttons with aria-pressed and counts in names")
+  Component(list, "TodoListComponent", "Angular presentational component", "Renders the ul with li items")
+  Component(item, "TodoItemComponent", "Angular presentational component", "Renders the native checkbox, the title, and labelled icon buttons")
+  Component(toast, "ToastComponent", "Angular presentational component", "Renders role alert or role status and reports focus-within")
+  Component(store, "TodoStore", "Angular service, Signals", "Holds editingId and the toast signal, and applies task actions")
+  Component(strings, "UI_STRINGS", "TypeScript constants in ui-strings.ts", "Holds announcement and label strings")
+  Component(tokens, "tokens.scss", "SCSS custom properties", "Holds colour tokens that meet contrast and the focus ring")
+}
+
+Rel(page, header, "Hosts")
+Rel(page, composer, "Hosts")
+Rel(page, filter, "Hosts")
+Rel(page, list, "Hosts")
+Rel(page, toast, "Hosts")
+Rel(page, live, "Writes announcement text to")
+Rel(list, item, "Renders one per task")
+Rel(page, store, "Calls actions and reads signals")
+Rel(page, strings, "Reads announcement text from")
+Rel(item, strings, "Reads aria-label text from")
+Rel(item, tokens, "Reads focus ring and colour tokens from")
+Rel(toast, page, "Emits focus-within changes to")
+@enduml

@@ -1,0 +1,35 @@
+@startuml
+title UML sequence behaviour — Unhandled exception returns 500 problem details
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "HttpTodoApi" as client
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "routes/api.php" as routes
+  participant "TodoController" as ctrl
+  participant "Exception rendering (bootstrap/app.php)" as errors
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "Action class" as action
+end box
+client -> routes : Any /api/v1 request
+routes -> ctrl : Dispatch to the controller
+ctrl -> action : Invoke the Action
+action --> errors : Unhandled exception escapes
+errors -> errors : Treat every /api request as a JSON request so the default HTML page is bypassed (L2-020 criterion 3)
+errors -> errors : Build problem details with status 500 and a detail message (L2-020)
+errors --> client : 500 application/problem+json
+@enduml

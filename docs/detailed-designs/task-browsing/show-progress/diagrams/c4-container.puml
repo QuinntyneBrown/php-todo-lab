@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Show progress
+
+Person(user, "User", "Single local user who checks how many tasks remain")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Computes counts and progress from the task signal and renders the header ring. Served by ng serve on :4200 with an /api proxy")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "Supplies the todos that fill the task signal. Served by php artisan serve on :8000")
+  ContainerDb(db, "MySQL database", "MySQL 8.4, utf8mb4", "Stores the todos table")
+}
+Rel(user, spa, "Reads the header and filter counts", "HTTP")
+Rel(spa, api, "Loads todos once, then derives counts locally", "JSON/HTTP")
+Rel(api, db, "Reads todos", "Eloquent")
+@enduml

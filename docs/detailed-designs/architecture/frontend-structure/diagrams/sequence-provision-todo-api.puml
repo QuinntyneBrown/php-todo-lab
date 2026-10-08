@@ -1,0 +1,50 @@
+@startuml
+title UML sequence behaviour — Provision TodoApi at startup and in tests
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "Angular bootstrap" as boot
+  participant "Application config" as cfg
+  participant "TodoApi (abstract class token)" as token
+  participant "HttpTodoApi" as http
+  participant "InMemoryTodoApi" as fake
+  participant "TodoStore" as store
+  participant "Test setup" as test
+end box
+== Application startup ==
+user -> boot : Open the app at /
+boot -> cfg : Read providers
+cfg --> boot : Zoneless change detection (L2-039)
+cfg --> boot : TodoApi provided with HttpTodoApi (L2-048)
+boot -> page : Create TodoPageComponent for route /
+page -> store : inject() TodoStore, created on first use (L2-047)
+store -> token : inject() abstract TodoApi (L2-048)
+token --> store : HttpTodoApi instance
+note over store, http
+  Route of the httpResource list read through the
+  TodoApi port: TO SUPPLY
+end note
+== Test configuration ==
+test -> token : Provide InMemoryTodoApi for TodoApi (L2-048)
+test -> store : inject() TodoStore
+store -> token : inject() abstract TodoApi (L2-048)
+token --> store : InMemoryTodoApi instance
+store -> fake : Call TodoApi operations without HttpTestingController (L2-048)
+fake --> store : In-memory results typed by core/api/models (L2-048)
+@enduml

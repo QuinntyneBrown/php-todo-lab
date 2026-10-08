@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Handle connectivity failures
+
+Person(user, "User", "Uses the app on a connection that can drop or stall")
+System(app, "php-todo-lab", "Single-screen to-do app that retries reads, rolls back failed writes, and shows an offline banner")
+
+Rel(user, app, "Manages tasks using", "Browser")
+@enduml

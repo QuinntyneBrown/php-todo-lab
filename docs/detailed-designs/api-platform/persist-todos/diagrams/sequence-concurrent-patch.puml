@@ -1,0 +1,45 @@
+@startuml
+title UML sequence behaviour — Two simultaneous PATCH requests, last write wins
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "HttpTodoApi request A" as a
+  participant "HttpTodoApi request B" as b
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "UpdateTodo" as action
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+a -> ctrl : PATCH /api/v1/todos/{id} with body A
+b -> ctrl : PATCH /api/v1/todos/{id} with body B at the same time
+ctrl -> action : Invoke UpdateTodo for A and for B
+action -> repo : Update the todo for A and for B
+repo -> db : A sends one UPDATE statement for its changed columns and updated_at
+repo -> db : B sends one UPDATE statement for its changed columns and updated_at
+note right of db : InnoDB row lock serialises the two statements (L2-043 criterion 2)
+db --> repo : A applied in full
+db --> repo : B applied in full after A
+repo --> action : Updated Todo for A and for B
+action --> ctrl : Updated Todo for A and for B
+ctrl --> a : 200 with the todo as saved by A
+ctrl --> b : 200 with the todo as saved by B
+note over db : Final state equals the last statement applied, never a partial row (L2-043 criterion 2)
+@enduml

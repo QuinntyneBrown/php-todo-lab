@@ -1,0 +1,74 @@
+@startuml
+title UML sequence behaviour — Edit task title and save
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "TodoPageComponent" as page
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+  participant "UpdateTodoRequest" as req
+  participant "TodoResource" as res
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "UpdateTodo" as action
+  participant "Todo" as todo
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+user -> item : Click the title, or focus it and press Enter (L2-012)
+item -> page : editStarted
+page -> store : beginEdit(id)
+opt Another task is already in edit mode
+  store -> store : Previous editor saves, or cancels when unchanged (L2-012)
+end
+store -> store : Set editingId (L2-012)
+store --> item : editing is true
+item --> user : Text field with current title selected and focused (L2-012)
+user -> item : Type a new title and press Enter, or blur the field (L2-012)
+item -> item : Trim the text and compare with the stored title (L2-013)
+item -> page : titleSaved(title)
+page -> store : saveTitle(id, title)
+store -> store : Replace the title in the todos signal and clear editingId (L2-012)
+store --> item : Updated title shown
+store -> api : updateTodo(id, title)
+api -> ctrl : PATCH /api/v1/todos/{id} with title
+ctrl -> req : Validate title (more than 200 characters gives 422, L2-013)
+req --> ctrl : Valid, body is not empty (L2-014)
+ctrl -> action : Invoke with id and validated fields
+action -> repo : Find non-deleted todo by id
+repo -> db : SELECT
+db --> repo : Row
+repo --> action : Todo
+action -> todo : Set title only, completed is unchanged (L2-014)
+action -> repo : Save todo
+repo -> db : UPDATE
+db --> repo : Saved
+repo --> action : Todo
+action --> ctrl : Todo
+ctrl -> res : Serialise todo
+res --> ctrl : data
+ctrl --> api : 200 OK
+api --> store : Updated todo
+store -> store : Merge server version into the todos signal
+@enduml

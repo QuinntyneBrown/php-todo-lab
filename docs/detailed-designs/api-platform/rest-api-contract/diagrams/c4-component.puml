@@ -1,0 +1,22 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — REST API contract
+
+Container_Boundary(api, "Laravel API") {
+  Component(routes, "routes/api.php", "Laravel routing", "Declares the seven endpoints under the /api/v1 prefix")
+  Component(requests, "Form Requests", "ListTodosRequest, StoreTodoRequest, UpdateTodoRequest, RestoreTodosRequest", "Validate input before the controller runs")
+  Component(ctrl, "TodoController", "Laravel controller", "Validates through a Form Request, calls one Action, returns a Resource")
+  Component(actions, "Action classes", "PHP classes", "Run one use case each and return todos")
+  Component(resource, "TodoResource and TodoCollection", "Laravel API Resources", "Serialise todos with camelCase keys inside data")
+  Component(errors, "Exception rendering", "bootstrap/app.php", "Renders every error as application/problem+json")
+}
+
+Rel(routes, requests, "Dispatches matched request to")
+Rel(requests, ctrl, "Passes validated input to")
+Rel(ctrl, actions, "Calls")
+Rel(ctrl, resource, "Returns")
+Rel(routes, errors, "Reports 404 and 405 to")
+Rel(requests, errors, "Reports validation failure to")
+Rel(actions, errors, "Reports unhandled exceptions to")
+@enduml

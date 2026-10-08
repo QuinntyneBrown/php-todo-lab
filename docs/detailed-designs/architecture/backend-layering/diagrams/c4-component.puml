@@ -1,0 +1,31 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Backend layering
+
+Container_Boundary(api, "Laravel API") {
+  Component(routes, "routes/api.php", "Laravel routing", "Maps endpoints under /api/v1 to controller methods")
+  Component(requests, "Form Requests", "ListTodosRequest, StoreTodoRequest, UpdateTodoRequest, RestoreTodosRequest", "Validate input")
+  Component(ctrl, "TodoController", "Laravel controller", "Thin: validates through a Form Request, calls one Action, returns a Resource, at most 10 lines per method")
+  Component(actions, "Action classes", "ListTodos, CreateTodo, UpdateTodo, DeleteTodo, RestoreTodo, ClearCompletedTodos, RestoreTodos", "One use case each with one public method")
+  Component(status, "TodoStatus", "PHP backed enum", "Cases All, Active, Completed")
+  Component(repoi, "TodoRepository", "PHP interface", "Persistence port that Actions depend on")
+  Component(repo, "EloquentTodoRepository", "Eloquent repository", "Implements the port and maps TodoStatus to model scopes")
+  Component(model, "Todo", "Eloquent model", "HasUlids, SoftDeletes, HasFactory, scopes, casts, completed accessor")
+  Component(resource, "TodoResource and TodoCollection", "Laravel API Resources", "Serialise todos")
+  Component(provider, "AppServiceProvider", "Laravel service provider", "Binds TodoRepository to EloquentTodoRepository")
+}
+ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
+
+Rel(routes, requests, "Dispatches to")
+Rel(requests, ctrl, "Passes validated input to")
+Rel(requests, status, "Validates status against")
+Rel(ctrl, actions, "Calls one")
+Rel(ctrl, resource, "Returns")
+Rel(actions, repoi, "Depend on")
+Rel(actions, status, "Pass to the repository")
+Rel(repo, repoi, "Implements")
+Rel(provider, repo, "Binds interface to")
+Rel(repo, model, "Queries through scopes")
+Rel(model, db, "Reads and writes", "SQL")
+@enduml

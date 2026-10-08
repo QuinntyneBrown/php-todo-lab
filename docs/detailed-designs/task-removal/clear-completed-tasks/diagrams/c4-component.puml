@@ -1,0 +1,38 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Clear completed tasks
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Angular smart component", "Handles the Clear completed click and the Undo event")
+  Component(list, "TodoListComponent", "Angular presentational component", "Renders the visible rows")
+  Component(empty, "TodoEmptyStateComponent", "Angular presentational component", "Renders the empty state for the filter")
+  Component(toastc, "ToastComponent", "Angular presentational component", "Renders the toast and the Undo button")
+  Component(store, "TodoStore", "Signal store", "Removes completed rows, owns the toast, restores by ids")
+  Component(port, "TodoApi", "Abstract class (port)", "Contract for todo requests")
+  Component(http, "HttpTodoApi", "Adapter", "Sends the bulk requests through HttpClient")
+}
+Container_Boundary(api, "Laravel API") {
+  Component(ctrl, "TodoController", "Laravel controller", "Receives the bulk requests")
+  Component(req, "RestoreTodosRequest", "Form Request", "Validates the ids to restore")
+  Component(clear, "ClearCompletedTodos", "Action", "Soft-deletes all completed todos")
+  Component(restore, "RestoreTodos", "Action", "Restores todos by ids")
+  Component(repo, "EloquentTodoRepository", "TodoRepository implementation", "Runs each bulk operation in one transaction")
+}
+ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
+
+Rel(page, store, "Calls clearCompleted and undo")
+Rel(store, list, "Supplies visibleTodos")
+Rel(store, empty, "Supplies filter and counts")
+Rel(store, toastc, "Supplies toast signal")
+Rel(store, port, "Depends on")
+Rel(toastc, page, "Emits undone")
+Rel(http, port, "Implements")
+Rel(http, ctrl, "DELETE /api/v1/todos/completed, POST /api/v1/todos/restore", "JSON over HTTP")
+Rel(ctrl, req, "Validates restore with")
+Rel(ctrl, clear, "Invokes")
+Rel(ctrl, restore, "Invokes")
+Rel(clear, repo, "Soft-deletes through TodoRepository")
+Rel(restore, repo, "Restores through TodoRepository")
+Rel(repo, db, "Reads and writes in one transaction", "Eloquent")
+@enduml

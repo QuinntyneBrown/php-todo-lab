@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Purge old soft-deleted tasks
+
+Person(user, "User", "Single local user of the to-do app")
+System(app, "php-todo-lab", "Single-screen to-do app that soft-deletes tasks and purges them after 24 hours")
+
+Rel(user, app, "Deletes tasks using")
+@enduml

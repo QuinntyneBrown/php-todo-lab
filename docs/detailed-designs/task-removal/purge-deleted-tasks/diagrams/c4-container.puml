@@ -1,0 +1,16 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Purge old soft-deleted tasks
+
+Person(user, "User", "Single local user of the to-do app")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular", "Single-screen UI served by ng serve on :4200 with an /api proxy")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "JSON API on :8000 and the Laravel scheduler that runs todos:purge-deleted hourly")
+  ContainerDb(db, "MySQL database", "MySQL 8.4, utf8mb4", "Stores the todos table including soft-deleted rows")
+}
+
+Rel(user, spa, "Deletes tasks using", "HTTP")
+Rel(spa, api, "Soft-deletes tasks via", "JSON/HTTPS")
+Rel(api, db, "Reads and writes todos, purges rows deleted over 24 hours ago", "Eloquent")
+@enduml

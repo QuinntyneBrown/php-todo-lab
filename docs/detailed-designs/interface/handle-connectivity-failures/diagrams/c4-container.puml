@@ -1,0 +1,14 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Handle connectivity failures
+
+Person(user, "User", "Uses the app on an unreliable connection")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Applies timeouts, read retries, write rollback, and the offline banner")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "Serves /api/v1/todos requests that the SPA can abort, retry, or lose")
+}
+
+Rel(user, spa, "Uses", "Browser")
+Rel(spa, api, "Sends requests to", "JSON/HTTP")
+@enduml

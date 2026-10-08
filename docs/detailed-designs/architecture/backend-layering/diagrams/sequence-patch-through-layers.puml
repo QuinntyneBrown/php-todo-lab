@@ -1,0 +1,56 @@
+@startuml
+title UML sequence behaviour — PATCH /todos/{id} flowing through the layers
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "HttpTodoApi" as client
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "routes/api.php" as routes
+  participant "UpdateTodoRequest" as req
+  participant "TodoController" as ctrl
+  participant "TodoResource" as res
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "UpdateTodo" as action
+  participant "Todo" as model
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+client -> routes : PATCH /api/v1/todos/{id}
+routes -> req : Resolve the Form Request for the route
+req -> req : Validate input, no validation in the controller (L2-044 criterion 1)
+req -> ctrl : Call the controller method with validated data
+ctrl -> action : Call UpdateTodo once, no business logic and no query calls (L2-044 criterion 1)
+action -> repo : Find the todo through the TodoRepository interface bound by AppServiceProvider (L2-044 criteria 2 and 3)
+repo -> model : Query Todo, soft-deleted rows excluded by SoftDeletes (L2-045 criterion 1)
+model -> db : SELECT by id
+db --> model : Row
+model --> repo : Todo with completed_at cast to immutable_datetime (L2-045 criterion 3)
+repo --> action : Todo
+action -> action : Apply the requested changes to the todo
+action -> repo : Save the todo
+repo -> model : save()
+model -> db : UPDATE changed columns
+db --> model : Saved
+model --> repo : Todo
+repo --> action : Todo
+action --> ctrl : Todo
+ctrl -> res : Wrap the todo in TodoResource
+res --> ctrl : Resource array
+ctrl --> client : 200 JSON response
+@enduml

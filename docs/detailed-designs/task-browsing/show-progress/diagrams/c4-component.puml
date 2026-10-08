@@ -1,0 +1,20 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Show progress
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Smart component", "Passes counts and progress to the header and filter, feeds the live region")
+  Component(header, "TodoHeaderComponent", "Presentational component", "Shows the date, the progress ring, and the n left or All done label")
+  Component(filter, "TodoFilterComponent", "Presentational component", "Shows All, Active, and Done with their counts")
+  Component(live, "Polite live region", "Live region, class TO SUPPLY", "Announces count changes to assistive technology")
+  Component(store, "TodoStore", "Signal store", "Holds the todos signal and the computed counts and progress")
+  Component(strings, "UI_STRINGS", "ui-strings.ts", "Typed constants for the n left and All done copy")
+}
+
+Rel(page, store, "Reads activeCount, completedCount, progress from")
+Rel(page, header, "Binds counts and progress")
+Rel(page, filter, "Binds counts")
+Rel(page, live, "Writes the announcement to")
+Rel(header, strings, "Reads copy from")
+@enduml

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tasks · Toolbar states</title>
+<meta name="description" content="Filter pill positions, counts and Clear completed">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
+<script src="../app.js"></script>
+</head>
+<body>
+<main class="app app--wide">
+<header class="page-head">
+  <h1>Toolbar states</h1>
+  <p>A segmented control with live counts, and Clear completed. The white pill slides to the selected filter in 220 ms. Under 576 px the control spans the full width and the counts hide (they stay in the accessible names).</p>
+</header>
+<h2 class="section-title">Filters</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card is-frozen">
+<div class="toolbar">
+  <div class="seg" role="group" aria-label="Show tasks" data-selected="all">
+    <span class="seg__pill" aria-hidden="true"></span>
+    <button class="seg__btn" type="button" aria-pressed="true" aria-label="All, 5">All <span class="seg__n">5</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="seg__n">3</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="seg__n">2</span></button>
+  </div>
+  <button class="link-btn" type="button" aria-disabled="false">Clear completed</button>
+</div>
+</div>
+  <figcaption class="specimen__cap"><strong>All<span class="tag">L2-006</span></strong>Default. The URL has no filter parameter.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<div class="toolbar">
+  <div class="seg" role="group" aria-label="Show tasks" data-selected="active">
+    <span class="seg__pill" aria-hidden="true"></span>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="All, 5">All <span class="seg__n">5</span></button>
+    <button class="seg__btn" type="button" aria-pressed="true" aria-label="Active, 3">Active <span class="seg__n">3</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="seg__n">2</span></button>
+  </div>
+  <button class="link-btn" type="button" aria-disabled="false">Clear completed</button>
+</div>
+</div>
+  <figcaption class="specimen__cap"><strong>Active<span class="tag">L2-006.1</span></strong>URL <code>?filter=active</code>.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<div class="toolbar">
+  <div class="seg" role="group" aria-label="Show tasks" data-selected="done">
+    <span class="seg__pill" aria-hidden="true"></span>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="All, 5">All <span class="seg__n">5</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="seg__n">3</span></button>
+    <button class="seg__btn" type="button" aria-pressed="true" aria-label="Done, 2">Done <span class="seg__n">2</span></button>
+  </div>
+  <button class="link-btn" type="button" aria-disabled="false">Clear completed</button>
+</div>
+</div>
+  <figcaption class="specimen__cap"><strong>Done<span class="tag">L2-006.2</span></strong>URL <code>?filter=done</code>.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<div class="toolbar">
+  <div class="seg" role="group" aria-label="Show tasks" data-selected="all">
+    <span class="seg__pill" aria-hidden="true"></span>
+    <button class="seg__btn" type="button" aria-pressed="true" aria-label="All, 5">All <span class="seg__n">5</span></button>
+    <button class="seg__btn is-focus-ring" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="seg__n">3</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="seg__n">2</span></button>
+  </div>
+  <button class="link-btn" type="button" aria-disabled="false">Clear completed</button>
+</div>
+</div>
+  <figcaption class="specimen__cap"><strong>Filter focused<span class="tag">L2-030.2</span></strong>Keyboard focus ring on a filter button.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Clear completed</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card is-frozen">
+<div class="toolbar">
+  <div class="seg" role="group" aria-label="Show tasks" data-selected="all">
+    <span class="seg__pill" aria-hidden="true"></span>
+    <button class="seg__btn" type="button" aria-pressed="true" aria-label="All, 5">All <span class="seg__n">5</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="seg__n">3</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="seg__n">2</span></button>
+  </div>
+  <button class="link-btn is-hover" type="button" aria-disabled="false">Clear completed</button>
+</div>
+</div>
+  <figcaption class="specimen__cap"><strong>Hover<span class="tag">L2-017</span></strong>Soft surface tint; the label keeps 4.5:1.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<div class="toolbar">
+  <div class="seg" role="group" aria-label="Show tasks" data-selected="all">
+    <span class="seg__pill" aria-hidden="true"></span>
+    <button class="seg__btn" type="button" aria-pressed="true" aria-label="All, 3">All <span class="seg__n">3</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="seg__n">3</span></button>
+    <button class="seg__btn" type="button" aria-pressed="false" aria-label="Done, 0">Done <span class="seg__n">0</span></button>
+  </div>
+  <button class="link-btn" type="button" aria-disabled="true">Clear completed</button>
+</div>
+</div>
+  <figcaption class="specimen__cap"><strong>Nothing to clear<span class="tag">L2-017.2</span></strong>Dimmed and <code>aria-disabled="true"</code>, but still focusable so its state can be discovered.</figcaption>
+</figure>
+</div>
+<aside class="mock" aria-label="Mock notes">
+  <p><strong>Mock</strong> · L2-006, L2-007.6, L2-017.2, L2-029.4 · <a href="../index.html">All mocks</a></p>
+  <p>Hover, focus and mid-animation frames are frozen so they can be reviewed side by side. Motion is off inside these specimens.</p>
+</aside>
+</main>
+</body>
+</html>

@@ -1,0 +1,44 @@
+@startuml
+title UML sequence behaviour — Edit task title, cancel and no-op
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "TodoPageComponent" as page
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+user -> item : Click the title to start editing (L2-012)
+item --> user : Text field with current title selected
+alt Escape pressed
+  user -> item : Press Escape (L2-012)
+  item -> page : editCancelled
+  page -> store : cancelEdit()
+  store -> store : Clear editingId
+  store --> item : Original title shown, no request sent (L2-012)
+else Saved with an unchanged title after trimming
+  user -> item : Press Enter or blur without changes (L2-013)
+  item -> item : Trim the text, equals the stored title
+  item -> page : editCancelled
+  page -> store : cancelEdit()
+  store --> item : Original title shown, no request sent (L2-013)
+else Field cleared and Enter pressed
+  user -> item : Clear the field and press Enter (L2-013)
+  item -> item : Trimmed text is empty
+  item --> user : Restore original title, show "A task needs a title." briefly, no request sent (L2-013)
+end
+@enduml

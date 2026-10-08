@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Show progress
+
+Person(user, "User", "Single local user who checks how many tasks remain")
+System(app, "php-todo-lab", "Single-screen to-do application for learning PHP coding practices")
+
+Rel(user, app, "Reads remaining count and progress in")
+@enduml

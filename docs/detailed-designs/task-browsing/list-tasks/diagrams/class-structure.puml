@@ -1,0 +1,104 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — List tasks
+
+package "Angular SPA" {
+  class TodoPageComponent <<smart>> {
+    +store: TodoStore
+  }
+  class TodoListComponent <<presentational>> {
+    +todos: input<TodoView[]>
+    +loading: input<boolean>
+  }
+  class TodoEmptyStateComponent <<presentational>> {
+    +kind: input<string>
+  }
+  class TodoStore <<providedIn root>> {
+    +todos: linkedSignal<TodoView[]>
+    +loading: Signal<boolean>
+    +loadFailed: Signal<boolean>
+    +reload(): void
+  }
+  class TodoListResponse <<interface>> {
+    +data: Todo[]
+    +meta: TodoListMeta
+  }
+  class TodoListMeta <<interface>> {
+    +active: number
+    +completed: number
+  }
+}
+
+package "Laravel API" {
+  class TodoController {
+    +index(request: ListTodosRequest, action: ListTodos): TodoCollection
+  }
+  class ListTodosRequest {
+    +rules(): array
+  }
+  class ListTodos {
+    +handle(status: TodoStatus): TodoList
+  }
+  enum TodoStatus {
+    All
+    Active
+    Completed
+  }
+  interface TodoRepository {
+    +list(status: TodoStatus): Todo[]
+    +counts(): TodoCounts
+  }
+  class EloquentTodoRepository {
+    +list(status: TodoStatus): Todo[]
+    +counts(): TodoCounts
+  }
+  class InMemoryTodoRepository <<test fake>> {
+    +list(status: TodoStatus): Todo[]
+    +counts(): TodoCounts
+  }
+  class Todo <<Eloquent>> {
+    +id: string
+    +title: string
+    +completed_at: CarbonImmutable
+    +completed: bool
+    +active(): Builder
+    +completed(): Builder
+  }
+  class TodoCollection {
+    +toArray(): array
+  }
+}
+
+TodoPageComponent --> TodoStore : reads
+TodoPageComponent ..> TodoListComponent : binds
+TodoPageComponent ..> TodoEmptyStateComponent : binds
+TodoStore ..> TodoListResponse : receives
+TodoListResponse *-- TodoListMeta
+
+TodoController ..> ListTodosRequest : validates with
+TodoController --> ListTodos : calls
+TodoController ..> TodoCollection : returns
+ListTodosRequest ..> TodoStatus : accepts
+ListTodos --> TodoRepository : depends on
+ListTodos ..> TodoStatus : receives
+EloquentTodoRepository ..|> TodoRepository
+InMemoryTodoRepository ..|> TodoRepository
+EloquentTodoRepository --> Todo : queries
+TodoCollection ..> Todo : serialises
+
+note bottom of TodoRepository
+  Method and field names that the specs
+  do not fix are provisional (TO SUPPLY).
+end note
+@enduml

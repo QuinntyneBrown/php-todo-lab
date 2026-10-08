@@ -1,0 +1,74 @@
+@startuml
+title UML sequence behaviour — Delete task and undo
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "TodoPageComponent" as page
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+  participant "TodoResource" as res
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "DeleteTodo" as del
+  participant "RestoreTodo" as rest
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+user -> item : Click the delete control (L2-015)
+item -> page : deleted
+page -> store : delete(id)
+store -> store : Keep the removed todo and its position, remove the row (L2-015)
+store -> store : Set toast "Task deleted" with Undo, start 6 s timer (L2-015)
+store --> item : Row collapses within 250 ms (L2-015)
+store --> toast : Toast with Undo button shown (L2-015)
+store -> api : deleteTodo(id)
+api -> ctrl : DELETE /api/v1/todos/{id}
+ctrl -> del : Invoke with id
+del -> repo : Find non-deleted todo, soft delete it
+repo -> db : UPDATE deleted_at
+db --> repo : Saved
+repo --> del : Done
+del --> ctrl : Done
+ctrl --> api : 204 No Content (L2-015)
+api --> store : Delete confirmed
+user -> toast : Click Undo, or press Ctrl or Cmd+Z while the toast is visible (L2-015)
+toast -> page : undone
+page -> store : undo()
+store -> api : restoreTodo(id)
+api -> ctrl : POST /api/v1/todos/{id}/restore
+ctrl -> rest : Invoke with id
+rest -> repo : Find soft-deleted todo, restore it
+repo -> db : UPDATE deleted_at to null
+db --> repo : Saved
+repo --> rest : Todo
+rest --> ctrl : Todo
+ctrl -> res : Serialise todo
+res --> ctrl : data with completed and completedAt kept
+ctrl --> api : 200 OK (L2-015)
+api --> store : Restored todo
+store -> store : Insert todo by createdAt descending, then id descending (L2-015)
+store -> store : Clear the toast
+store --> item : Row returns at original position, completed state kept (L2-015)
+@enduml

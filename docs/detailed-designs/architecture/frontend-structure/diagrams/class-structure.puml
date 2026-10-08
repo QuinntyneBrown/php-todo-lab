@@ -1,0 +1,73 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Frontend structure
+
+class TodoPageComponent <<smart>> {
+  -store: TodoStore
+}
+
+class TodoHeaderComponent <<presentational>>
+class TodoComposerComponent <<presentational>>
+class TodoFilterComponent <<presentational>>
+class TodoListComponent <<presentational>>
+class TodoItemComponent <<presentational>>
+class TodoEmptyStateComponent <<presentational>>
+class ToastComponent <<presentational>>
+
+class TodoStore <<providedIn root>> {
+  -api: TodoApi
+  +todos: signal
+  +filter: signal
+  +editingId: signal
+  +toast: signal
+  +activeCount: computed
+  +completedCount: computed
+  +visibleTodos: computed
+  +progress: computed
+}
+
+abstract class TodoApi {
+  one operation per endpoint in L2-018
+  operation names TO SUPPLY
+}
+
+class HttpTodoApi {
+  -http: HttpClient
+  calls wrapped with firstValueFrom
+}
+
+class InMemoryTodoApi <<test fake>>
+
+class HttpClient <<Angular>>
+
+package "core/api/models" {
+  class "Request and response interfaces" as Models
+}
+
+TodoPageComponent --> TodoStore : injects
+TodoPageComponent ..> TodoHeaderComponent : renders
+TodoPageComponent ..> TodoComposerComponent : renders
+TodoPageComponent ..> TodoFilterComponent : renders
+TodoPageComponent ..> TodoListComponent : renders
+TodoPageComponent ..> ToastComponent : renders
+TodoListComponent ..> TodoItemComponent : renders
+TodoListComponent ..> TodoEmptyStateComponent : renders
+TodoStore --> TodoApi : depends on
+HttpTodoApi ..|> TodoApi
+InMemoryTodoApi ..|> TodoApi
+HttpTodoApi --> HttpClient : only user
+HttpTodoApi ..> Models : uses
+InMemoryTodoApi ..> Models : uses
+TodoApi ..> Models : uses
+@enduml

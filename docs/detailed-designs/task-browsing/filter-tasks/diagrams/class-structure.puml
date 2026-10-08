@@ -1,0 +1,79 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Filter tasks
+
+package "Angular SPA" {
+  class TodoPageComponent <<smart>> {
+    +filter: input<string>
+    +select(filter: string): void
+  }
+  class TodoFilterComponent <<presentational>> {
+    +selected: input<string>
+    +selectedChange: output<string>
+  }
+  class TodoStore <<providedIn root>> {
+    +todos: Signal<TodoView[]>
+    +filter: Signal<string>
+    +visibleTodos: Signal<TodoView[]>
+  }
+  class Router <<Angular>> {
+    +navigate(commands, extras): Promise<boolean>
+  }
+}
+
+package "Laravel API" {
+  class TodoController {
+    +index(request: ListTodosRequest, action: ListTodos): TodoCollection
+  }
+  class ListTodosRequest {
+    +rules(): array
+  }
+  enum TodoStatus {
+    All = all
+    Active = active
+    Completed = completed
+  }
+  class ListTodos {
+    +handle(status: TodoStatus): TodoList
+  }
+  interface TodoRepository {
+    +list(status: TodoStatus): Todo[]
+  }
+  class EloquentTodoRepository {
+    +list(status: TodoStatus): Todo[]
+  }
+  class Todo <<Eloquent>> {
+    +active(): Builder
+    +completed(): Builder
+  }
+}
+
+TodoPageComponent --> TodoStore : sets filter
+TodoPageComponent ..> TodoFilterComponent : binds
+TodoPageComponent ..> Router : navigates
+
+TodoController ..> ListTodosRequest : validates with
+TodoController --> ListTodos : calls
+ListTodosRequest ..> TodoStatus : accepts
+ListTodos ..> TodoStatus : receives
+ListTodos --> TodoRepository : depends on
+EloquentTodoRepository ..|> TodoRepository
+EloquentTodoRepository --> Todo : applies scopes
+
+note bottom of TodoStore
+  Filter values in the URL are active and done, omitted for All.
+  The status values sent to the API are all, active, and completed.
+  Member names that the specs do not fix are provisional (TO SUPPLY).
+end note
+@enduml

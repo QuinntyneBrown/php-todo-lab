@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Adapt layout across breakpoints and orientation change
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "Component stylesheets and tokens.scss" as css
+  participant "TodoPageComponent" as page
+  participant "TodoComposerComponent" as composer
+  participant "TodoItemComponent" as item
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+user -> user : Type "Buy oat" in the composer and start editing a task title
+user -> css : Rotate the device or resize the window (viewport width changes)
+css -> css : Re-evaluate breakpoint media queries (L2-027)
+alt XS below 576 px
+  css -> page : Full width column with 16 px side gutters (L2-027)
+  css -> page : Header ring 48 px and filter control full width (L2-027)
+else SM from 576 px
+  css -> page : Full width column up to 560 px, centred (L2-027)
+else MD from 768 px
+  css -> page : 640 px centred column, list on raised rounded surface (L2-027)
+else LG and XL from 992 px
+  css -> page : 640 px centred column offset 8vh from the top, no stretch (L2-027)
+end
+css -> item : Wrap long title and grow the row, controls never overlap text (L2-027)
+css -> page : No horizontal page scroll from 320 px to 1920 px (L2-027)
+note over composer, item
+  No component handles a resize event.
+  Angular does not re-create the components,
+  so the composer text and the edit field are kept (L2-028).
+end note
+composer --> user : Composer still contains "Buy oat" (L2-028)
+page -> store : Read editingId (unchanged)
+store --> page : Same editingId
+item --> user : Edit field still open with its draft text (L2-028)
+@enduml

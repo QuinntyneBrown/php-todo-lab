@@ -1,0 +1,92 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Edit task title
+
+package "Angular SPA" {
+  class TodoItemComponent {
+    +todo: InputSignal<TodoDto>
+    +editing: InputSignal<boolean>
+    +editStarted: OutputEmitterRef<void>
+    +titleSaved: OutputEmitterRef<string>
+    +editCancelled: OutputEmitterRef<void>
+  }
+  class TodoPageComponent {
+    -store: TodoStore
+    +onEditStarted(id: string): void
+    +onTitleSaved(id: string, title: string): void
+    +onEditCancelled(id: string): void
+  }
+  class TodoStore {
+    +todos: WritableSignal<TodoDto[]>
+    +editingId: WritableSignal<string | null>
+    +toast: WritableSignal<ToastState | null>
+    +beginEdit(id: string): void
+    +saveTitle(id: string, title: string): void
+    +cancelEdit(): void
+  }
+  abstract class TodoApi {
+    +updateTodo(id: string, changes: UpdateTodoPayload): Promise<TodoDto>
+  }
+  class HttpTodoApi
+  class InMemoryTodoApi
+  class TodoDto
+  class UpdateTodoPayload {
+    +title?: string
+    +completed?: boolean
+  }
+}
+
+package "Laravel API" {
+  class TodoController {
+    +update(request: UpdateTodoRequest, id: string): TodoResource
+  }
+  class UpdateTodoRequest {
+    +rules(): array
+  }
+  class UpdateTodo {
+    +__invoke(id: string, changes: array): Todo
+  }
+  interface TodoRepository {
+    +find(id: string): Todo
+    +save(todo: Todo): Todo
+  }
+  class EloquentTodoRepository
+  class InMemoryTodoRepository
+  class Todo {
+    +id: string
+    +title: string
+    +completed_at: CarbonImmutable | null
+  }
+  class TodoResource
+}
+
+TodoItemComponent ..> TodoDto : reads
+TodoPageComponent --> TodoStore : calls
+TodoPageComponent ..> TodoItemComponent : handles edit events
+TodoStore --> TodoApi : depends on
+TodoStore "1" o-- "*" TodoDto : todos
+TodoApi <|-- HttpTodoApi
+TodoApi <|-- InMemoryTodoApi
+TodoApi ..> UpdateTodoPayload : accepts
+HttpTodoApi ..> TodoController : PATCH /api/v1/todos/{id}
+
+TodoController ..> UpdateTodoRequest : validates with
+TodoController --> UpdateTodo : invokes
+TodoController ..> TodoResource : returns
+UpdateTodo --> TodoRepository : depends on
+TodoRepository <|.. EloquentTodoRepository
+TodoRepository <|.. InMemoryTodoRepository
+EloquentTodoRepository ..> Todo : persists
+TodoResource ..> Todo : serialises
+@enduml

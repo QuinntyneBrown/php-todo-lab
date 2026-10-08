@@ -1,0 +1,13 @@
+# Normalise every text file to LF in the repository and the working tree, on every OS.
+# Pint (PSR-12 line_ending) and Prettier (endOfLine: lf) both require LF.
+* text=auto eol=lf
+
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+*.png  binary
+*.jpg  binary
+*.gif  binary
+*.ico  binary
+*.woff2 binary

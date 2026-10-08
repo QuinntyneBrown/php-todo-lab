@@ -1,0 +1,28 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Responsive layout
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Angular smart component", "Hosts the single centred column and the raised list surface")
+  Component(header, "TodoHeaderComponent", "Angular presentational component", "Shows the date and the progress ring sized per breakpoint")
+  Component(composer, "TodoComposerComponent", "Angular presentational component", "Text field with 16 px minimum font size and 44 x 44 px controls")
+  Component(filter, "TodoFilterComponent", "Angular presentational component", "Segmented control that spans the full width at XS")
+  Component(list, "TodoListComponent", "Angular presentational component", "Renders the ul of task rows")
+  Component(item, "TodoItemComponent", "Angular presentational component", "Wraps long titles and reveals the delete control per hover capability")
+  Component(toast, "ToastComponent", "Angular presentational component", "Positions the toast above the bottom safe-area inset")
+  Component(store, "TodoStore", "Angular service, Signals", "Holds editingId so edit state survives viewport changes")
+  Component(tokens, "tokens.scss", "SCSS custom properties", "Shared design tokens consumed by component stylesheets")
+}
+
+Rel(page, header, "Hosts")
+Rel(page, composer, "Hosts")
+Rel(page, filter, "Hosts")
+Rel(page, list, "Hosts")
+Rel(page, toast, "Hosts")
+Rel(list, item, "Renders one per task")
+Rel(page, store, "Reads editingId from")
+Rel(page, tokens, "Reads tokens from")
+Rel(item, tokens, "Reads tokens from")
+Rel(toast, tokens, "Reads tokens from")
+@enduml

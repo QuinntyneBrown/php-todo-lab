@@ -1,0 +1,53 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Keyboard operation
+
+class TodoPageComponent <<smart>> {
+  -store: TodoStore
+  document keydown listener
+  slash key handling
+}
+
+class TodoComposerComponent <<presentational>> {
+  text field
+  Add task button
+  focus request handling TO SUPPLY
+}
+
+class TodoFilterComponent <<presentational>> {
+  filter tab buttons
+}
+
+class TodoListComponent <<presentational>>
+
+class TodoItemComponent <<presentational>> {
+  native checkbox
+  title control
+  delete control
+  edit text field
+}
+
+class TodoStore <<providedIn root>> {
+  +todos: signal
+  +editingId: signal
+}
+
+TodoPageComponent --> TodoStore : injects
+TodoPageComponent ..> TodoComposerComponent : renders and focuses
+TodoPageComponent ..> TodoFilterComponent : renders
+TodoPageComponent ..> TodoListComponent : renders
+TodoListComponent ..> TodoItemComponent : renders in list order
+TodoComposerComponent ..> TodoPageComponent : add output
+TodoItemComponent ..> TodoListComponent : toggle, edit, delete outputs
+@enduml

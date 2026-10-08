@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tasks</title>
+<meta name="description" content="Design mock for the single-screen to-do app. Spec: docs/specs/L2.md (L2-022 to L2-031).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/tokens.css">
+<link rel="stylesheet" href="./styles/app.css">
+<script src="./app.js"></script>
+</head>
+<body>
+<main class="app">
+
+  <header class="head">
+    <div>
+      <h1 class="head__day" id="day">Wednesday</h1>
+      <p class="head__date" id="date">7 October</p>
+    </div>
+    <div class="progress">
+      <div class="progress__text">
+        <span class="progress__num" id="progNum">0</span>
+        <span class="progress__label" id="progLabel">left</span>
+      </div>
+      <div class="ring-wrap" aria-hidden="true">
+        <svg class="ring" viewBox="0 0 48 48">
+          <circle class="ring__track" cx="24" cy="24" r="20"/>
+          <circle class="ring__fill" id="ring" cx="24" cy="24" r="20"/>
+        </svg>
+        <svg class="ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6"/></svg>
+      </div>
+    </div>
+  </header>
+
+  <section class="card" aria-label="Tasks">
+
+    <form class="composer" id="composer" novalidate>
+      <div class="composer__field">
+        <label class="sr-only" for="newTask">New task</label>
+        <input class="composer__input" id="newTask" name="title" type="text" maxlength="200"
+               placeholder="What needs doing?" autocomplete="off" aria-describedby="composerError">
+        <span class="composer__count" id="count" hidden></span>
+      </div>
+      <button class="composer__btn" type="submit" aria-label="Add task">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Add task</span>
+      </button>
+    </form>
+    <p class="composer__error" id="composerError" role="alert" hidden></p>
+
+    <div class="toolbar">
+      <div class="seg" role="group" aria-label="Show tasks">
+        <span class="seg__pill" id="pill" aria-hidden="true"></span>
+        <button class="seg__btn" type="button" data-filter="all" aria-pressed="true">All <span class="seg__n" id="nAll">0</span></button>
+        <button class="seg__btn" type="button" data-filter="active" aria-pressed="false">Active <span class="seg__n" id="nActive">0</span></button>
+        <button class="seg__btn" type="button" data-filter="done" aria-pressed="false">Done <span class="seg__n" id="nDone">0</span></button>
+      </div>
+      <button class="link-btn" type="button" id="clear">Clear completed</button>
+    </div>
+
+    <div class="banner" id="banner" role="alert" hidden>
+      <p>Couldn't load your tasks. Check your connection and try again.</p>
+      <button type="button" id="retry">Try again</button>
+    </div>
+
+    <ul class="skeleton" id="skeleton" aria-hidden="true" hidden>
+      <li><span class="skeleton__dot"></span><span class="skeleton__bar" style="width:58%"></span></li>
+      <li><span class="skeleton__dot"></span><span class="skeleton__bar" style="width:72%"></span></li>
+      <li><span class="skeleton__dot"></span><span class="skeleton__bar" style="width:44%"></span></li>
+    </ul>
+
+    <ul class="list" id="list"></ul>
+
+    <div class="state" id="empty" hidden>
+      <svg class="state__art" viewBox="0 0 72 72" aria-hidden="true">
+        <circle class="a" cx="36" cy="36" r="34"/>
+        <path class="b" d="M22 37l10 10 18-22"/>
+      </svg>
+      <h2 class="state__title" id="emptyTitle">Nothing here yet</h2>
+      <p class="state__text" id="emptyText">Type a task above and press Enter.</p>
+    </div>
+  </section>
+
+  <aside class="mock" aria-label="Mock controls">
+    <p>Mock controls, not part of the product. Switch the data state to review each design. <a href="./index.html">All mocks</a></p>
+    <div class="mock__row" id="mockRow">
+      <button type="button" data-view="loaded" aria-pressed="true">Loaded</button>
+      <button type="button" data-view="empty" aria-pressed="false">Empty</button>
+      <button type="button" data-view="allDone" aria-pressed="false">All done</button>
+      <button type="button" data-view="loading" aria-pressed="false">Loading</button>
+      <button type="button" data-view="error" aria-pressed="false">Error</button>
+    </div>
+  </aside>
+</main>
+
+<div class="toasts"><div class="toast" id="toast" hidden>
+  <span class="toast__msg" id="toastMsg"></span>
+  <button class="toast__btn" type="button" id="toastAction">Undo</button>
+</div></div>
+<div class="sr-only" id="live" aria-live="polite"></div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const els = {
+    day: $('day'), date: $('date'), num: $('progNum'), label: $('progLabel'), ring: $('ring'),
+    form: $('composer'), input: $('newTask'), count: $('count'), err: $('composerError'),
+    pill: $('pill'), clear: $('clear'), list: $('list'), empty: $('empty'),
+    emptyTitle: $('emptyTitle'), emptyText: $('emptyText'), skeleton: $('skeleton'),
+    banner: $('banner'), toast: $('toast'), toastMsg: $('toastMsg'), toastAction: $('toastAction'), live: $('live'),
+  };
+  const RING = 125.66;
+  const FILTERS = ['all', 'active', 'done'];
+
+  const now = new Date();
+  els.day.textContent = now.toLocaleDateString(undefined, { weekday: 'long' });
+  els.date.textContent = now.toLocaleDateString(undefined, { day: 'numeric', month: 'long' });
+
+  let seq = 100;
+  const seed = () => [
+    { id: 5, title: 'Renew passport', done: true },
+    { id: 4, title: 'Draft the Q4 budget outline', done: false },
+    { id: 3, title: 'Water the plants', done: true },
+    { id: 2, title: 'Reply to Priya about the venue', done: false },
+    { id: 1, title: 'Book dentist appointment', done: false },
+  ]; // newest first (L2-005)
+
+  const state = { todos: seed(), filter: 'all', editing: null, justAdded: null, justDone: null };
+  let undo = null, toastTimer = null;
+
+  const say = (msg) => { els.live.textContent = ''; setTimeout(() => (els.live.textContent = msg), 30); };
+
+  /* ----- derived (computed in the real app) ----- */
+  const active = () => state.todos.filter((t) => !t.done).length;
+  const done = () => state.todos.length - active();
+  const visible = () => state.todos.filter((t) =>
+    state.filter === 'all' ? true : state.filter === 'active' ? !t.done : t.done);
+
+  /* ----- header, counts, toolbar ----- */
+  function renderMeta() {
+    const total = state.todos.length, a = active(), d = done();
+    const allDone = total > 0 && a === 0;
+    els.num.textContent = allDone ? 'All done' : String(a);
+    els.label.textContent = allDone ? '' : 'left';
+    els.label.hidden = allDone;
+    els.ring.closest('.progress').classList.toggle('is-complete', allDone);
+    els.ring.style.strokeDashoffset = String(RING * (1 - (total ? d / total : 0)));
+    $('nAll').textContent = total; $('nActive').textContent = a; $('nDone').textContent = d;
+    els.clear.setAttribute('aria-disabled', String(d === 0));
+    els.pill.style.transform = `translateX(${FILTERS.indexOf(state.filter) * 100}%)`;
+    document.querySelectorAll('.seg__btn').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === state.filter)));
+    document.querySelectorAll('.seg__btn').forEach((b) => {
+      const n = { all: total, active: a, done: d }[b.dataset.filter];
+      b.setAttribute('aria-label', `${b.firstChild.textContent.trim()}, ${n}`);
+    });
+  }
+
+  /* ----- list ----- */
+  function renderList() {
+    const items = visible();
+    els.list.replaceChildren(...items.map(row));
+    const showEmpty = items.length === 0;
+    els.empty.hidden = !showEmpty;
+    if (showEmpty) {
+      const copy = state.todos.length === 0
+        ? ['Nothing here yet', 'Type a task above and press Enter.']
+        : state.filter === 'active' ? ['All clear', 'Nothing left to do.']
+        : ['Nothing completed yet', 'Tick a task and it will show up here.'];
+      els.emptyTitle.textContent = copy[0]; els.emptyText.textContent = copy[1];
+    }
+    state.justAdded = null; state.justDone = null;
+    renderMeta();
+  }
+
+  function row(t) {
+    const li = document.createElement('li');
+    li.className = 'item' + (t.done ? ' is-done' : '') + (t.id === state.justAdded ? ' enter' : '') + (t.pending ? ' is-pending' : '');
+    li.dataset.id = t.id;
+
+    const label = document.createElement('label');
+    label.className = 'check';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox'; cb.className = 'check__input'; cb.checked = t.done;
+    cb.setAttribute('aria-label', t.title);
+    cb.addEventListener('change', () => toggle(t.id, cb.checked, li));
+    label.append(cb);
+    label.insertAdjacentHTML('beforeend', '<span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span>');
+
+    const title = document.createElement('div');
+    title.className = 'title';
+    if (state.editing === t.id) {
+      const input = document.createElement('input');
+      input.className = 'edit'; input.value = t.title; input.maxLength = 200;
+      input.setAttribute('aria-label', 'Edit task title');
+      let finished = false;
+      const finish = (save) => {
+        if (finished) return; finished = true;
+        const v = input.value.trim();
+        if (save && v === '') { input.setAttribute('aria-invalid', 'true'); input.title = 'A task needs a title.'; finished = false; input.focus(); toast('A task needs a title.', { error: true }); return; }
+        if (save && v !== t.title) { t.title = v; say('Task updated'); }
+        state.editing = null; renderList();
+        els.list.querySelector(`[data-id="${t.id}"] .title__btn`)?.focus();
+      };
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); finish(true); }
+        if (e.key === 'Escape') { e.preventDefault(); finish(false); }
+      });
+      input.addEventListener('blur', () => setTimeout(() => finish(true), 0));
+      title.append(input);
+      queueMicrotask(() => { input.focus(); input.select(); });
+    } else {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'title__btn'; b.textContent = t.title;
+      b.setAttribute('aria-label', `Edit ${t.title}`);
+      b.addEventListener('click', () => { state.editing = t.id; renderList(); });
+      title.append(b);
+    }
+
+    const del = document.createElement('button');
+    del.type = 'button'; del.className = 'del'; del.setAttribute('aria-label', `Delete ${t.title}`);
+    del.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg>';
+    del.addEventListener('click', () => remove(t.id, li));
+
+    li.append(label, title, del);
+    return li;
+  }
+
+  /* ----- actions ----- */
+  function toggle(id, checked, li) {
+    const t = state.todos.find((x) => x.id === id); if (!t) return;
+    t.done = checked;
+    li.classList.toggle('is-done', checked);
+    li.classList.toggle('just-done', checked);
+    say(checked ? 'Task completed' : 'Task reopened');
+    renderMeta();
+    // In "Active"/"Done" views the row leaves once the animation has played (L2-006.6).
+    if (state.filter !== 'all') setTimeout(() => { li.classList.add('leave'); setTimeout(renderList, 250); }, 450);
+  }
+
+  function remove(id, li) {
+    const idx = state.todos.findIndex((x) => x.id === id); if (idx < 0) return;
+    const [t] = state.todos.splice(idx, 1);
+    li.classList.add('leave');
+    setTimeout(() => {
+      renderList();
+      (els.list.children[Math.min(idx, els.list.children.length - 1)]?.querySelector('.title__btn') ?? els.input).focus();
+    }, 230);
+    say('Task deleted');
+    toast('Task deleted', { undo: () => { state.todos.splice(idx, 0, t); renderList(); say('Task restored'); } });
+  }
+
+  function clearCompleted() {
+    if (done() === 0) return;
+    const removed = state.todos.filter((t) => t.done);
+    const before = state.todos.slice();
+    state.todos = state.todos.filter((t) => !t.done);
+    renderList();
+    const n = removed.length;
+    say(`${n} ${n === 1 ? 'task' : 'tasks'} cleared`);
+    toast(`${n} ${n === 1 ? 'task' : 'tasks'} cleared`, { undo: () => { state.todos = before; renderList(); } });
+  }
+
+  function add(title) {
+    if (state.todos.length >= 500) return showError('You have 500 tasks. Finish or delete some to add more.');
+    const t = { id: ++seq, title, done: false, pending: true };
+    state.todos.unshift(t);
+    if (state.filter === 'done') state.filter = 'all';
+    state.justAdded = t.id;
+    renderList();
+    setTimeout(() => { t.pending = false; els.list.querySelector(`[data-id="${t.id}"]`)?.classList.remove('is-pending'); }, 450);
+    say('Task added');
+  }
+
+  /* ----- composer ----- */
+  function showError(msg) {
+    els.input.setAttribute('aria-invalid', 'true');
+    els.err.textContent = msg; els.err.hidden = false;
+    els.form.classList.remove('shake'); void els.form.offsetWidth; els.form.classList.add('shake');
+  }
+  function clearError() { els.input.removeAttribute('aria-invalid'); els.err.hidden = true; }
+
+  els.form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const v = els.input.value.trim();
+    if (!v) return showError('Enter a task title.');
+    clearError(); add(v);
+    els.input.value = ''; updateCount(); els.input.focus();
+  });
+  function updateCount() {
+    const n = [...els.input.value].length;
+    els.count.hidden = n < 160; els.count.textContent = `${n}/200`;
+    els.input.classList.toggle('has-count', n >= 160);
+  }
+  els.input.addEventListener('input', () => { clearError(); updateCount(); });
+
+  /* ----- filters, clear ----- */
+  document.querySelectorAll('.seg__btn').forEach((b) => b.addEventListener('click', () => {
+    state.filter = b.dataset.filter; state.editing = null; renderList();
+  }));
+  els.clear.addEventListener('click', clearCompleted);
+
+  /* ----- toast ----- */
+  function toast(msg, { undo: fn, error = false } = {}) {
+    clearTimeout(toastTimer);
+    els.toastMsg.textContent = msg;
+    els.toast.classList.toggle('is-error', error);
+    els.toast.setAttribute('role', error ? 'alert' : 'status');
+    els.toastAction.hidden = !fn;
+    undo = fn || null;
+    els.toast.hidden = false;
+    els.toast.style.animation = 'none'; void els.toast.offsetWidth; els.toast.style.animation = '';
+    const hold = () => clearTimeout(toastTimer);
+    const arm = () => { toastTimer = setTimeout(() => (els.toast.hidden = true), 6000); };
+    els.toast.onmouseenter = els.toast.onfocusin = hold;
+    els.toast.onmouseleave = els.toast.onfocusout = arm;
+    arm();
+  }
+  els.toastAction.addEventListener('click', () => { const fn = undo; undo = null; els.toast.hidden = true; fn?.(); });
+
+  /* ----- keyboard (L2-023) ----- */
+  document.addEventListener('keydown', (e) => {
+    const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement?.tagName);
+    if (e.key === '/' && !typing) { e.preventDefault(); els.input.focus(); }
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z' && !els.toast.hidden && undo) { e.preventDefault(); els.toastAction.click(); }
+  });
+
+  /* ----- mock data states ----- */
+  function setView(view) {
+    document.querySelectorAll('#mockRow button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+    els.banner.hidden = view !== 'error';
+    els.skeleton.hidden = view !== 'loading';
+    els.list.hidden = view === 'loading' || view === 'error';
+    els.empty.hidden = true;
+    if (view === 'loaded') { state.todos = seed(); state.filter = 'all'; }
+    if (view === 'empty') { state.todos = []; state.filter = 'all'; }
+    if (view === 'allDone') { state.todos = seed().map((t) => ({ ...t, done: true })); state.filter = 'all'; }
+    if (view === 'loading' || view === 'error') { els.empty.hidden = true; renderMeta(); return; }
+    renderList();
+  }
+  document.querySelectorAll('#mockRow button').forEach((b) => b.addEventListener('click', () => setView(b.dataset.view)));
+  $('retry').addEventListener('click', () => setView('loaded'));
+
+  setView('loaded');
+  if (matchMedia('(hover: hover)').matches) els.input.focus();   // L2-022.3: not forced on touch
+})();
+</script>
+</body>
+</html>

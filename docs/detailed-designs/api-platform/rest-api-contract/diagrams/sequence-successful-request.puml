@@ -1,0 +1,49 @@
+@startuml
+title UML sequence behaviour — Successful request through routing, validation, and serialisation
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "HttpTodoApi" as client
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "routes/api.php" as routes
+  participant "ListTodosRequest" as req
+  participant "TodoController" as ctrl
+  participant "TodoCollection and TodoResource" as res
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "ListTodos" as action
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+client -> routes : GET /api/v1/todos?status=active
+routes -> routes : Match method and path under the /api/v1 prefix (L2-018)
+routes -> req : Resolve Form Request for the matched route
+req -> req : Validate query parameters
+req -> ctrl : Call controller method with validated input
+ctrl -> action : Invoke ListTodos with the status filter
+action -> repo : Fetch matching todos and counts
+repo -> db : Query non-deleted rows
+db --> repo : Rows
+repo --> action : Todo models and counts
+action --> ctrl : Todo models and counts
+ctrl -> res : Wrap models in TodoCollection of TodoResource
+res -> res : Emit exactly id, title, completed, completedAt, createdAt, updatedAt (L2-019)
+res -> res : Format timestamps as ISO-8601 UTC ending in Z and derive completed from completed_at (L2-019)
+res --> ctrl : JSON body wrapped in data
+ctrl --> client : 200 application/json (stated success code, L2-018)
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+title UML sequence behaviour — Toast roles and undo toast focus handling
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+actor "Assistive technology" as at
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+store -> store : Set toast signal
+store --> page : toast signal changed
+page -> toast : toast input
+alt error toast
+  toast -> toast : Render with role="alert" (L2-031)
+  toast --> at : Assertive announcement of the error text
+  at --> user : Speaks the error
+else non-error toast
+  toast -> toast : Render with role="status" (L2-031)
+  toast --> at : Polite announcement of the toast text
+  at --> user : Speaks the status
+end
+opt toast has an Undo button
+  note over toast
+    The toast never calls focus().
+    Focus stays on the element the user was using (L2-031).
+  end note
+  user -> toast : Tab to Undo (L2-015 orders it right after the delete action)
+  toast -> page : focusWithinChange(true)
+  page -> store : Pause auto-dismiss (L2-031)
+  alt user activates Undo
+    user -> toast : Enter or Space on Undo
+    toast -> page : undone output
+    page -> store : Restore task
+  else focus leaves the toast
+    toast -> page : focusWithinChange(false)
+    page -> store : Resume auto-dismiss
+    store -> store : Dismiss the toast after the delay (L2-015 sets 6 seconds)
+    store --> page : toast signal cleared
+  end
+end
+@enduml

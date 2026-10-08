@@ -1,0 +1,34 @@
+@startuml
+title UML sequence behaviour — Purge with no eligible rows
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "Laravel scheduler" as scheduler
+  participant "PurgeDeletedTodos" as cmd
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+scheduler -> cmd : Run todos:purge-deleted
+cmd -> cmd : Compute cutoff as now minus 24 hours
+cmd -> repo : Purge up to 500 todos soft-deleted before cutoff
+repo -> db : Permanently delete up to 500 rows where deleted_at is before cutoff
+db --> repo : 0 rows deleted
+repo --> cmd : Chunk count 0
+note right of cmd : Rows soft-deleted 23 hours ago stay (L2-016 criterion 2)
+cmd -> cmd : Log purged count 0 (L2-016 criterion 3)
+cmd --> scheduler : Exit 0
+@enduml

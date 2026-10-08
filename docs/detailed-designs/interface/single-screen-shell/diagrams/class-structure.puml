@@ -1,0 +1,58 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Single-screen shell
+
+class "Route table" as Routes {
+  path "" renders TodoPageComponent
+  path "**" redirects to /
+}
+
+class TodoPageComponent <<smart>> {
+  -store: TodoStore
+  regions in order: header, composer, toolbar, list, toast area
+  requests composer focus after first render
+}
+
+class TodoHeaderComponent <<presentational>> {
+  weekday and date formatted in the user locale
+}
+class TodoComposerComponent <<presentational>>
+class TodoFilterComponent <<presentational>>
+class TodoListComponent <<presentational>>
+class ToastComponent <<presentational>>
+
+class "Polite live region" as Live {
+  class name TO SUPPLY
+}
+
+class TodoStore <<providedIn root>> {
+  +toast: signal
+}
+
+class UI_STRINGS <<typed constants>> {
+  all user-facing strings
+  key names TO SUPPLY
+}
+
+Routes --> TodoPageComponent : activates for /
+TodoPageComponent ..> TodoHeaderComponent : renders 1st
+TodoPageComponent ..> TodoComposerComponent : renders 2nd
+TodoPageComponent ..> TodoFilterComponent : renders 3rd
+TodoPageComponent ..> TodoListComponent : renders 4th
+TodoPageComponent ..> ToastComponent : renders 5th
+TodoPageComponent --> Live : feeds
+TodoPageComponent --> TodoStore : injects
+TodoStore ..> UI_STRINGS : reads
+TodoPageComponent ..> UI_STRINGS : reads
+@enduml

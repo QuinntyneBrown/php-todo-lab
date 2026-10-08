@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Migrate and roll back the todos table
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "Artisan migrate commands" as artisan
+  participant "create_todos_table" as migration
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  database "MySQL database" as db
+end box
+user -> artisan : php artisan migrate
+artisan -> migration : Run up()
+migration -> db : Create table todos with id CHAR(26) primary key, title VARCHAR(200), completed_at, created_at, updated_at, deleted_at as TIMESTAMP(3) (L2-021)
+migration -> db : Set charset utf8mb4 and collation utf8mb4_0900_ai_ci (L2-021)
+migration -> db : Create index on deleted_at, created_at, id (list query)
+migration -> db : Create index on deleted_at, completed_at (counts and bulk operations)
+db --> migration : Table and indexes created
+migration --> artisan : Done
+artisan --> user : Migration succeeded, todos can be created and read back (L2-021 criterion 1)
+note right of db : Emoji and CJK titles round-trip unchanged under utf8mb4 (L2-021 criterion 3)
+opt User reverses the migration
+  user -> artisan : php artisan migrate:rollback
+  artisan -> migration : Run down()
+  migration -> db : Drop table todos if it exists
+  db --> migration : Table dropped
+  migration --> artisan : Done
+  artisan --> user : Rollback succeeded without error (L2-021 criterion 2)
+end
+@enduml

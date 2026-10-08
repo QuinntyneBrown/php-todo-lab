@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Theme resolution on load
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+participant "Browser" as browser
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "Global stylesheet" as global
+  participant "tokens.scss" as tokens
+  participant "Component stylesheets" as css
+end box
+user -> browser : Open the app with the OS set to light or dark
+browser -> global : Load the global stylesheet before first paint
+global -> tokens : Include the light and dark token sets
+browser -> browser : Evaluate prefers-color-scheme
+alt OS is set to dark
+  tokens --> browser : Dark token set applies (L2-026)
+else OS is set to light
+  tokens --> browser : Light token set applies (L2-026)
+end
+browser -> css : Resolve every colour through a custom property (L2-026)
+css --> browser : Computed colours for the active theme
+browser --> user : First paint in the matching theme, no flash of the other theme (L2-026)
+note over browser, tokens
+  No script selects the theme and no manual toggle exists in v1 (L2-026)
+end note
+opt OS appearance changes while the app is open
+  browser -> browser : Re-evaluate prefers-color-scheme
+  browser --> user : Repaint with the other token set (L2-026)
+end
+@enduml

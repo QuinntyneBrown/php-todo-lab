@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Load the task list
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+  participant "TodoListComponent" as list
+  participant "TodoEmptyStateComponent" as empty
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+  participant "ListTodosRequest" as request
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "ListTodos" as action
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+user -> page : Open /
+page -> store : Read list
+store -> controller : GET /api/v1/todos with no query parameters
+store --> page : List request in flight
+page -> list : Show 3 skeleton rows, no spinner (L2-008)
+note right of page : Composer is already usable (L2-008)
+controller -> request : Validate query, status defaults to all
+request --> controller : Valid
+controller -> action : Handle with TodoStatus All
+action -> repo : List non-deleted todos
+repo -> db : Select non-deleted rows ordered by created_at desc, id desc (L2-005)
+db --> repo : Rows
+repo -> db : Count active and completed non-deleted todos (L2-005)
+db --> repo : Counts
+repo --> action : Todos and counts
+action --> controller : Todos and counts
+controller --> store : 200 with data array and meta.active, meta.completed, within 200 ms for 500 todos (L2-005, L2-038)
+store -> store : Copy data into todos signal, keep server order
+store --> page : Loaded
+alt No tasks exist
+  page -> empty : Show "Nothing here yet" and "Type a task above and press Enter." (L2-008)
+else Filter is "Active" and no active tasks exist
+  page -> empty : Show "All clear. Nothing left to do." (L2-008)
+else Filter is "Done" and no completed tasks exist
+  page -> empty : Show "Nothing completed yet." (L2-008)
+else Matching tasks exist
+  page -> list : Render rows newest first, completed tasks keep their position (L2-005)
+end
+@enduml

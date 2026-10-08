@@ -1,0 +1,27 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Frontend structure
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Angular smart component", "Route /. Injects TodoStore and wires state to presentational components")
+  Component(pres, "Presentational components", "Angular standalone, OnPush", "TodoHeaderComponent, TodoComposerComponent, TodoFilterComponent, TodoItemComponent, TodoListComponent, TodoEmptyStateComponent, ToastComponent. input() and output() only")
+  Component(store, "TodoStore", "Injectable, providedIn root", "Signals todos, filter, editingId, toast. Computed counts, visibleTodos, progress. Reads via httpResource")
+  Component(port, "TodoApi", "Abstract class, DI token", "Port that the store depends on")
+  Component(http, "HttpTodoApi", "Adapter", "Only class that uses HttpClient. Wraps calls with firstValueFrom")
+  Component(fake, "InMemoryTodoApi", "Test fake", "Replaces HttpTodoApi in tests without HttpTestingController")
+  Component(models, "core/api/models", "TypeScript interfaces", "Request and response shapes defined once")
+  Component(tokens, "tokens.scss", "SCSS custom properties", "Shared design tokens used by component SCSS")
+}
+Container(api, "Laravel API", "PHP 8.4, Laravel", "Versioned JSON API under /api/v1")
+
+Rel(page, pres, "Passes inputs to and handles outputs from")
+Rel(page, store, "Reads signals and calls")
+Rel(store, port, "Depends on")
+Rel(http, port, "Implements")
+Rel(fake, port, "Implements")
+Rel(http, models, "Types requests and responses with")
+Rel(fake, models, "Types requests and responses with")
+Rel(pres, tokens, "Styled with")
+Rel(http, api, "Calls", "JSON/HTTP, /api/v1")
+@enduml

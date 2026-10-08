@@ -1,0 +1,34 @@
+@startuml
+title UML sequence behaviour — Validation failure returns 422 problem details
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "HttpTodoApi" as client
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "routes/api.php" as routes
+  participant "StoreTodoRequest" as req
+  participant "TodoController" as ctrl
+  participant "Exception rendering (bootstrap/app.php)" as errors
+end box
+client -> routes : POST /api/v1/todos with a body that has no title
+routes -> req : Resolve Form Request for the matched route
+req -> req : Validate title and collect failures
+req -> errors : Raise validation exception before the controller runs
+note right of ctrl : The controller is not invoked
+errors -> errors : Map failures to errors.title as a list of messages (L2-020 criterion 1)
+errors -> errors : Build problem details with status 422 and detail (L2-020)
+errors --> client : 422 application/problem+json with errors object
+@enduml

@@ -1,0 +1,29 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Single-screen shell
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(routes, "Route table", "Angular Router", "Route / renders TodoPageComponent. Unknown paths redirect to /")
+  Component(page, "TodoPageComponent", "Angular smart component", "Lays out the five regions in order and requests composer focus after first render")
+  Component(header, "TodoHeaderComponent", "Presentational", "Region 1. Weekday and date in the user locale, progress ring")
+  Component(composer, "TodoComposerComponent", "Presentational", "Region 2. Text field and Add task button")
+  Component(filter, "TodoFilterComponent", "Presentational", "Region 3, toolbar. Filter tabs. Host of Clear completed is TO SUPPLY")
+  Component(list, "TodoListComponent", "Presentational", "Region 4. Task rows and empty state")
+  Component(toast, "ToastComponent", "Presentational", "Region 5. Toast area")
+  Component(live, "Polite live region", "aria-live polite element", "Announces actions to assistive technology. Class name TO SUPPLY")
+  Component(store, "TodoStore", "Injectable, providedIn root", "Holds the toast signal and requests announcements")
+  Component(strings, "UI_STRINGS", "Typed constants in ui-strings.ts", "Every user-facing string")
+}
+
+Rel(routes, page, "Activates for /")
+Rel(page, header, "Renders")
+Rel(page, composer, "Renders")
+Rel(page, filter, "Renders")
+Rel(page, list, "Renders")
+Rel(page, toast, "Renders")
+Rel(page, live, "Hosts and feeds")
+Rel(page, store, "Reads signals and calls")
+Rel(store, strings, "Reads toast and announcement text from")
+Rel(page, strings, "Reads template copy from")
+@enduml

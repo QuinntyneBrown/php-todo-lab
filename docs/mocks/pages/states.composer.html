@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tasks · Composer states</title>
+<meta name="description" content="Default, focus, counter, limits and validation">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
+<script src="../app.js"></script>
+</head>
+<body>
+<main class="app app--wide">
+<header class="page-head">
+  <h1>Composer states</h1>
+  <p>One field and one button. Every message is about the title being typed; the field keeps the text whenever the task could not be added. On phones (under 576 px) the button shows only the plus icon.</p>
+</header>
+<h2 class="section-title">Typing</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card is-frozen">
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="c1">New task</label>
+    <input class="composer__input" id="c1" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-describedby="c1Error">
+    <span class="composer__count" hidden>0/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="c1Error" role="alert" hidden></p>
+</div>
+  <figcaption class="specimen__cap"><strong>Default<span class="tag">L2-001</span></strong>The placeholder asks a question rather than labelling the field.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="c2">New task</label>
+    <input class="composer__input is-focus" id="c2" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-describedby="c2Error">
+    <span class="composer__count" hidden>0/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="c2Error" role="alert" hidden></p>
+</div>
+  <figcaption class="specimen__cap"><strong>Focused<span class="tag">L2-022.3</span></strong>Has focus on load, except on touch devices.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="c3">New task</label>
+    <input class="composer__input is-focus" id="c3" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Buy oat milk" aria-describedby="c3Error">
+    <span class="composer__count" hidden>12/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="c3Error" role="alert" hidden></p>
+</div>
+  <figcaption class="specimen__cap"><strong>Typing<span class="tag">L2-001.3</span></strong>Enter or Add task submits. The field clears and keeps focus.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="c4">New task</label>
+    <input class="composer__input has-count is-focus" id="c4" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Write the thank-you notes for everyone who helped with the move: Sam for the van, Ana for the boxes, the neighbours for the plants, and Leo for the very long weekend" aria-describedby="c4Error">
+    <span class="composer__count">165/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="c4Error" role="alert" hidden></p>
+</div>
+  <figcaption class="specimen__cap"><strong>Counter<span class="tag">L2-002.3</span></strong>From 160 characters a quiet counter appears.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="c5">New task</label>
+    <input class="composer__input has-count is-focus" id="c5" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Call the building manager about the leaking radiator in the spare room, ask whether the plumber can come before the twentieth, and confirm who pays for the parts if the valve has to be replaced again." aria-describedby="c5Error">
+    <span class="composer__count is-max">200/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="c5Error" role="alert" hidden></p>
+</div>
+  <figcaption class="specimen__cap"><strong>At the limit<span class="tag">L2-002.2</span></strong>At 200/200 the counter turns red and typing stops.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Messages</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card is-frozen">
+<form class="composer shake" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="c6">New task</label>
+    <input class="composer__input" id="c6" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-invalid="true" aria-describedby="c6Error">
+    <span class="composer__count" hidden>0/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="c6Error" role="alert">Enter a task title.</p>
+</div>
+  <figcaption class="specimen__cap"><strong>Empty submit<span class="tag">L2-002.1</span></strong>No request is sent. The field gives one short shake (no shake with reduced motion).</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="c7">New task</label>
+    <input class="composer__input" id="c7" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Plan the team offsite" aria-invalid="true" aria-describedby="c7Error">
+    <span class="composer__count" hidden>21/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="c7Error" role="alert">You have 500 tasks. Finish or delete some to add more.</p>
+</div>
+  <figcaption class="specimen__cap"><strong>Task limit reached<span class="tag">L2-003.2</span></strong>The typed text is kept so nothing is lost.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="c8">New task</label>
+    <input class="composer__input" id="c8" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Buy oat milk" aria-invalid="true" aria-describedby="c8Error">
+    <span class="composer__count" hidden>12/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="c8Error" role="alert">The title field must not be greater than 200 characters.</p>
+</div>
+  <figcaption class="specimen__cap"><strong>Server validation<span class="tag">L2-004.4</span></strong>A 422 message from the server is shown as is, at the field.</figcaption>
+</figure>
+</div>
+<aside class="mock" aria-label="Mock notes">
+  <p><strong>Mock</strong> · L2-001 to L2-004 · <a href="../index.html">All mocks</a></p>
+  <p>Hover, focus and mid-animation frames are frozen so they can be reviewed side by side. Motion is off inside these specimens.</p>
+</aside>
+</main>
+</body>
+</html>

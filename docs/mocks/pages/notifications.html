@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tasks · Notifications</title>
+<meta name="description" content="Every toast, banner, field message and announcement">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
+<script src="../app.js"></script>
+</head>
+<body>
+<main class="app app--wide">
+<header class="page-head">
+  <h1>Notifications</h1>
+  <p>Toasts confirm what just happened and offer Undo. Errors say what went wrong and what to do next, and never apologise. One toast at a time, at the bottom centre, clear of the safe-area inset.</p>
+</header>
+<h2 class="section-title">Undo toasts <span class="tag">role="status"</span></h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="stage"><div class="toast toast--static" role="status"><span class="toast__msg">Task deleted</span><button class="toast__btn" type="button">Undo</button></div></div>
+  <figcaption class="specimen__cap"><strong>Task deleted<span class="tag">L2-015</span></strong>Holds for 6 seconds, longer while hovered or focused. Ctrl/Cmd+Z also undoes. A second delete replaces it.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="stage"><div class="toast toast--static" role="status"><span class="toast__msg">3 tasks cleared</span><button class="toast__btn" type="button">Undo</button></div></div>
+  <figcaption class="specimen__cap"><strong>Tasks cleared<span class="tag">L2-017</span></strong>After Clear completed. Undo brings them all back.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="stage"><div class="toast toast--static" role="status"><span class="toast__msg">1 task cleared</span><button class="toast__btn" type="button">Undo</button></div></div>
+  <figcaption class="specimen__cap"><strong>One task cleared<span class="tag">L2-017</span><span class="tag">L2-025</span></strong>Singular when n is 1.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Error toasts <span class="tag">role="alert"</span></h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="stage"><div class="toast is-error toast--static" role="alert"><span class="toast__msg">Couldn't add that task. Try again.</span></div></div>
+  <figcaption class="specimen__cap"><strong>Add failed<span class="tag">L2-004.3</span></strong>The pending row is removed and the title goes back into the composer.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="stage"><div class="toast is-error toast--static" role="alert"><span class="toast__msg">Couldn't update that task.</span></div></div>
+  <figcaption class="specimen__cap"><strong>Toggle failed<span class="tag">L2-010.2</span></strong>The checkbox and counts revert.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="stage"><div class="toast is-error toast--static" role="alert"><span class="toast__msg">Couldn't save that change.</span></div></div>
+  <figcaption class="specimen__cap"><strong>Edit failed<span class="tag">L2-013.4</span></strong>The previous title is restored.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="stage"><div class="toast is-error toast--static" role="alert"><span class="toast__msg">Couldn't delete that task.</span></div></div>
+  <figcaption class="specimen__cap"><strong>Delete failed<span class="tag">L2-015.7</span></strong>The row reappears where it was.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="stage"><div class="toast is-error toast--static" role="alert"><span class="toast__msg">That task no longer exists.</span></div></div>
+  <figcaption class="specimen__cap"><strong>Task gone<span class="tag">L2-014.5</span></strong>The task was deleted elsewhere; its row is removed.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Banners</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card"><div class="banner" role="alert">
+  <svg class="banner__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg>
+  <p>Couldn't load your tasks. Check your connection and try again.</p>
+  <button type="button">Try again</button>
+</div></div>
+  <figcaption class="specimen__cap"><strong>Load error<span class="tag">L2-008.5</span></strong>Inside the card, in place of the list. Try again reloads the list.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="stage"><div class="notice" role="status">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"/></svg>
+  <span>You're offline. Changes will fail until you reconnect.</span>
+</div></div>
+  <figcaption class="specimen__cap"><strong>Offline<span class="tag">L2-042.3</span></strong>Above the card, non-blocking. Removed when the connection returns.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Field messages</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card"><form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="n1">New task</label>
+    <input class="composer__input" id="n1" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-invalid="true" aria-describedby="n1Error">
+    <span class="composer__count" hidden>0/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="n1Error" role="alert">Enter a task title.</p></div>
+  <figcaption class="specimen__cap"><strong>Empty title<span class="tag">L2-002.1</span></strong>At the composer.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card"><form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="n2">New task</label>
+    <input class="composer__input" id="n2" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Plan the team offsite" aria-invalid="true" aria-describedby="n2Error">
+    <span class="composer__count" hidden>21/200</span>
+  </div>
+  <button class="composer__btn" type="submit" aria-label="Add task"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Add task</span></button>
+</form>
+<p class="composer__error" id="n2Error" role="alert">You have 500 tasks. Finish or delete some to add more.</p></div>
+  <figcaption class="specimen__cap"><strong>Task limit<span class="tag">L2-003.2</span></strong>At the composer.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen"><ul class="list">
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Call mom"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><input class="edit" type="text" value="Call mom" maxlength="200" aria-label="Edit task title" aria-invalid="true" aria-describedby="n3"><p class="edit__msg" id="n3" role="alert">A task needs a title.</p></div>
+  <button class="del" type="button" aria-label="Delete Call mom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul></div>
+  <figcaption class="specimen__cap"><strong>Empty edit<span class="tag">L2-013.2</span></strong>Under the row being edited.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Screen reader announcements</h2>
+<div class="table-wrap">
+<table class="table">
+  <thead><tr><th scope="col">When</th><th scope="col">Announced</th><th scope="col">How</th></tr></thead>
+  <tbody>
+    <tr><td>A task is added</td><td>Task added</td><td>Polite live region</td></tr>
+    <tr><td>A task is completed</td><td>Task completed</td><td>Polite live region</td></tr>
+    <tr><td>A task is reopened</td><td>Task reopened</td><td>Polite live region</td></tr>
+    <tr><td>A title is saved</td><td>Task updated</td><td>Polite live region</td></tr>
+    <tr><td>A task is deleted</td><td>Task deleted</td><td>Polite live region and <code>role="status"</code> toast</td></tr>
+    <tr><td>Undo is used</td><td>Task restored</td><td>Polite live region</td></tr>
+    <tr><td>Completed tasks are cleared</td><td>3 tasks cleared</td><td>Polite live region and <code>role="status"</code> toast</td></tr>
+    <tr><td>The remaining count changes</td><td>2 left, or All done</td><td>Polite live region (L2-007.5)</td></tr>
+    <tr><td>Anything fails</td><td>The error toast text</td><td><code>role="alert"</code></td></tr>
+  </tbody>
+</table>
+</div>
+<aside class="mock" aria-label="Mock notes">
+  <p><strong>Mock</strong> · L2-004, L2-008, L2-010, L2-013 to L2-017, L2-025, L2-031, L2-042 · <a href="../index.html">All mocks</a></p>
+  <p>Toasts are shown inline here; in the app they sit fixed at the bottom of the viewport (see the Deleted, with undo screen). Toasts never take focus.</p>
+</aside>
+</main>
+</body>
+</html>

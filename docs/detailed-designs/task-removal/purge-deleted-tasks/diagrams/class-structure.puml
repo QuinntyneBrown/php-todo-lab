@@ -1,0 +1,50 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Purge old soft-deleted tasks
+
+class PurgeDeletedTodos {
+  +signature: string = "todos:purge-deleted"
+  -RETENTION_HOURS: int = 24
+  -CHUNK_SIZE: int = 500
+  +handle(repository: TodoRepository): int
+}
+
+interface TodoRepository {
+  +purgeDeletedBefore(cutoff: CarbonImmutable, limit: int): int
+}
+
+class EloquentTodoRepository {
+  +purgeDeletedBefore(cutoff: CarbonImmutable, limit: int): int
+}
+
+class Todo {
+  +id: string
+  +deleted_at: CarbonImmutable
+}
+
+class AppServiceProvider {
+  +register(): void
+}
+
+class "Laravel scheduler (routes/console.php)" as Scheduler {
+  +command("todos:purge-deleted"): Event
+  +hourly(): Event
+}
+
+Scheduler ..> PurgeDeletedTodos : runs hourly
+PurgeDeletedTodos --> TodoRepository : depends on
+EloquentTodoRepository ..|> TodoRepository
+EloquentTodoRepository ..> Todo : force-deletes
+AppServiceProvider ..> EloquentTodoRepository : binds to TodoRepository
+@enduml

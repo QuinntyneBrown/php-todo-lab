@@ -1,0 +1,77 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — REST API contract
+
+class "routes/api.php" as Routes {
+  +prefix: "/api/v1"
+}
+
+class TodoController {
+  one method per endpoint (names TO SUPPLY)
+}
+
+abstract class FormRequest {
+  +rules(): array
+}
+
+class ListTodosRequest
+class StoreTodoRequest
+class UpdateTodoRequest
+class RestoreTodosRequest
+
+class TodoResource {
+  +toArray(request: Request): array
+}
+
+class TodoCollection {
+  +toArray(request: Request): array
+}
+
+class Todo {
+  +id: string
+  +title: string
+  +completed_at: CarbonImmutable
+  +created_at: CarbonImmutable
+  +updated_at: CarbonImmutable
+  +deleted_at: CarbonImmutable
+  +completed: bool
+}
+
+class "Exception rendering (bootstrap/app.php)" as ExceptionRendering <<class name TO SUPPLY>> {
+  +render(e: Throwable, request: Request): JsonResponse
+}
+
+class ProblemDetails <<application/problem+json body>> {
+  +type: string
+  +title: string
+  +status: int
+  +detail: string
+  +errors: map of field to list of messages
+}
+
+Routes --> TodoController : dispatches to
+TodoController ..> ListTodosRequest : validates with
+TodoController ..> StoreTodoRequest : validates with
+TodoController ..> UpdateTodoRequest : validates with
+TodoController ..> RestoreTodosRequest : validates with
+ListTodosRequest --|> FormRequest
+StoreTodoRequest --|> FormRequest
+UpdateTodoRequest --|> FormRequest
+RestoreTodosRequest --|> FormRequest
+TodoController ..> TodoResource : returns
+TodoController ..> TodoCollection : returns
+TodoCollection o-- "*" TodoResource : wraps
+TodoResource ..> Todo : serialises
+ExceptionRendering ..> ProblemDetails : builds
+@enduml

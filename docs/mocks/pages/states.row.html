@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tasks · Row states</title>
+<meta name="description" content="Hover, focus, pending, completion frames, editing, leaving">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles/tokens.css">
+<link rel="stylesheet" href="../styles/app.css">
+<script src="../app.js"></script>
+</head>
+<body>
+<main class="app app--wide">
+<header class="page-head">
+  <h1>Row states</h1>
+  <p>A row is a native checkbox, a title that edits in place and a delete button. Completing a task is the signature moment: the tick draws itself, a sun-coloured ring bursts once and the title is struck through left to right, all within 500 ms.</p>
+</header>
+<h2 class="section-title">Resting and interaction</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Book dentist appointment"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div>
+  <button class="del" type="button" aria-label="Delete Book dentist appointment"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Active<span class="tag">L2-028.2</span></strong>Delete is hidden until the row is hovered or focused on pointer devices.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item is-hover">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Book dentist appointment"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div>
+  <button class="del" type="button" aria-label="Delete Book dentist appointment"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Hover<span class="tag">L2-028.2</span></strong>The row tints and delete appears.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item is-hover">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Book dentist appointment"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div>
+  <button class="del is-hover" type="button" aria-label="Delete Book dentist appointment"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Delete hovered<span class="tag">L2-015</span></strong>Danger tint only on the control itself.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item is-hover">
+  <label class="check is-focus"><input class="check__input" type="checkbox" aria-label="Book dentist appointment"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div>
+  <button class="del" type="button" aria-label="Delete Book dentist appointment"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Checkbox focused<span class="tag">L2-009.5</span><span class="tag">L2-030.2</span></strong>Space toggles. The focus ring is 2 px with a 3 px offset.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item is-hover">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Book dentist appointment"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn is-focus-ring" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div>
+  <button class="del" type="button" aria-label="Delete Book dentist appointment"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Title focused<span class="tag">L2-023.3</span></strong>Enter starts editing.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item is-pending" aria-busy="true">
+  <label class="check"><input class="check__input" type="checkbox" disabled aria-label="Buy oat milk"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Buy oat milk" disabled>Buy oat milk</button></div>
+  <button class="del" type="button" aria-label="Delete Buy oat milk" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Pending<span class="tag">L2-004.1</span></strong>Just added and waiting for the server. Dimmed; cannot be completed or edited yet.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Completing, frame by frame</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Water the plants"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Water the plants">Water the plants</button></div>
+  <button class="del" type="button" aria-label="Delete Water the plants"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>0 ms<span class="tag">L2-011</span></strong>Unchecked.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item frame-1">
+  <label class="check"><input class="check__input" type="checkbox" checked aria-label="Water the plants"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Water the plants">Water the plants</button></div>
+  <button class="del" type="button" aria-label="Delete Water the plants"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>~150 ms<span class="tag">L2-011.1</span></strong>The circle fills, the tick starts drawing and the burst leaves the checkbox.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item frame-2">
+  <label class="check"><input class="check__input" type="checkbox" checked aria-label="Water the plants"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Water the plants">Water the plants</button></div>
+  <button class="del" type="button" aria-label="Delete Water the plants"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>~300 ms<span class="tag">L2-011.1</span></strong>The tick is drawn, the burst fades and the strike wipes across.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item is-done">
+  <label class="check"><input class="check__input" type="checkbox" checked aria-label="Water the plants"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Water the plants">Water the plants</button></div>
+  <button class="del" type="button" aria-label="Delete Water the plants"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>500 ms, completed<span class="tag">L2-011.2</span><span class="tag">L2-030.6</span></strong>Muted title (still 4.5:1), tick and strike, so state never relies on colour alone.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Editing</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Call mom"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><input class="edit" type="text" value="Call mom" maxlength="200" aria-label="Edit task title"></div>
+  <button class="del" type="button" aria-label="Delete Call mom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Editing<span class="tag">L2-012.1</span></strong>Click or Enter on the title. The text is selected. Enter or blur saves; Escape cancels.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Call mom"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><input class="edit" type="text" value="Call mom Sunday" maxlength="200" aria-label="Edit task title"></div>
+  <button class="del" type="button" aria-label="Delete Call mom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Changed<span class="tag">L2-012.2</span></strong>Saved optimistically on Enter or blur.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Call mom"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><input class="edit" type="text" value="Call mom" maxlength="200" aria-label="Edit task title" aria-invalid="true" aria-describedby="e1"><p class="edit__msg" id="e1" role="alert">A task needs a title.</p></div>
+  <button class="del" type="button" aria-label="Delete Call mom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Cleared and saved<span class="tag">L2-013.2</span></strong>The original title comes back and a brief message explains why. No request is sent.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item is-done">
+  <label class="check"><input class="check__input" type="checkbox" checked aria-label="Call mom"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><input class="edit" type="text" value="Call mom" maxlength="200" aria-label="Edit task title"></div>
+  <button class="del" type="button" aria-label="Delete Call mom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Editing a completed task<span class="tag">L2-012.5</span></strong>Completed tasks can be edited too.</figcaption>
+</figure>
+</div>
+<h2 class="section-title">Leaving and wrapping</h2>
+<div class="gallery">
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item is-done is-leaving">
+  <label class="check"><input class="check__input" type="checkbox" checked aria-label="Renew passport"><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Renew passport">Renew passport</button></div>
+  <button class="del" type="button" aria-label="Delete Renew passport"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Leaving<span class="tag">L2-015.1</span><span class="tag">L2-006.6</span></strong>Slides right and fades out in 250 ms on delete, or after completion in a filtered view.</figcaption>
+</figure>
+<figure class="specimen">
+  <div class="card is-frozen">
+<ul class="list">
+<li class="item">
+  <label class="check"><input class="check__input" type="checkbox" aria-label="Call the building manager about the leaking radiator in the spare room, ask whether the plumber can come before the twentieth, and confirm who pays for the parts if the valve has to be replaced again."><span class="check__box"><svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></label>
+  <div class="title"><button class="title__btn" type="button" aria-label="Edit Call the building manager about the leaking radiator in the spare room, ask whether the plumber can come before the twentieth, and confirm who pays for the parts if the valve has to be replaced again.">Call the building manager about the leaking radiator in the spare room, ask whether the plumber can come before the twentieth, and confirm who pays for the parts if the valve has to be replaced again.</button></div>
+  <button class="del" type="button" aria-label="Delete Call the building manager about the leaking radiator in the spare room, ask whether the plumber can come before the twentieth, and confirm who pays for the parts if the valve has to be replaced again."><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</li>
+</ul>
+</div>
+  <figcaption class="specimen__cap"><strong>Long title<span class="tag">L2-027.6</span></strong>Wraps onto as many lines as it needs; controls stay aligned.</figcaption>
+</figure>
+</div>
+<aside class="mock" aria-label="Mock notes">
+  <p><strong>Mock</strong> · L2-004, L2-009 to L2-013, L2-024, L2-028, L2-030 · <a href="../index.html">All mocks</a></p>
+  <p>Hover, focus and mid-animation frames are frozen so they can be reviewed side by side. Motion is off inside these specimens.</p>
+</aside>
+</main>
+</body>
+</html>

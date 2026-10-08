@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Load failure and Try again
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoPageComponent" as page
+  participant "TodoListComponent" as list
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+end box
+user -> page : Open /
+page -> store : Read list
+store -> controller : GET /api/v1/todos
+page -> list : Show 3 skeleton rows (L2-008)
+controller --> store : Network error or 5xx problem details
+store -> store : Mark list request as failed, keep todos unchanged
+store --> page : Load failed
+page -> list : Remove skeleton rows
+page --> user : Show banner "Couldn't load your tasks. Check your connection and try again." with "Try again" button (L2-008)
+note right of page : Composer stays visible and enabled, adding is attempted on submit (L2-008)
+user -> page : Press "Try again"
+page -> store : Reload list (L2-008)
+store -> controller : GET /api/v1/todos
+page -> list : Show 3 skeleton rows again (L2-008)
+alt Server answers
+  controller --> store : 200 with data and meta
+  store --> page : Loaded
+  page --> user : Hide banner, show list (L2-005)
+else Request fails again
+  controller --> store : Network error or 5xx problem details
+  store --> page : Load failed
+  page --> user : Show banner with "Try again" (L2-008)
+end
+@enduml

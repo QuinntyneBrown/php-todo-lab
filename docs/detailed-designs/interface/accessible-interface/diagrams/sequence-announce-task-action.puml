@@ -1,0 +1,65 @@
+@startuml
+title UML sequence behaviour — Announce a task action through the polite live region
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+actor "Assistive technology" as at
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoComposerComponent" as composer
+  participant "TodoItemComponent" as item
+  participant "TodoPageComponent" as page
+  participant "Polite live region" as live
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "UI_STRINGS" as strings
+end box
+alt add
+  user -> composer : Press Enter or click "Add task"
+  composer -> page : submitted output
+  page -> store : Add task
+  store --> page : Pending task shown
+  page -> strings : Read announcement for add
+  strings --> page : "Task added"
+else complete or reopen
+  user -> item : Toggle the checkbox
+  item -> page : toggled output
+  page -> store : Set completed
+  store --> page : State updated
+  page -> strings : Read announcement for toggle
+  strings --> page : "Task completed" or "Task reopened"
+else edit
+  user -> item : Save an edited title
+  item -> page : editEnded output
+  page -> store : Update title
+  store --> page : Title updated
+  page -> strings : Read announcement for edit
+  strings --> page : "Task updated"
+else delete
+  user -> item : Activate delete
+  item -> page : deleted output
+  page -> store : Delete task
+  store --> page : Row removed
+  page -> strings : Read announcement for delete
+  strings --> page : "Task deleted"
+end
+page -> live : Set message text (L2-031)
+live --> at : Polite announcement, queued after current speech (L2-031)
+at --> user : Speaks the announcement
+note over page, live
+  Announcement verbs match the button and toast verbs (L2-025).
+  Strings other than "Task added" and "Task completed" follow the mock todo.html.
+end note
+@enduml

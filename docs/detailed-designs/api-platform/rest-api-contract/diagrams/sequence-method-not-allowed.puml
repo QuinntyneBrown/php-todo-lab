@@ -1,0 +1,29 @@
+@startuml
+title UML sequence behaviour — Unsupported method returns 405 problem details
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "HttpTodoApi" as client
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "routes/api.php" as routes
+  participant "Exception rendering (bootstrap/app.php)" as errors
+end box
+client -> routes : PUT /api/v1/todos/{id}
+routes -> routes : Path matches a route but the method does not (L2-018 criterion 2)
+routes -> errors : Raise method-not-allowed exception with the allowed methods
+errors -> errors : Build problem details with status 405 (L2-020)
+errors --> client : 405 application/problem+json with Allow header (L2-018)
+@enduml

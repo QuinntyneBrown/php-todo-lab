@@ -1,0 +1,80 @@
+@startuml
+title UML sequence behaviour — Add a task, validation and failure paths
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoComposerComponent" as composer
+  participant "TodoPageComponent" as page
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+  participant "StoreTodoRequest" as request
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "CreateTodo" as action
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+user -> composer : Submit title
+alt Empty or whitespace-only title (client)
+  composer -> composer : Mark field invalid, show "Enter a task title." (L2-002)
+  composer --> user : No request sent
+else Valid title
+  composer -> page : Emit trimmed title
+  page -> store : Add task
+  store -> store : Insert pending task with temporary id (L2-004)
+  store -> api : Create task
+  api -> controller : POST /api/v1/todos
+  alt Title missing, not a string, or over 200 characters
+    controller -> request : Validate title (L2-002)
+    request --> controller : Validation failed
+    controller --> api : 422 problem details with errors.title (L2-002)
+    api --> store : Validation failure
+    store -> store : Remove pending task (L2-004)
+    store --> page : Field-level message from server
+    page -> composer : Show message at the composer (L2-004)
+  else 500 non-deleted todos exist
+    controller -> request : Validate title (L2-002)
+    request --> controller : Valid, trimmed title
+    controller -> action : Handle create
+    action -> repo : Create todo within the 500-task cap
+    repo -> db : Begin transaction
+    repo -> db : Count non-deleted todos under a lock (L2-003, L2-043)
+    db --> repo : Count equals 500
+    repo -> db : Roll back
+    repo --> action : Limit reached
+    action --> controller : Limit reached
+    controller --> api : 422 problem details with code todo_limit_reached (L2-003)
+    api --> store : Limit failure
+    store -> store : Remove pending task (L2-004)
+    store --> page : Limit message, restore typed text
+    page -> composer : Show "You have 500 tasks. Finish or delete some to add more." and keep text (L2-003)
+  else Network error or 5xx response
+    api --> store : Request failed
+    store -> store : Remove pending task, no automatic retry (L2-004)
+    store --> page : Restore typed title
+    page -> composer : Put title back in the composer (L2-004)
+    store --> toast : Error toast "Couldn't add that task. Try again." (L2-004)
+  end
+end
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+!include <C4/C4_Context>
+LAYOUT_WITH_LEGEND()
+title System Context — Single-screen shell
+
+Person(user, "User", "Single person managing a personal task list on a local machine")
+System(app, "php-todo-lab", "Single-screen to-do app with a PHP API and an Angular front end")
+
+Rel(user, app, "Adds, completes, edits, and deletes tasks using")
+@enduml

@@ -1,0 +1,75 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Persist todos
+
+class "create_todos_table" as Migration {
+  +up(): void
+  +down(): void
+}
+
+class Todo {
+  +id: string
+  +title: string
+  +completed_at: CarbonImmutable
+  +created_at: CarbonImmutable
+  +updated_at: CarbonImmutable
+  +deleted_at: CarbonImmutable
+  #dateFormat: string = "Y-m-d H:i:s.v"
+  #fillable: title only
+  +completed: bool
+}
+
+interface TodoRepository {
+  +createWithinLimit(title: string, limit: int): Todo
+  +update(todo: Todo, changes: array): Todo
+  +softDeleteCompleted(): list of Todo
+  +restoreMany(ids: list of string): list of Todo
+}
+
+class EloquentTodoRepository {
+  +createWithinLimit(title: string, limit: int): Todo
+  +update(todo: Todo, changes: array): Todo
+  +softDeleteCompleted(): list of Todo
+  +restoreMany(ids: list of string): list of Todo
+}
+
+class CreateTodo {
+  +__invoke(title: string): Todo
+}
+
+class UpdateTodo {
+  +__invoke(id: string, changes: array): Todo
+}
+
+class ClearCompletedTodos {
+  +__invoke(): list of Todo
+}
+
+class RestoreTodos {
+  +__invoke(ids: list of string): list of Todo
+}
+
+class "DB transaction (Illuminate DB facade)" as Transaction {
+  +transaction(callback): mixed
+}
+
+CreateTodo --> TodoRepository
+UpdateTodo --> TodoRepository
+ClearCompletedTodos --> TodoRepository
+RestoreTodos --> TodoRepository
+EloquentTodoRepository ..|> TodoRepository
+EloquentTodoRepository ..> Todo : reads and writes
+EloquentTodoRepository ..> Transaction : wraps create and bulk writes
+Migration ..> Todo : creates the table for
+@enduml

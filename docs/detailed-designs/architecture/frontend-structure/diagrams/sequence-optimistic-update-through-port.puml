@@ -1,0 +1,51 @@
+@startuml
+title UML sequence behaviour — Optimistic update through the TodoApi port
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "TodoListComponent" as list
+  participant "TodoPageComponent" as page
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as http
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "Laravel API" as api
+end box
+user -> item : Check the task checkbox
+item -> list : Emit toggle through output() (L2-046)
+list -> page : Re-emit toggle through output() (L2-046)
+page -> store : Request completion change for the task
+store -> store : Write todos signal optimistically (L2-047)
+store -> store : Recompute activeCount, completedCount, progress (L2-047)
+store --> page : Signals notify OnPush components (L2-039)
+page --> user : Updated row and counts within 100 ms (L2-039)
+store -> http : Call TodoApi, resolved to HttpTodoApi (L2-048)
+http -> api : PATCH /api/v1/todos/{id} through HttpClient and firstValueFrom (L2-048)
+alt Server accepts the change
+  api --> http : 200 with todo resource
+  http --> store : Typed todo from core/api/models (L2-048)
+  store -> store : Reconcile todos signal with the server version
+else Request fails
+  api --> http : Network error or error response
+  http --> store : Rejected promise
+  store -> store : Revert todos signal and set toast signal (L2-047)
+  store --> page : Signals notify OnPush components (L2-039)
+  page --> user : Reverted row and error toast
+end
+@enduml

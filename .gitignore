@@ -1,0 +1,26 @@
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Dependencies
+vendor/
+node_modules/
+
+# Build and tool output
+dist/
+.angular/
+coverage/
+.phpunit.cache/
+.phpunit.result.cache
+test-results/
+playwright-report/
+blob-report/
+.playwright-cli/
+
+# Editors and OS
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

@@ -1,0 +1,76 @@
+@startuml
+title UML sequence behaviour — Toggle task completion
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "TodoPageComponent" as page
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+  participant "UpdateTodoRequest" as req
+  participant "TodoResource" as res
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "UpdateTodo" as action
+  participant "Todo" as todo
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+user -> item : Click the checkbox or press Space (L2-009)
+item -> page : toggled(completed)
+page -> store : toggle(id, completed)
+store -> store : Set completed and completedAt in the todos signal, counts recompute (L2-010)
+store --> item : New todo value
+item --> user : Checked state and strike-through within one frame (L2-010)
+opt Task is being completed
+  item --> user : Check draws, ring burst, left-to-right wipe within 500 ms (L2-011)
+else Task is being reopened
+  item --> user : Strike-through removed, no burst (L2-011)
+end
+store -> api : updateTodo(id, completed)
+api -> ctrl : PATCH /api/v1/todos/{id} with completed
+ctrl -> req : Validate body (non-boolean completed gives 422, L2-009)
+req --> ctrl : Valid
+ctrl -> action : Invoke with id and completed
+action -> repo : Find non-deleted todo by id
+repo -> db : SELECT
+db --> repo : Row
+repo --> action : Todo
+alt completed is true and completed_at is null
+  action -> todo : Set completed_at to current UTC time (L2-009)
+else completed is true and completed_at is set
+  action -> todo : Leave completed_at unchanged, idempotent (L2-009)
+else completed is false
+  action -> todo : Set completed_at to null (L2-009)
+end
+action -> repo : Save todo
+repo -> db : UPDATE
+db --> repo : Saved
+repo --> action : Todo
+action --> ctrl : Todo
+ctrl -> res : Serialise todo
+res --> ctrl : data with completed and completedAt
+ctrl --> api : 200 OK
+api --> store : Updated todo
+store -> store : Merge server completedAt when no later toggle is pending
+@enduml

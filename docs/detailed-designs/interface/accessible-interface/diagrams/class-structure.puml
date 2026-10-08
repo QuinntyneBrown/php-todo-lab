@@ -1,0 +1,98 @@
+@startuml
+' --- shared skin header ---
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam class {
+  BorderColor #344054
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+' --------------------------
+title Class structure — Accessible interface
+
+class TodoPageComponent <<smart component>> {
+  +onDeleteByKeyboard(id: string): void
+  +onEditEnded(id: string, how: string): void
+  +onToastFocusWithin(focused: boolean): void
+}
+
+class PoliteLiveRegion <<class name to supply>> {
+  +announce(message: string): void
+}
+
+class TodoStore <<providedIn root>> {
+  +todos: WritableSignal<Todo[]>
+  +editingId: WritableSignal<string or null>
+  +toast: WritableSignal<ToastState or null>
+  +visibleTodos: Signal<Todo[]>
+  +activeCount: Signal<number>
+  +completedCount: Signal<number>
+}
+
+class ToastState {
+  +message: string
+  +isError: boolean
+  +hasUndo: boolean
+}
+
+class TodoItemComponent <<presentational>> {
+  +todo: InputSignal<Todo>
+  +editing: InputSignal<boolean>
+  +toggled: OutputEmitterRef<boolean>
+  +deleted: OutputEmitterRef<void>
+  +editEnded: OutputEmitterRef<string>
+}
+
+class TodoComposerComponent <<presentational>> {
+  +submitted: OutputEmitterRef<string>
+}
+
+class TodoFilterComponent <<presentational>> {
+  +filter: InputSignal<string>
+  +allCount: InputSignal<number>
+  +activeCount: InputSignal<number>
+  +doneCount: InputSignal<number>
+}
+
+class TodoHeaderComponent <<presentational>> {
+  +date: InputSignal<Date>
+}
+
+class TodoListComponent <<presentational>> {
+  +todos: InputSignal<Todo[]>
+}
+
+class ToastComponent <<presentational>> {
+  +toast: InputSignal<ToastState>
+  +undone: OutputEmitterRef<void>
+  +focusWithinChange: OutputEmitterRef<boolean>
+}
+
+class UI_STRINGS <<constants>> {
+  +announcements
+  +ariaLabels
+  +toasts
+}
+
+class "tokens.scss" as Tokens <<design tokens>> {
+  focus ring 2 px, offset 2 px
+  colour pairs at 4.5 to 1 or 3 to 1
+}
+
+TodoPageComponent --> TodoStore : calls actions
+TodoPageComponent --> PoliteLiveRegion : announces through
+TodoPageComponent ..> UI_STRINGS : reads text
+TodoPageComponent *-- TodoHeaderComponent
+TodoPageComponent *-- TodoComposerComponent
+TodoPageComponent *-- TodoFilterComponent
+TodoPageComponent *-- TodoListComponent
+TodoPageComponent *-- ToastComponent
+TodoListComponent "1" o-- "*" TodoItemComponent
+TodoStore --> ToastState : holds
+ToastComponent ..> ToastState : renders
+TodoItemComponent ..> UI_STRINGS : aria-label text
+TodoItemComponent ..> Tokens : focus ring
+@enduml

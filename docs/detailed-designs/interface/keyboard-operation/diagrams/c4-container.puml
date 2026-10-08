@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Keyboard operation
+
+Person(user, "User", "Single person managing a personal task list")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Single-screen UI served by ng serve on port 4200 with an /api proxy. Hosts this feature.")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "Versioned JSON API under /api/v1 served by php artisan serve on port 8000")
+  ContainerDb(db, "MySQL database", "MySQL 8.4, utf8mb4", "Stores tasks in the todos table")
+}
+Rel(user, spa, "Uses", "Browser")
+Rel(spa, api, "Calls", "JSON/HTTP via /api proxy")
+Rel(api, db, "Reads and writes", "Eloquent")
+@enduml

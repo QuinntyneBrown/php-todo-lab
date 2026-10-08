@@ -1,0 +1,48 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Add a task
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Smart component", "Wires the composer, list, and toast to the store")
+  Component(composer, "TodoComposerComponent", "Presentational component", "Text field, Add task button, client validation, counter")
+  Component(list, "TodoListComponent", "Presentational component", "Renders rows, including the pending row")
+  Component(item, "TodoItemComponent", "Presentational component", "Renders a pending task dimmed and inert")
+  Component(toast, "ToastComponent", "Presentational component", "Shows the error toast")
+  Component(store, "TodoStore", "Signal store", "Pending task, rollback, filter switch to All")
+  Component(port, "TodoApi", "Abstract class", "Port for todo writes")
+  Component(adapter, "HttpTodoApi", "Adapter", "Sends POST /api/v1/todos")
+}
+
+Container_Boundary(api, "Laravel API") {
+  Component(routes, "routes/api.php", "Route file", "Maps POST /api/v1/todos to TodoController")
+  Component(ctrl, "TodoController", "Thin controller", "Validates, calls CreateTodo, returns TodoResource")
+  Component(req, "StoreTodoRequest", "Form Request", "Validates the title")
+  Component(action, "CreateTodo", "Action", "Creates a todo within the 500-task cap")
+  Component(repo, "TodoRepository", "Interface", "Persistence port")
+  Component(eloquent, "EloquentTodoRepository", "Repository", "Counts and inserts in one transaction")
+  Component(model, "Todo", "Eloquent model", "HasUlids, SoftDeletes")
+  Component(res, "TodoResource", "API Resource", "Serialises the created todo")
+  Component(errs, "Exception handler", "bootstrap/app.php", "Renders application/problem+json")
+}
+
+ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
+
+Rel(page, composer, "Binds title and error message")
+Rel(page, list, "Binds visible todos")
+Rel(list, item, "Renders rows with")
+Rel(page, toast, "Binds toast")
+Rel(page, store, "Calls add task on")
+Rel(store, port, "Depends on")
+Rel(adapter, port, "Implements")
+Rel(adapter, routes, "POST /api/v1/todos", "JSON/HTTP")
+Rel(routes, ctrl, "Routes to")
+Rel(ctrl, req, "Validates with")
+Rel(ctrl, action, "Calls")
+Rel(ctrl, res, "Returns 201 with")
+Rel(action, repo, "Depends on")
+Rel(eloquent, repo, "Implements")
+Rel(eloquent, model, "Creates")
+Rel(eloquent, db, "Counts and inserts", "SQL transaction")
+Rel(errs, ctrl, "Renders 422 and 500 problem details for")
+@enduml

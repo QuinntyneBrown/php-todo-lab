@@ -1,0 +1,12 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Accessible interface
+
+Person(user, "User", "Uses assistive technology")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Renders semantic markup, focus styles, live announcements, and toast roles")
+}
+
+Rel(user, spa, "Navigates, listens, and operates", "Browser and assistive technology")
+@enduml

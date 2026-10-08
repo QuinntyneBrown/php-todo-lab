@@ -1,0 +1,39 @@
+@startuml
+title UML sequence behaviour — Load the page at /?filter=done
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoFilterComponent" as filter
+  participant "TodoPageComponent" as page
+  participant "TodoListComponent" as list
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "Router" as router
+  participant "TodoStore" as store
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+end box
+user -> router : Open /?filter=done (reload, bookmark, or back)
+router -> page : Bind query parameter filter=done to the page input (L2-006)
+page -> store : Set filter signal to Done
+store -> controller : GET /api/v1/todos (list load as in list-tasks)
+controller --> store : 200 with data and meta
+store -> store : Recompute visibleTodos, completed tasks only (L2-006)
+store --> list : Completed tasks only (L2-006)
+page --> filter : Selected filter is Done
+filter --> user : "Done" shown selected, aria-pressed true (L2-006)
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Create a todo with the cap check in one transaction
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+end box
+box "Backend — Laravel Application and Domain" #ECFDF3
+  participant "CreateTodo" as action
+  participant "Todo" as model
+end box
+box "Backend — Laravel Infrastructure" #FFF4E5
+  participant "EloquentTodoRepository" as repo
+  database "MySQL database" as db
+end box
+ctrl -> action : Invoke with the validated title only
+action -> repo : Create todo with limit 500
+repo -> db : Begin transaction (L2-043 criterion 3)
+repo -> db : Count non-deleted todos with a lock that serialises concurrent creates (mechanism TO SUPPLY)
+db --> repo : Count
+alt Count is 500 or more
+  repo -> db : Roll back
+  repo --> action : Limit reached
+  action --> ctrl : Raise todo_limit_reached
+else Count is below 500
+  repo -> model : Fill title, ignoring any client id (L2-021 criterion 4)
+  model -> model : Generate 26-character ULID id (HasUlids)
+  model --> repo : New Todo
+  repo -> db : Insert row with created_at and updated_at in UTC (L2-043 criterion 4)
+  repo -> db : Commit
+  db --> repo : Committed
+  repo --> action : Persisted Todo
+  action --> ctrl : Persisted Todo
+end
+@enduml

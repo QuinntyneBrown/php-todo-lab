@@ -1,0 +1,15 @@
+@startuml
+!include <C4/C4_Container>
+LAYOUT_WITH_LEGEND()
+title Containers — Filter tasks
+
+Person(user, "User", "Single local user who narrows the list to active or done tasks")
+System_Boundary(app, "php-todo-lab") {
+  Container(spa, "Angular SPA", "Angular, standalone, zoneless, OnPush, Signals", "Segmented control and URL query parameter ?filter. Served by ng serve on :4200 with an /api proxy")
+  Container(api, "Laravel API", "PHP 8.4, Laravel", "Supports GET /api/v1/todos?status=all|active|completed. Served by php artisan serve on :8000")
+  ContainerDb(db, "MySQL database", "MySQL 8.4, utf8mb4", "Stores the todos table")
+}
+Rel(user, spa, "Selects a filter or opens a URL with ?filter", "HTTP")
+Rel(spa, api, "Sends GET /api/v1/todos", "JSON/HTTP")
+Rel(api, db, "Reads todos by status", "Eloquent")
+@enduml

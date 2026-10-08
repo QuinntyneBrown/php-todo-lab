@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Row enter animation and reduced motion
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+participant "Browser" as browser
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoComposerComponent" as composer
+  participant "TodoListComponent" as list
+  participant "TodoItemComponent" as item
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+user -> composer : Submit a valid title
+composer -> store : Add the task through TodoPageComponent
+store -> store : Insert the task at the top of the todos signal
+store --> list : visibleTodos changes
+list -> item : Create a row for the new id only, @for track todo.id (L2-024)
+note right of list
+  Existing rows keep their DOM and do not re-animate (L2-024)
+end note
+item -> item : Mark the new row as entering (L2-024)
+item -> browser : Request the enter animation
+browser -> browser : Evaluate prefers-reduced-motion
+alt No reduced-motion preference
+  browser --> user : One slide-and-fade of 250 ms or less, ease-out, transform and opacity only (L2-024)
+else prefers-reduced-motion is reduce
+  browser --> user : Row appears with no movement, at most an opacity change of 100 ms (L2-024)
+end
+@enduml

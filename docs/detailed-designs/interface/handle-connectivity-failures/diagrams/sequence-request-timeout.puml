@@ -1,0 +1,40 @@
+@startuml
+title UML sequence behaviour — Abort a request after 10 seconds and treat it as a network error
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as controller
+end box
+store -> api : Any call (list, create, update, delete, restore)
+api -> api : Start the 10 second timer for this request (L2-042)
+api -> controller : HTTP request
+note over controller
+  No response arrives.
+end note
+api -> api : Timer expires after 10 seconds
+api -> controller : Abort the request (L2-042)
+api -> api : Classify the failure as a network error (L2-042)
+alt the call was GET /api/v1/todos
+  api -> api : Apply the read retry delays, 300 ms then 900 ms (L2-042)
+  api --> store : Task list, or failure after 2 retries
+else the call was a write
+  api --> store : Failure with no retry (L2-042)
+  store -> store : Roll back per L2-004, L2-010, L2-013, or L2-015
+end
+@enduml

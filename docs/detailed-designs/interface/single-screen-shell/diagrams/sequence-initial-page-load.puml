@@ -1,0 +1,47 @@
+@startuml
+title UML sequence behaviour — Initial page load
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "Route table" as router
+  participant "TodoPageComponent" as page
+  participant "TodoHeaderComponent" as header
+  participant "TodoComposerComponent" as composer
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+end box
+user -> router : Open the app at any path
+alt Path is not /
+  router -> router : Redirect unknown path to / (L2-022)
+end
+router -> page : Activate route /
+page -> header : Render region 1 with the current date
+header -> header : Format weekday and date in the user locale (L2-022)
+header --> user : Show for example Wednesday and 7 October
+page -> composer : Render region 2
+page -> page : Render region 3 toolbar, region 4 list, region 5 toast area (L2-022)
+page -> store : Read signals for the regions
+note right of page
+  No modal dialogs and no other route exist (L2-022)
+end note
+alt Device matches hover: hover
+  page -> composer : Request focus after first render (L2-022)
+  composer --> user : Composer has keyboard focus
+else Touch device without hover
+  page --> user : Focus is not forced so the on-screen keyboard does not cover the list (L2-022)
+end
+@enduml

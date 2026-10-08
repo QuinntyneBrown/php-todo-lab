@@ -1,0 +1,43 @@
+@startuml
+title UML sequence behaviour — Delete task, request failure
+skinparam backgroundColor #FFFFFF
+skinparam shadowing false
+skinparam roundcorner 12
+skinparam defaultFontName Arial
+skinparam ArrowColor #344054
+skinparam rectangle {
+  BorderColor #344054
+  FontColor #101828
+}
+skinparam package {
+  BorderColor #667085
+  FontColor #101828
+  BackgroundColor #F9FAFB
+}
+actor "User" as user
+box "Frontend — Angular SPA (UI components)" #E0F2FE
+  participant "TodoItemComponent" as item
+  participant "ToastComponent" as toast
+end box
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "TodoStore" as store
+  participant "HttpTodoApi" as api
+end box
+box "Backend — Laravel API (HTTP layer)" #D1FADF
+  participant "TodoController" as ctrl
+end box
+user -> item : Click the delete control (L2-015)
+item -> store : delete(id) through TodoPageComponent
+store -> store : Keep the removed todo and its position, remove the row (L2-015)
+store --> toast : Toast "Task deleted" with Undo shown
+store -> api : deleteTodo(id)
+api -> ctrl : DELETE /api/v1/todos/{id}
+alt Network error or 5xx response
+  ctrl --> api : 5xx or no response
+  api --> store : Rejected request
+  store -> store : Insert the todo back at its original position (L2-015)
+  store --> item : Row reappears
+  store -> toast : Replace toast with "Couldn't delete that task." (L2-015)
+  toast --> user : Error toast shown
+end
+@enduml

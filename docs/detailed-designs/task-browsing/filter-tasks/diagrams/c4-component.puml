@@ -1,0 +1,41 @@
+@startuml
+!include <C4/C4_Component>
+LAYOUT_WITH_LEGEND()
+title Components — Filter tasks
+
+Container_Boundary(spa, "Angular SPA") {
+  Component(page, "TodoPageComponent", "Smart component", "Receives the filter query parameter as an input and navigates on selection")
+  Component(filter, "TodoFilterComponent", "Presentational component", "Segmented control All, Active, Done with aria-pressed and a selection indicator")
+  Component(list, "TodoListComponent", "Presentational component", "Renders the visible tasks")
+  Component(store, "TodoStore", "Signal store", "Holds the filter signal and the visibleTodos computed")
+  Component(router, "Router", "Angular Router", "Mirrors the filter in ?filter and binds it to component inputs")
+}
+
+Container_Boundary(api, "Laravel API") {
+  Component(ctrl, "TodoController", "Thin controller", "Validates, calls ListTodos, returns the list response")
+  Component(req, "ListTodosRequest", "Form Request", "Rejects an unknown status with 422")
+  Component(status, "TodoStatus", "Backed enum", "All, Active, Completed")
+  Component(action, "ListTodos", "Action", "Returns todos for a TodoStatus")
+  Component(repo, "TodoRepository", "Interface", "Persistence port")
+  Component(eloquent, "EloquentTodoRepository", "Repository", "Applies the active or completed scope")
+  Component(model, "Todo", "Eloquent model", "Scopes active() and completed()")
+  Component(errs, "Exception handler", "bootstrap/app.php", "Renders application/problem+json")
+}
+
+ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
+
+Rel(page, filter, "Binds selected filter")
+Rel(page, list, "Binds visible tasks")
+Rel(page, router, "Navigates with query parameter filter")
+Rel(router, page, "Binds filter query parameter to input")
+Rel(page, store, "Sets filter on")
+Rel(store, ctrl, "GET /api/v1/todos", "JSON/HTTP")
+Rel(ctrl, req, "Validates with")
+Rel(req, status, "Accepts values of")
+Rel(ctrl, action, "Calls")
+Rel(action, repo, "Depends on")
+Rel(eloquent, repo, "Implements")
+Rel(eloquent, model, "Applies scopes of")
+Rel(eloquent, db, "Selects rows", "SQL")
+Rel(errs, ctrl, "Renders 422 for")
+@enduml

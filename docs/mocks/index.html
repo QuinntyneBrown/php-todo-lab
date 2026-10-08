@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tasks mocks</title>
+<meta name="description" content="Launcher for the to-do app design mocks">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/tokens.css">
+<link rel="stylesheet" href="./styles/app.css">
+<script src="./app.js"></script>
+</head>
+<body>
+<main class="app app--wide launcher">
+<header class="page-head">
+  <h1>Tasks</h1>
+  <p>Design mocks for the one-screen to-do app. Each page is a single state you can link to; the prototype puts them all together. Specs: <code>docs/specs/L2.md</code>, L2-001 to L2-031 and L2-042.</p>
+</header>
+<div class="launcher__bar">
+  <span id="themeLabel">Theme</span>
+  <div class="chips" role="group" aria-labelledby="themeLabel">
+    <button type="button" data-set-theme="auto">Match system</button>
+    <button type="button" data-set-theme="light">Light</button>
+    <button type="button" data-set-theme="dark">Dark</button>
+  </div>
+</div>
+
+<h2 class="section-title">Prototype</h2>
+<ul class="tiles">
+    <li><a class="tile tile--star" href="./todo.html">Interactive prototype<small>Add, complete, edit, delete and undo, filter, clear completed. Switch data states at the bottom.</small></a></li>
+</ul>
+
+<h2 class="section-title">Screens</h2>
+<ul class="tiles">
+    <li><a class="tile" href="./pages/page.loaded.html">Loaded<small>Five tasks, newest first, two done</small></a></li>
+    <li><a class="tile" href="./pages/page.loading.html">Loading<small>Three skeleton rows, composer already usable</small></a></li>
+    <li><a class="tile" href="./pages/page.empty.html">Empty<small>First run: nothing here yet</small></a></li>
+    <li><a class="tile" href="./pages/page.all-done.html">All done<small>Every task ticked: full ring, &quot;All done&quot;</small></a></li>
+    <li><a class="tile" href="./pages/page.load-error.html">Load error<small>Inline banner with Try again; composer still works</small></a></li>
+    <li><a class="tile" href="./pages/page.offline.html">Offline<small>Non-blocking notice while the browser is offline</small></a></li>
+    <li><a class="tile" href="./pages/page.limit.html">500-task limit<small>Limit reached; typed text is kept</small></a></li>
+    <li><a class="tile" href="./pages/page.long-titles.html">Long titles<small>200 characters, emoji, CJK and URLs wrap cleanly</small></a></li>
+    <li><a class="tile" href="./pages/page.deleted.html">Deleted, with undo<small>Row gone, &quot;Task deleted&quot; toast with Undo</small></a></li>
+</ul>
+
+<h2 class="section-title">Filters</h2>
+<ul class="tiles">
+    <li><a class="tile" href="./pages/page.filter-active.html">Active filter<small>Only the three active tasks</small></a></li>
+    <li><a class="tile" href="./pages/page.filter-active.empty.html">Active filter, all clear<small>&quot;All clear. Nothing left to do.&quot;</small></a></li>
+    <li><a class="tile" href="./pages/page.filter-done.html">Done filter<small>Only the two completed tasks</small></a></li>
+    <li><a class="tile" href="./pages/page.filter-done.empty.html">Done filter, empty<small>&quot;Nothing completed yet.&quot;</small></a></li>
+</ul>
+
+<h2 class="section-title">Inline states</h2>
+<ul class="tiles">
+    <li><a class="tile" href="./pages/states.composer.html">Composer states<small>Default, focus, counter, limits and validation</small></a></li>
+    <li><a class="tile" href="./pages/states.row.html">Row states<small>Hover, focus, pending, completion frames, editing, leaving</small></a></li>
+    <li><a class="tile" href="./pages/states.toolbar.html">Toolbar states<small>Filter pill positions, counts and Clear completed</small></a></li>
+</ul>
+
+<h2 class="section-title">Notifications</h2>
+<ul class="tiles">
+    <li><a class="tile" href="./pages/notifications.html">Notifications<small>Every toast, banner, field message and announcement</small></a></li>
+</ul>
+
+<h2 class="section-title">Dialogs</h2>
+<ul class="tiles">
+    <li><div class="tile tile--none">None, by design<small>L2-022 keeps the app to one screen with no modals. Destructive actions are undoable from a toast instead of confirmed in a dialog.</small></div></li>
+</ul>
+</main>
+</body>
+</html>
