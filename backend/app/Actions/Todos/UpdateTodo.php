@@ -28,8 +28,10 @@ final readonly class UpdateTodo
         if (array_key_exists('title', $changes)) {
             $columns['title'] = $changes['title'];
         }
-        if (array_key_exists('completed', $changes) && $changes['completed'] !== $todo->completed) {
-            $columns['completed_at'] = $changes['completed'] ? now() : null;
+        // Always written when requested, so a concurrent request cannot leave this
+        // one half-applied (L2-043); `??` keeps an existing completedAt (L2-009).
+        if (array_key_exists('completed', $changes)) {
+            $columns['completed_at'] = $changes['completed'] ? ($todo->completed_at ?? now()) : null;
         }
 
         return $this->todos->update($todo, $columns);

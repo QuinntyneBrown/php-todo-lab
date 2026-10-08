@@ -8,6 +8,7 @@ use App\Enums\TodoStatus;
 use App\Exceptions\TodoLimitReached;
 use App\Models\Todo;
 use Carbon\CarbonImmutable;
+use DateTimeInterface;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -55,9 +56,15 @@ final class EloquentTodoRepository implements TodoRepository
 
     public function update(Todo $todo, array $columns): Todo
     {
-        $todo->fill($columns)->save();
+        // A query-level update writes every given column in one statement, even one
+        // that matches a stale read, which a model save() would skip as clean.
+        $values = array_map(
+            fn (mixed $value): mixed => $value instanceof DateTimeInterface ? $todo->fromDateTime($value) : $value,
+            $columns,
+        );
+        Todo::query()->whereKey($todo->getKey())->update($values);
 
-        return $todo;
+        return $todo->refresh();
     }
 
     public function delete(Todo $todo): void
