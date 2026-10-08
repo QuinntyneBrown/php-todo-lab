@@ -7,7 +7,7 @@
   <section class="card" [attr.aria-label]="strings.list.label">
     <app-todo-composer
       [focusRequest]="composerFocus()"
-      [restore]="composerRestore()"
+      [refused]="refusedAdd()"
       (submitted)="onAdd($event)"
     />
 
@@ -19,6 +19,14 @@
         [doneCount]="store.completedCount()"
         (selectedChange)="select($event)"
       />
+      <button
+        class="link-btn"
+        type="button"
+        [attr.aria-disabled]="store.completedCount() === 0"
+        (click)="onClearCompleted()"
+      >
+        {{ strings.filters.clearCompleted }}
+      </button>
     </div>
 
     @if (store.loadFailed()) {

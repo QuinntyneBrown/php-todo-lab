@@ -5,22 +5,16 @@ import {
   computed,
   effect,
   input,
+  linkedSignal,
   output,
-  signal,
   viewChild,
 } from '@angular/core';
+import type { RefusedAdd } from '../../todo.store';
 import { UI_STRINGS } from '../../ui-strings';
 
 /** Titles are limited in characters (code points), not UTF-16 units (L2-002). */
 const MAX_LENGTH = 200;
 const COUNTER_FROM = 160;
-
-/** A title to put back in the field; `seq` makes a repeat of the same text apply again. */
-export interface ComposerRestore {
-  readonly text: string;
-  readonly error: string | null;
-  readonly seq: number;
-}
 
 /** Code points, as the server counts them with mb_strlen, so 200 emoji fit. */
 function codePoints(text: string): string[] {
@@ -38,14 +32,15 @@ export class TodoComposerComponent {
   /** Each new value moves focus to the field; the page owns when that happens. */
   readonly focusRequest = input<number | null>(null);
   /** Gives a refused title back, with the server's message if it sent one (L2-004). */
-  readonly restore = input<ComposerRestore | null>(null);
+  readonly refused = input<RefusedAdd | null>(null);
   /** Emits the trimmed title; the field is cleared for the next task at once. */
   readonly submitted = output<string>();
 
   protected readonly strings = UI_STRINGS.composer;
   protected readonly maxLength = MAX_LENGTH;
-  protected readonly text = signal('');
-  protected readonly error = signal<string | null>(null);
+  /** What the user typed; a refused add puts its title back (L2-004). */
+  protected readonly text = linkedSignal(() => this.refused()?.title ?? '');
+  protected readonly error = linkedSignal(() => this.refused()?.fieldError ?? null);
   protected readonly length = computed(() => codePoints(this.text()).length);
   protected readonly showCounter = computed(() => this.length() >= COUNTER_FROM);
   private readonly field = viewChild.required<ElementRef<HTMLInputElement>>('field');
@@ -53,12 +48,6 @@ export class TodoComposerComponent {
   constructor() {
     effect(() => {
       if (this.focusRequest() !== null) this.field().nativeElement.focus();
-    });
-    effect(() => {
-      const restore = this.restore();
-      if (restore === null) return;
-      this.text.set(restore.text);
-      this.error.set(restore.error);
     });
   }
 

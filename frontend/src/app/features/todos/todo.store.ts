@@ -36,9 +36,12 @@ interface PatchQueue {
 }
 
 /** Why an add did not stick, so the page can give the title back (L2-004). */
-export type AddResult =
-  | { readonly ok: true }
-  | { readonly ok: false; readonly title: string; readonly fieldError?: string };
+export type AddResult = { readonly ok: true } | RefusedAdd;
+export interface RefusedAdd {
+  readonly ok: false;
+  readonly title: string;
+  readonly fieldError?: string;
+}
 
 /**
  * The single source of task state (L2-047). Reads go through `resource()` over the
@@ -179,6 +182,32 @@ export class TodoStore {
       this.removed.delete(id);
       this.insert(todo);
       this.showError(UI_STRINGS.toasts.deleteFailed);
+    }
+  }
+
+  /** Removes every completed task at once, in one request, and offers Undo (L2-017). */
+  async clearCompleted(): Promise<void> {
+    const completed = this.todos().filter((t) => t.completed && !t.pending);
+    if (completed.length === 0) return;
+    const ids = completed.map((t) => t.id);
+    this.todos.update((todos) => todos.filter((t) => !ids.includes(t.id)));
+    this.toast.set({
+      message: UI_STRINGS.toasts.cleared(ids.length),
+      tone: 'status',
+      undo: { ids },
+    });
+
+    const deleting = this.track(this.api.clearCompleted()).then(
+      () => true,
+      () => false,
+    );
+    completed.forEach((todo) => this.removed.set(todo.id, { todo, deleting }));
+    if (!(await deleting)) {
+      ids.forEach((id) => this.removed.delete(id));
+      completed.forEach((todo) => {
+        this.insert(todo);
+      });
+      this.showError(UI_STRINGS.toasts.clearFailed);
     }
   }
 

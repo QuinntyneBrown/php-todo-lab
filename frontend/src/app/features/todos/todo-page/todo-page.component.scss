@@ -35,9 +35,34 @@
   border-bottom: 1px solid var(--line);
 }
 
+// aria-disabled rather than disabled, so the button stays discoverable (L2-017 criterion 2).
+.link-btn {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: none;
+  border-radius: 8px;
+  color: var(--sea);
+  font-weight: 600;
+  white-space: nowrap;
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--paper-sunk);
+  }
+
+  &[aria-disabled='true'] {
+    color: var(--slate);
+    cursor: default;
+  }
+}
+
 @media (width <= 575.98px) {
   .toolbar {
     flex-wrap: wrap;
+  }
+
+  .link-btn {
+    margin-left: auto;
   }
 }
 

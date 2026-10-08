@@ -11,10 +11,7 @@ import {
 import { Router } from '@angular/router';
 import { Announcer } from '../../../shared/ui/announcer/announcer';
 import { ToastComponent } from '../../../shared/ui/toast/toast.component';
-import {
-  type ComposerRestore,
-  TodoComposerComponent,
-} from '../components/todo-composer/todo-composer.component';
+import { TodoComposerComponent } from '../components/todo-composer/todo-composer.component';
 import {
   type EmptyKind,
   TodoEmptyStateComponent,
@@ -22,7 +19,7 @@ import {
 import { TodoFilterComponent } from '../components/todo-filter/todo-filter.component';
 import { TodoHeaderComponent } from '../components/todo-header/todo-header.component';
 import { type RowFocus, TodoListComponent } from '../components/todo-list/todo-list.component';
-import { type TodoFilter, TodoStore, parseFilter } from '../todo.store';
+import { type RefusedAdd, type TodoFilter, TodoStore, parseFilter } from '../todo.store';
 import { UI_STRINGS } from '../ui-strings';
 
 /** The one screen (L2-022): header, composer, toolbar, list, and toasts. */
@@ -51,7 +48,7 @@ export class TodoPageComponent implements OnChanges {
   protected readonly today = new Date();
   protected readonly strings = UI_STRINGS;
   protected readonly composerFocus = signal<number | null>(null);
-  protected readonly composerRestore = signal<ComposerRestore | null>(null);
+  protected readonly refusedAdd = signal<RefusedAdd | null>(null);
   protected readonly rowFocus = signal<RowFocus | null>(null);
 
   /** Why the visible list is empty: no tasks at all, or none for this filter (L2-008). */
@@ -85,13 +82,7 @@ export class TodoPageComponent implements OnChanges {
     const added = this.store.add(title);
     this.announce(UI_STRINGS.announcements.added);
     const result = await added;
-    if (!result.ok) {
-      this.composerRestore.update((previous) => ({
-        text: result.title,
-        error: result.fieldError ?? null,
-        seq: (previous?.seq ?? 0) + 1,
-      }));
-    }
+    if (!result.ok) this.refusedAdd.set(result);
   }
 
   protected onToggled(id: string, completed: boolean): void {
@@ -117,6 +108,13 @@ export class TodoPageComponent implements OnChanges {
     if (!viaKeyboard) return;
     if (neighbour) this.rowFocus.update((f) => ({ id: neighbour.id, seq: (f?.seq ?? 0) + 1 }));
     else this.focusComposer();
+  }
+
+  protected onClearCompleted(): void {
+    const cleared = this.store.completedCount();
+    if (cleared === 0) return;
+    void this.store.clearCompleted();
+    this.announce(UI_STRINGS.toasts.cleared(cleared));
   }
 
   protected onUndo(): void {
