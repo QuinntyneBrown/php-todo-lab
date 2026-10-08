@@ -11,6 +11,16 @@
       (submitted)="onAdd($event)"
     />
 
+    <div class="toolbar">
+      <app-todo-filter
+        [selected]="store.filter()"
+        [allCount]="store.totalCount()"
+        [activeCount]="store.activeCount()"
+        [doneCount]="store.completedCount()"
+        (selectedChange)="select($event)"
+      />
+    </div>
+
     @if (store.loadFailed()) {
       <div class="banner" role="alert">
         <p class="banner__text">{{ strings.list.loadFailed }}</p>
@@ -19,9 +29,9 @@
         </button>
       </div>
     } @else {
-      <app-todo-list [todos]="store.todos()" [loading]="store.loading()" />
-      @if (!store.loading() && store.todos().length === 0) {
-        <app-todo-empty-state kind="none" />
+      <app-todo-list [todos]="store.visibleTodos()" [loading]="store.loading()" />
+      @if (!store.loading() && store.visibleTodos().length === 0) {
+        <app-todo-empty-state [kind]="emptyKind()" />
       }
     }
   </section>

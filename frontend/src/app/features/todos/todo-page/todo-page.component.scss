@@ -26,6 +26,21 @@
   overflow: hidden;
 }
 
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+@media (width <= 575.98px) {
+  .toolbar {
+    flex-wrap: wrap;
+  }
+}
+
 // Bottom-centred, clear of the home indicator (L2-028 criterion 5).
 .toasts {
   position: fixed;

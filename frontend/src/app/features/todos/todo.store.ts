@@ -16,6 +16,14 @@ import { UI_STRINGS } from './ui-strings';
 /** A todo as the UI holds it: pending while its create is in flight (L2-004). */
 export type TodoView = Todo & { readonly pending?: true };
 
+/** The list filter, as it appears in the URL (`?filter=active|done`; nothing for all). */
+export type TodoFilter = 'all' | 'active' | 'done';
+
+/** Anything other than a known filter, including a missing one, means all (L2-006). */
+export function parseFilter(value: string | null | undefined): TodoFilter {
+  return value === 'active' || value === 'done' ? value : 'all';
+}
+
 /** Why an add did not stick, so the page can give the title back (L2-004). */
 export type AddResult =
   | { readonly ok: true }
@@ -39,9 +47,20 @@ export class TodoStore {
   );
   readonly toast = signal<ToastState | null>(null);
 
+  /** The selected filter; the page writes it from the `?filter=` query parameter. */
+  readonly filter = signal<TodoFilter>('all');
+
   /** Counted from the local copy, so they move with every optimistic change (L2-007). */
   readonly activeCount = computed(() => this.todos().filter((t) => !t.completed).length);
   readonly completedCount = computed(() => this.todos().filter((t) => t.completed).length);
+  readonly totalCount = computed(() => this.todos().length);
+
+  readonly visibleTodos = computed(() => {
+    const filter = this.filter();
+    return filter === 'all'
+      ? this.todos()
+      : this.todos().filter((t) => t.completed === (filter === 'done'));
+  });
 
   readonly loading = computed(() => this.listResource.isLoading());
   readonly loadFailed = computed(() => this.listResource.status() === 'error');

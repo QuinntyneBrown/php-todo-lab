@@ -1,0 +1,13 @@
+<div class="seg" role="group" [attr.aria-label]="label" [attr.data-selected]="selected()">
+  <span class="seg__pill" aria-hidden="true"></span>
+  @for (option of options(); track option.value) {
+    <button
+      class="seg__btn"
+      type="button"
+      [attr.aria-pressed]="option.value === selected()"
+      (click)="selectedChange.emit(option.value)"
+    >
+      {{ option.name }} <span class="seg__n">{{ option.count }}</span>
+    </button>
+  }
+</div>
