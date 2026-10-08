@@ -75,6 +75,20 @@ final class InMemoryTodoRepository implements TodoRepository
         return $this->seed($title);
     }
 
+    public function find(string $id): ?Todo
+    {
+        return $this->live()->get($id);
+    }
+
+    public function update(Todo $todo, array $columns): Todo
+    {
+        foreach ($columns as $column => $value) {
+            $todo->setAttribute($column, $value);
+        }
+
+        return $todo;
+    }
+
     /**
      * @return Collection<string, Todo>
      */

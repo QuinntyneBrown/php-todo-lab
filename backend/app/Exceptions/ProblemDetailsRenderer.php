@@ -33,7 +33,7 @@ final class ProblemDetailsRenderer
                 'code' => 'todo_limit_reached',
                 'errors' => ['title' => [$e->getMessage()]],
             ]),
-            $e instanceof ModelNotFoundException => self::problem(404, 'The requested resource was not found.'),
+            $e instanceof TodoNotFound, $e instanceof ModelNotFoundException => self::problem(404, 'The requested resource was not found.'),
             $e instanceof MethodNotAllowedHttpException => self::problem(
                 405,
                 "The {$request->method()} method is not supported for this route.",

@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Enums\TodoStatus;
 use App\Exceptions\TodoLimitReached;
 use App\Models\Todo;
+use DateTimeInterface;
 use Illuminate\Support\Collection;
 
 interface TodoRepository
@@ -32,4 +33,14 @@ interface TodoRepository
      * @throws TodoLimitReached
      */
     public function createWithinLimit(string $title, int $limit): Todo;
+
+    /** The non-deleted todo with this id, if any. */
+    public function find(string $id): ?Todo;
+
+    /**
+     * Writes the given columns in one statement and returns the updated todo.
+     *
+     * @param  array{title?: string, completed_at?: DateTimeInterface|null}  $columns
+     */
+    public function update(Todo $todo, array $columns): Todo;
 }

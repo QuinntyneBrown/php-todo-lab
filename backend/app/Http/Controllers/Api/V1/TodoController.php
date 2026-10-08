@@ -6,9 +6,11 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Actions\Todos\CreateTodo;
 use App\Actions\Todos\ListTodos;
+use App\Actions\Todos\UpdateTodo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\ListTodosRequest;
 use App\Http\Requests\Api\V1\StoreTodoRequest;
+use App\Http\Requests\Api\V1\UpdateTodoRequest;
 use App\Http\Resources\V1\TodoCollection;
 use App\Http\Resources\V1\TodoResource;
 use Illuminate\Http\JsonResponse;
@@ -27,5 +29,10 @@ final class TodoController extends Controller
         return (new TodoResource($todo))->response()
             ->setStatusCode(201)
             ->header('Location', url("/api/v1/todos/{$todo->id}"));
+    }
+
+    public function update(UpdateTodoRequest $request, string $todo, UpdateTodo $updateTodo): TodoResource
+    {
+        return new TodoResource($updateTodo->handle($todo, $request->changes()));
     }
 }

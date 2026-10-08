@@ -46,4 +46,16 @@ final class EloquentTodoRepository implements TodoRepository
             return Todo::query()->create(['title' => $title]);
         }, attempts: 3);
     }
+
+    public function find(string $id): ?Todo
+    {
+        return Todo::query()->find($id);
+    }
+
+    public function update(Todo $todo, array $columns): Todo
+    {
+        $todo->fill($columns)->save();
+
+        return $todo;
+    }
 }
