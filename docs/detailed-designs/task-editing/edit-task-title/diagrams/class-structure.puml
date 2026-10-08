@@ -43,7 +43,7 @@ package "Angular SPA" {
   class InMemoryTodoApi
   class "Todo (core/api/models)" as Todo
   class TodoView <<type>> {
-    Todo & { pending?: true; tempId?: string }
+    Todo & { pending?: true }
   }
   class ApiError {
     +kind: FailureKind

@@ -28,11 +28,11 @@ The feature is a frontend-only slice. It touches the Angular SPA container and n
 - **`TodoItemComponent`** — presentational component for one row. Its title wraps and the row grows, so controls never overlap the text at 320 px with a 200-character title. It reveals the delete control according to the hover capability.
 - **`ToastComponent`** — presentational component for the toast. Its bottom offset includes `env(safe-area-inset-bottom)`. The mock adds a 16 px base offset.
 - **`TodoStore`** — root service. Its `editingId` signal records which row is in edit mode. A viewport change does not write to it.
-- **`tokens.scss`** — shared design tokens as CSS custom properties, plus the breakpoint thresholds as Sass variables. Component stylesheets read them.
+- **`tokens.scss` and `_breakpoints.scss`** — `tokens.scss` holds the shared design tokens as CSS custom properties. `_breakpoints.scss`, beside it in `src/styles`, holds the breakpoint thresholds as Sass variables, so a component can load them without copying the `:root` token rules.
 
 Every interactive control has a hit area of at least 44 x 44 CSS px. The mock applies this with a 44 px minimum size on the delete control, the toast button, and the banner button.
 
-Breakpoint thresholds are fixed by L2-027. Media queries cannot read CSS custom properties, so `tokens.scss` declares the thresholds as Sass variables: `$breakpoint-sm: 576px`, `$breakpoint-md: 768px`, `$breakpoint-lg: 992px`, and `$breakpoint-xl: 1200px`. Each component stylesheet loads them with `@use` and Sass resolves them at build time.
+Breakpoint thresholds are fixed by L2-027. Media queries cannot read CSS custom properties, so `_breakpoints.scss` declares the thresholds as Sass variables: `$breakpoint-sm: 576px`, `$breakpoint-md: 768px`, `$breakpoint-lg: 992px`, and `$breakpoint-xl: 1200px`. Each component stylesheet loads them with `@use` and Sass resolves them at build time.
 
 The SM column is "full width up to 560 px". The side gutter is 16 px at every breakpoint, as the mock applies it. L2-027 fixes the 16 px gutter at XS only, and the design keeps the same value above XS.
 

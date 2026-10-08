@@ -9,7 +9,7 @@ Container_Boundary(spa, "Angular SPA") {
   Component(motion, "Reduced-motion rules", "CSS media query prefers-reduced-motion", "Disables transitions and animations or limits them to opacity changes of 100 ms or less. Replaces the shimmer with a solid var(--line) tone")
   Component(css, "Component stylesheets", "SCSS, BEM-style classes", "Use colour tokens only. Animate transform and opacity")
   Component(item, "TodoItemComponent", "Presentational", "Row with a one-time enter animation for a new task")
-  Component(list, "TodoListComponent", "Presentational", "Tracks rows by tempId ?? id and renders skeleton rows while loading")
+  Component(list, "TodoListComponent", "Presentational", "Tracks rows by id and renders skeleton rows while loading")
   Component(skeleton, "Skeleton rows", "Placeholder rows in TodoListComponent", "Shimmer is the only animation on page load")
   Component(store, "TodoStore", "Injectable, providedIn root", "Adds the new task to the todos signal")
 }

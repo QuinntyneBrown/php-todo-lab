@@ -40,7 +40,7 @@ package "Angular SPA" {
     +create(title: string): Promise<Todo>
   }
   class "TodoView" as TodoView <<type>> {
-    Todo & { pending?: true; tempId?: string }
+    Todo & { pending?: true }
     id is tmp-<uuid> while pending
   }
   class ApiError {

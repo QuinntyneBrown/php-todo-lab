@@ -32,6 +32,8 @@ php artisan serve             # http://localhost:8000
 
 The Angular dev server proxies `/api` here, so no CORS configuration is needed.
 
+The scheduler runs `todos:purge-deleted` hourly (L2-016). Locally, keep it running in a second terminal with `php artisan schedule:work`, or run the command once with `php artisan todos:purge-deleted`.
+
 ## Check
 
 | Command | What it runs |

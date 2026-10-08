@@ -43,7 +43,7 @@ package "Angular SPA" {
     +updatedAt: string
   }
   class TodoView <<type>> {
-    Todo & { pending?: true; tempId?: string }
+    Todo & { pending?: true }
   }
   class UpdateTodoPayload {
     +title?: string

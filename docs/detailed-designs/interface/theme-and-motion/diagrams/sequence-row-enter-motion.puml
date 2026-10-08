@@ -28,7 +28,7 @@ user -> composer : Submit a valid title
 composer -> store : addTask(title) through TodoPageComponent
 store -> store : Insert { id: tmp-<uuid>, pending: true } at the top of the todos signal
 store --> list : visibleTodos changes
-list -> item : Create a row for the new track key only, track todo.tempId ?? todo.id (L2-024)
+list -> item : Create a row for the new id only, track todo.id; only pending rows animate in (L2-024)
 note right of list
   Existing rows keep their DOM and do not re-animate (L2-024)
 end note
@@ -40,7 +40,7 @@ alt No reduced-motion preference
 else prefers-reduced-motion is reduce
   browser --> user : Row appears with no movement, at most an opacity change of 100 ms (L2-024)
 end
-store -> store : On 201, replace the pending task in place and keep tempId
+store -> store : On 201, drop the pending task (no exit animation) and insert the server task
 store --> list : visibleTodos changes
 list -> list : Track key unchanged, row DOM kept, no second enter animation (L2-024)
 @enduml

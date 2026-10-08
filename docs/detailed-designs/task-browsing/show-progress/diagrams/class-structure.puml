@@ -22,7 +22,7 @@ class TodoStore <<providedIn root>> {
 }
 
 class TodoView <<type>> {
-  Todo & { pending?: true; tempId?: string }
+  Todo & { pending?: true }
 }
 
 class TodoPageComponent <<smart>> {

@@ -44,7 +44,7 @@ class "Reduced-motion rules" as Reduced <<stylesheet>> {
 class TodoListComponent <<presentational>> {
   +todos: InputSignal<TodoView[]>
   +loading: InputSignal<boolean>
-  @for track todo.tempId ?? todo.id
+  @for track todo.id
 }
 
 class TodoItemComponent <<presentational>> {
