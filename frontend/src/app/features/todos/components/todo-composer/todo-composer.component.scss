@@ -39,6 +39,63 @@
     background: var(--paper);
     box-shadow: 0 0 0 3px var(--sea-soft);
   }
+
+  &[aria-invalid='true'] {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px var(--danger-soft);
+  }
+}
+
+.composer__input--counted {
+  padding-right: 72px;
+}
+
+.composer__count {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: 0.8125rem;
+  color: var(--slate);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.composer__count--max {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.composer__error {
+  margin: 0;
+  padding: 0 16px 10px;
+  color: var(--danger);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.composer__field--shake {
+  animation: shake 0.28s var(--ease-out);
+}
+
+@keyframes shake {
+  20% {
+    translate: -6px 0;
+  }
+
+  50% {
+    translate: 5px 0;
+  }
+
+  80% {
+    translate: -3px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .composer__field--shake {
+    animation: none;
+  }
 }
 
 .composer__btn {

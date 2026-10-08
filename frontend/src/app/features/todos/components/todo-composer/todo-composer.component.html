@@ -1,16 +1,25 @@
-<form class="composer" novalidate>
-  <div class="composer__field">
+<form class="composer" novalidate (submit)="onSubmit($event)">
+  <div class="composer__field" [class.composer__field--shake]="error() !== null">
     <label class="sr-only" for="new-task">{{ strings.label }}</label>
     <input
       #field
       class="composer__input"
+      [class.composer__input--counted]="showCounter()"
       id="new-task"
       name="title"
       type="text"
-      maxlength="200"
       autocomplete="off"
       [placeholder]="strings.placeholder"
+      [value]="text()"
+      [attr.aria-invalid]="error() === null ? null : 'true'"
+      [attr.aria-describedby]="error() === null ? null : 'new-task-error'"
+      (input)="onInput($event)"
     />
+    @if (showCounter()) {
+      <span class="composer__count" [class.composer__count--max]="length() >= maxLength">
+        {{ length() }}/{{ maxLength }}
+      </span>
+    }
   </div>
   <button class="composer__btn" type="submit" [attr.aria-label]="strings.submit">
     <svg
@@ -28,3 +37,6 @@
     <span>{{ strings.submit }}</span>
   </button>
 </form>
+@if (error(); as message) {
+  <p class="composer__error" id="new-task-error" role="alert">{{ message }}</p>
+}
