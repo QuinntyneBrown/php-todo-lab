@@ -11,10 +11,12 @@
         <app-todo-item
           [todo]="todo"
           [editing]="todo.id === editingId()"
+          [focusRequest]="rowFocus()?.id === todo.id ? (rowFocus()?.seq ?? null) : null"
           (toggled)="toggled.emit({ id: todo.id, completed: $event })"
           (editStarted)="editStarted.emit(todo.id)"
           (titleSaved)="titleSaved.emit({ id: todo.id, title: $event })"
           (editCancelled)="editCancelled.emit()"
+          (deleted)="deleted.emit({ id: todo.id, viaKeyboard: $event.viaKeyboard })"
         />
       </li>
     }

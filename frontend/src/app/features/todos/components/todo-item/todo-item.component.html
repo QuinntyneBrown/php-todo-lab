@@ -7,6 +7,7 @@
 >
   <label class="check">
     <input
+      #checkbox
       class="check__input"
       type="checkbox"
       [checked]="todo().completed"
@@ -49,4 +50,15 @@
       </button>
     }
   </div>
+  <button
+    class="del"
+    type="button"
+    [disabled]="todo().pending"
+    [attr.aria-label]="strings.ariaLabels.delete(todo().title)"
+    (click)="onDelete($event)"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3" />
+    </svg>
+  </button>
 </div>

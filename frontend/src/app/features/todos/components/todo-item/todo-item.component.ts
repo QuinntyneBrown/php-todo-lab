@@ -24,6 +24,10 @@ import { UI_STRINGS } from '../../ui-strings';
 export class TodoItemComponent {
   readonly todo = input.required<TodoView>();
   readonly editing = input(false);
+  /** Each new value focuses this row's checkbox; the page owns when (L2-031 criterion 3). */
+  readonly focusRequest = input<number | null>(null);
+  /** Whether a keyboard activated the delete, so the page can move focus on (L2-031). */
+  readonly deleted = output<{ viaKeyboard: boolean }>();
   /** The checked state the user chose. */
   readonly toggled = output<boolean>();
   readonly editStarted = output();
@@ -37,6 +41,7 @@ export class TodoItemComponent {
   protected readonly editError = signal<string | null>(null);
   private readonly editor = viewChild<ElementRef<HTMLInputElement>>('editor');
   private readonly titleButton = viewChild<ElementRef<HTMLButtonElement>>('titleButton');
+  private readonly checkbox = viewChild.required<ElementRef<HTMLInputElement>>('checkbox');
   /** Set when Enter or Escape ends editing, so focus goes back to the title (L2-031). */
   private returnFocus = false;
   /** One edit session ends once, whichever of Enter, Escape, or blur comes first. */
@@ -55,6 +60,14 @@ export class TodoItemComponent {
         title.focus();
       }
     });
+    afterRenderEffect(() => {
+      if (this.focusRequest() !== null) this.checkbox().nativeElement.focus();
+    });
+  }
+
+  protected onDelete(event: MouseEvent): void {
+    // A click from Enter or Space carries no pointer detail.
+    this.deleted.emit({ viaKeyboard: event.detail === 0 });
   }
 
   protected onChange(event: Event): void {

@@ -86,6 +86,9 @@ export class TodoStore {
   /** Each task's PATCHes run one after another, so they apply in order (L2-010). */
   private readonly patchQueues = new Map<string, PatchQueue>();
 
+  /** Deleted tasks an Undo can still bring back, with whether their delete succeeded. */
+  private readonly removed = new Map<string, { todo: TodoView; deleting: Promise<boolean> }>();
+
   readonly loading = computed(() => this.listResource.isLoading());
   readonly loadFailed = computed(() => this.listResource.status() === 'error');
 
@@ -157,6 +160,73 @@ export class TodoStore {
     if (!todo || trimmed === '' || trimmed === todo.title) return false;
     void this.patch({ ...todo, title: trimmed }, { title: trimmed }, UI_STRINGS.toasts.saveFailed);
     return true;
+  }
+
+  /** Removes a task at once and offers Undo; a failed delete puts it back (L2-015). */
+  async delete(id: string): Promise<void> {
+    const todo = this.todos().find((t) => t.id === id);
+    if (!todo || todo.pending) return;
+    if (this.editingId() === id) this.editingId.set(null);
+    this.todos.update((todos) => todos.filter((t) => t.id !== id));
+    this.toast.set({ message: UI_STRINGS.toasts.deleted, tone: 'status', undo: { ids: [id] } });
+
+    const deleting = this.track(this.api.delete(id)).then(
+      () => true,
+      () => false,
+    );
+    this.removed.set(id, { todo, deleting });
+    if (!(await deleting)) {
+      this.removed.delete(id);
+      this.insert(todo);
+      this.showError(UI_STRINGS.toasts.deleteFailed);
+    }
+  }
+
+  /**
+   * Brings back what the toast's Undo names, at once and in its original place. A delete
+   * still in flight is waited for first; a failed restore removes the task again.
+   */
+  async undo(): Promise<void> {
+    const ids = this.toast()?.undo?.ids ?? [];
+    this.toast.set(null);
+    const entries = ids.flatMap((id) => this.removed.get(id) ?? []);
+    ids.forEach((id) => this.removed.delete(id));
+    entries.forEach(({ todo }) => {
+      this.insert(todo);
+    });
+
+    const settled = await Promise.all(entries.map(({ deleting }) => deleting));
+    const restorable = entries.filter((_, i) => settled[i]).map(({ todo }) => todo.id);
+    if (restorable.length === 0) return;
+    try {
+      await this.track<unknown>(
+        restorable.length === 1 && restorable[0] !== undefined
+          ? this.api.restore(restorable[0])
+          : this.api.restoreMany(restorable),
+      );
+    } catch {
+      this.todos.update((todos) => todos.filter((t) => !restorable.includes(t.id)));
+      this.showError(
+        restorable.length === 1
+          ? UI_STRINGS.toasts.restoreFailed
+          : UI_STRINGS.toasts.restoreManyFailed,
+      );
+    }
+  }
+
+  dismissToast(): void {
+    this.toast.set(null);
+  }
+
+  /** Puts a task back where the server orders it: newest first, ties by id (L2-005). */
+  private insert(todo: TodoView): void {
+    this.todos.update((todos) =>
+      todos.some((t) => t.id === todo.id)
+        ? todos
+        : [...todos, todo].sort(
+            (a, b) => b.createdAt.localeCompare(a.createdAt) || b.id.localeCompare(a.id),
+          ),
+    );
   }
 
   /**

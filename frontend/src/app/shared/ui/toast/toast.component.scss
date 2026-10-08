@@ -23,9 +23,27 @@
   color: var(--on-danger);
 }
 
+.toast--action {
+  padding-right: 4px;
+}
+
 .toast__msg {
   flex: 1;
   font-weight: 500;
+}
+
+.toast__btn {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  border-radius: 10px;
+  color: var(--toast-action);
+  font-weight: 700;
+
+  &:hover {
+    background: var(--toast-hover);
+  }
 }
 
 @keyframes toast-in {

@@ -33,6 +33,8 @@
         [todos]="store.visibleTodos()"
         [loading]="store.loading()"
         [editingId]="store.editingId()"
+        [rowFocus]="rowFocus()"
+        (deleted)="onDelete($event.id, $event.viaKeyboard)"
         (toggled)="onToggled($event.id, $event.completed)"
         (editStarted)="store.beginEdit($event)"
         (titleSaved)="onTitleSaved($event.id, $event.title)"
@@ -46,6 +48,11 @@
 </main>
 <div class="toasts">
   @if (store.toast(); as toast) {
-    <app-toast [toast]="toast" />
+    <app-toast
+      [toast]="toast"
+      [undoLabel]="strings.toasts.undo"
+      (undone)="onUndo()"
+      (dismissed)="store.dismissToast()"
+    />
   }
 </div>

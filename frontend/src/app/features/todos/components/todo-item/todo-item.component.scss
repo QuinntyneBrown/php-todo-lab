@@ -201,6 +201,48 @@
   font-weight: 500;
 }
 
+.del {
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  border-radius: 50%;
+  color: var(--slate);
+  display: grid;
+  place-items: center;
+  transition:
+    opacity 0.15s,
+    background-color 0.15s,
+    color 0.15s;
+
+  svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:hover {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+}
+
+// Revealed on hover or focus where there is a pointer; always shown on touch (L2-028).
+@media (hover: hover) {
+  .del {
+    opacity: 0;
+  }
+
+  .item:hover .del,
+  .item:focus-within .del {
+    opacity: 1;
+  }
+}
+
 // State changes apply at once, colour only (L2-011 criterion 3, L2-024 criterion 2).
 @media (prefers-reduced-motion: reduce) {
   .check__box,

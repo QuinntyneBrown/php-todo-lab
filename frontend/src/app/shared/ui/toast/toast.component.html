@@ -1,7 +1,11 @@
 <div
   class="toast"
   [class.toast--error]="toast().tone === 'error'"
+  [class.toast--action]="toast().undo !== null"
   [attr.role]="toast().tone === 'error' ? 'alert' : 'status'"
 >
   <span class="toast__msg">{{ toast().message }}</span>
+  @if (toast().undo !== null) {
+    <button class="toast__btn" type="button" (click)="undone.emit()">{{ undoLabel() }}</button>
+  }
 </div>
