@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 :host {
   display: block;
   flex: 1;
@@ -61,7 +63,7 @@
 }
 
 // Full width on phones, counts hidden visually (L2-027 criterion 1).
-@media (width <= 575.98px) {
+@media (width < bp.$breakpoint-sm) {
   :host {
     flex: 1 1 100%;
     max-width: none;

@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 // Single centred column (L2-027).
 .app {
   width: 100%;
@@ -6,14 +8,14 @@
   padding: 24px 16px calc(96px + env(safe-area-inset-bottom));
 }
 
-@media (width >= 768px) {
+@media (width >= bp.$breakpoint-md) {
   .app {
     max-width: 640px;
     padding-top: 40px;
   }
 }
 
-@media (width >= 992px) {
+@media (width >= bp.$breakpoint-lg) {
   .app {
     padding-top: 8vh;
   }
@@ -56,7 +58,7 @@
   }
 }
 
-@media (width <= 575.98px) {
+@media (width < bp.$breakpoint-sm) {
   .toolbar {
     flex-wrap: wrap;
   }

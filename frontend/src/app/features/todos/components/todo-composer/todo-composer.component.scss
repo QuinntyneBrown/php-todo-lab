@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 .composer {
   position: relative;
   display: flex;
@@ -123,7 +125,7 @@
   }
 }
 
-@media (width <= 575.98px) {
+@media (width < bp.$breakpoint-sm) {
   .composer__btn {
     width: 52px;
     padding: 0;

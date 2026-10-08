@@ -1,3 +1,5 @@
+@use 'breakpoints' as bp;
+
 .head {
   display: flex;
   align-items: center;
@@ -64,7 +66,7 @@
   transform: rotate(-90deg);
 }
 
-@media (width >= 576px) {
+@media (width >= bp.$breakpoint-sm) {
   .ring {
     width: 56px;
     height: 56px;
