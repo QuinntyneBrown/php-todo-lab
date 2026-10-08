@@ -5,7 +5,11 @@
     [completedCount]="store.completedCount()"
   />
   <section class="card" [attr.aria-label]="strings.list.label">
-    <app-todo-composer [focusRequest]="composerFocus()" />
+    <app-todo-composer
+      [focusRequest]="composerFocus()"
+      [restore]="composerRestore()"
+      (submitted)="onAdd($event)"
+    />
 
     @if (store.loadFailed()) {
       <div class="banner" role="alert">
@@ -22,3 +26,8 @@
     }
   </section>
 </main>
+<div class="toasts">
+  @if (store.toast(); as toast) {
+    <app-toast [toast]="toast" />
+  }
+</div>

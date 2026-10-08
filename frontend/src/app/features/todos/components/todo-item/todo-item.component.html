@@ -1,9 +1,15 @@
-<div class="item" [class.item--done]="todo().completed">
+<div
+  class="item"
+  [class.item--done]="todo().completed"
+  [class.item--pending]="todo().pending"
+  [class.item--enter]="todo().pending"
+>
   <label class="check">
     <input
       class="check__input"
       type="checkbox"
       [checked]="todo().completed"
+      [disabled]="todo().pending"
       [attr.aria-label]="todo().title"
     />
     <span class="check__box">

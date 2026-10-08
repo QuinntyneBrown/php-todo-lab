@@ -15,6 +15,13 @@ import { UI_STRINGS } from '../../ui-strings';
 const MAX_LENGTH = 200;
 const COUNTER_FROM = 160;
 
+/** A title to put back in the field; `seq` makes a repeat of the same text apply again. */
+export interface ComposerRestore {
+  readonly text: string;
+  readonly error: string | null;
+  readonly seq: number;
+}
+
 /** Code points, as the server counts them with mb_strlen, so 200 emoji fit. */
 function codePoints(text: string): string[] {
   return Array.from(text);
@@ -30,6 +37,8 @@ function codePoints(text: string): string[] {
 export class TodoComposerComponent {
   /** Each new value moves focus to the field; the page owns when that happens. */
   readonly focusRequest = input<number | null>(null);
+  /** Gives a refused title back, with the server's message if it sent one (L2-004). */
+  readonly restore = input<ComposerRestore | null>(null);
   /** Emits the trimmed title; the field is cleared for the next task at once. */
   readonly submitted = output<string>();
 
@@ -44,6 +53,12 @@ export class TodoComposerComponent {
   constructor() {
     effect(() => {
       if (this.focusRequest() !== null) this.field().nativeElement.focus();
+    });
+    effect(() => {
+      const restore = this.restore();
+      if (restore === null) return;
+      this.text.set(restore.text);
+      this.error.set(restore.error);
     });
   }
 

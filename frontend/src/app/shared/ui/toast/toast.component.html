@@ -1,0 +1,7 @@
+<div
+  class="toast"
+  [class.toast--error]="toast().tone === 'error'"
+  [attr.role]="toast().tone === 'error' ? 'alert' : 'status'"
+>
+  <span class="toast__msg">{{ toast().message }}</span>
+</div>
