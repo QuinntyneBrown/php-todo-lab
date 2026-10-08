@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Enums\TodoStatus;
+use App\Exceptions\TodoLimitReached;
 use App\Models\Todo;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 final class EloquentTodoRepository implements TodoRepository
 {
@@ -31,8 +33,17 @@ final class EloquentTodoRepository implements TodoRepository
         ];
     }
 
-    public function create(string $title): Todo
+    public function createWithinLimit(string $title, int $limit): Todo
     {
-        return Todo::query()->create(['title' => $title]);
+        // The locking read takes next-key locks on the scanned index range, so a
+        // concurrent create waits here until this transaction commits, then counts
+        // the new row. A deadlock is retried by the transaction attempts.
+        return DB::transaction(function () use ($title, $limit): Todo {
+            if (Todo::query()->lockForUpdate()->count() >= $limit) {
+                throw new TodoLimitReached($limit);
+            }
+
+            return Todo::query()->create(['title' => $title]);
+        }, attempts: 3);
     }
 }

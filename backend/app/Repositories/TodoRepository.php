@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Enums\TodoStatus;
+use App\Exceptions\TodoLimitReached;
 use App\Models\Todo;
 use Illuminate\Support\Collection;
 
@@ -24,5 +25,11 @@ interface TodoRepository
      */
     public function counts(): array;
 
-    public function create(string $title): Todo;
+    /**
+     * Creates a todo unless `$limit` non-deleted todos already exist. The check and the
+     * insert are atomic, so concurrent creates cannot exceed the limit (L2-043).
+     *
+     * @throws TodoLimitReached
+     */
+    public function createWithinLimit(string $title, int $limit): Todo;
 }

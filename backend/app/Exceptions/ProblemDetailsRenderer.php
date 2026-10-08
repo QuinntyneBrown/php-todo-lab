@@ -29,6 +29,10 @@ final class ProblemDetailsRenderer
             $e instanceof ValidationException => self::problem(422, 'One or more fields are invalid.', [
                 'errors' => $e->errors(),
             ]),
+            $e instanceof TodoLimitReached => self::problem(422, $e->getMessage(), [
+                'code' => 'todo_limit_reached',
+                'errors' => ['title' => [$e->getMessage()]],
+            ]),
             $e instanceof ModelNotFoundException => self::problem(404, 'The requested resource was not found.'),
             $e instanceof MethodNotAllowedHttpException => self::problem(
                 405,

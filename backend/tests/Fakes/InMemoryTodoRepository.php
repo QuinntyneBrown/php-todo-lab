@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Fakes;
 
 use App\Enums\TodoStatus;
+use App\Exceptions\TodoLimitReached;
 use App\Models\Todo;
 use App\Repositories\TodoRepository;
 use Carbon\CarbonImmutable;
@@ -65,8 +66,12 @@ final class InMemoryTodoRepository implements TodoRepository
         ];
     }
 
-    public function create(string $title): Todo
+    public function createWithinLimit(string $title, int $limit): Todo
     {
+        if ($this->live()->count() >= $limit) {
+            throw new TodoLimitReached($limit);
+        }
+
         return $this->seed($title);
     }
 
