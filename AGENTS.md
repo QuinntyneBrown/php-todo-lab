@@ -103,7 +103,8 @@ php-todo-lab/
     │   │   └── app.component.{ts,html,scss}
     │   ├── styles/                   tokens.scss (single source of design tokens)
     │   ├── testing/                  InMemoryTodoApi and other test-only helpers
-    │   ├── styles.scss  index.html  main.ts
+    │   ├── styles.scss  index.html  main.ts  test-setup.ts (Vitest matchers)
+    ├── public/                       Static files copied as-is (favicon)
     ├── e2e/                          Playwright + axe specs and fixtures
     ├── angular.json  tsconfig*.json  eslint.config.js  .prettierrc.json  .stylelintrc.json
     ├── playwright.config.ts  vitest config
