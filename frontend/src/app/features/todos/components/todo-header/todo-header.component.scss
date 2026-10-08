@@ -1,0 +1,23 @@
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 4px 20px;
+}
+
+.head__when {
+  min-width: 0;
+}
+
+.head__day {
+  margin: 0;
+  font: 800 clamp(1.875rem, 8vw, 3.25rem) / 1 var(--font-display);
+  letter-spacing: -0.035em;
+}
+
+.head__date {
+  margin: 6px 0 0;
+  color: var(--slate);
+  font-weight: 500;
+}

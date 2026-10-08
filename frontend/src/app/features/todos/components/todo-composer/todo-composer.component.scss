@@ -1,0 +1,79 @@
+.composer {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.composer__field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.composer__input {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  font-size: 1.0625rem; // >= 16px so iOS does not zoom (L2-028)
+  background: var(--paper-sunk);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+
+  &::placeholder {
+    color: var(--slate);
+    opacity: 1;
+  }
+
+  &:hover {
+    border-color: var(--line);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--sea);
+    background: var(--paper);
+    box-shadow: 0 0 0 3px var(--sea-soft);
+  }
+}
+
+.composer__btn {
+  flex: none;
+  height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--sea);
+  color: var(--on-sea);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    transform 0.12s var(--ease-out),
+    filter 0.15s;
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@media (width <= 575.98px) {
+  .composer__btn {
+    width: 52px;
+    padding: 0;
+    justify-content: center;
+
+    span {
+      display: none;
+    }
+  }
+}

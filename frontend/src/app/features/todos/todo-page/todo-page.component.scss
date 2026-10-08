@@ -1,0 +1,27 @@
+// Single centred column (L2-027).
+.app {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px calc(96px + env(safe-area-inset-bottom));
+}
+
+@media (width >= 768px) {
+  .app {
+    max-width: 640px;
+    padding-top: 40px;
+  }
+}
+
+@media (width >= 992px) {
+  .app {
+    padding-top: 8vh;
+  }
+}
+
+.card {
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}

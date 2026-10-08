@@ -1,0 +1,30 @@
+<form class="composer" novalidate>
+  <div class="composer__field">
+    <label class="sr-only" for="new-task">{{ strings.label }}</label>
+    <input
+      #field
+      class="composer__input"
+      id="new-task"
+      name="title"
+      type="text"
+      maxlength="200"
+      autocomplete="off"
+      [placeholder]="strings.placeholder"
+    />
+  </div>
+  <button class="composer__btn" type="submit" [attr.aria-label]="strings.submit">
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.5"
+      stroke-linecap="round"
+      aria-hidden="true"
+    >
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+    <span>{{ strings.submit }}</span>
+  </button>
+</form>

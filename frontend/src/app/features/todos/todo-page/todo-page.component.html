@@ -1,0 +1,6 @@
+<main class="app">
+  <app-todo-header [date]="today" />
+  <section class="card" [attr.aria-label]="strings.list.label">
+    <app-todo-composer [focusRequest]="composerFocus()" />
+  </section>
+</main>
