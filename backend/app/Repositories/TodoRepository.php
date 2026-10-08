@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Enums\TodoStatus;
 use App\Exceptions\TodoLimitReached;
 use App\Models\Todo;
+use Carbon\CarbonImmutable;
 use DateTimeInterface;
 use Illuminate\Support\Collection;
 
@@ -66,4 +67,11 @@ interface TodoRepository
      * @return Collection<int, Todo> the restored todos
      */
     public function restoreMany(array $ids): Collection;
+
+    /**
+     * Permanently deletes up to `$limit` todos soft-deleted strictly before `$cutoff`.
+     *
+     * @return int the number of todos purged
+     */
+    public function purgeDeletedBefore(CarbonImmutable $cutoff, int $limit): int;
 }

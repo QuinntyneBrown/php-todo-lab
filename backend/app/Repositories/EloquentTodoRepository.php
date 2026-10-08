@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Enums\TodoStatus;
 use App\Exceptions\TodoLimitReached;
 use App\Models\Todo;
+use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -101,5 +102,13 @@ final class EloquentTodoRepository implements TodoRepository
 
             return Todo::query()->whereIn('id', $found)->get()->toBase();
         });
+    }
+
+    public function purgeDeletedBefore(CarbonImmutable $cutoff, int $limit): int
+    {
+        return Todo::onlyTrashed()
+            ->where('deleted_at', '<', $cutoff)
+            ->limit($limit)
+            ->forceDelete();
     }
 }

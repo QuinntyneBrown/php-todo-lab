@@ -58,6 +58,7 @@ php-todo-lab/
 ├── backend/                          Laravel API (PHP 8.4, strict_types everywhere)
 │   ├── app/
 │   │   ├── Actions/Todos/            One use case per class: CreateTodo, ListTodos, ...
+│   │   ├── Console/Commands/         Artisan commands (PurgeDeletedTodos)
 │   │   ├── Enums/                    TodoStatus (backed enum)
 │   │   ├── Exceptions/               ProblemDetailsRenderer, domain exceptions (TodoNotFound, ...)
 │   │   ├── Http/
@@ -79,6 +80,7 @@ php-todo-lab/
 │   ├── tests/
 │   │   ├── Feature/Api/V1/           Pest HTTP tests against real MySQL, one file per endpoint
 │   │   ├── Feature/Models/           Pest tests of the schema and model scopes against MySQL
+│   │   ├── Feature/Console/          Pest tests of Artisan commands and their schedule
 │   │   ├── Unit/Actions/             Pest unit tests with the in-memory fake
 │   │   ├── Fakes/                    InMemoryTodoRepository
 │   │   └── Pest.php

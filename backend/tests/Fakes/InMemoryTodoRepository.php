@@ -125,6 +125,17 @@ final class InMemoryTodoRepository implements TodoRepository
             ->values();
     }
 
+    public function purgeDeletedBefore(CarbonImmutable $cutoff, int $limit): int
+    {
+        $eligible = collect($this->rows)
+            ->filter(fn (Todo $todo): bool => $todo->deleted_at !== null && $todo->deleted_at->lt($cutoff))
+            ->take($limit);
+
+        $this->rows = array_diff_key($this->rows, $eligible->all());
+
+        return $eligible->count();
+    }
+
     /**
      * @return Collection<string, Todo>
      */
