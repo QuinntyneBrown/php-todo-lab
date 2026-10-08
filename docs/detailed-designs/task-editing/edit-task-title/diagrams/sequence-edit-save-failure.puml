@@ -35,22 +35,22 @@ end box
 user -> item : Save a changed title (L2-012)
 item -> store : saveTitle(id, title) through TodoPageComponent
 store -> store : Remember previous title, apply optimistic title (L2-012)
-store -> api : updateTodo(id, title)
+store -> api : update(id, {title})
 api -> ctrl : PATCH /api/v1/todos/{id} with title
 alt Network error or 5xx response
-  ctrl --> api : 5xx or no response
+  ctrl --> api : 422, 5xx, or no response
   api --> store : Rejected request
   store -> store : Restore the previous title (L2-013)
   store --> item : Previous title shown
   store -> toast : Set toast to "Couldn't save that change." (L2-013)
   toast --> user : Error toast shown
 else Task deleted elsewhere, unknown id, or malformed id
-  ctrl -> action : Invoke with id
-  action -> repo : Find non-deleted todo by id
-  repo --> action : Not found
-  action --> ctrl : Not-found condition
+  ctrl -> action : handle(id, changes)
+  action -> repo : find(id)
+  repo --> action : null
+  action --> ctrl : throw TodoNotFound
   ctrl --> api : 404 problem details (L2-014)
-  api --> store : Rejected request with status 404
+  api --> store : ApiError with status 404
   store -> store : Remove the row from the todos signal (L2-014)
   store -> toast : Set toast to "That task no longer exists." (L2-014)
   toast --> user : Toast shown, row gone from the list

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Form field — Tasks design system</title>
+<meta name="description" content="The wrapper every input uses: label, control, hint, message and counter, with the spacing between them.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Form field</h1>
+      <p class="ds-lead">A form field is the layout primitive around an input. It fixes where the label, hint, error and character counter go, and how they are wired to the control, so every input in the product reads the same way.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Used in v1</span><span class="ds-pill"><code>&lt;label for&gt;</code> + <code>aria-describedby</code></span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Wrap every <a href="text-field.html">text field</a>, <a href="textarea.html">textarea</a> and <a href="select.html">select</a> in <code>.field</code>. The field owns the vertical rhythm (<code>--space-2</code> between parts) and the relationships: the label names the control, the hint and message describe it, the counter sits inside the control's edge.</p>
+      <p>Tasks v1 uses the field's parts in two compact places: the <a href="composer.html">composer</a> (visually hidden "New task" label, counter from 160 characters, message under the card edge) and the in-place title edit in a <a href="task-item.html">task item</a> (named by <code>aria-label</code>, message under the input). Both keep the wiring even though they hide the visible label.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="field" style="position: relative; width: min(100%, 22rem);">
+            <label class="field__label" for="an-title">Task title <span class="field__required">(required)</span></label>
+            <p class="field__hint" id="an-hint">Up to 200 characters.</p>
+            <div class="field__control"><input class="input input--with-count" id="an-title" value="Write the thank-you notes for everyone" aria-describedby="an-hint an-msg"><span class="field__count" aria-hidden="true">38/200</span></div>
+            <p class="message message--error" id="an-msg">A task needs a title.</p>
+            <span class="ds-callout" style="left: -2rem; top: 0;" aria-hidden="true">1</span>
+            <span class="ds-callout" style="left: -2rem; top: 1.75rem;" aria-hidden="true">2</span>
+            <span class="ds-callout" style="left: -2rem; top: 4.5rem;" aria-hidden="true">3</span>
+            <span class="ds-callout" style="right: -2rem; top: 3.25rem;" aria-hidden="true">4</span>
+            <span class="ds-callout" style="left: -2rem; bottom: 0;" aria-hidden="true">5</span>
+          </div>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Label</b><small><code>.field__label</code>, <code>--text-label</code> (14px medium). Says "(required)" in text, never only an asterisk.</small></div></li>
+          <li><div><b>Hint (optional)</b><small><code>.field__hint</code>, <code>--text-body-sm</code> muted. Sits above the control so it is read before typing.</small></div></li>
+          <li><div><b>Control</b><small><code>.field__control</code> wraps the input so the counter and icons can sit inside its edge.</small></div></li>
+          <li><div><b>Counter (optional)</b><small><code>.field__count</code>, 14px tabular, inside the right edge; red at the limit.</small></div></li>
+          <li><div><b>Message</b><small><a href="inline-message.html">inline message</a> (<code>.message--error</code>) under the control; replaces nothing, pushes content down.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>The parts are optional; the order is not. Label, hint, control, message.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-start;">
+          <div class="field" style="flex: 1 1 14rem;"><label class="field__label" for="v-a">Task title</label><input class="input" id="v-a" placeholder="What needs doing?"></div>
+          <div class="field" style="flex: 1 1 14rem;"><label class="field__label" for="v-b">Task title</label><p class="field__hint" id="v-b-h">Up to 200 characters.</p><input class="input" id="v-b" aria-describedby="v-b-h"></div>
+          <div class="field" style="flex: 1 1 14rem;"><label class="field__label" for="v-c">Task title</label><div class="field__control"><input class="input input--with-count" id="v-c" value="Call the building manager about the radiator" aria-describedby="v-c-c"><span class="field__count" id="v-c-c">165/200</span></div></div>
+          <div class="field" style="flex: 1 1 14rem;"><label class="visually-hidden" for="v-d">New task</label><input class="input input--filled" id="v-d" placeholder="What needs doing?"></div>
+        </div>
+        <div class="ds-example__caption"><span>Label only · with hint · with counter · hidden label (composer).</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="title"&gt;Task title&lt;/label&gt;
+  &lt;p class="field__hint" id="title-hint"&gt;Up to 200 characters.&lt;/p&gt;
+  &lt;div class="field__control"&gt;
+    &lt;input class="input input--with-count" id="title" maxlength="200" aria-describedby="title-hint title-error"&gt;
+    &lt;span class="field__count" aria-hidden="true"&gt;165/200&lt;/span&gt;
+  &lt;/div&gt;
+  &lt;p class="message message--error" id="title-error" hidden&gt;&lt;/p&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>The field follows its control's size; the gaps do not change. Counter padding grows with the control so text never runs under it.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="field"><label class="field__label" for="sz1">Small · 36px</label><input class="input input--sm" id="sz1" value="Buy oat milk"></div>
+          <div class="field"><label class="field__label" for="sz2">Medium · 44px (default)</label><input class="input" id="sz2" value="Buy oat milk"></div>
+          <div class="field"><label class="field__label" for="sz3">Large · 52px (composer)</label><input class="input input--lg" id="sz3" value="Buy oat milk"></div>
+        </div>
+        <div class="ds-example__caption"><span><code>--control-height-sm/md/lg</code>; gaps stay <code>--space-2</code>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Field</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Counter at limit</th><th scope="col">Read-only</th><th scope="col">Disabled</th></tr></thead>
+        <tbody><tr><th scope="row">Labelled</th>
+          <td><div class="field"><label class="field__label" for="st1">Title</label><input class="input" id="st1" value="Call mom"></div></td>
+          <td><div class="field"><label class="field__label" for="st2">Title</label><input class="input" id="st2" value="Call mom" data-state="hover"></div></td>
+          <td><div class="field"><label class="field__label" for="st3">Title</label><input class="input" id="st3" value="Call mom" data-state="focus"></div></td>
+          <td><div class="field"><label class="field__label" for="st4">Title</label><input class="input" id="st4" value="" aria-invalid="true" aria-describedby="st4m"><p class="message message--error" id="st4m">Enter a task title.</p></div></td>
+          <td><div class="field"><label class="field__label" for="st5">Title</label><div class="field__control"><input class="input input--with-count" id="st5" value="Call the building manager" data-state="focus"><span class="field__count" data-limit="reached">200/200</span></div></div></td>
+          <td><div class="field"><label class="field__label" for="st6">Title</label><input class="input" id="st6" value="Call mom" readonly></div></td>
+          <td><div class="field"><label class="field__label" for="st7">Title</label><input class="input" id="st7" value="Call mom" disabled></div></td>
+        </tr></tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="field"><label class="field__label" for="tl1">Task title</label><p class="field__hint" id="tl1h">Up to 200 characters.</p><input class="input" id="tl1" aria-invalid="true" aria-describedby="tl1h tl1m"><p class="message message--error" id="tl1m">Enter a task title.</p></div></div>
+        <div data-theme="dark"><div class="field"><label class="field__label" for="td1">Task title</label><p class="field__hint" id="td1h">Up to 200 characters.</p><input class="input" id="td1" aria-invalid="true" aria-describedby="td1h td1m"><p class="message message--error" id="td1m">Enter a task title.</p></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Label above the control at every breakpoint; never beside it, so long labels and 200% zoom never squeeze the input (L2-030.3).</li>
+        <li>Fields are full width of their column at XS; from MD a <code>.form__row--split</code> may put two short related fields side by side (see <a href="form-layout.html">form layout</a>).</li>
+        <li>Input text stays 16px or more at every size so iOS never zooms on focus (L2-028.3).</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Label <code>--color-fg-default</code>; hint and required marker <code>--color-fg-muted</code>; counter <code>--color-fg-subtle</code>, <code>--color-danger-fg</code> at the limit; messages per tone. The control itself is themed through <code>--input-*</code> (see <a href="text-field.html">text field</a>).</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Plain HTML: <code>&lt;label for&gt;</code> names the control; <code>aria-describedby</code> lists hint then message ids; <code>aria-invalid="true"</code> marks an error. No APG widget pattern is needed; see the <a href="https://www.w3.org/WAI/tutorials/forms/">WAI forms tutorial</a>.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Focus goes straight to the control; label, hint, counter and message are not focusable.</td></tr>
+        <tr><td>Click on label</td><td>Focuses the control (the label is a larger target).</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>Only the control shows focus: accent border plus the <code>--shadow-focus</code> halo. When a submit fails, focus moves to the first invalid control (or an error summary on long forms).</p>
+      <h3>Labelling</h3>
+      <p>Every control has a programmatic label (L2-029.3), visible unless the context makes it obvious; the composer hides "New task" with <code>.visually-hidden</code> because the placeholder question and the Add task button make the purpose plain. Placeholders are never the label. The counter is <code>aria-hidden</code> while typing (it would chatter); the field announces only when the limit is reached.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Label on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Hint on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Counter inside input</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Error message, counter at limit</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Control edge</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>None of the field's parts animate; messages appear without transition so they are never missed.</p>
+      <h3>Touch</h3>
+      <p>The label is part of the target; controls are at least 44px tall at the default size.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Labels are nouns in sentence case: "Task title". No colon.</li>
+        <li>Hints state a constraint before it is broken: "Up to 200 characters."</li>
+        <li>Error messages say what to do: "Enter a task title.", "A task needs a title.". Server messages (422) are shown as sent (L2-004.4).</li>
+        <li>Counters read "165/200": typed over limit, no spaces, tabular figures.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field"><label class="field__label" for="dd1">Task title</label><input class="input" id="dd1" aria-invalid="true" aria-describedby="dd1m"><p class="message message--error" id="dd1m">Enter a task title.</p></div><div class="field"><label class="field__label" for="dd1b">Notes</label><input class="input" id="dd1b" aria-invalid="true" aria-describedby="dd1bm"><p class="message message--error" id="dd1bm">Notes can be up to 1,000 characters.</p></div></div><figcaption>Use one message size and weight for every field error (14px medium).</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="message message--error" style="font-size: 0.9375rem;">Enter a task title.</p><p class="message message--error">A task needs a title.</p></div><figcaption>Size the composer error at 15px and the edit error at 14px, as the mocks did (D12).</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="field" style="flex: 1;"><label class="visually-hidden" for="dd2">New task</label><input class="input input--filled" id="dd2" placeholder="What needs doing?"></div></div><figcaption>Keep a programmatic label even when it is visually hidden.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><input class="input" placeholder="Task title (required)" aria-label="Placeholder used as a label, don't example"></div><figcaption>Use the placeholder as the label: it disappears on the first keystroke.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Label</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Hint, required marker</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Counter</td><td><code>--color-fg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td></tr>
+          <tr><td>Error, counter at limit</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+          <tr><td>Label font</td><td><code>--text-label</code></td><td><span data-theme="light"><span data-token="--text-label"></span></span></td><td><span data-theme="dark"><span data-token="--text-label"></span></span></td></tr>
+          <tr><td>Hint and message font</td><td><code>--text-body-sm</code></td><td><span data-theme="light"><span data-token="--text-body-sm"></span></span></td><td><span data-theme="dark"><span data-token="--text-body-sm"></span></span></td></tr>
+          <tr><td>Gap between parts</td><td><code>--space-2</code></td><td><span data-theme="light"><span data-token="--space-2"></span></span></td><td><span data-theme="dark"><span data-token="--space-2"></span></span></td></tr>
+          <tr><td>Counter inset</td><td><code>--space-4</code></td><td><span data-theme="light"><span data-token="--space-4"></span></span></td><td><span data-theme="dark"><span data-token="--space-4"></span></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="title"&gt;Task title &lt;span class="field__required"&gt;(required)&lt;/span&gt;&lt;/label&gt;
+  &lt;input class="input" id="title" required aria-invalid="true" aria-describedby="title-error"&gt;
+  &lt;p class="message message--error" id="title-error"&gt;Enter a task title.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.field</code></td><td>Grid with <code>--space-2</code> gaps.</td></tr>
+        <tr><td><code>.field__label</code>, <code>.field__required</code>, <code>.field__hint</code></td><td>Label, required marker, hint.</td></tr>
+        <tr><td><code>.field__control</code></td><td>Positioning context for counter and icon.</td></tr>
+        <tr><td><code>.field__count</code>, <code>[data-limit="reached"]</code></td><td>Counter inside the right edge; danger colour at the limit. Pair with <code>.input--with-count</code>.</td></tr>
+        <tr><td><code>.field__icon</code></td><td>Leading icon; pair with <code>.input--with-icon</code>.</td></tr>
+        <tr><td><code>aria-describedby</code>, <code>aria-invalid</code></td><td>Wiring; hint id first, message id second.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <ul>
+        <li><a href="../../mocks/pages/states.composer.html">pages/states.composer</a> (hidden label, counter from 160, counter at 200/200, messages)</li>
+        <li><a href="../../mocks/pages/states.row.html">pages/states.row</a> (edit input with message)</li>
+        <li><a href="../../mocks/pages/notifications.html">pages/notifications</a> (field messages)</li>
+      </ul>
+      <p>Mock → system: <code>.composer__count</code> → <code>.field__count</code>; <code>.composer__count.is-max</code> → <code>[data-limit="reached"]</code>; <code>.composer__error</code> and <code>.edit__msg</code> → <code>.message.message--error</code>; <code>.sr-only</code> label → <code>.visually-hidden</code>.</p>
+      <p>Drift fixed during extraction: D12 (15px vs 14px field errors unified; 13px counter → 14px), D11 (counter inset 14px → 16px). The visible label and hint are system additions (D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

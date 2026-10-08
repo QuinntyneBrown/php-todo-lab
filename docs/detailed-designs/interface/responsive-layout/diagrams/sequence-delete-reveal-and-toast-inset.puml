@@ -34,8 +34,8 @@ else device reports hover: none
   item --> user : Delete control visible without hover (L2-028)
 end
 user -> item : Activate the delete control
-item -> page : deleted output
-page -> store : Delete task (behaviour owned by the delete feature)
+item -> page : deleted output { viaKeyboard: false }
+page -> store : delete(id) (behaviour owned by the delete feature)
 store --> page : toast signal set to "Task deleted" with Undo
 page -> toast : toast input
 alt device has a bottom safe-area inset

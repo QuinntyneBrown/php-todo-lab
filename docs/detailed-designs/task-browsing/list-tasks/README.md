@@ -26,42 +26,41 @@ The server returns every non-deleted todo, newest first. The `meta` counts cover
 
 ## Description
 
-The feature is a vertical slice from the page to the `todos` table. Names that the specs and the shared design contract do not fix are marked `<TO SUPPLY>`. The diagrams use provisional names for them.
+The feature is a vertical slice from the page to the `todos` table.
 
 Frontend, Angular SPA:
 
-- **`TodoPageComponent`** — smart component on route `/`. It chooses between the loading, empty, error, and loaded views. It renders the error banner, `<TO SUPPLY>` as part of its own template or as a separate component. It wires the "Try again" button to `TodoStore`.
-- **`TodoListComponent`** — presentational component built on `input()` and `output()`. It renders 3 skeleton rows while the list is loading and the task rows otherwise.
+- **`TodoPageComponent`** — smart component on route `/`. It chooses between the loading, empty, error, and loaded views. It renders the error banner as markup in its own template, and wires the "Try again" button to `TodoStore.reload()`.
+- **`TodoListComponent`** — presentational component built on `input()` and `output()`. It has the input `loading`. It renders 3 skeleton rows while `loading` is true and the task rows otherwise.
 - **`TodoItemComponent`** — presentational component that renders one task row.
 - **`TodoEmptyStateComponent`** — presentational component that renders the empty-state heading and text for one of three kinds: no tasks at all, no active tasks, and no completed tasks.
-- **`TodoStore`** — root-provided signal store. It reads the list through `httpResource`, so the store exposes the loading and error status of the request. The `todos` signal is a `linkedSignal` over the resource value, which keeps the server order and allows later optimistic changes to a local copy. Reloading calls the resource reload.
-- **`ui-strings.ts`** — typed constants file that holds all copy as `UI_STRINGS`, including the empty-state, banner, and button strings.
+- **`TodoStore`** — root-provided signal store. It reads the list through `resource({ loader: () => this.api.list() })`, so the read goes through the `TodoApi` port (L2-048). The computed values `loading` and `loadFailed` derive from the resource status. The `todos` signal is a `linkedSignal` over the resource value, which keeps the server order and allows later optimistic changes to a local copy. `reload()` calls the resource reload.
+- **`HttpTodoApi`** — adapter that implements `TodoApi.list()` with `GET /api/v1/todos`. It applies `timeout(10_000)` and retries the read twice, after 300 ms and 900 ms, on a network error or a `5xx` response (L2-042).
+- **`ui-strings.ts`** — typed constants file in `src/app/features/todos/` that holds all copy as `UI_STRINGS`, including the empty-state, banner, and button strings.
 
 Backend, Laravel API:
 
 - **`routes/api.php`** — maps `GET /api/v1/todos` to `TodoController`.
 - **`TodoController`** — thin controller. It validates through `ListTodosRequest`, calls `ListTodos`, and returns the list response.
 - **`ListTodosRequest`** — Form Request that validates the optional `status` parameter. The filter feature owns that rule. With no parameter the status is `all`.
-- **`ListTodos`** — Action with one public method (`__invoke` or `handle`, `<TO SUPPLY>`). It depends on `TodoRepository` and returns the todos with the active and completed counts.
+- **`ListTodos`** — Action with a single public `handle(TodoStatus $status)` method. It depends on `TodoRepository` and returns the todos with the active and completed counts.
 - **`TodoStatus`** — backed enum with the cases `All`, `Active`, and `Completed`.
-- **`TodoRepository`** — interface. **`EloquentTodoRepository`** implements it. **`InMemoryTodoRepository`** is the test fake. Method names are `<TO SUPPLY>`.
-- **`EloquentTodoRepository` query** — selects non-deleted todos ordered by `created_at` descending, then `id` descending. The ULID `id` breaks ties between todos with equal `created_at` values. A second query counts active and completed non-deleted todos. The indexes that serve both queries belong to the `create_todos_table` migration (L2-021, owned by another feature).
+- **`TodoRepository`** — interface. **`EloquentTodoRepository`** implements it. **`InMemoryTodoRepository`** is the test fake. This feature uses two of its methods: `list(TodoStatus $status): Collection<int, Todo>` and `counts(): array{active: int, completed: int}`.
+- **`EloquentTodoRepository` query** — selects non-deleted todos ordered by `created_at` descending, then `id` descending. The ULID `id` breaks ties between todos with equal `created_at` values. A second query counts active and completed non-deleted todos. The indexes `todos_deleted_at_created_at_id_index` and `todos_deleted_at_completed_at_index` serve both queries. They belong to the `create_todos_table` migration (L2-021, owned by another feature).
 - **`Todo`** — Eloquent model with `HasUlids`, `SoftDeletes`, and `HasFactory`. `SoftDeletes` excludes soft-deleted todos from every query. The scopes `active()` and `completed()` serve the counts.
 - **`TodoCollection`** — list response. It wraps the serialised todos in `data` and adds `meta.active` and `meta.completed`.
-- **Exception handler** — renders failures as `application/problem+json` in `bootstrap/app.php`.
+- **`ProblemDetailsRenderer`** — invokable class registered in `bootstrap/app.php`. It renders failures as `application/problem+json`.
 
 Behaviour notes:
 
 - The order is stable because it depends only on `createdAt` and `id`. Completing or editing a task changes neither value, so the row keeps its position.
 - Completed tasks appear in the same order as active tasks.
-- Retries of the failed read follow the client-resilience requirement (L2-042), which this feature does not own. The error banner appears after those retries finish.
+- Retries of the failed read follow the client-resilience requirement (L2-042), which this feature does not own. The error banner appears after those retries finish. A `4xx` response is not retried and shows the same error banner.
 - The composer remains visible and enabled when the list request fails. The add attempt happens on submit.
 
-Open details:
-
-- The list request sends no query parameters, and the SPA derives the visible tasks from the `filter` signal. Whether the SPA ever sends `status` to the server is `<TO SUPPLY>`.
-- The use of the `meta` counts by the SPA is `<TO SUPPLY>`. L2-007 states that the SPA computes counts from the task signal.
-- The endpoint latency budget has no stated measurement method beyond "developer laptop". The measurement tooling is `<TO SUPPLY>`.
+- The list request sends no query parameters. The SPA never sends `status`, and derives the visible tasks from the `filter` signal.
+- The SPA does not display the `meta` counts. `TodoListResponse` types them, and the API tests assert them. L2-007 requires the SPA to compute counts from the task signal.
+- A Pest feature test measures the latency budget (L2-038). It seeds 500 todos through the factory, times the request with `hrtime()`, and asserts a duration under 200 ms against the local MySQL database.
 
 ## Requirements
 

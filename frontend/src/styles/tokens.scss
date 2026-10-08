@@ -1,0 +1,63 @@
+// Design tokens: the single source of colour, type, motion, and radius (L2-026).
+// Ported from docs/mocks/styles/tokens.css. The product follows prefers-color-scheme only;
+// the mock's data-theme override is a review aid and is not carried over.
+
+:root {
+  --mist: #e9eef3;
+  --paper: #fff;
+  --paper-sunk: #f3f6f9;
+  --ink: #10222f;
+  --slate: #566676; // 5.9:1 on paper
+  --line: #d5dde5;
+  --line-strong: #8a9aa8; // 3:1+ for control boundaries
+  --sea: #0b7f74; // accent; 4.9:1 on paper
+  --sea-soft: #d9f0ec;
+  --on-sea: #fff;
+  --sun: #f4b82e; // burst and illustration only, never text
+  --sun-soft: #fcefcc;
+  --danger: #b3261e;
+  --danger-soft: #fbe4e1;
+  --on-danger: #fff;
+  --toast-bg: #10222f;
+  --toast-ink: #f3f6f9;
+  --toast-action: #7fe0d2;
+  --toast-hover: rgb(127 127 127 / 20%);
+  --shadow: 0 1px 2px rgb(16 34 47 / 6%), 0 12px 32px -12px rgb(16 34 47 / 18%);
+  --shadow-sm: 0 1px 3px rgb(16 34 47 / 18%);
+  --focus: #0b7f74;
+  --font-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Figtree', 'Segoe UI', system-ui, sans-serif;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --radius-lg: 20px;
+  --radius-md: 12px;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mist: #0b141b;
+    --paper: #14222d;
+    --paper-sunk: #0f1b24;
+    --ink: #eaf1f6;
+    --slate: #9fb0be;
+    --line: #243643;
+    --line-strong: #5f7587;
+    --sea: #4fd1bf;
+    --sea-soft: #12403b;
+    --on-sea: #062b27;
+    --sun: #f4b82e;
+    --sun-soft: #3a2f12;
+    --danger: #ff8d85;
+    --danger-soft: #3a1b19;
+    --on-danger: #2a0b09;
+    --toast-bg: #eaf1f6;
+    --toast-ink: #10222f;
+    --toast-action: #0b6b61;
+    --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 16px 40px -16px rgb(0 0 0 / 60%);
+    --shadow-sm: 0 1px 3px rgb(0 0 0 / 50%);
+    --focus: #4fd1bf;
+
+    color-scheme: dark;
+  }
+}

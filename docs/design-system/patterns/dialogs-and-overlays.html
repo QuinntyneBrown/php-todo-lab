@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dialogs and overlays — Tasks design system</title>
+<meta name="description" content="Why v1 has no dialogs, and when a future dialog, tooltip or menu is right.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Dialogs and overlays</h1>
+      <p class="ds-lead">v1 has none by design. Undo replaces confirmation; in-place editing replaces forms in boxes.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill ds-pill--warn">Not used in v1</span><span class="ds-pill">L2-015, L2-022</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive behaviour</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Tasks v1 has <b>no dialogs, drawers or popovers</b>. L2-022.2 requires that the page contains exactly its five regions and no modal dialogs, and every flow is designed around that: destructive actions are undone from a toast instead of confirmed, titles are edited in place, and errors appear where they happened.</p>
+      <p>This page records why, and sets the rules for when a later version may introduce an overlay. The components exist and are documented: <a href="../components/dialog.html">Dialog</a>, <a href="../components/tooltip.html">Tooltip</a>, <a href="../components/menu.html">Menu</a>.</p>
+    </section>
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Need</th><th scope="col">v1 answer</th><th scope="col">If a future version needs an overlay</th></tr></thead>
+        <tbody>
+        <tr><td>Confirm a destructive action</td><td>Act, then offer Undo for 6 s (L2-015, L2-017)</td><td><a href="../components/dialog.html">Dialog</a> only when the action cannot be undone (for example deleting an account)</td></tr>
+        <tr><td>Edit a record</td><td>Inline edit in the row (L2-012)</td><td>Dialog with a form when it has several fields and the list must stay visible behind it</td></tr>
+        <tr><td>Show more actions for a row</td><td>Only delete exists; it is a visible icon button</td><td><a href="../components/menu.html">Menu</a> behind a "More actions for <i>title</i>" button</td></tr>
+        <tr><td>Explain an icon-only control</td><td>Every icon button has an <code>aria-label</code>; the icons are conventional (plus, bin)</td><td><a href="../components/tooltip.html">Tooltip</a> on hover and focus, never containing actions</td></tr>
+        <tr><td>Settings, help, about</td><td>None exist (L2-022)</td><td>A page or drawer, not a dialog stacked over the list</td></tr>
+        </tbody>
+      </table></div>
+      <p>Decision order: prefer in place, then undo, then a page; use a dialog only when the person must decide before anything happens. Never stack one overlay on another.</p>
+    </section>
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+<div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas">
+<div class="dialog dialog--static dialog--sm" role="dialog" aria-modal="false" aria-labelledby="dlg-t" aria-describedby="dlg-d"><div class="dialog__header"><span class="dialog__icon"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></span><h3 class="dialog__title" id="dlg-t">Delete all 12 tasks?</h3><button class="btn btn--icon btn--ghost" type="button" aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><div class="dialog__body" id="dlg-d"><p>This removes every task, including completed ones. It cannot be undone.</p></div><div class="dialog__footer"><button class="btn" type="button">Keep tasks</button><button class="btn btn--danger" type="button">Delete 12 tasks</button></div></div><div class="cluster" style="justify-content: center; padding-top: var(--space-8);"><span class="tooltip-anchor" data-state="open"><button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete Call mom" aria-describedby="tt-1"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button><span class="tooltip" role="tooltip" id="tt-1">Delete Call mom</span></span></div>
+        </div>
+        <div class="ds-example__caption"><span>A future, irreversible confirmation (not in v1) and a tooltip on an icon button. Both are shown statically.</span></div>
+      </div>
+      <ol>
+        <li><b>Backdrop</b>: <code>--color-bg-backdrop</code>; the page behind is <code>inert</code>.</li>
+        <li><b>Header</b>: optional danger icon, title as the accessible name, close button.</li>
+        <li><b>Body</b>: what will happen and whether it can be undone.</li>
+        <li><b>Footer</b>: the safe action first, the committing action last; labels name the consequence ("Delete 12 tasks").</li>
+      </ol>
+    </section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Overlay</th><th scope="col">Opens on</th><th scope="col">Closes on</th><th scope="col">Focus</th></tr></thead>
+        <tbody>
+        <tr><td>Dialog</td><td>Button activation</td><td>Esc, close button, the safe action; backdrop click only for non-destructive dialogs</td><td>Moves to the first field or the safe action; returns to the trigger on close</td></tr>
+        <tr><td>Tooltip</td><td>Hover after 300 ms, or focus</td><td>Pointer leaves, blur, Esc</td><td>Never moves; never contains interactive content</td></tr>
+        <tr><td>Menu</td><td>Button activation, Down arrow</td><td>Esc, selection, Tab, click outside</td><td>First item; returns to the button</td></tr>
+        </tbody>
+      </table></div>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack"><div class="dialog dialog--static dialog--sm" role="group" aria-label="Busy dialog example" aria-busy="true"><div class="dialog__header"><p class="dialog__title">Delete all 12 tasks?</p></div><div class="dialog__body"><p>Deleting…</p></div><div class="dialog__footer"><button class="btn" type="button" disabled>Keep tasks</button><button class="btn btn--danger" type="button" aria-busy="true">Delete 12 tasks</button></div></div></div></div>
+        <div data-theme="dark"><div class="stack"><div class="dialog dialog--static dialog--sm" role="group" aria-label="Busy dialog example" aria-busy="true"><div class="dialog__header"><p class="dialog__title">Delete all 12 tasks?</p></div><div class="dialog__body"><p>Deleting…</p></div><div class="dialog__footer"><button class="btn" type="button" disabled>Keep tasks</button><button class="btn btn--danger" type="button" aria-busy="true">Delete 12 tasks</button></div></div></div></div>
+      </div>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul>
+        <li>Below SM (576px) a dialog is a bottom sheet: full width, top corners rounded, footer sticky, at most 90dvh tall; above SM it is centred at 32rem (24rem small, 44rem large).</li>
+        <li>Tooltips flip below their anchor (<code>.tooltip--below</code>) when there is no room above, and wrap at 16rem.</li>
+        <li>Touch has no hover: anything a tooltip says must also be in the control's accessible name or visible text.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<ul>
+        <li>Dialogs follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/">APG modal dialog pattern</a>: native <code>&lt;dialog&gt;</code> opened with <code>showModal()</code>, labelled by its title, described by its body, focus trapped, <kbd>Esc</kbd> closes, focus returns to the trigger.</li>
+        <li>Tooltips follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/">APG tooltip pattern</a>: <code>role="tooltip"</code> referenced by <code>aria-describedby</code>, shown on hover and focus, dismissible with <kbd>Esc</kbd> (WCAG 1.4.13).</li>
+        <li>Toasts are not overlays in this sense: they never take focus and never block the page.</li>
+      </ul>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+          <div class="ds-pair"><span>Dialog text</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Dialog body</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-raised" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Tooltip text</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse|--color-bg-inverse" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Destructive label</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-danger|--color-danger-solid" data-min="4.5"></span></div>
+      </div>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<ul>
+        <li>Title is the question with its object and number: "Delete all 12 tasks?" Not "Are you sure?"</li>
+        <li>Body says the consequence and whether it can be undone. One or two sentences.</li>
+        <li>Buttons name outcomes: "Keep tasks" / "Delete 12 tasks". Never "OK" / "Cancel" for destructive choices.</li>
+        <li>Tooltips repeat the accessible name, in sentence case, without a full stop.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div></div><figcaption>In v1, make the action reversible and offer Undo.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="dialog dialog--static dialog--sm" role="group" aria-label="Example to avoid"><div class="dialog__header"><p class="dialog__title">Are you sure?</p></div><div class="dialog__footer"><button class="btn" type="button">Cancel</button><button class="btn btn--primary" type="button">OK</button></div></div></div><figcaption>Confirm a reversible delete with a vague modal; it violates L2-022 and says nothing.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><span class="tooltip-anchor" data-state="open"><button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete Buy oat milk" aria-describedby="tt-2"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button><span class="tooltip" role="tooltip" id="tt-2">Delete Buy oat milk</span></span></div><figcaption>A tooltip that repeats the label for pointer users.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><span class="tooltip-anchor" data-state="open"><button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button><span class="tooltip tooltip--below" role="tooltip">Delete? <u>Undo</u></span></span></div><figcaption>Put actions inside a tooltip; it cannot be reached by keyboard or touch.</figcaption></figure>
+      </div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<p>No mock shows an overlay; that absence is the requirement (<a href="../../mocks/pages/page.deleted.html">pages/page.deleted</a> shows the Undo toast that replaces a confirmation). The mocks README states: "Dialogs: None. L2-022 keeps the app to one screen with no modals; destructive actions are undone from a toast instead."</p>
+      <p>Drift: D22 (dialog, tooltip and menu are system additions built from the existing tokens: <code>--radius-xl</code>, <code>--shadow-4</code>, <code>--color-bg-backdrop</code>).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

@@ -31,22 +31,22 @@ The feature is a backend-only slice in the Laravel API and the MySQL database.
   - Table options: charset `utf8mb4`, collation `utf8mb4_0900_ai_ci`.
   - Index on `(deleted_at, created_at, id)` serves the list query.
   - Index on `(deleted_at, completed_at)` serves counts and bulk operations.
-  - Index names are `<TO SUPPLY>`.
+  - The indexes are named `todos_deleted_at_created_at_id_index` and `todos_deleted_at_completed_at_index`.
 - **Artisan migrate commands** — `php artisan migrate` runs `up()`. `php artisan migrate:rollback` runs `down()` and drops the table.
 - **Timezone and charset configuration** — `config/app.php` fixes the application time zone to `UTC`, and the value does not come from the environment. The MySQL connection in `config/database.php` sets its session time zone to `+00:00` and uses `utf8mb4` with the collation above. PHP and MySQL therefore read and write the same instant regardless of the server time zone.
-- **`Todo`** — Eloquent model for the table. It uses `HasUlids`, `SoftDeletes`, and `HasFactory`. Its date format includes milliseconds (`Y-m-d H:i:s.v`) so that Eloquent keeps the TIMESTAMP(3) precision. Its fillable attributes exclude `id`, so a client-supplied `id` never reaches the row, and `HasUlids` generates the id. The full fillable list is `<TO SUPPLY>`.
-- **`TodoRepository`** — interface that declares the write operations. The class diagram shows `createWithinLimit`, `update`, `softDeleteCompleted`, and `restoreMany` as descriptive placeholders. The final method names are `<TO SUPPLY>`.
+- **`Todo`** — Eloquent model for the table. It uses `HasUlids`, `SoftDeletes`, and `HasFactory`. Its date format includes milliseconds (`Y-m-d H:i:s.v`) so that Eloquent keeps the TIMESTAMP(3) precision. Its fillable attributes are `title` and `completed_at`. The list excludes `id`, so a client-supplied `id` never reaches the row, and `HasUlids` generates the id.
+- **`TodoRepository`** — interface in `app/Repositories/TodoRepository.php` that declares the persistence operations. The write operations this feature covers are `createWithinLimit(string $title, int $limit): Todo`, `update(Todo $todo, array $changes): Todo`, `deleteCompleted(): list<string>`, and `restoreMany(list<string> $ids): Collection<int, Todo>`. `createWithinLimit` throws `TodoLimitReached` when the limit is reached. `deleteCompleted` returns the ids it soft-deleted.
 - **`EloquentTodoRepository`** — implements the interface and owns every transaction, so the Action classes stay free of database calls.
-  - Create: opens a transaction, counts non-deleted todos, and inserts only when the count is below the limit passed by `CreateTodo`.
-  - Bulk operations: wrap the id selection and the row updates in one transaction.
+  - Create: opens a transaction, counts non-deleted todos with a locking read, and inserts only when the count is below the limit passed by `CreateTodo`.
+  - Bulk operations: `deleteCompleted` and `restoreMany` each wrap the id selection and the row updates in one transaction.
   - Update: sends one `UPDATE` statement for the changed columns.
-- **`CreateTodo`, `UpdateTodo`, `ClearCompletedTodos`, `RestoreTodos`** — Action classes that call the repository. The limit value 500 and the `todo_limit_reached` error belong to the add-task design.
+- **`CreateTodo`, `UpdateTodo`, `ClearCompletedTodos`, `RestoreTodos`** — Action classes that call the repository. Each exposes a single public `handle(...)` method. The limit value 500 and the `todo_limit_reached` error belong to the add-task design.
 - **`TodoResource`** — formats timestamps as ISO-8601 UTC strings ending in `Z`, as described in the REST API contract design (`docs/detailed-designs/api-platform/rest-api-contract`).
 
 Concurrency decisions follow.
 
-- **Concurrent creates.** The count and the insert share one transaction. A plain transaction at the default MySQL isolation level does not stop two transactions from both counting 499 and both inserting. The transaction therefore takes a lock that serialises concurrent creates. The locking mechanism, and the handling of a deadlock that the lock may cause, are `<TO SUPPLY>`.
-- **Concurrent PATCH.** Each request sends one `UPDATE` statement, and InnoDB locks the row for the duration of the statement. The statements run one after the other, and each applies in full. No version column exists, so the last statement applied wins, which matches the last-write-wins rule of `L2-014`. When two requests change different columns, the final row holds both changes. Criterion 2 of `L2-043` says the final state "equals one of the two requests", and its meaning for requests with disjoint columns is `<TO SUPPLY>`.
+- **Concurrent creates.** The count and the insert share one transaction. A plain transaction at the default MySQL isolation level does not stop two transactions from both counting 499 and both inserting. `createWithinLimit` therefore runs inside `DB::transaction(fn, attempts: 3)`. Inside the transaction, the count of non-deleted todos uses `lockForUpdate()`. At the InnoDB default isolation level, REPEATABLE READ, the locking read takes next-key locks on the scanned index range. A second concurrent create waits on those locks until the first commits, then counts the new row. A deadlock between the two transactions causes Laravel to retry the closure, up to 3 attempts in total.
+- **Concurrent PATCH.** Each request sends one `UPDATE` statement, and InnoDB locks the row for the duration of the statement. The statements run one after the other, and each applies in full. No version column exists, so the last statement applied wins, which matches the last-write-wins rule of `L2-014`. When two requests change different columns, the final row holds both changes. The design reads criterion 2 of `L2-043` as follows. Each request applies atomically and in full. When both requests change the same field, the final value equals the value from one of the two. When the requests change disjoint fields, both changes are present.
 - **Bulk operations.** A failure on any statement rolls back the whole transaction, so either all rows change or none.
 
 ## Requirements

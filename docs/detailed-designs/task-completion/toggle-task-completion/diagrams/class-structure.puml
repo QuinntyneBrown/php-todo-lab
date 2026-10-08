@@ -15,7 +15,7 @@ title Class structure — Toggle task completion
 
 package "Angular SPA" {
   class TodoItemComponent {
-    +todo: InputSignal<TodoDto>
+    +todo: InputSignal<TodoView>
     +toggled: OutputEmitterRef<boolean>
   }
   class TodoPageComponent {
@@ -23,24 +23,27 @@ package "Angular SPA" {
     +onToggled(id: string, completed: boolean): void
   }
   class TodoStore {
-    +todos: WritableSignal<TodoDto[]>
+    +todos: WritableSignal<TodoView[]>
     +toast: WritableSignal<ToastState | null>
     +activeCount: Signal<number>
     +completedCount: Signal<number>
-    +toggle(id: string, completed: boolean): void
+    +toggle(id: string, completed: boolean): Promise<void>
   }
   abstract class TodoApi {
-    +updateTodo(id: string, changes: UpdateTodoPayload): Promise<TodoDto>
+    +update(id: string, changes: UpdateTodoPayload): Promise<Todo>
   }
   class HttpTodoApi
   class InMemoryTodoApi
-  class TodoDto {
+  class "Todo (core/api/models)" as Todo {
     +id: string
     +title: string
     +completed: boolean
     +completedAt: string | null
     +createdAt: string
     +updatedAt: string
+  }
+  class TodoView <<type>> {
+    Todo & { pending?: true }
   }
   class UpdateTodoPayload {
     +title?: string
@@ -56,41 +59,44 @@ package "Laravel API" {
     +rules(): array
   }
   class UpdateTodo {
-    +__invoke(id: string, changes: array): Todo
+    +handle(id: string, changes: array): Todo
   }
   interface TodoRepository {
-    +find(id: string): Todo
-    +save(todo: Todo): Todo
+    +find(id: string): ?Todo
+    +update(todo: Todo, changes: array): Todo
   }
   class EloquentTodoRepository
   class InMemoryTodoRepository
-  class Todo {
+  class "Todo (Eloquent)" as TodoModel {
     +id: string
     +title: string
     +completed_at: CarbonImmutable | null
     +completed: bool
   }
+  class TodoNotFound <<exception>>
   class TodoResource {
     +toArray(): array
   }
 }
 
-TodoItemComponent ..> TodoDto : reads
+TodoItemComponent ..> TodoView : reads
 TodoPageComponent --> TodoStore : calls
 TodoPageComponent ..> TodoItemComponent : handles toggled
 TodoStore --> TodoApi : depends on
-TodoStore "1" o-- "*" TodoDto : todos
+TodoStore "1" o-- "*" TodoView : todos
+TodoView ..> Todo : extends
 TodoApi <|-- HttpTodoApi
 TodoApi <|-- InMemoryTodoApi
 TodoApi ..> UpdateTodoPayload : accepts
 HttpTodoApi ..> TodoController : PATCH /api/v1/todos/{id}
 
 TodoController ..> UpdateTodoRequest : validates with
-TodoController --> UpdateTodo : invokes
+TodoController --> UpdateTodo : calls handle
 TodoController ..> TodoResource : returns
 UpdateTodo --> TodoRepository : depends on
 TodoRepository <|.. EloquentTodoRepository
 TodoRepository <|.. InMemoryTodoRepository
-EloquentTodoRepository ..> Todo : persists
-TodoResource ..> Todo : serialises
+EloquentTodoRepository ..> TodoModel : persists
+TodoResource ..> TodoModel : serialises
+UpdateTodo ..> TodoNotFound : throws when missing
 @enduml

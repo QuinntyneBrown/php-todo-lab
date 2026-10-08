@@ -18,18 +18,24 @@ actor "User" as user
 participant "Browser connectivity events" as browser
 box "Frontend — Angular SPA (UI components)" #E0F2FE
   participant "TodoPageComponent" as page
-  participant "Offline banner (class name TO SUPPLY)" as banner
+  participant "Offline banner (template markup, role status)" as banner
 end box
-browser -> page : offline event
-page -> page : Set offline state
+box "Frontend — Angular SPA (state and API client)" #E0F2FE
+  participant "Connectivity" as conn
+end box
+conn -> conn : Seed online from navigator.onLine at page load
+browser -> conn : window offline event
+conn -> conn : online.set(false)
+conn --> page : online signal changed
 page -> banner : Show
 banner --> user : "You're offline. Changes will fail until you reconnect." (L2-042)
 note over banner
   The banner is non-blocking. The composer, the list, and the
   controls stay usable, and writes that fail follow L2-042.
 end note
-browser -> page : online event
-page -> page : Clear offline state
+browser -> conn : window online event
+conn -> conn : online.set(true)
+conn --> page : online signal changed
 page -> banner : Remove
 banner --> user : Banner removed (L2-042)
 @enduml

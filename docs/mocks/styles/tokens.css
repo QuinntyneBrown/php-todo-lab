@@ -1,83 +1,37 @@
 /* Design tokens (L2-026: every colour comes from here).
+   The mocks now read the design system's tokens (docs/design-system/tokens/tokens.css)
+   and keep their original names as aliases, so app.css is unchanged.
    The product follows prefers-color-scheme only. The mocks also honour
-   <html data-theme="light|dark"> (set by ?theme=) so both themes can be reviewed. */
+   <html data-theme="light|dark"> (set by ?theme=) so both themes can be reviewed;
+   the design-system tokens handle both. */
+@import url("../../design-system/tokens/tokens.css");
+
 :root {
-  --mist: #e9eef3;
-  --paper: #ffffff;
-  --paper-sunk: #f3f6f9;
-  --ink: #10222f;
-  --slate: #566676;          /* 5.9:1 on paper */
-  --line: #d5dde5;
-  --line-strong: #8a9aa8;    /* 3:1+ for control boundaries */
-  --sea: #0b7f74;            /* accent; 4.9:1 on paper */
-  --sea-soft: #d9f0ec;
-  --on-sea: #ffffff;
-  --sun: #f4b82e;            /* burst and illustration only, never text */
-  --sun-soft: #fcefcc;
-  --danger: #b3261e;
-  --danger-soft: #fbe4e1;
-  --on-danger: #ffffff;
-  --toast-bg: #10222f;
-  --toast-ink: #f3f6f9;
-  --toast-action: #7fe0d2;
-  --shadow: 0 1px 2px rgb(16 34 47 / .06), 0 12px 32px -12px rgb(16 34 47 / .18);
-  --focus: #0b7f74;
+  --mist: var(--color-bg-canvas);
+  --paper: var(--color-bg-surface);
+  --paper-sunk: var(--color-bg-surface-sunken);
+  --ink: var(--color-fg-default);
+  --slate: var(--color-fg-muted);
+  --line: var(--color-border-default);
+  --line-strong: var(--color-border-strong);   /* 3.96:1 on paper (D1) */
+  --sea: var(--color-accent);
+  --sea-soft: var(--color-accent-subtle);
+  --on-sea: var(--color-fg-on-accent);
+  --sun: var(--color-highlight);               /* burst and illustration only, never text */
+  --sun-soft: var(--color-warning-bg);
+  --danger: var(--color-danger-solid);
+  --danger-soft: var(--color-danger-bg);
+  --on-danger: var(--color-fg-on-danger);
+  --toast-bg: var(--color-bg-inverse);
+  --toast-ink: var(--color-fg-inverse);
+  --toast-action: var(--color-fg-inverse-accent);
+  --shadow: var(--shadow-2);
+  --focus: var(--color-focus-ring);
 
-  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --font-body: "Figtree", "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-family-display);
+  --font-body: var(--font-family-sans);
 
-  --ease-out: cubic-bezier(.22, 1, .36, 1);
-  --radius-lg: 20px;
-  --radius-md: 12px;
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --mist: #0b141b;
-    --paper: #14222d;
-    --paper-sunk: #0f1b24;
-    --ink: #eaf1f6;
-    --slate: #9fb0be;
-    --line: #243643;
-    --line-strong: #5f7587;
-    --sea: #4fd1bf;
-    --sea-soft: #12403b;
-    --on-sea: #062b27;
-    --sun: #f4b82e;
-    --sun-soft: #3a2f12;
-    --danger: #ff8d85;
-    --danger-soft: #3a1b19;
-    --on-danger: #2a0b09;
-    --toast-bg: #eaf1f6;
-    --toast-ink: #10222f;
-    --toast-action: #0b6b61;
-    --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 16px 40px -16px rgb(0 0 0 / .6);
-    --focus: #4fd1bf;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme="dark"] {
-  --mist: #0b141b;
-  --paper: #14222d;
-  --paper-sunk: #0f1b24;
-  --ink: #eaf1f6;
-  --slate: #9fb0be;
-  --line: #243643;
-  --line-strong: #5f7587;
-  --sea: #4fd1bf;
-  --sea-soft: #12403b;
-  --on-sea: #062b27;
-  --sun: #f4b82e;
-  --sun-soft: #3a2f12;
-  --danger: #ff8d85;
-  --danger-soft: #3a1b19;
-  --on-danger: #2a0b09;
-  --toast-bg: #eaf1f6;
-  --toast-ink: #10222f;
-  --toast-action: #0b6b61;
-  --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 16px 40px -16px rgb(0 0 0 / .6);
-  --focus: #4fd1bf;
-  color-scheme: dark;
+  --ease-out: var(--ease-standard);
+  --radius-lg: var(--radius-xl);               /* the mocks' 20px card radius */
+  /* --radius-md (12px) is the design system's own --radius-md. */
 }

@@ -24,29 +24,30 @@ The slice runs from the title in a row to the `todos` table.
 
 Frontend (Angular SPA):
 
-- **`TodoItemComponent`** — presentational component for one row. It renders the title and, in edit mode, a text field with the current value selected and focused. It trims the text on save and compares it with the stored title. It emits `editStarted`, `titleSaved` with the new title, or `editCancelled`. After it emits a save or a cancel, it ignores the blur that follows, so a single edit produces a single save. For an empty field, it restores the original title and shows "A task needs a title." briefly. The display duration is `<TO SUPPLY>`.
-- **`TodoPageComponent`** — smart component. It maps the item events to store calls.
-- **`TodoStore`** — signal store. It holds `editingId`, replaces the title in the `todos` signal optimistically, and keeps the previous title for rollback. On a rejection with status `404`, it removes the row. On any other rejection, it restores the title. In both cases it sets the `toast` signal.
-- **`ToastComponent`** — presentational component. It renders the toasts "Couldn't save that change." and "That task no longer exists."
-- **`TodoApi`**, **`HttpTodoApi`**, **`InMemoryTodoApi`** — the port, the `HttpClient` adapter, and the test fake. `HttpTodoApi` reports the HTTP status of a failure so that the store can recognise `404`. The error type is `<TO SUPPLY>`.
-- **`UI_STRINGS`** in `ui-strings.ts` — typed constants that hold the copy.
+- **`TodoItemComponent`** — presentational component for one row. It renders the title as a button with the `aria-label` "Edit <title>" and, in edit mode, a text field with the current value selected and focused. The field carries the `aria-label` "Edit task title", as in the mock `docs/mocks/pages/states.row.html`. Its inputs are `todo`, `editing`, and `focusRequest`. It trims the text on save and compares it with the stored title. It emits `editStarted`, `titleSaved` with the new title, or `editCancelled`. After it emits a save or a cancel, it ignores the blur that follows, so a single edit produces a single save. For an empty field, it restores the original title and shows "A task needs a title." below the field for 3 s. The message uses `role="alert"` and the field sets `aria-invalid="true"` while the message is visible, as in the mock.
+- **`TodoPageComponent`** — smart component. It maps the item events to `beginEdit(id)`, `saveTitle(id, title)`, and `cancelEdit()` on the store. When an edit ends by Enter or Escape, it sets its `focusRequest` signal to `{ id, target: 'title', seq }`, and the item returns focus to the row's title button.
+- **`TodoStore`** — signal store. It holds `editingId`, replaces the title in the `todos` signal optimistically, and keeps the previous title for rollback inside `saveTitle`. On a rejection with status `404`, it removes the row. On any other rejection, it restores the title. In both cases it sets the `toast` signal.
+- **`ToastComponent`** — presentational component. It renders the error toasts "Couldn't save that change." and "That task no longer exists." with `role="alert"`.
+- **`TodoApi`**, **`HttpTodoApi`**, **`InMemoryTodoApi`** — the port, the `HttpClient` adapter, and the test fake. The port method is `update(id: string, changes: UpdateTodoPayload): Promise<Todo>`. `HttpTodoApi` converts each failure to an `ApiError` with `kind`, `status`, and the parsed `problem` body, so that the store can recognise `404`.
+- **`UI_STRINGS`** in `src/app/features/todos/ui-strings.ts` — typed constants that hold the copy in the `toasts`, `errors`, and `ariaLabels` groups.
 
 Backend (Laravel API):
 
-- **`TodoController`** — thin controller for `PATCH /api/v1/todos/{id}`.
+- **`TodoController`** — thin controller whose `update` method serves `PATCH /api/v1/todos/{id}`. The route parameter uses `whereUlid`, so a malformed id is a `404` from routing and never reaches the controller.
 - **`UpdateTodoRequest`** — form request. It validates `title` as a string of at most 200 characters, and it rejects an empty body `{}` with `422`. It exposes only `title` and `completed`, so `id`, `createdAt`, `deletedAt`, and unknown fields are ignored.
-- **`UpdateTodo`** — action with a single `__invoke` method. It loads the non-deleted todo through `TodoRepository`, applies only the fields present, and saves. The last write wins. When no todo matches, it raises a not-found condition (type `<TO SUPPLY>`), which the exception handler renders as a `404` `application/problem+json` response.
+- **`UpdateTodo`** — action with a single public method, `handle(string $id, array $changes): Todo`. It loads the non-deleted todo through `TodoRepository::find`, applies only the fields present, and calls `TodoRepository::update`, which issues one `UPDATE` statement. The last write wins per field. When no todo matches, it throws `TodoNotFound` from `app/Exceptions`. `ProblemDetailsRenderer` renders that exception as a `404` `application/problem+json` response with `detail` "The requested resource was not found.".
 - **`TodoRepository`**, **`EloquentTodoRepository`**, **`InMemoryTodoRepository`** — the interface, the Eloquent implementation, and the unit-test fake.
 - **`Todo`** — Eloquent model with soft deletes, so a soft-deleted todo is not found.
 - **`TodoResource`** — serialises the updated todo.
 
-Method names shown in the diagrams, such as `beginEdit`, `saveTitle`, `updateTodo`, `find`, and `save`, are indicative. Final names are `<TO SUPPLY>`.
+The method names in the diagrams, `beginEdit`, `saveTitle`, `cancelEdit`, `update`, `find`, and `handle`, are the settled names.
 
-Open details:
+Further decisions:
 
-- Whether edit mode ends after a rejected empty save, and the result of a blur on an empty field: `<TO SUPPLY>`.
-- Mechanism that maps a malformed id to `404` (route constraint or lookup): `<TO SUPPLY>`.
-- UI treatment of a `422` response to a title save: `<TO SUPPLY>`. The client limits the title to 200 characters, so the response arises only from a direct request.
+- Edit mode does not end after a rejected empty save. The field shows the original title, keeps focus, and shows the message.
+- A blur on an empty field cancels the edit. The original title is shown and no request is sent. The mock refocuses the field on such a blur instead; the design cancels, so that the field never traps focus.
+- `whereUlid` on the route maps a malformed id to `404` before any lookup.
+- A `422` response to a title save is treated like any other failed save. The store restores the previous title and shows the toast "Couldn't save that change.". The client limits the title to 200 characters, so the response arises only from a direct request.
 
 ## Requirements
 
@@ -74,7 +75,7 @@ The Angular SPA sends the title change as a `PATCH` to the Laravel API, which st
 
 ### Components
 
-In the SPA, the item emits edit events, the page forwards them, and the store applies the change through the `TodoApi` port. In the API, the controller validates through `UpdateTodoRequest` and invokes `UpdateTodo`.
+In the SPA, the item emits edit events, the page forwards them, and the store applies the change through the `TodoApi` port. In the API, the controller validates through `UpdateTodoRequest` and calls `UpdateTodo::handle`.
 
 ![C4 component view for editing a task title](diagrams/c4-component.png)
 

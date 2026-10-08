@@ -26,14 +26,15 @@ box "Backend — Laravel Infrastructure" #FFF4E5
   database "MySQL database" as db
 end box
 ctrl -> action : Invoke with the validated title only
-action -> repo : Create todo with limit 500
-repo -> db : Begin transaction (L2-043 criterion 3)
-repo -> db : Count non-deleted todos with a lock that serialises concurrent creates (mechanism TO SUPPLY)
+action -> repo : createWithinLimit(title, 500)
+repo -> db : Begin DB::transaction with 3 attempts (L2-043 criterion 3)
+repo -> db : Count non-deleted todos with lockForUpdate()
+note right of db : Next-key locks at REPEATABLE READ make a concurrent create wait; a deadlock retries the closure
 db --> repo : Count
 alt Count is 500 or more
   repo -> db : Roll back
-  repo --> action : Limit reached
-  action --> ctrl : Raise todo_limit_reached
+  repo --> action : Throw TodoLimitReached
+  action --> ctrl : TodoLimitReached propagates (rendered as 422 todo_limit_reached)
 else Count is below 500
   repo -> model : Fill title, ignoring any client id (L2-021 criterion 4)
   model -> model : Generate 26-character ULID id (HasUlids)

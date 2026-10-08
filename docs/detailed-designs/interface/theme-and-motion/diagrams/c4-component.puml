@@ -4,12 +4,13 @@ LAYOUT_WITH_LEGEND()
 title Components — Theme and motion
 
 Container_Boundary(spa, "Angular SPA") {
-  Component(global, "Global stylesheet", "SCSS entry, file name TO SUPPLY", "Includes tokens.scss and the reduced-motion rules")
+  Component(global, "Global stylesheet", "SCSS entry, src/styles.scss", "Includes tokens.scss and the reduced-motion rules. Render-blocking link, inlineCritical false")
   Component(tokens, "tokens.scss", "SCSS custom properties", "Light token set on root. Dark token set under prefers-color-scheme dark")
-  Component(motion, "Reduced-motion rules", "CSS media query prefers-reduced-motion", "Disables transitions and animations or limits them to opacity changes of 100 ms or less. Replaces the shimmer with a static tone")
+  Component(motion, "Reduced-motion rules", "CSS media query prefers-reduced-motion", "Disables transitions and animations or limits them to opacity changes of 100 ms or less. Replaces the shimmer with a solid var(--line) tone")
   Component(css, "Component stylesheets", "SCSS, BEM-style classes", "Use colour tokens only. Animate transform and opacity")
   Component(item, "TodoItemComponent", "Presentational", "Row with a one-time enter animation for a new task")
-  Component(skeleton, "Skeleton rows", "Placeholder rows, host TO SUPPLY", "Shimmer is the only animation on page load")
+  Component(list, "TodoListComponent", "Presentational", "Tracks rows by id and renders skeleton rows while loading")
+  Component(skeleton, "Skeleton rows", "Placeholder rows in TodoListComponent", "Shimmer is the only animation on page load")
   Component(store, "TodoStore", "Injectable, providedIn root", "Adds the new task to the todos signal")
 }
 
@@ -20,5 +21,7 @@ Rel(item, css, "Styled by")
 Rel(skeleton, css, "Styled by")
 Rel(motion, item, "Disables or shortens enter animation of")
 Rel(motion, skeleton, "Replaces shimmer of")
-Rel(store, item, "Causes a new row to render, through the list")
+Rel(store, list, "Causes a new row to render through")
+Rel(list, item, "Renders one per task")
+Rel(list, skeleton, "Renders while loading")
 @enduml

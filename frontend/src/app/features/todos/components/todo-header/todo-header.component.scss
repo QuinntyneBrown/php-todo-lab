@@ -1,0 +1,109 @@
+@use 'breakpoints' as bp;
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 4px 20px;
+}
+
+.head__when {
+  min-width: 0;
+}
+
+.head__day {
+  margin: 0;
+  font: 800 clamp(1.875rem, 8vw, 3.25rem) / 1 var(--font-display);
+  letter-spacing: -0.035em;
+}
+
+.head__date {
+  margin: 6px 0 0;
+  color: var(--slate);
+  font-weight: 500;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress__text {
+  margin: 0;
+  text-align: right;
+  line-height: 1.15;
+}
+
+.progress__num {
+  display: block;
+  font: 800 1.5rem / 1 var(--font-display);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress__label {
+  color: var(--slate);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.progress__ring {
+  display: grid;
+  place-items: center;
+  flex: none;
+
+  > * {
+    grid-area: 1 / 1;
+  }
+}
+
+// 48 px on phones, 56 px from SM up (L2-027).
+.ring {
+  width: 48px;
+  height: 48px;
+  flex: none;
+  transform: rotate(-90deg);
+}
+
+@media (width >= bp.$breakpoint-sm) {
+  .ring {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+.ring__track {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 5;
+}
+
+// Animates to the new value within 300 ms (L2-007 criterion 2).
+.ring__fill {
+  fill: none;
+  stroke: var(--sea);
+  stroke-width: 5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.3s var(--ease-out);
+}
+
+.ring__done {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--sea);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+  transform: scale(0.6);
+  transition:
+    opacity 0.2s,
+    transform 0.2s var(--ease-out);
+}
+
+.progress--complete .ring__done {
+  opacity: 1;
+  transform: none;
+}

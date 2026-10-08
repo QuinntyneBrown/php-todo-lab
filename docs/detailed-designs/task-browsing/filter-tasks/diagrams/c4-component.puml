@@ -19,7 +19,7 @@ Container_Boundary(api, "Laravel API") {
   Component(repo, "TodoRepository", "Interface", "Persistence port")
   Component(eloquent, "EloquentTodoRepository", "Repository", "Applies the active or completed scope")
   Component(model, "Todo", "Eloquent model", "Scopes active() and completed()")
-  Component(errs, "Exception handler", "bootstrap/app.php", "Renders application/problem+json")
+  Component(errs, "ProblemDetailsRenderer", "Invokable class, registered in bootstrap/app.php", "Renders application/problem+json")
 }
 
 ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")

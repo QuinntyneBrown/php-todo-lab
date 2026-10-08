@@ -32,8 +32,8 @@ item -> store : delete(idB) through TodoPageComponent
 store -> store : Remove row B, keep todo B and its position (L2-015)
 store -> store : Replace the toast value, Undo target is now task B only (L2-015)
 store --> toast : Toast updated to the latest deletion
-note over store : Timer restart on replacement is TO SUPPLY
-store -> api : deleteTodo(idB)
+store -> store : Restart the 6 s timer at the full duration
+store -> api : delete(idB)
 api -> ctrl : DELETE /api/v1/todos/{idB}
 ctrl --> api : 204 No Content
 api --> store : Delete confirmed

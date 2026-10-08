@@ -1,0 +1,138 @@
+@use 'breakpoints' as bp;
+
+.composer {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.composer__field {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.composer__input {
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
+  font-size: 1.0625rem; // >= 16px so iOS does not zoom (L2-028)
+  background: var(--paper-sunk);
+  border: 1.5px solid transparent;
+  border-radius: var(--radius-md);
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
+
+  &::placeholder {
+    color: var(--slate);
+    opacity: 1;
+  }
+
+  &:hover {
+    border-color: var(--line);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--sea);
+    background: var(--paper);
+    box-shadow: 0 0 0 3px var(--sea-soft);
+  }
+
+  &[aria-invalid='true'] {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px var(--danger-soft);
+  }
+}
+
+.composer__input--counted {
+  padding-right: 72px;
+}
+
+.composer__count {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: 0.8125rem;
+  color: var(--slate);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+}
+
+.composer__count--max {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.composer__error {
+  margin: 0;
+  padding: 0 16px 10px;
+  color: var(--danger);
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.composer__field--shake {
+  animation: shake 0.28s var(--ease-out);
+}
+
+@keyframes shake {
+  20% {
+    translate: -6px 0;
+  }
+
+  50% {
+    translate: 5px 0;
+  }
+
+  80% {
+    translate: -3px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .composer__field--shake {
+    animation: none;
+  }
+}
+
+.composer__btn {
+  flex: none;
+  height: 52px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--sea);
+  color: var(--on-sea);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition:
+    transform 0.12s var(--ease-out),
+    filter 0.15s;
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+@media (width < bp.$breakpoint-sm) {
+  .composer__btn {
+    width: 52px;
+    padding: 0;
+    justify-content: center;
+
+    span {
+      display: none;
+    }
+  }
+}

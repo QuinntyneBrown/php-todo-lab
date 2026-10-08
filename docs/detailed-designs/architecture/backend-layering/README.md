@@ -23,11 +23,23 @@ The feature is a structural slice of the Laravel API.
 - **`routes/api.php`** — maps each endpoint under `/api/v1` to a controller method.
 - **Form Requests** — `ListTodosRequest`, `StoreTodoRequest`, `UpdateTodoRequest`, and `RestoreTodosRequest`. Each validates the input of its endpoint before the controller runs.
 - **`TodoController`** — thin controller for all todo endpoints. A method validates through a Form Request, calls exactly one Action, and returns a Resource. A method holds no business logic and no query call, and spans at most 10 lines.
-- **Action classes** — `ListTodos`, `CreateTodo`, `UpdateTodo`, `DeleteTodo`, `RestoreTodo`, `ClearCompletedTodos`, and `RestoreTodos`. Each class has a single public method, `__invoke` or `handle`, and the choice between the two is `<TO SUPPLY>`. Each class receives `TodoRepository` through its constructor, typed as the interface.
+- **Action classes** — `ListTodos`, `CreateTodo`, `UpdateTodo`, `DeleteTodo`, `RestoreTodo`, `ClearCompletedTodos`, and `RestoreTodos`. Each class has a single public method, `handle(...)`. Each class receives `TodoRepository` through its constructor, typed as the interface.
 - **`TodoStatus`** — backed PHP enum with the cases `All`, `Active`, and `Completed`. The status filter uses this enum everywhere, so no string literal for a status appears in the code. `ListTodosRequest` validates the `status` parameter against the enum, and `ListTodos` passes the enum to the repository.
-- **`TodoRepository`** — interface that declares the persistence operations the Actions need. The class diagram shows `list`, `find`, `createWithinLimit`, `update`, `softDelete`, `restore`, `softDeleteCompleted`, and `restoreMany` as descriptive placeholders. The final method names and signatures are `<TO SUPPLY>`.
+- **`TodoRepository`** — interface in `app/Repositories/TodoRepository.php` that declares the persistence operations the Actions need. Its signatures follow.
+  - `list(TodoStatus $status): Collection<int, Todo>`
+  - `counts(): array{active: int, completed: int}`
+  - `createWithinLimit(string $title, int $limit): Todo`, which throws `TodoLimitReached` when the limit is reached
+  - `find(string $id): ?Todo`
+  - `update(Todo $todo, array $changes): Todo`
+  - `delete(Todo $todo): void`
+  - `findDeleted(string $id): ?Todo`
+  - `restore(Todo $todo): Todo`
+  - `deleteCompleted(): list<string>`, which returns the soft-deleted ids
+  - `restoreMany(list<string> $ids): Collection<int, Todo>`
+  - `purgeDeletedBefore(CarbonImmutable $cutoff, int $limit): int`
+- **`TodoNotFound`, `TodoLimitReached`** — domain exceptions in `app/Exceptions`. An Action throws `TodoNotFound` when `find` or `findDeleted` returns `null`. `ProblemDetailsRenderer` maps `TodoNotFound` to `404` and `TodoLimitReached` to `422`.
 - **`EloquentTodoRepository`** — implements `TodoRepository` with Eloquent. It maps each `TodoStatus` case to a model scope.
-- **`InMemoryTodoRepository`** — test fake that implements `TodoRepository` without a database. Unit tests of the Actions use it.
+- **`InMemoryTodoRepository`** — test fake in `tests/Fakes` that implements `TodoRepository` without a database. Unit tests of the Actions use it.
 - **`AppServiceProvider`** — binds `TodoRepository` to `EloquentTodoRepository`.
 - **`Todo`** — Eloquent model that holds the persistence mapping.
   - Traits: `HasUlids`, `SoftDeletes`, and `HasFactory`.

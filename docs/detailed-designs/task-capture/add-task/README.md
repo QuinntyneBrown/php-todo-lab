@@ -26,35 +26,35 @@ Validation runs twice. The client gives fast feedback, and the server is the aut
 
 ## Description
 
-The feature is a vertical slice from the composer to the `todos` table. Names that the specs and the shared design contract do not fix are marked `<TO SUPPLY>`. The diagrams use provisional names for them.
+The feature is a vertical slice from the composer to the `todos` table. The class and method names below are the settled names that every feature design shares.
 
 Frontend, Angular SPA:
 
-- **`TodoComposerComponent`** — presentational component built on `input()` and `output()`. It holds the text field and the "Add task" button. It trims the title, rejects an empty title with "Enter a task title.", limits typing to 200 characters, and shows the live counter "n/200" from 160 characters upward. It counts Unicode code points rather than bytes or UTF-16 units. The counting mechanism is `<TO SUPPLY>`.
-- **`TodoPageComponent`** — smart component on route `/`. It passes the emitted title to `TodoStore`, clears the composer after submit, returns keyboard focus to it, and shows server or limit messages at the composer.
+- **`TodoComposerComponent`** — presentational component built on `input()` and `output()`. It holds the text field and the "Add task" button. It trims the title, rejects an empty title with "Enter a task title.", limits typing to 200 characters, and shows the live counter "n/200" from 160 characters upward. It counts Unicode code points rather than bytes or UTF-16 units, with `[...text].length`. The field carries no `maxlength` attribute, because `maxlength` counts UTF-16 code units. The input handler truncates text beyond 200 code points instead. Inputs are `serverError`, `restoreText`, and `focusRequest`; the output is `submitted: string`.
+- **`TodoPageComponent`** — smart component on route `/`. It passes the emitted title to `TodoStore.addTask(title)`, clears the composer after submit, and returns keyboard focus to it through the composer's `focusRequest` input (`{ target: 'composer', seq }`). It binds server and limit messages to the composer's `serverError` input.
 - **`TodoListComponent`** and **`TodoItemComponent`** — presentational components. They render the pending task at the top of the list, dimmed, with the checkbox and title editing disabled.
-- **`ToastComponent`** — presentational component that shows the error toast "Couldn't add that task. Try again."
-- **`TodoStore`** — root-provided signal store. On add, it switches the `filter` signal to "All" when the filter is "Done", inserts a pending task into the `todos` signal, and calls `TodoApi`. On success, it replaces the pending task with the server task in place. On failure, it removes the pending task, sets the `toast` signal when the failure is a network error or `5xx`, and hands the typed title back for restoration. The temporary id format is `<TO SUPPLY>`. The mechanism that avoids a visible jump when the id changes is `<TO SUPPLY>`.
-- **`TodoApi`** — abstract class that is the port for todo writes. **`HttpTodoApi`** is the adapter and the only class that uses `HttpClient`, wrapped with `firstValueFrom`. **`InMemoryTodoApi`** is the test fake.
-- **`ui-strings.ts`** — typed constants file that holds the user-facing copy as `UI_STRINGS`.
+- **`ToastComponent`** — presentational component that shows the error toast "Couldn't add that task. Try again." with `role="alert"`.
+- **`TodoStore`** — root-provided signal store. On add, it switches the `filter` signal to "All" when the filter is "Done", inserts a pending task into the `todos` signal, and calls `TodoApi`. On success, it replaces the pending task with the server task in place. On failure, it removes the pending task, sets the `toast` signal when the failure is a network error or `5xx`, and hands the typed title back for restoration. The temporary id is `tmp-<crypto.randomUUID()>`, and the pending row is a `TodoView` (`Todo & { pending?: true }`) with `pending: true`. On success, the store removes the pending row and inserts the server task in server order. The list tracks rows by `todo.id`, so the row is replaced; the pending row leaves without the exit animation and the confirmed row does not play the enter animation. A list loaded while the create is in flight keeps the pending row, unless that list already holds a new task with the same title. Pending tasks count toward progress.
+- **`TodoApi`** — abstract class in `src/app/core/api/todo-api.ts` that is the port for todo writes. This feature uses `create(title: string): Promise<Todo>`. **`HttpTodoApi`** is the adapter and the only class that uses `HttpClient`, wrapped with `firstValueFrom`. It applies `timeout(10_000)`, never retries a write, and converts failures to `ApiError` (`kind`, `status`, `problem`). **`InMemoryTodoApi`** is the test fake.
+- **`ui-strings.ts`** — typed constants file at `src/app/features/todos/ui-strings.ts` that holds the user-facing copy as `UI_STRINGS`, grouped as `composer`, `filters`, `emptyStates`, `toasts`, `announcements`, `ariaLabels`, and `errors`.
 
 Backend, Laravel API:
 
-- **`routes/api.php`** — maps `POST /api/v1/todos` to `TodoController`.
-- **`TodoController`** — thin controller. It validates through `StoreTodoRequest`, calls `CreateTodo`, and returns a `TodoResource` with status `201` and a `Location` header. The `Location` target is `<TO SUPPLY>`, because the API in L2-018 has no endpoint that reads a single todo.
+- **`routes/api.php`** — maps `POST /api/v1/todos` to `TodoController::store`.
+- **`TodoController`** — thin controller. It validates through `StoreTodoRequest`, calls `CreateTodo`, and returns a `TodoResource` with status `201` and the header `Location: /api/v1/todos/{id}`. That URI is the canonical identifier of the todo. The API in L2-018 intentionally has no route that reads a single todo.
 - **`StoreTodoRequest`** — Form Request. It requires `title` to be a string of 1 to 200 characters after trimming, and answers `422` with a `title` entry in `errors` otherwise.
-- **`CreateTodo`** — Action with one public method (`__invoke` or `handle`, `<TO SUPPLY>`). It depends on `TodoRepository` and creates a todo within the task cap.
-- **`TodoRepository`** — interface. **`EloquentTodoRepository`** implements it. **`InMemoryTodoRepository`** is the test fake. The repository operation that counts and inserts is named `<TO SUPPLY>`.
-- **`EloquentTodoRepository` transaction** — opens one database transaction, takes a lock that serialises concurrent creates, counts non-deleted todos, and inserts the row only when the count is below 500. The lock strategy is `<TO SUPPLY>`. Soft-deleted todos do not count.
-- **Limit exception** — raised when 500 non-deleted todos exist. Its class name is `<TO SUPPLY>`. The exception handler renders it as `422` problem details with the error code `todo_limit_reached`. The problem-details member that carries the code is `<TO SUPPLY>`.
+- **`CreateTodo`** — Action with one public method, `handle(string $title): Todo`. It depends on `TodoRepository` and creates a todo within the task cap.
+- **`TodoRepository`** — interface in `app/Repositories/TodoRepository.php`. **`EloquentTodoRepository`** implements it. **`InMemoryTodoRepository`** in `tests/Fakes` is the test fake. The operation that counts and inserts is `createWithinLimit(string $title, int $limit): Todo`, which throws `TodoLimitReached`.
+- **`EloquentTodoRepository` transaction** — runs `createWithinLimit` in `DB::transaction(fn, attempts: 3)`. Inside the transaction, it counts non-deleted todos with `lockForUpdate()` and inserts the row only when the count is below the limit. InnoDB next-key locks at `REPEATABLE READ` serialise concurrent creates, so the second create waits for the first to commit. The 3 attempts retry the transaction on deadlock. Soft-deleted todos do not count.
+- **`TodoLimitReached`** — domain exception in `app/Exceptions`, raised when 500 non-deleted todos exist. `ProblemDetailsRenderer` renders it as `422` problem details with `detail` "You have 500 tasks. Finish or delete some to add more.". The extension member `code` carries `todo_limit_reached`, and `errors.title` holds the same sentence.
 - **`Todo`** — Eloquent model with `HasUlids`, `SoftDeletes`, and `HasFactory`. It derives `completed` from `completed_at`.
 - **`TodoResource`** — API Resource. It returns `id`, `title`, `completed`, `completedAt`, `createdAt`, and `updatedAt` inside `data`. A new todo has `completed: false` and `completedAt: null`.
-- **Exception handler** — renders errors as `application/problem+json` in `bootstrap/app.php`.
+- **`ProblemDetailsRenderer`** — invokable class `App\Exceptions\ProblemDetailsRenderer`, registered in `bootstrap/app.php` through `withExceptions`. It renders errors on every `api/` path as `application/problem+json`.
 
-Open details:
+Decisions on the failure paths:
 
-- Whether the typed title returns to the composer after a `422` validation response is `<TO SUPPLY>`. L2-004 criterion 3 restores the title only for network and `5xx` failures, and L2-003 criterion 2 keeps it for the limit message.
-- The placement of the limit message "You have 500 tasks. Finish or delete some to add more." is `<TO SUPPLY>`. L2-003 criterion 2 says the message is shown but not where.
+- On any `422` response, including the task cap, the composer keeps the typed text. The composer shows the server's field message from `errors.title` below the field.
+- The limit message "You have 500 tasks. Finish or delete some to add more." therefore appears at the composer, in the same place as other field messages.
 - The "Task added" announcement belongs to the live-region requirements and is outside this feature.
 
 ## Requirements
@@ -91,7 +91,7 @@ In the SPA, the page, composer, list, and store handle input and the pending tas
 
 ### Class structure
 
-`TodoStore` depends on the `TodoApi` port. `CreateTodo` depends on the `TodoRepository` interface. `EloquentTodoRepository` creates `Todo` rows and raises the limit exception at 500.
+`TodoStore` depends on the `TodoApi` port. `CreateTodo` depends on the `TodoRepository` interface. `EloquentTodoRepository` creates `Todo` rows and throws `TodoLimitReached` at 500.
 
 ![Class diagram for adding a task](diagrams/class-structure.png)
 

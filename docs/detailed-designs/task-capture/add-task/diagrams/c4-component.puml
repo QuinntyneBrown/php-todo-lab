@@ -23,7 +23,7 @@ Container_Boundary(api, "Laravel API") {
   Component(eloquent, "EloquentTodoRepository", "Repository", "Counts and inserts in one transaction")
   Component(model, "Todo", "Eloquent model", "HasUlids, SoftDeletes")
   Component(res, "TodoResource", "API Resource", "Serialises the created todo")
-  Component(errs, "Exception handler", "bootstrap/app.php", "Renders application/problem+json")
+  Component(errs, "ProblemDetailsRenderer", "Invokable class", "Registered in bootstrap/app.php; renders application/problem+json")
 }
 
 ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")

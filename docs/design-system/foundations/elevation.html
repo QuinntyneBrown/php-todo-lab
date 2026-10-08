@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevation — Tasks design system</title>
+<meta name="description" content="Shadow levels, surface hierarchy, focus halos and z-order of the Tasks design system.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation · Elevation</p>
+      <h1>Elevation</h1>
+      <p class="ds-lead">Four shadow levels, two focus halos and nine z-layers: the card floats on the canvas and the toast floats above everything.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Source: <code>tokens/tokens.css</code></span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#shadows">Shadows</a></li><li><a href="#surfaces">Surfaces</a></li><li><a href="#focus-halos">Focus halos</a></li><li><a href="#z-order">Z-order</a></li><li><a href="#usage">Usage</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#tokens">Tokens</a></li></ul>
+    </header>
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Tasks uses little elevation: the card floats on the canvas, the selected filter sits on its track, and the toast floats above everything. Four shadow levels and two focus halos cover it. Shadows are tinted with ink (<code>--shadow-color: 16 34 47</code>) in light and pure black in dark; the mocks had raw shadow colours, including a light-theme tint reused in dark (D8).</p>
+    </section>
+    <section class="ds-section" id="shadows"><h2><a href="#shadows">Shadow levels</a></h2>
+      <p>Light theme left, dark theme right. In dark, shadows are stronger and the surface itself gets lighter as it rises.</p>
+      <div class="ds-themes"><div data-theme="light"><div class="ds-shadow-grid"><div style="--shadow: var(--shadow-1);"><span><b>1 · Pill</b><br>Selected filter pill, switch thumb</span></div><div style="--shadow: var(--shadow-2);"><span><b>2 · Card</b><br>The task card, tables</span></div><div style="--shadow: var(--shadow-3);"><span><b>3 · Menu</b><br>Menus, tooltips, skip link</span></div><div style="--shadow: var(--shadow-4);"><span><b>4 · Toast</b><br>Toasts, dialogs</span></div></div></div><div data-theme="dark"><div class="ds-shadow-grid"><div style="--shadow: var(--shadow-1);"><span><b>1 · Pill</b><br>Selected filter pill, switch thumb</span></div><div style="--shadow: var(--shadow-2);"><span><b>2 · Card</b><br>The task card, tables</span></div><div style="--shadow: var(--shadow-3);"><span><b>3 · Menu</b><br>Menus, tooltips, skip link</span></div><div style="--shadow: var(--shadow-4);"><span><b>4 · Toast</b><br>Toasts, dialogs</span></div></div></div></div>
+    </section>
+    <section class="ds-section" id="surfaces"><h2><a href="#surfaces">Surface hierarchy</a></h2>
+      <p>Canvas &lt; surface &lt; raised, with sunken wells inside a surface. In the light theme surface and raised are both white and the shadow separates them; in the dark theme raised (<code>--palette-ink-850</code>) is lighter than surface, because shadows barely show on dark backgrounds. That is why the selected filter pill uses <code>--color-bg-surface-raised</code>: in the mocks it was the surface colour on a sunken track, 1.05:1 in dark (D9).</p>
+      <div class="ds-themes"><div data-theme="light"><div class="stack stack--tight">
+        <div style="background: var(--color-bg-canvas); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: var(--space-4);"><b>Canvas</b> <code>--color-bg-canvas</code>
+          <div style="margin-top: var(--space-3); background: var(--color-bg-surface); box-shadow: var(--shadow-2); border-radius: var(--radius-md); padding: var(--space-4);"><b>Surface</b> <code>--color-bg-surface</code>
+            <div style="margin-top: var(--space-3); background: var(--color-bg-surface-sunken); border-radius: var(--radius-full); padding: var(--space-1); display: flex;"><span style="background: var(--color-bg-surface-raised); box-shadow: var(--shadow-1); border-radius: var(--radius-full); padding: var(--space-2) var(--space-4);"><b>Raised</b> on sunken</span></div>
+          </div>
+        </div></div></div><div data-theme="dark"><div class="stack stack--tight">
+        <div style="background: var(--color-bg-canvas); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); padding: var(--space-4);"><b>Canvas</b> <code>--color-bg-canvas</code>
+          <div style="margin-top: var(--space-3); background: var(--color-bg-surface); box-shadow: var(--shadow-2); border-radius: var(--radius-md); padding: var(--space-4);"><b>Surface</b> <code>--color-bg-surface</code>
+            <div style="margin-top: var(--space-3); background: var(--color-bg-surface-sunken); border-radius: var(--radius-full); padding: var(--space-1); display: flex;"><span style="background: var(--color-bg-surface-raised); box-shadow: var(--shadow-1); border-radius: var(--radius-full); padding: var(--space-2) var(--space-4);"><b>Raised</b> on sunken</span></div>
+          </div>
+        </div></div></div></div>
+    </section>
+    <section class="ds-section" id="focus-halos"><h2><a href="#focus-halos">Focus halos</a></h2>
+      <p>Text inputs show focus with an accent border and a 3px halo (<code>--shadow-focus</code>) instead of the outline ring; invalid inputs keep a danger halo (<code>--shadow-focus-invalid</code>). The border carries the ≥ 3:1 indicator; the halo is reinforcement.</p>
+      <div class="ds-example"><div class="ds-example__canvas"><input class="input" style="max-width: 16rem;" aria-label="Focused input" value="Buy oat milk" data-state="focus"><input class="input" style="max-width: 16rem;" aria-label="Invalid input" value="" aria-invalid="true" placeholder="What needs doing?"></div></div>
+    </section>
+    <section class="ds-section" id="z-order"><h2><a href="#z-order">Z-order</a></h2>
+      <p>Nine layers. A component never writes a raw <code>z-index</code>.</p>
+      <ol><li><code>--z-base</code>: Page content</li><li><code>--z-raised</code>: A focused input inside an input group, so its ring sits above neighbours</li><li><code>--z-sticky</code>: Sticky table headers</li><li><code>--z-dropdown</code>: Menus</li><li><code>--z-overlay</code>: Overlays behind a dialog</li><li><code>--z-modal</code>: Dialogs (not used in v1)</li><li><code>--z-popover</code>: Popovers</li><li><code>--z-toast</code>: The toast region (was a raw 10, D20)</li><li><code>--z-tooltip</code>: Tooltips and the skip link: always on top</li></ol>
+      <p>Values are in the <a href="#tokens">token table</a>; the gaps between layers leave room to insert one without renumbering.</p>
+    </section>
+    <section class="ds-section" id="usage"><h2><a href="#usage">Usage</a></h2>
+      <ul>
+        <li>Pick the level by what the element does, not how important it looks: cards 2, pills 1, menus 3, toasts and dialogs 4.</li>
+        <li>Never stack two shadowed surfaces of the same level; nest a sunken well instead.</li>
+        <li>In dark, rely on the surface colour first and the shadow second.</li>
+        <li>Shadows never animate on a frame loop; the card's hover lift is a transform (L2-024.3).</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <ul>
+        <li>Elevation is never the only way to tell surfaces apart: the selected filter is also bold and <code>aria-pressed</code>; cards have a distinct background from the canvas.</li>
+        <li>Toasts on <code>--z-toast</code> never cover focus: the column reserves <code>--layout-safe-bottom</code> beneath the list (WCAG 2.4.11).</li>
+        <li>In <code>forced-colors</code> mode shadows disappear; cards and inputs keep borders through system colours.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <h3>Shadows</h3>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>--shadow-color</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--shadow-color" data-swatch></i><span data-token="--shadow-color"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--shadow-color" data-swatch></i><span data-token="--shadow-color"></span></span></td><td>RGB channels the shadows are tinted with: ink in light, black in dark</td></tr><tr><td><code>--shadow-1</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--shadow-1" data-swatch></i><span data-token="--shadow-1"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--shadow-1" data-swatch></i><span data-token="--shadow-1"></span></span></td><td>Selected filter pill, switch thumb</td></tr><tr><td><code>--shadow-2</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--shadow-2" data-swatch></i><span data-token="--shadow-2"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--shadow-2" data-swatch></i><span data-token="--shadow-2"></span></span></td><td>The task card, tables</td></tr><tr><td><code>--shadow-3</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--shadow-3" data-swatch></i><span data-token="--shadow-3"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--shadow-3" data-swatch></i><span data-token="--shadow-3"></span></span></td><td>Menus, tooltips, skip link</td></tr><tr><td><code>--shadow-4</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--shadow-4" data-swatch></i><span data-token="--shadow-4"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--shadow-4" data-swatch></i><span data-token="--shadow-4"></span></span></td><td>Toasts, dialogs</td></tr><tr><td><code>--shadow-focus</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--shadow-focus" data-swatch></i><span data-token="--shadow-focus"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--shadow-focus" data-swatch></i><span data-token="--shadow-focus"></span></span></td><td>3px accent-subtle halo around a focused input</td></tr><tr><td><code>--shadow-focus-invalid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--shadow-focus-invalid" data-swatch></i><span data-token="--shadow-focus-invalid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--shadow-focus-invalid" data-swatch></i><span data-token="--shadow-focus-invalid"></span></span></td><td>3px danger halo around an invalid input</td></tr></tbody></table></div>
+      <h3>Z-order</h3>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>--z-base</code></td><td><span data-token="--z-base"></span></td><td>Page content</td></tr><tr><td><code>--z-raised</code></td><td><span data-token="--z-raised"></span></td><td>A focused input inside an input group, so its ring sits above neighbours</td></tr><tr><td><code>--z-sticky</code></td><td><span data-token="--z-sticky"></span></td><td>Sticky table headers</td></tr><tr><td><code>--z-dropdown</code></td><td><span data-token="--z-dropdown"></span></td><td>Menus</td></tr><tr><td><code>--z-overlay</code></td><td><span data-token="--z-overlay"></span></td><td>Overlays behind a dialog</td></tr><tr><td><code>--z-modal</code></td><td><span data-token="--z-modal"></span></td><td>Dialogs (not used in v1)</td></tr><tr><td><code>--z-popover</code></td><td><span data-token="--z-popover"></span></td><td>Popovers</td></tr><tr><td><code>--z-toast</code></td><td><span data-token="--z-toast"></span></td><td>The toast region (was a raw 10, D20)</td></tr><tr><td><code>--z-tooltip</code></td><td><span data-token="--z-tooltip"></span></td><td>Tooltips and the skip link: always on top</td></tr></tbody></table></div>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

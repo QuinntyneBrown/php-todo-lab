@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Button — Tasks design system</title>
+<meta name="description" content="Buttons trigger actions: Add task, Clear completed, Undo, Delete, Try again. Six variants, three sizes, every state, in both themes.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Actions</p>
+      <h1>Button</h1>
+      <p class="ds-lead">Buttons let people act: add a task, clear completed ones, undo a delete, try a failed load again. One primary button per view says what the screen is for.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Used in v1</span><span class="ds-pill">Native <code>&lt;button&gt;</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a button when activating it changes something: it adds, clears, deletes, undoes or retries. Use a <a href="link.html">link</a> when it only takes the person somewhere. Use a <a href="button-group.html">button group</a> when several mutually exclusive options choose a view, as the All / Active / Done filter does.</p>
+      <ul>
+        <li><b>Primary</b> is the one action the view exists for. In v1 that is <b>Add task</b>, and nothing else is primary.</li>
+        <li><b>Secondary</b> (the default look, an outlined button) is for other real actions. Inside an <a href="alert.html">alert</a> it takes the alert's tone, which is how <b>Try again</b> in the load-error banner is drawn.</li>
+        <li><b>Ghost</b> is accent text with no container until hover. It sits in dense surfaces: <b>Clear completed</b> in the toolbar and <b>Undo</b> in the toast.</li>
+        <li><b>Link</b> looks like a link but behaves like a button; use it for low-emphasis actions inside sentences.</li>
+        <li><b>Danger</b> is a solid destructive button. v1 never uses it, because deletes are undone from a toast instead of confirmed (L2-022). It exists for a future confirmation step.</li>
+        <li><b>Ghost danger</b> is a quiet icon button that turns red only on hover or focus: the per-row <b>Delete</b>.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <button class="btn btn--primary btn--lg" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button>
+          <span class="ds-callout" style="left: 33%; top: 22%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 52%; top: 22%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 66%; top: 72%;" aria-hidden="true">3</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Leading icon (optional)</b><small>20px, 2px stroke, <code>currentColor</code>, <code>aria-hidden</code>. Stays visible when the label collapses below SM.</small></div></li>
+          <li><div><b>Label</b><small><code>.btn__label</code>. A verb phrase in sentence case, semibold 16px (<code>--text-button</code>); the accessible name.</small></div></li>
+          <li><div><b>Container</b><small>Height from <code>--control-height-*</code> (36 / 44 / 52px), 1.5px edge, <code>--radius-md</code> (12px), padding <code>--space-3/4/5</code>.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Variants change emphasis, not meaning. Pick by how much attention the action deserves on this view.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <button class="btn btn--primary" type="button">Add task</button>
+          <button class="btn" type="button">Try again</button>
+          <button class="btn btn--ghost" type="button">Clear completed</button>
+          <button class="btn btn--link" type="button">Show details</button>
+          <button class="btn btn--danger" type="button">Delete 3 tasks</button>
+          <button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+        </div>
+        <div class="ds-example__caption"><span>Primary, secondary, ghost, link, danger, ghost danger (icon-only).</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;button class="btn btn--primary" type="button"&gt;Add task&lt;/button&gt;
+&lt;button class="btn" type="button"&gt;Try again&lt;/button&gt;
+&lt;button class="btn btn--ghost" type="button"&gt;Clear completed&lt;/button&gt;
+&lt;button class="btn btn--link" type="button"&gt;Show details&lt;/button&gt;
+&lt;button class="btn btn--danger" type="button"&gt;Delete 3 tasks&lt;/button&gt;
+&lt;button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete Call mom"&gt;…&lt;/button&gt;</code></pre></details>
+      </div>
+      <h3>In context</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div>
+          <div class="alert alert--danger" role="alert"><svg class="icon alert__icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><p class="alert__body">Couldn't load your tasks. Check your connection and try again.</p><button class="btn" type="button">Try again</button></div>
+        </div>
+        <div class="ds-example__caption"><span>Inside a toast, ghost takes the inverse accent; inside an alert, secondary takes the alert's tone. No extra classes are needed.</span></div>
+      </div>
+      <h3>With icons, icon-only, block and collapsing</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <button class="btn btn--primary" type="button"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add task</button>
+          <button class="btn btn--icon" type="button" aria-label="Refresh tasks"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 5.7M20 4v7h-7"/></svg></button>
+          <button class="btn btn--primary btn--lg btn--collapse" type="button" aria-label="Add task"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button>
+          <div style="flex: 1 1 14rem; max-width: 18rem;"><button class="btn btn--block" type="button">Block (full width)</button></div>
+        </div>
+        <div class="ds-example__caption"><span><code>.btn--collapse</code> shows only its icon below 576px; resize the window to see it. Icon-only buttons always carry <code>aria-label</code>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Medium (44px) is the default and the product's minimum touch target (L2-028.1). Large (52px) is the composer's Add task, matching the 52px input beside it. Small (36px) is only for places where the surrounding row is itself the 44px target.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <button class="btn btn--primary btn--sm" type="button">Small · 36px</button>
+          <button class="btn btn--primary" type="button">Medium · 44px</button>
+          <button class="btn btn--primary btn--lg" type="button">Large · 52px</button>
+        </div>
+        <div class="ds-example__caption"><span>Heights <code>--control-height-sm/md/lg</code>; padding <code>--space-3/4/5</code>; small also drops to <code>--font-size-sm</code>.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Pointer and focus states are forced here with <code>data-state</code>; real pages get them from <code>:hover</code>, <code>:focus-visible</code>, <code>:active</code>, <code>:disabled</code>, <code>aria-disabled</code> and <code>aria-busy</code>.</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Active</th><th scope="col">Disabled</th><th scope="col">Loading</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Primary</th><td><button class="btn btn--primary" type="button">Add task</button></td><td><button class="btn btn--primary" type="button" data-state="hover">Add task</button></td><td><button class="btn btn--primary" type="button" data-state="focus">Add task</button></td><td><button class="btn btn--primary" type="button" data-state="active">Add task</button></td><td><button class="btn btn--primary" type="button" disabled>Add task</button></td><td><button class="btn btn--primary" type="button" aria-busy="true">Add task</button></td></tr>
+          <tr><th scope="row">Secondary</th><td><button class="btn" type="button">Try again</button></td><td><button class="btn" type="button" data-state="hover">Try again</button></td><td><button class="btn" type="button" data-state="focus">Try again</button></td><td><button class="btn" type="button" data-state="active">Try again</button></td><td><button class="btn" type="button" disabled>Try again</button></td><td><button class="btn" type="button" aria-busy="true">Try again</button></td></tr>
+          <tr><th scope="row">Ghost</th><td><button class="btn btn--ghost" type="button">Clear completed</button></td><td><button class="btn btn--ghost" type="button" data-state="hover">Clear completed</button></td><td><button class="btn btn--ghost" type="button" data-state="focus">Clear completed</button></td><td><button class="btn btn--ghost" type="button" data-state="active">Clear completed</button></td><td><button class="btn btn--ghost" type="button" aria-disabled="true">Clear completed</button></td><td><button class="btn btn--ghost" type="button" aria-busy="true">Clear completed</button></td></tr>
+          <tr><th scope="row">Link</th><td><button class="btn btn--link" type="button">Show details</button></td><td><button class="btn btn--link" type="button" data-state="hover">Show details</button></td><td><button class="btn btn--link" type="button" data-state="focus">Show details</button></td><td><button class="btn btn--link" type="button" data-state="active">Show details</button></td><td><button class="btn btn--link" type="button" disabled>Show details</button></td><td><button class="btn btn--link" type="button" aria-busy="true">Show details</button></td></tr>
+          <tr><th scope="row">Danger</th><td><button class="btn btn--danger" type="button">Delete 3 tasks</button></td><td><button class="btn btn--danger" type="button" data-state="hover">Delete 3 tasks</button></td><td><button class="btn btn--danger" type="button" data-state="focus">Delete 3 tasks</button></td><td><button class="btn btn--danger" type="button" data-state="active">Delete 3 tasks</button></td><td><button class="btn btn--danger" type="button" disabled>Delete 3 tasks</button></td><td><button class="btn btn--danger" type="button" aria-busy="true">Delete 3 tasks</button></td></tr>
+          <tr><th scope="row">Ghost danger</th><td><button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></td><td><button class="btn btn--icon btn--ghost-danger" type="button" data-state="hover" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></td><td><button class="btn btn--icon btn--ghost-danger" type="button" data-state="focus" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></td><td><button class="btn btn--icon btn--ghost-danger" type="button" data-state="active" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></td><td><button class="btn btn--icon btn--ghost-danger" type="button" disabled aria-label="Delete Buy oat milk"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></td><td><button class="btn btn--icon btn--ghost-danger" type="button" aria-busy="true" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Pressed and expanded</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <button class="btn" type="button" aria-pressed="false">Show completed</button>
+          <button class="btn" type="button" aria-pressed="true">Show completed</button>
+          <button class="btn" type="button" aria-expanded="true" aria-haspopup="menu">Sort</button>
+        </div>
+        <div class="ds-example__caption"><span><code>aria-pressed="true"</code> tints with the accent; <code>aria-expanded="true"</code> holds the hover fill while its menu is open.</span></div>
+      </div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="ds-example__canvas" style="padding: 0;"><button class="btn btn--primary" type="button">Add task</button><button class="btn" type="button">Try again</button><button class="btn btn--ghost" type="button">Clear completed</button><button class="btn btn--danger" type="button">Delete</button><button class="btn btn--icon btn--ghost-danger" type="button" data-state="hover" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></div></div>
+        <div data-theme="dark"><div class="ds-example__canvas" style="padding: 0;"><button class="btn btn--primary" type="button">Add task</button><button class="btn" type="button">Try again</button><button class="btn btn--ghost" type="button">Clear completed</button><button class="btn btn--danger" type="button">Delete</button><button class="btn btn--icon btn--ghost-danger" type="button" data-state="hover" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></div></div>
+      </div>
+      <ul>
+        <li><b>Loading</b> keeps the width, hides the label, shows a ring in the label colour, sets <code>aria-busy="true"</code> and ignores clicks. v1 is optimistic (L2-004), so loading is reserved for Try again while the list reloads.</li>
+        <li><b>Disabled</b> (<code>disabled</code>) is removed from the tab order and is 55% opaque. Use it only when a pending row is waiting for the server (L2-004.1).</li>
+        <li><b>Aria-disabled</b> (<code>aria-disabled="true"</code>) looks the same but stays focusable, so its state can be discovered. <b>Clear completed</b> uses it when there is nothing to clear (L2-017.2); the click handler returns early.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>XS (&lt; 576px)</b>: Add task collapses to its plus icon (<code>.btn--collapse</code>), a 52px square; the accessible name stays on <code>aria-label="Add task"</code>. Clear completed wraps onto its own line under the full-width filter and aligns right.</li>
+        <li><b>SM and up (≥ 576px)</b>: Add task shows its label; the toolbar holds the filter and Clear completed on one row.</li>
+        <li><b>Hover-capable pointers</b>: the row's Delete is hidden until the row is hovered or has focus inside it. On touch (<code>hover: none</code>) it is always visible (L2-028.2).</li>
+        <li>Labels never truncate or wrap; a label that does not fit at 320px is too long.</li>
+        <li>Every product button is at least 44 × 44px at every breakpoint (L2-028.1); small (36px) never appears in the product.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The button reads only component tokens (<code>--btn-bg</code>, <code>--btn-fg</code>, <code>--btn-border</code>, <code>--btn-bg-hover</code>, <code>--btn-fg-hover</code>, <code>--btn-bg-active</code>, <code>--btn-ring</code>, plus <code>--btn-height</code>, <code>--btn-pad</code>, <code>--btn-radius</code>), which alias semantic tokens. Each variant overrides them; containers do too, which is how the toast and the alert re-tone their buttons without new classes.</p>
+      <pre><code>/* What .toast does to the buttons inside it */
+.toast .btn { --btn-fg: var(--toast-action); --btn-bg-hover: var(--toast-action-hover); --btn-ring: var(--toast-action); }</code></pre>
+      <p>In dark, the accent lightens to sea-400 and the label flips to <code>--color-fg-on-accent</code> (deep sea, 8.1:1). Hover replaces the mock's <code>filter: brightness(1.08)</code> with <code>--color-accent-hover</code>, which is lighter in dark and darker in light, so both themes keep their contrast (D6).</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;button type="button"&gt;</code>, or <code>type="submit"</code> for Add task inside the composer form. Toggle buttons follow the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button pattern</a> with <code>aria-pressed</code>. Never a <code>&lt;div&gt;</code> with a click handler.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves focus to and from the button in DOM order. <code>aria-disabled</code> buttons stay in the order; <code>disabled</code> ones do not.</td></tr>
+        <tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Activates. Enter in the composer field also submits Add task.</td></tr>
+        <tr><td><kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>Z</kbd></td><td>Same as the toast's Undo while it is showing (L2-015); the toast never takes focus.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>One ring for everything: 2px <code>--color-focus-ring</code> at a 2px offset on <code>:focus-visible</code> (L2-030.2), so pointer clicks do not show it. Inside the toast the ring takes the action colour so it stays visible on the inverse surface.</p>
+      <h3>Labelling</h3>
+      <p>The visible label is the name. Icon-only buttons carry an <code>aria-label</code> that includes the task title: "Delete Call mom" (L2-029.5). The collapsing Add task keeps <code>aria-label="Add task"</code> at every width. Loading keeps the name; progress is announced through the page's polite live region, not the button.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Label on primary</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Label on primary (hover)</span><span class="ds-pair__ratio" data-contrast="--color-fg-on-accent|--color-accent-hover" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Ghost label on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-accent|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Ghost label on hover tint</span><span class="ds-pair__ratio" data-contrast="--color-fg-accent|--color-bg-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Secondary edge on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Undo on toast</span><span class="ds-pair__ratio" data-contrast="--color-fg-inverse-accent|--color-bg-inverse" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Delete icon on hover tint</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring on card</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Background, border and colour transition over <code>--duration-fast</code> (150ms); active scales to 0.97. Reduced motion zeroes the durations in the tokens, so both become instant. The loading ring stops rotating and reads as a static ring next to the busy state.</p>
+      <h3>Touch</h3>
+      <p>Medium and large exceed 44 × 44px (L2-028.1). Icon-only buttons are 44px circles even though the icon is 20px. Delete is always visible where there is no hover (L2-028.2).</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Verb phrases in sentence case, one name per thing (L2-025): "Add task", "Clear completed", "Undo", "Try again". Never "OK", "Submit" or "Click here".</li>
+        <li>The verb on the button matches the announcement it causes: Add task → "Task added"; Clear completed → "3 tasks cleared".</li>
+        <li>Icon-only labels name the object: "Delete Call mom", not "Delete" or "Trash".</li>
+        <li>Destructive labels name the loss: "Delete 3 tasks", not "Confirm".</li>
+        <li>No exclamation marks; loading never changes the label.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--primary" type="button" data-state="hover">Add task</button></div><figcaption>Hover with <code>--color-accent-hover</code>, a token checked at 6.38:1 in light (D6).</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button" style="filter: brightness(1.08);">Add task</button></div><figcaption>Brighten the button with <code>filter</code> as the mock did; the result cannot be themed or contrast-checked.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--ghost" type="button" aria-disabled="true">Clear completed</button></div><figcaption>Use <code>aria-disabled</code> when nothing can be cleared, so keyboard users can still find the control and hear why.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--primary" type="button">Add task</button><button class="btn btn--primary" type="button">Clear completed</button></div><figcaption>Two primary buttons compete. Clear completed is a ghost button.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="toast toast--static" role="status"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button">Undo</button></div></div><figcaption>Make deletes reversible with Undo in a toast (L2-015).</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--danger" type="button">Delete</button></div><figcaption>Put a solid danger button on every row; it shouts eight times per screen. Rows use the quiet ghost-danger icon button.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Primary background</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Primary hover / active</td><td><code>--color-accent-hover</code> / <code>--color-accent-active</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-hover" data-swatch></i><span data-token="--color-accent-hover"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-hover" data-swatch></i><span data-token="--color-accent-hover"></span></span></td></tr>
+          <tr><td>Primary label</td><td><code>--color-fg-on-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-on-accent" data-swatch></i><span data-token="--color-fg-on-accent"></span></span></td></tr>
+          <tr><td>Secondary edge</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Ghost label</td><td><code>--color-fg-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-accent" data-swatch></i><span data-token="--color-fg-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-accent" data-swatch></i><span data-token="--color-fg-accent"></span></span></td></tr>
+          <tr><td>Hover fill (secondary, ghost)</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+          <tr><td>Danger background</td><td><code>--color-danger-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td></tr>
+          <tr><td>Ghost danger hover</td><td><code>--color-danger-bg</code> / <code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-bg" data-swatch></i><span data-token="--color-danger-bg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-bg" data-swatch></i><span data-token="--color-danger-bg"></span></span></td></tr>
+          <tr><td>Focus ring</td><td><code>--color-focus-ring</code>, <code>--focus-ring-width</code>, <code>--focus-ring-offset</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+          <tr><td>Height sm / md / lg</td><td><code>--control-height-sm/md/lg</code></td><td colspan="2"><span data-token="--control-height-sm"></span> / <span data-token="--control-height-md"></span> / <span data-token="--control-height-lg"></span></td></tr>
+          <tr><td>Padding sm / md / lg</td><td><code>--space-3/4/5</code></td><td colspan="2"><span data-token="--space-3"></span> / <span data-token="--space-4"></span> / <span data-token="--space-5"></span></td></tr>
+          <tr><td>Radius (ghost / default / icon)</td><td><code>--radius-sm</code> / <code>--radius-md</code> / <code>--radius-full</code></td><td colspan="2"><span data-token="--radius-sm"></span> / <span data-token="--radius-md"></span> / <span data-token="--radius-full"></span></td></tr>
+          <tr><td>Edge width</td><td><code>--border-width-control</code></td><td colspan="2"><span data-token="--border-width-control"></span></td></tr>
+          <tr><td>Label font</td><td><code>--text-button</code></td><td colspan="2"><span data-token="--text-button"></span></td></tr>
+          <tr><td>Transition</td><td><code>--duration-fast</code>, <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-fast"></span> <span data-token="--ease-standard"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"&gt;
+  &lt;svg class="icon" aria-hidden="true" viewBox="0 0 24 24"&gt;&lt;path d="M12 5v14M5 12h14"/&gt;&lt;/svg&gt;
+  &lt;span class="btn__label"&gt;Add task&lt;/span&gt;
+&lt;/button&gt;
+
+&lt;button class="btn btn--ghost" type="button" aria-disabled="true"&gt;Clear completed&lt;/button&gt;
+&lt;button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Call mom"&gt;…&lt;/button&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.btn</code></td><td>Base: secondary (outlined) look, medium size.</td></tr>
+        <tr><td><code>.btn--primary</code> <code>.btn--ghost</code> <code>.btn--link</code> <code>.btn--danger</code> <code>.btn--ghost-danger</code></td><td>Variant.</td></tr>
+        <tr><td><code>.btn--sm</code> <code>.btn--lg</code></td><td>Size; omit for medium.</td></tr>
+        <tr><td><code>.btn--icon</code></td><td>Square, round icon-only button; requires <code>aria-label</code>.</td></tr>
+        <tr><td><code>.btn--collapse</code> + <code>.btn__label</code></td><td>Icon-only below 576px, labelled from SM up; requires <code>aria-label</code>.</td></tr>
+        <tr><td><code>.btn--block</code></td><td>Full width.</td></tr>
+        <tr><td><code>disabled</code> / <code>aria-disabled="true"</code></td><td>Disabled and removed from tab order / disabled-looking but focusable.</td></tr>
+        <tr><td><code>aria-busy="true"</code></td><td>Loading: ring, label hidden, clicks ignored, width kept.</td></tr>
+        <tr><td><code>aria-pressed</code>, <code>aria-expanded</code></td><td>Toggle state; open popup.</td></tr>
+        <tr><td><code>data-state="hover|focus|active"</code></td><td>Documentation only: forces a pointer or focus state.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from these mocks:</p>
+      <ul>
+        <li><a href="../../mocks/pages/states.composer.html">pages/states.composer</a> (Add task, collapsing below 576px)</li>
+        <li><a href="../../mocks/pages/states.toolbar.html">pages/states.toolbar</a> (Clear completed: hover, <code>aria-disabled</code>)</li>
+        <li><a href="../../mocks/pages/states.row.html">pages/states.row</a> (Delete: hidden, revealed, hovered, disabled while pending)</li>
+        <li><a href="../../mocks/pages/notifications.html">pages/notifications</a> (Undo in toasts, Try again in the banner)</li>
+        <li><a href="../../mocks/pages/page.load-error.html">pages/page.load-error</a></li>
+      </ul>
+      <p>Class mapping: <code>.composer__btn</code> → <code>.btn.btn--primary.btn--lg.btn--collapse</code>; <code>.link-btn</code> → <code>.btn.btn--ghost</code>; <code>.toast__btn</code> → <code>.btn.btn--ghost</code> inside <code>.toast</code>; <code>.banner button</code> → <code>.btn</code> inside <code>.alert--danger</code>; <code>.del</code> → <code>.btn.btn--icon.btn--ghost-danger.task__delete</code>.</p>
+      <p>Drift fixed during extraction: D3 (ghost label on hover tint was exactly 4.5:1), D6 (hover <code>filter</code>), D7 (raw toast hover colour), D10 (10px radii → 12px), D13 (Undo weight 700 → 600), D18 (max-width collapse query → mobile-first). Link and danger variants are system additions (D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

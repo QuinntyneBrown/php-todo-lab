@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Textarea — Tasks design system</title>
+<meta name="description" content="Multi-line text input: fixed and auto-growing, with a counter, invalid, read-only and disabled. Not used in v1.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Textarea</h1>
+      <p class="ds-lead">A textarea takes text that runs over several lines, such as notes. It shares every token and state with the <a href="text-field.html">text field</a>.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: ready</span><span class="ds-pill ds-pill--warn">Not used in v1</span><span class="ds-pill">Native <code>&lt;textarea&gt;</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a textarea when people may write more than one sentence. Task titles are a single line of up to 200 characters, so v1 uses a <a href="text-field.html">text field</a> and lets long titles wrap in the row instead (L2-027.6). The textarea is ready for a future notes field.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="field" style="width: min(100%, 22rem);">
+            <label class="field__label" for="aNotes">Notes</label>
+            <textarea class="input" id="aNotes" rows="3" aria-describedby="aNotesHint">Ask whether the plumber can come before the twentieth.</textarea>
+            <p class="message message--hint" id="aNotesHint">Optional. Up to 1,000 characters.</p>
+          </div>
+          <span class="ds-callout" style="left: 12%; top: 12%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 12%; top: 45%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 12%; top: 84%;" aria-hidden="true">3</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Label</b><small>Always visible for a textarea.</small></div></li>
+          <li><div><b>Container</b><small><code>textarea.input</code>: minimum two lines (88px), 12px vertical padding, vertical resize.</small></div></li>
+          <li><div><b>Hint or message</b><small>Linked with <code>aria-describedby</code>.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="field"><label class="field__label" for="tvFixed">Fixed (resizable)</label><textarea class="input" id="tvFixed" rows="3"></textarea></div>
+          <div class="field"><label class="field__label" for="tvAuto">Auto-grow</label><textarea class="input textarea--auto" id="tvAuto">Grows with its content up to 16rem, then scrolls.</textarea></div>
+          <div class="field"><label class="field__label" for="tvCount">With counter</label><textarea class="input" id="tvCount" rows="3" maxlength="1000" aria-describedby="tvCountN">Call the building manager about the leaking radiator in the spare room.</textarea><p class="message message--hint" id="tvCountN">71/1000</p></div>
+        </div>
+        <div class="ds-example__caption"><span>Auto-grow uses <code>field-sizing: content</code> where supported and falls back to the fixed size. The counter sits under the field, never inside it.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="One size: medium text and padding; height comes from rows or content.">
+      <h2><a href="#sizes">Sizes</a></h2><p class="ds-na">One size: medium text and padding; height comes from rows or content.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Invalid</th><th scope="col">Read-only</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Textarea</th>
+            <td><textarea class="input" rows="2" aria-label="Default">Notes</textarea></td>
+            <td><textarea class="input" rows="2" aria-label="Hover" data-state="hover">Notes</textarea></td>
+            <td><textarea class="input" rows="2" aria-label="Focus" data-state="focus">Notes</textarea></td>
+            <td><textarea class="input" rows="2" aria-label="Invalid" aria-invalid="true"></textarea></td>
+            <td><textarea class="input" rows="2" aria-label="Read-only" readonly>Notes</textarea></td>
+            <td><textarea class="input" rows="2" aria-label="Disabled" disabled>Notes</textarea></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><textarea class="input" rows="2" aria-label="Light">Ask about the valve.</textarea></div>
+        <div data-theme="dark"><textarea class="input" rows="2" aria-label="Dark" data-state="focus">Ask about the valve.</textarea></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>Full width of its container at every breakpoint; only vertical resize, so it cannot cause horizontal scroll.</li>
+        <li>Text stays 18px for iOS (L2-028.3). On phones prefer auto-grow over the resize handle, which is hard to grab.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Identical to the text field: <code>--input-bg</code>, <code>--input-border</code>, <code>--input-height</code> (here used as the base for the two-line minimum).</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native <code>&lt;textarea&gt;</code>; no role. Errors via <code>aria-invalid</code> and <code>aria-describedby</code>.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Into and out of the field (Tab never inserts a tab character).</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>New line. Never submits the form.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>Accent edge plus 3px halo, as the text field.</p>
+      <h3>Labelling</h3>
+      <p>A visible <code>&lt;label for&gt;</code>; hint and counter in <code>aria-describedby</code>. Announce the counter only near the limit, through a polite live region, not on every keystroke.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Text on surface</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Edge on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Hint on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>Edge and halo transition over 150ms; none under reduced motion.</p>
+      <h3>Touch</h3>
+      <p>Minimum 88px tall; the whole area is the target.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Label it with a noun ("Notes"); mark it optional in the hint, not with an asterisk.</li>
+        <li>State the limit once in the hint; show the counter as "71/1000".</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas" style="display: block;"><input class="input" type="text" aria-label="Do: task title" value="Call the building manager about the leaking radiator"></div><figcaption>Keep task titles in a single-line field; long titles wrap in the row (L2-027.6).</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas" style="display: block;"><textarea class="input" rows="3" aria-label="Don't: task title">Call the building manager about the leaking radiator</textarea></div><figcaption>Use a textarea for titles; Enter would add a line break instead of adding the task.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><textarea class="input" rows="2" aria-label="Do: counter below" aria-describedby="ddc1">Notes</textarea><p class="message message--hint" id="ddc1">5/1000</p></div><figcaption>Put the counter under the field.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="field__control"><textarea class="input input--with-count" rows="2" aria-label="Don't: counter inside">Notes that run under the counter when they wrap</textarea><span class="field__count">47/1000</span></div></div><figcaption>Overlay the counter inside a multi-line field; text runs underneath it.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Background</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Edge</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Focused edge</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Minimum height</td><td><code>2 × --control-height-md</code></td><td colspan="2"><span data-token="--control-height-md"></span> × 2</td></tr>
+          <tr><td>Padding</td><td><code>--space-3</code> / <code>--space-4</code></td><td colspan="2"><span data-token="--space-3"></span> / <span data-token="--space-4"></span></td></tr>
+          <tr><td>Line height</td><td><code>--line-height-normal</code></td><td colspan="2"><span data-token="--line-height-normal"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;div class="field"&gt;
+  &lt;label class="field__label" for="notes"&gt;Notes&lt;/label&gt;
+  &lt;textarea class="input textarea--auto" id="notes" maxlength="1000" aria-describedby="notesHint"&gt;&lt;/textarea&gt;
+  &lt;p class="message message--hint" id="notesHint"&gt;Optional. Up to 1,000 characters.&lt;/p&gt;
+&lt;/div&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>textarea.input</code></td><td>Two-line minimum, vertical resize.</td></tr>
+        <tr><td><code>.textarea--auto</code></td><td>Grows with content up to 16rem.</td></tr>
+        <tr><td><code>aria-invalid</code>, <code>readonly</code>, <code>disabled</code></td><td>States, as the text field.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>No mock uses a textarea. It inherits the text field extracted from <a href="../../mocks/pages/states.composer.html">pages/states.composer</a> and <a href="../../mocks/pages/states.row.html">pages/states.row</a>.</p>
+      <p>Drift fixed during extraction: none; system addition (D22). Inherits the D1 and D2 fixes from the text field.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

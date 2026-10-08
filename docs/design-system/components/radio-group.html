@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radio group — Tasks design system</title>
+<meta name="description" content="Native radio buttons in a fieldset for choosing one option of several: vertical, horizontal and card-style, every state, both themes.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Inputs</p>
+      <h1>Radio group</h1>
+      <p class="ds-lead">A radio group asks for exactly one choice from a short, visible set. It is the form counterpart of the segmented filter: same rule, one selection, but the choice waits for submit.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill ds-pill--warn">Not used in v1</span><span class="ds-pill">Native <code>&lt;input type="radio"&gt;</code></span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a radio group when people must pick one of two to six options and seeing every option helps them choose. Use a <a href="select.html">select</a> for longer lists, a <a href="checkbox.html">checkbox</a> when several can be chosen, and the <a href="button-group.html">segmented button group</a> when the choice applies immediately and filters what is on screen.</p>
+      <p><b>Not used in v1.</b> Tasks has one screen (L2-022) and its only one-of-many choice, the All / Active / Done filter, applies instantly, so it is a segmented button group with <code>aria-pressed</code> (L2-029.4 allows either; the group keeps one Tab stop per button and shows counts). The radio group is documented so a future settings form stays consistent with the system.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <span style="position: relative; display: inline-block;">
+            <fieldset class="choice-group">
+              <legend class="choice-group__legend">Sort tasks by</legend>
+              <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="an1" checked><span class="radio__dot"></span></span><span>Newest first</span></label>
+              <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="an1"><span class="radio__dot"></span></span><span>Oldest first</span></label>
+            </fieldset>
+            <span class="ds-callout" style="right: -2rem; top: 0;" aria-hidden="true">1</span>
+            <span class="ds-callout" style="left: -2rem; top: 2.25rem;" aria-hidden="true">2</span>
+            <span class="ds-callout" style="left: 0.625rem; bottom: -1.75rem;" aria-hidden="true">3</span>
+            <span class="ds-callout" style="right: -2rem; top: 2.25rem;" aria-hidden="true">4</span>
+          </span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Legend</b><small><code>&lt;legend class="choice-group__legend"&gt;</code>: the question, <code>--text-label</code>. Required, because it names the group.</small></div></li>
+          <li><div><b>Target</b><small><code>.radio__control</code>: 44 × 44px hit area with the native input stretched over it.</small></div></li>
+          <li><div><b>Dot</b><small><code>.radio__dot</code>: 24px ring in <code>--color-border-strong</code>; the selected ring turns accent and a 10px accent dot scales in.</small></div></li>
+          <li><div><b>Label</b><small>Text inside the <code>&lt;label&gt;</code>, so the whole line is clickable.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Vertical is the default and the easiest to scan. Horizontal is only for two or three short options. Cards are for options that need a description.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-start;">
+          <fieldset class="choice-group">
+            <legend class="choice-group__legend">Show on open</legend>
+            <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="v1" checked><span class="radio__dot"></span></span><span>All tasks</span></label>
+            <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="v1"><span class="radio__dot"></span></span><span>Active tasks</span></label>
+            <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="v1"><span class="radio__dot"></span></span><span>Completed tasks</span></label>
+          </fieldset>
+          <fieldset class="choice-group choice-group--horizontal">
+            <legend class="choice-group__legend">Week starts on</legend>
+            <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="v2" checked><span class="radio__dot"></span></span><span>Monday</span></label>
+            <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="v2"><span class="radio__dot"></span></span><span>Sunday</span></label>
+          </fieldset>
+        </div>
+        <div class="ds-example__caption"><span>Vertical (<code>.choice-group</code>) and horizontal (<code>.choice-group--horizontal</code>).</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend class="choice-group__legend"&gt;Show on open&lt;/legend&gt;
+  &lt;label class="radio"&gt;
+    &lt;span class="radio__control"&gt;&lt;input class="radio__input" type="radio" name="open" checked&gt;&lt;span class="radio__dot"&gt;&lt;/span&gt;&lt;/span&gt;
+    &lt;span&gt;All tasks&lt;/span&gt;
+  &lt;/label&gt;
+  …
+&lt;/fieldset&gt;</code></pre></details>
+      </div>
+      <h3>Card-style</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <fieldset class="choice-group" style="gap: var(--space-2);">
+            <legend class="choice-group__legend">When a task is completed</legend>
+            <label class="choice-card"><span class="radio__control"><input class="radio__input" type="radio" name="v3" checked aria-describedby="v3a"><span class="radio__dot"></span></span><span class="checkbox__text"><span>Keep it in place</span><span class="radio__description" id="v3a">The list order never changes when you tick something.</span></span></label>
+            <label class="choice-card"><span class="radio__control"><input class="radio__input" type="radio" name="v3" aria-describedby="v3b"><span class="radio__dot"></span></span><span class="checkbox__text"><span>Move it to the bottom</span><span class="radio__description" id="v3b">Active tasks stay together at the top.</span></span></label>
+          </fieldset>
+        </div>
+        <div class="ds-example__caption"><span><code>.choice-card</code> wraps the radio and its description; <code>:has(input:checked)</code> tints the selected card.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="One size: 24px dot in a 44px target, the minimum the product allows for any control (L2-028.1)."><h2><a href="#sizes">Sizes</a></h2><p class="ds-na">One size: 24px dot in a 44px target, the minimum the product allows for any control (L2-028.1).</p></section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Checked</th><th scope="col">Invalid</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Radio</th>
+            <td><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="s1"><span class="radio__dot"></span></span><span>Off</span></label></td>
+            <td><label class="radio" data-state="hover"><span class="radio__control"><input class="radio__input" type="radio" name="s2"><span class="radio__dot"></span></span><span>Off</span></label></td>
+            <td><label class="radio" data-state="focus"><span class="radio__control"><input class="radio__input" type="radio" name="s3"><span class="radio__dot"></span></span><span>Off</span></label></td>
+            <td><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="s4" checked><span class="radio__dot"></span></span><span>On</span></label></td>
+            <td><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="s6" aria-invalid="true"><span class="radio__dot"></span></span><span>Off</span></label></td>
+            <td><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="s7" disabled checked><span class="radio__dot"></span></span><span>On</span></label></td></tr>
+          <tr><th scope="row">Card</th>
+            <td><label class="choice-card"><span class="radio__control"><input class="radio__input" type="radio" name="c1"><span class="radio__dot"></span></span><span class="checkbox__text">Keep</span></label></td>
+            <td><label class="choice-card" data-state="hover"><span class="radio__control"><input class="radio__input" type="radio" name="c2"><span class="radio__dot"></span></span><span class="checkbox__text">Keep</span></label></td>
+            <td><label class="choice-card radio" data-state="focus"><span class="radio__control"><input class="radio__input" type="radio" name="c3"><span class="radio__dot"></span></span><span class="checkbox__text">Keep</span></label></td>
+            <td><label class="choice-card"><span class="radio__control"><input class="radio__input" type="radio" name="c4" checked><span class="radio__dot"></span></span><span class="checkbox__text">Keep</span></label></td>
+            <td><label class="choice-card"><span class="radio__control"><input class="radio__input" type="radio" name="c6" aria-invalid="true"><span class="radio__dot"></span></span><span class="checkbox__text">Keep</span></label></td>
+            <td><label class="choice-card radio"><span class="radio__control"><input class="radio__input" type="radio" name="c7" disabled><span class="radio__dot"></span></span><span class="checkbox__text">Keep</span></label></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Group error</h3>
+      <div class="ds-example"><div class="ds-example__canvas">
+        <fieldset class="choice-group" aria-describedby="ge1">
+          <legend class="choice-group__legend">Show on open</legend>
+          <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="ge" aria-invalid="true"><span class="radio__dot"></span></span><span>All tasks</span></label>
+          <label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="ge" aria-invalid="true"><span class="radio__dot"></span></span><span>Active tasks</span></label>
+          <p class="message message--error" id="ge1">Choose what to show when the app opens.</p>
+        </fieldset>
+      </div></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="cluster"><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="tl"><span class="radio__dot"></span></span><span>Off</span></label><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="tl2" checked><span class="radio__dot"></span></span><span>On</span></label><label class="radio" data-state="focus"><span class="radio__control"><input class="radio__input" type="radio" name="tl3"><span class="radio__dot"></span></span><span>Focus</span></label><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="tl4" aria-invalid="true"><span class="radio__dot"></span></span><span>Invalid</span></label></div></div>
+        <div data-theme="dark"><div class="cluster"><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="td"><span class="radio__dot"></span></span><span>Off</span></label><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="td2" checked><span class="radio__dot"></span></span><span>On</span></label><label class="radio" data-state="focus"><span class="radio__control"><input class="radio__input" type="radio" name="td3"><span class="radio__dot"></span></span><span>Focus</span></label><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="td4" aria-invalid="true"><span class="radio__dot"></span></span><span>Invalid</span></label></div></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>XS: every group is vertical; <code>.choice-group--horizontal</code> wraps onto new lines rather than shrinking targets.</li>
+        <li>SM and up: horizontal groups sit on one line when the options fit; never more than three.</li>
+        <li>Choice cards are full width at every breakpoint; from MD two cards may sit side by side in a <code>.form__row--split</code>.</li>
+        <li>Targets stay 44px at all breakpoints; labels wrap, they never truncate.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Reads <code>--color-border-strong</code> (ring), <code>--color-accent</code> (hover, selected ring and dot), <code>--color-bg-surface</code> (fill), <code>--color-danger-solid</code> (invalid) and, for cards, <code>--color-border-default</code> and <code>--color-accent-subtle</code>. Both themes swap only these semantic tokens; no radio-specific dark rules exist.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>Native radios sharing a <code>name</code>, inside <code>&lt;fieldset&gt;</code> with <code>&lt;legend&gt;</code>: the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/radio/">APG Radio Group pattern</a> without any ARIA.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Enters the group on the checked radio (or the first when none is checked) and leaves it; the group is one Tab stop.</td></tr>
+        <tr><td><kbd>↓</kbd> <kbd>→</kbd> / <kbd>↑</kbd> <kbd>←</kbd></td><td>Moves to and selects the next / previous option, wrapping.</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Selects the focused option when none is selected yet.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>The shared 2px ring with 2px offset is drawn on the dot. On a card, the dot carries the ring too, so the focus indicator does not depend on the card's tint.</p>
+      <h3>Labelling</h3>
+      <p>The legend is the group's name; each option's text is its name; card descriptions use <code>aria-describedby</code>. A group error goes on the fieldset with <code>aria-describedby</code> and every radio gets <code>aria-invalid="true"</code>.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Ring on card</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Selected ring and dot</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Label on selected card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Group error text</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>The dot scales in over <code>--duration-base</code>; reduced motion zeroes it so selection is instant.</p>
+      <h3>Touch</h3>
+      <p>Each option is a 44px-tall label, and the whole label is the target.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>The legend is a short question or noun phrase in sentence case: "Show on open", not "Please select an option".</li>
+        <li>Options are parallel and mutually exclusive; order them logically (most common first, or natural order like days).</li>
+        <li>Preselect the safest common option unless the choice must be deliberate.</li>
+        <li>Error copy says what to do: "Choose what to show when the app opens." Never apologise (L2-025).</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="segmented" role="group" aria-label="Show tasks, do example"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true">All</button><button class="segmented__option" type="button" aria-pressed="false">Active</button><button class="segmented__option" type="button" aria-pressed="false">Done</button></div></div><figcaption>Use the segmented button group for a choice that filters the screen immediately, as the toolbar does.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><fieldset class="choice-group choice-group--horizontal"><legend class="visually-hidden">Show tasks, don't example</legend><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="dd1" checked><span class="radio__dot"></span></span><span>All</span></label><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="dd1"><span class="radio__dot"></span></span><span>Active</span></label><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="dd1"><span class="radio__dot"></span></span><span>Done</span></label></fieldset></div><figcaption>Use radios for a live filter: arrow keys change the list on every keypress.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><label class="radio"><span class="radio__control"><input class="radio__input" type="radio" name="dd2" checked><span class="radio__dot"></span></span><span>Keep completed tasks in place</span></label></div><figcaption>Give the radio a 44px target with the dot from the shared ring tokens.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><span class="radio"><span class="radio__control"><span class="radio__dot" style="border-color: var(--color-fg-disabled);"></span></span><span>Faint ring</span></span></div><figcaption>Draw the ring in the mock's #8a9aa8 (2.89:1): it fails non-text contrast (D1).</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Ring</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Selected ring, dot, hover</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Fill</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Invalid ring</td><td><code>--color-danger-solid</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-solid" data-swatch></i><span data-token="--color-danger-solid"></span></span></td></tr>
+          <tr><td>Card border</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Selected card</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Focus ring</td><td><code>--color-focus-ring</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-focus-ring" data-swatch></i><span data-token="--color-focus-ring"></span></span></td></tr>
+          <tr><td>Dot size</td><td><code>--space-6</code></td><td><span data-theme="light"><span data-token="--space-6"></span></span></td><td><span data-theme="dark"><span data-token="--space-6"></span></span></td></tr>
+          <tr><td>Target</td><td><code>--target-comfortable</code></td><td><span data-theme="light"><span data-token="--target-comfortable"></span></span></td><td><span data-theme="dark"><span data-token="--target-comfortable"></span></span></td></tr>
+          <tr><td>Card corner</td><td><code>--radius-md</code></td><td><span data-theme="light"><span data-token="--radius-md"></span></span></td><td><span data-theme="dark"><span data-token="--radius-md"></span></span></td></tr>
+          <tr><td>Dot scale</td><td><code>--duration-base</code></td><td><span data-theme="light"><span data-token="--duration-base"></span></span></td><td><span data-theme="dark"><span data-token="--duration-base"></span></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;fieldset class="choice-group"&gt;
+  &lt;legend class="choice-group__legend"&gt;Show on open&lt;/legend&gt;
+  &lt;label class="radio"&gt;
+    &lt;span class="radio__control"&gt;
+      &lt;input class="radio__input" type="radio" name="open" value="all" checked&gt;
+      &lt;span class="radio__dot"&gt;&lt;/span&gt;
+    &lt;/span&gt;
+    &lt;span&gt;All tasks&lt;/span&gt;
+  &lt;/label&gt;
+&lt;/fieldset&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.choice-group</code>, <code>.choice-group--horizontal</code></td><td>Fieldset layout, vertical or wrapping row.</td></tr>
+        <tr><td><code>.radio</code>, <code>.radio__control</code>, <code>.radio__input</code>, <code>.radio__dot</code></td><td>Label, 44px target, native input, visible ring and dot.</td></tr>
+        <tr><td><code>.choice-card</code>, <code>.radio__description</code></td><td>Card-style option with description.</td></tr>
+        <tr><td><code>checked</code>, <code>aria-invalid="true"</code>, <code>disabled</code></td><td>States.</td></tr>
+        <tr><td><code>data-state="hover|focus"</code> on the label</td><td>Documentation only.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>No mock uses a radio group. Its look is derived from the round task check in <a href="../../mocks/pages/states.row.html">pages/states.row</a> (ring, accent fill, focus ring) and its rule from the filter in <a href="../../mocks/pages/states.toolbar.html">pages/states.toolbar</a>, which L2-029.4 allows to be either a button group or a radio group.</p>
+      <p>Drift fixed during extraction: none in the mocks; built from the system tokens (D22). Inherits the D1 ring correction.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

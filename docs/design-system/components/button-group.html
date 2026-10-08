@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Button group — Tasks design system</title>
+<meta name="description" content="The segmented filter control: All, Active and Done as a group of aria-pressed buttons with live counts and a sliding indicator, plus the toolbar it sits in.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Actions</p>
+      <h1>Button group</h1>
+      <p class="ds-lead">A segmented control picks one of a few views. In Tasks it is the All / Active / Done filter: three toggle buttons, each with its count, and a raised indicator that slides to the selection.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Used in v1</span><span class="ds-pill"><code>role="group"</code> + <code>aria-pressed</code></span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a segmented control when two to four options filter or switch the same content and exactly one is always selected. The filter changes which tasks are listed and mirrors the choice in the URL (<code>?filter=active</code>, L2-006); it does not navigate.</p>
+      <ul>
+        <li>Use <a href="tabs.html">tabs</a> instead when each option shows a different panel of content.</li>
+        <li>Use <a href="radio-group.html">radio buttons</a> inside a form, where the choice is submitted rather than applied at once.</li>
+        <li>Use separate <a href="button.html">buttons</a> when the options are actions rather than views.</li>
+      </ul>
+      <p>The <b>toolbar</b> is the row that holds the filter and <b>Clear completed</b>, between the composer and the list.</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure" data-frozen>
+          <div class="segmented" role="group" aria-label="Show tasks (anatomy)" style="width: min(20rem, 100%);">
+            <span class="segmented__indicator" aria-hidden="true"></span>
+            <button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5">All <span class="segmented__count">5</span></button>
+            <button class="segmented__option" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="segmented__count">3</span></button>
+            <button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button>
+          </div>
+          <span class="ds-callout" style="left: 12%; top: 20%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 30%; top: 20%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 47%; top: 20%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 85%; top: 75%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Indicator</b><small><code>.segmented__indicator</code>: raised surface, <code>--shadow-1</code>, slides with <code>transform</code>; <code>aria-hidden</code>.</small></div></li>
+          <li><div><b>Option</b><small><code>.segmented__option</code>: a toggle button with <code>aria-pressed</code>, 44px tall.</small></div></li>
+          <li><div><b>Count</b><small><code>.segmented__count</code>: 14px tabular numerals; hidden below 576px but always in the accessible name.</small></div></li>
+          <li><div><b>Track</b><small><code>.segmented</code>: sunken pill, 4px inset, max 340px from SM up.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <h3>Segmented (single select)</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+          <div class="segmented" role="group" aria-label="Show tasks">
+            <span class="segmented__indicator" aria-hidden="true"></span>
+            <button class="segmented__option" type="button" aria-pressed="false" aria-label="All, 5">All <span class="segmented__count">5</span></button>
+            <button class="segmented__option" type="button" aria-pressed="true" aria-label="Active, 3">Active <span class="segmented__count">3</span></button>
+            <button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button>
+          </div>
+          <div class="segmented segmented--2" role="group" aria-label="Sort tasks">
+            <span class="segmented__indicator" aria-hidden="true"></span>
+            <button class="segmented__option" type="button" aria-pressed="true">Newest</button>
+            <button class="segmented__option" type="button" aria-pressed="false">Oldest</button>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span>Three options (default) and two (<code>.segmented--2</code>). The indicator position comes from which option is pressed, using <code>:has()</code>; no script sets it.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="segmented" role="group" aria-label="Show tasks"&gt;
+  &lt;span class="segmented__indicator" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;button class="segmented__option" type="button" aria-pressed="false" aria-label="All, 5"&gt;All &lt;span class="segmented__count"&gt;5&lt;/span&gt;&lt;/button&gt;
+  &lt;button class="segmented__option" type="button" aria-pressed="true" aria-label="Active, 3"&gt;Active &lt;span class="segmented__count"&gt;3&lt;/span&gt;&lt;/button&gt;
+  &lt;button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2"&gt;Done &lt;span class="segmented__count"&gt;2&lt;/span&gt;&lt;/button&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <h3>Toolbar composition</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="padding: 0; display: block;">
+          <div class="toolbar">
+            <div class="segmented" role="group" aria-label="Show tasks (toolbar)">
+              <span class="segmented__indicator" aria-hidden="true"></span>
+              <button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5">All <span class="segmented__count">5</span></button>
+              <button class="segmented__option" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="segmented__count">3</span></button>
+              <button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button>
+            </div>
+            <button class="btn btn--ghost" type="button">Clear completed</button>
+          </div>
+        </div>
+        <div class="ds-example__caption"><span><code>.toolbar</code>: filter left, Clear completed right; below 576px they wrap onto two rows. It is a plain row, not <code>role="toolbar"</code>, because Tab (not arrows) moves between its controls.</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Medium (44px options) is the product size. Compact (36px, <code>.segmented--compact</code>) is for documentation chrome and dense settings, never the product (L2-028.1).</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+          <div class="segmented" role="group" aria-label="Medium example"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true">All</button><button class="segmented__option" type="button" aria-pressed="false">Active</button><button class="segmented__option" type="button" aria-pressed="false">Done</button></div>
+          <div class="segmented segmented--compact" role="group" aria-label="Compact example"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true">All</button><button class="segmented__option" type="button" aria-pressed="false">Active</button><button class="segmented__option" type="button" aria-pressed="false">Done</button></div>
+        </div>
+        <div class="ds-example__caption"><span>Option heights <code>--target-comfortable</code> (44px) and <code>--control-height-sm</code> (36px).</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix" data-frozen><table>
+        <thead><tr><th scope="col">State</th><th scope="col">Group</th><th scope="col">Note</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">All selected</th><td><div class="segmented" role="group" aria-label="State all" style="min-width: 16rem;"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div></td><td>Default; no URL parameter.</td></tr>
+          <tr><th scope="row">Selected (Done)</th><td><div class="segmented" role="group" aria-label="State done" style="min-width: 16rem;"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="false" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="true" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div></td><td><code>?filter=done</code>; semibold label, raised indicator.</td></tr>
+          <tr><th scope="row">Hover</th><td><div class="segmented" role="group" aria-label="State hover" style="min-width: 16rem;"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="false" data-state="hover" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div></td><td>Label darkens to <code>--color-fg-default</code>.</td></tr>
+          <tr><th scope="row">Focus</th><td><div class="segmented" role="group" aria-label="State focus" style="min-width: 16rem;"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="false" data-state="focus" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div></td><td>Shared 2px ring, 2px offset.</td></tr>
+          <tr><th scope="row">Active (pressing)</th><td><div class="segmented" role="group" aria-label="State active" style="min-width: 16rem;"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="false" data-state="hover active" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div></td><td>Same as hover; the indicator moves on release (click).</td></tr>
+          <tr><th scope="row">Disabled option</th><td><div class="segmented" role="group" aria-label="State disabled" style="min-width: 16rem;"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 0">All <span class="segmented__count">0</span></button><button class="segmented__option" type="button" aria-pressed="false" disabled aria-label="Active, 0">Active <span class="segmented__count">0</span></button><button class="segmented__option" type="button" aria-pressed="false" disabled aria-label="Done, 0">Done <span class="segmented__count">0</span></button></div></td><td>System only. v1 never disables a filter: an empty filter shows its own empty state (L2-006).</td></tr>
+          <tr><th scope="row">Clear completed</th><td><div class="cluster"><button class="btn btn--ghost" type="button" data-state="hover">Clear completed</button><button class="btn btn--ghost" type="button" aria-disabled="true">Clear completed</button></div></td><td>Hover tint; <code>aria-disabled</code> when Done is 0 (L2-017.2).</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="segmented" role="group" aria-label="Light theme filter"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="false" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="true" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div></div>
+        <div data-theme="dark"><div class="segmented" role="group" aria-label="Dark theme filter"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="false" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="true" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div></div>
+      </div>
+      <p>In dark the indicator uses <code>--color-bg-surface-raised</code>, which is lighter than the track, so the selection reads at a glance (D9).</p>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li><b>XS (&lt; 576px)</b>: the group spans the full width of the card (L2-027.1), counts are hidden, and Clear completed wraps under it, right-aligned.</li>
+        <li><b>SM and up (≥ 576px)</b>: the group is at most 340px (<code>21.25rem</code>), counts show, and the toolbar holds both controls on one row.</li>
+        <li>Options share the width equally (<code>repeat(var(--segmented-count), 1fr)</code>), so labels never shift when counts change; counts use tabular numerals.</li>
+        <li>At 200% zoom the group still fits a 320px viewport; labels are one short word each.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The track reads <code>--color-bg-surface-sunken</code>, the indicator <code>--color-bg-surface-raised</code> and <code>--shadow-1</code>, labels <code>--color-fg-muted</code> (resting) and <code>--color-fg-default</code> (selected or hovered). Component tokens <code>--segmented-count</code>, <code>--segmented-index</code> and <code>--segmented-inset</code> set the geometry; change the count with <code>.segmented--2</code> / <code>.segmented--4</code> or set <code>--segmented-count</code> directly.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A <code>role="group"</code> with <code>aria-label="Show tasks"</code> containing toggle buttons with <code>aria-pressed</code> (<a href="https://www.w3.org/WAI/ARIA/apg/patterns/button/">APG Button, toggle</a>), as L2-029.4 allows. It is not a tablist: there are no panels and the list below is the same region.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd> / <kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>Moves through each option, then to Clear completed.</td></tr>
+        <tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Selects the focused filter; the URL updates and focus stays on the button.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>The shared ring on the focused option, drawn outside the pill. Focus never moves to the list when the filter changes.</p>
+      <h3>Labelling</h3>
+      <p>Each option's name includes its count: <code>aria-label="Active, 3"</code> (L2-029.4), so the count is announced even when it is hidden below 576px. The indicator is <code>aria-hidden</code>; selection is announced as "pressed".</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Unselected label on track</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-sunken" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Selected label on indicator</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring on track</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface-sunken" data-min="3"></span></div>
+        <div class="ds-pair"><span>Clear completed on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-accent|--color-bg-surface" data-min="4.5"></span></div>
+      </div>
+      <p>Selection is never colour alone: the pressed option is semibold, darker and sits on the raised indicator (L2-030.6).</p>
+      <h3>Motion</h3>
+      <p>The indicator slides with <code>transform</code> over <code>--duration-base</code> (200ms, ease-out; the mock's 220ms, D15). Reduced motion makes it jump.</p>
+      <h3>Touch</h3>
+      <p>Options are 44px tall and at least a third of the card wide at XS.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>One word per option, sentence case: "All", "Active", "Done". Use the same words in the URL (<code>?filter=active</code>) and in the empty states ("All clear", "Nothing completed yet").</li>
+        <li>Counts are plain numerals, no brackets.</li>
+        <li>The group label describes the choice, not the control: "Show tasks".</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas" data-theme="dark" style="background: var(--color-bg-surface);"><div class="segmented" role="group" aria-label="Do example"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true">All</button><button class="segmented__option" type="button" aria-pressed="false">Active</button><button class="segmented__option" type="button" aria-pressed="false">Done</button></div></div><figcaption>In dark, put the indicator on the raised surface so it stands out from the track (D9).</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas" data-theme="dark" style="background: var(--color-bg-surface);"><div class="segmented" role="group" aria-label="Don't example"><span class="segmented__indicator" aria-hidden="true" style="background: var(--color-bg-surface); box-shadow: none;"></span><button class="segmented__option" type="button" aria-pressed="true">All</button><button class="segmented__option" type="button" aria-pressed="false">Active</button><button class="segmented__option" type="button" aria-pressed="false">Done</button></div></div><figcaption>Reuse the card surface for the indicator as the mock did: 1.05:1 against the track, so the selection nearly disappears.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="segmented" role="group" aria-label="Count names"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div></div><figcaption>Keep each count in the option's accessible name, so it survives being hidden at XS.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="tabs"><div class="tabs__list" role="tablist" aria-label="Wrong pattern"><button class="tabs__tab" type="button" role="tab" aria-selected="true">All</button><button class="tabs__tab" type="button" role="tab" aria-selected="false">Active</button><button class="tabs__tab" type="button" role="tab" aria-selected="false">Done</button></div></div></div><figcaption>Mark the filter up as tabs; there are no tab panels, so screen readers announce a structure that is not there.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Track</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+          <tr><td>Indicator</td><td><code>--color-bg-surface-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td></tr>
+          <tr><td>Indicator shadow</td><td><code>--shadow-1</code></td><td><span data-theme="light" data-token="--shadow-1"></span></td><td><span data-theme="dark" data-token="--shadow-1"></span></td></tr>
+          <tr><td>Resting label, count</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Selected label</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Option height</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+          <tr><td>Inset, toolbar padding, gap</td><td><code>--space-1</code>, <code>--space-3</code>, <code>--space-2</code></td><td colspan="2"><span data-token="--space-1"></span>, <span data-token="--space-3"></span>, <span data-token="--space-2"></span></td></tr>
+          <tr><td>Radius</td><td><code>--radius-full</code></td><td colspan="2"><span data-token="--radius-full"></span></td></tr>
+          <tr><td>Slide</td><td><code>--duration-base</code>, <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-base"></span> <span data-token="--ease-standard"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;div class="toolbar"&gt;
+  &lt;div class="segmented" role="group" aria-label="Show tasks"&gt;
+    &lt;span class="segmented__indicator" aria-hidden="true"&gt;&lt;/span&gt;
+    &lt;button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5"&gt;All &lt;span class="segmented__count"&gt;5&lt;/span&gt;&lt;/button&gt;
+    …
+  &lt;/div&gt;
+  &lt;button class="btn btn--ghost" type="button" aria-disabled="false"&gt;Clear completed&lt;/button&gt;
+&lt;/div&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.segmented</code></td><td>Track; full width at XS, max 340px from SM.</td></tr>
+        <tr><td><code>.segmented--2</code> <code>.segmented--4</code></td><td>Option count (default 3).</td></tr>
+        <tr><td><code>.segmented--compact</code></td><td>36px options; not for the product.</td></tr>
+        <tr><td><code>.segmented__indicator</code></td><td>Sliding raised pill; position follows the pressed option.</td></tr>
+        <tr><td><code>.segmented__option[aria-pressed]</code></td><td>Option; <code>true</code> marks the selection.</td></tr>
+        <tr><td><code>.segmented__count</code></td><td>Count, hidden below 576px.</td></tr>
+        <tr><td><code>.toolbar</code></td><td>Row under the composer; last button aligns right.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <ul>
+        <li><a href="../../mocks/pages/states.toolbar.html">pages/states.toolbar</a> (positions, focus, Clear completed states)</li>
+        <li><a href="../../mocks/pages/page.filter-active.html">pages/page.filter-active</a>, <a href="../../mocks/pages/page.filter-done.html">pages/page.filter-done</a></li>
+        <li><a href="../../mocks/pages/page.loaded.html">pages/page.loaded</a></li>
+      </ul>
+      <p>Class mapping: <code>.seg</code> → <code>.segmented</code>; <code>.seg__pill</code> → <code>.segmented__indicator</code>; <code>.seg__btn</code> → <code>.segmented__option</code>; <code>.seg__n</code> → <code>.segmented__count</code>; <code>data-selected="…"</code> → derived from <code>aria-pressed</code>; <code>.link-btn</code> → <code>.btn.btn--ghost</code>.</p>
+      <p>Drift fixed during extraction: D8 (raw pill shadow), D9 (dark indicator 1.05:1), D11 (3px inset → 4px, 10px toolbar padding → 12px, 6px gap → 8px), D12 (13px counts → 14px), D15 (220ms → 200ms), D18 (max-width query → mobile-first).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

@@ -51,23 +51,23 @@ else Valid title
     controller --> api : 422 problem details with errors.title (L2-002)
     api --> store : Validation failure
     store -> store : Remove pending task (L2-004)
-    store --> page : Field-level message from server
+    store --> page : Field message from errors.title, typed text kept
     page -> composer : Show message at the composer (L2-004)
   else 500 non-deleted todos exist
     controller -> request : Validate title (L2-002)
     request --> controller : Valid, trimmed title
-    controller -> action : Handle create
-    action -> repo : Create todo within the 500-task cap
-    repo -> db : Begin transaction
-    repo -> db : Count non-deleted todos under a lock (L2-003, L2-043)
+    controller -> action : handle(title)
+    action -> repo : createWithinLimit(title, 500)
+    repo -> db : Begin DB::transaction (attempts: 3)
+    repo -> db : Count non-deleted todos with lockForUpdate() (L2-003, L2-043)
     db --> repo : Count equals 500
     repo -> db : Roll back
-    repo --> action : Limit reached
-    action --> controller : Limit reached
-    controller --> api : 422 problem details with code todo_limit_reached (L2-003)
+    repo --> action : throw TodoLimitReached
+    action --> controller : TodoLimitReached propagates
+    controller --> api : 422 problem details, code todo_limit_reached, errors.title (L2-003)
     api --> store : Limit failure
     store -> store : Remove pending task (L2-004)
-    store --> page : Limit message, restore typed text
+    store --> page : Server message from errors.title, typed text kept
     page -> composer : Show "You have 500 tasks. Finish or delete some to add more." and keep text (L2-003)
   else Network error or 5xx response
     api --> store : Request failed

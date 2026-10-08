@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accessibility — Tasks design system</title>
+<meta name="description" content="The WCAG 2.2 AA commitments of the Tasks design system, mapped to L2-028 to L2-030, with focus and target tokens and the testing procedure.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation · Accessibility</p>
+      <h1>Accessibility</h1>
+      <p class="ds-lead">WCAG 2.2 AA in both themes, by construction: checked colour pairs, one focus ring, 44px targets and motion that steps aside.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">L2-028 to L2-030</span><span class="ds-pill">4 tokens</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#focus">Focus</a></li>
+        <li><a href="#targets">Target size</a></li>
+        <li><a href="#perceivable">Perceivable</a></li>
+        <li><a href="#operable">Operable</a></li>
+        <li><a href="#understandable">Understandable</a></li>
+        <li><a href="#robust">Robust</a></li>
+        <li><a href="#requirements">Mapping to L2</a></li>
+        <li><a href="#contract">Component contract</a></li>
+        <li><a href="#usage">Testing</a></li>
+        <li><a href="#tokens">Tokens</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Tasks meets <b>WCAG 2.2 level AA</b> in both themes (L1-009). Accessibility is built into the tokens (contrast-checked colour pairs, one focus ring, 44px targets, durations that vanish under reduced motion) and into every component page, whose <code>#accessibility</code> section answers the same seven questions. This page is the list of commitments and how they are tested.</p>
+    </section>
+
+    <section class="ds-section" id="focus"><h2><a href="#focus">Focus</a></h2>
+<div class="ds-example"><div class="ds-example__canvas">
+<button class="btn btn--primary" type="button" data-state="focus">Add task</button>
+<button class="btn btn--ghost" type="button" data-state="focus">Clear completed</button>
+<label class="checkbox checkbox--round" data-state="focus"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Book dentist appointment"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label>
+<span style="flex: 1 1 14rem;"><label class="visually-hidden" for="a11y-input">New task</label><input class="input input--filled" id="a11y-input" data-state="focus" placeholder="What needs doing?"></span>
+</div><div class="ds-example__caption"><span>Focus states forced with <code>data-state="focus"</code>: ring on buttons and the checkbox, border plus halo on the input.</span></div></div>
+<div class="ds-themes"><div data-theme="light"><div class="ds-example__canvas" style="padding: 0;"><div class="ds-pair"><span>Ring on card</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div><div class="ds-pair"><span>Ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div><div class="ds-pair"><span>Ring on hovered row</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-subtle" data-min="3"></span></div></div></div>
+<div data-theme="dark"><div class="ds-example__canvas" style="padding: 0;"><div class="ds-pair"><span>Ring on card</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-surface" data-min="3"></span></div><div class="ds-pair"><span>Ring on page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div><div class="ds-pair"><span>Ring on hovered row</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-subtle" data-min="3"></span></div></div></div></div>
+<p>Exactly one focus style for buttons, links and checkboxes, from <code>components.css</code>: <code>outline: var(--focus-ring-width) solid var(--color-focus-ring); outline-offset: var(--focus-ring-offset)</code> on <code>:focus-visible</code>, so mouse clicks do not show it. Text inputs replace the outline with an accent border and a 3px <code>--shadow-focus</code> halo (accent border ≥ 3:1). Inside the toast the ring takes the action colour so it stays visible on the inverse surface.</p><div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Use</th></tr></thead>
+<tbody>
+<tr><td><code>--focus-ring-width</code></td><td data-token="--focus-ring-width"></td><td><span data-theme="dark" data-token="--focus-ring-width"></span></td><td>The one focus ring: 2px solid --color-focus-ring (L2-030.2).</td></tr>
+<tr><td><code>--focus-ring-offset</code></td><td data-token="--focus-ring-offset"></td><td><span data-theme="dark" data-token="--focus-ring-offset"></span></td><td>2px gap between ring and control (L2-030.2; the mock checkbox used 3px, D16).</td></tr>
+</tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="targets"><h2><a href="#targets">Target size</a></h2>
+<div class="ds-example"><div class="ds-example__canvas">
+<span class="stack stack--tight" style="align-items: center;"><span style="display: block; width: var(--target-min); height: var(--target-min); border: var(--border-width-hairline) dashed var(--color-accent); border-radius: var(--radius-xs);"></span><code>--target-min</code></span>
+<span class="stack stack--tight" style="align-items: center;"><span style="display: block; width: var(--target-comfortable); height: var(--target-comfortable); border: var(--border-width-hairline) dashed var(--color-accent); border-radius: var(--radius-xs);"></span><code>--target-comfortable</code></span>
+<button class="btn btn--icon btn--ghost-danger" type="button" data-state="hover" aria-label="Delete Call mom"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button>
+</div><div class="ds-example__caption"><span>24px minimum, 44px for every product control; the delete button's hover tint shows its full 44px area.</span></div></div><div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Use</th></tr></thead>
+<tbody>
+<tr><td><code>--target-min</code></td><td data-token="--target-min"></td><td><span data-theme="dark" data-token="--target-min"></span></td><td>WCAG 2.5.8 minimum target (24px). Only for inline links and controls whose row is also a target.</td></tr>
+<tr><td><code>--target-comfortable</code></td><td data-token="--target-comfortable"></td><td><span data-theme="dark" data-token="--target-comfortable"></span></td><td>Every product control (44px, L2-028.1): checkbox hit area, delete, filter options, toast action, Clear completed.</td></tr>
+</tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="perceivable"><h2><a href="#perceivable">Perceivable</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Requirement</th><th scope="col">SC</th><th scope="col">Commitment in Tasks</th></tr></thead><tbody>
+<tr><td>Text contrast</td><td>1.4.3</td><td>Body, label and secondary text ≥ 4.5:1 on every surface it sits on, in both themes. 74 pairs per theme live in <code>tokens/contrast-pairs.json</code> and are checked by <code>check_contrast.py</code> (L2-030.1).</td></tr>
+<tr><td>Non-text contrast</td><td>1.4.11</td><td>Input and checkbox edges, the focus ring, the checked fill and status icons ≥ 3:1. The mock's <code>--line-strong</code> failed at 2.89:1 and the composer had no edge at all; both are fixed (D1, D2). Row dividers are decorative.</td></tr>
+<tr><td>Use of colour</td><td>1.4.1</td><td>Completed tasks show a tick and a strike as well as muted text (L2-030.6); alerts pair colour with an icon and a sentence (D19); links are underlined.</td></tr>
+<tr><td>Resize and reflow</td><td>1.4.4, 1.4.10</td><td>Sizes in <code>rem</code>; one column reflows to 320px; 200% zoom loses nothing (L2-030.3).</td></tr>
+<tr><td>Text spacing</td><td>1.4.12</td><td>Rows and controls grow with content; no fixed heights on text (L2-030.4).</td></tr>
+<tr><td>Images</td><td>1.1.1</td><td>Icons and empty-state art are <code>aria-hidden</code>; icon-only buttons carry <code>aria-label</code>.</td></tr>
+<tr><td>Orientation and motion</td><td>1.3.4, 2.3.3</td><td>No orientation lock; reduced motion zeroes durations in the tokens (L2-024.2).</td></tr>
+<tr><td>Input purpose</td><td>1.3.5</td><td>The composer is not personal data, so <code>autocomplete="off"</code>; future personal fields set <code>autocomplete</code>.</td></tr>
+</tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="operable"><h2><a href="#operable">Operable</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Requirement</th><th scope="col">SC</th><th scope="col">Commitment in Tasks</th></tr></thead><tbody>
+<tr><td>Keyboard</td><td>2.1.1, 2.1.2</td><td>Everything works with Tab, Enter, Space and Escape: Enter adds, Space toggles, Enter edits a title, Escape cancels an edit, Ctrl/Cmd+Z undoes. No traps.</td></tr>
+<tr><td>Focus visible</td><td>2.4.7, 2.4.11</td><td>One ring on <code>:focus-visible</code>: <code>--focus-ring-width</code> of <code>--color-focus-ring</code> at <code>--focus-ring-offset</code>, ≥ 3:1 on every surface. Inputs show an accent border plus a 3px halo instead.</td></tr>
+<tr><td>Focus not obscured</td><td>2.4.11</td><td>The toast sits in a reserved bottom area (<code>--layout-safe-bottom</code>), so it never covers a focused row.</td></tr>
+<tr><td>Focus order</td><td>2.4.3</td><td>DOM order is visual order: header, composer, filter, Clear completed, rows. No positive <code>tabindex</code>. After delete, focus moves to the next row; after Undo it returns.</td></tr>
+<tr><td>Target size</td><td>2.5.8</td><td>Every product control is 44 × 44px (<code>--target-comfortable</code>, L2-028.1).</td></tr>
+<tr><td>Timing</td><td>2.2.1</td><td>The Undo toast holds 6 s, pauses while hovered or focused, and Ctrl/Cmd+Z is an alternative; error toasts persist until the next action.</td></tr>
+<tr><td>Skip and landmarks</td><td>2.4.1</td><td>One <code>main</code>; a skip link where a page has content before it.</td></tr>
+<tr><td>Titles and headings</td><td>2.4.2, 2.4.6</td><td>One <code>h1</code>: the date (L2-029.1).</td></tr>
+<tr><td>Pointer cancellation</td><td>2.5.2</td><td>Actions fire on click, never on pointer down.</td></tr>
+</tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="understandable"><h2><a href="#understandable">Understandable</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Requirement</th><th scope="col">SC</th><th scope="col">Commitment in Tasks</th></tr></thead><tbody>
+<tr><td>Labels</td><td>3.3.2</td><td>The composer has the label "New task" (visually hidden, programmatically associated, L2-029.3); the placeholder "What needs doing?" is a hint, never the label.</td></tr>
+<tr><td>Error identification</td><td>3.3.1, 3.3.3</td><td>Errors say what happened and what to do ("Enter a task title."), set <code>aria-invalid</code>, and are linked with <code>aria-describedby</code>.</td></tr>
+<tr><td>Error prevention</td><td>3.3.4</td><td>Destructive actions are reversible: delete and Clear completed offer Undo instead of a confirmation dialog.</td></tr>
+<tr><td>Consistency</td><td>3.2.3, 3.2.4</td><td>One name per thing: task, Add task, Undo, Clear completed (L2-025).</td></tr>
+<tr><td>Language</td><td>3.1.1</td><td><code>&lt;html lang&gt;</code> on every page; dates in the user's locale.</td></tr>
+<tr><td>On input</td><td>3.2.2</td><td>Toggling a checkbox never navigates; choosing a filter updates the URL without a reload.</td></tr>
+</tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="robust"><h2><a href="#robust">Robust</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Requirement</th><th scope="col">SC</th><th scope="col">Commitment in Tasks</th></tr></thead><tbody>
+<tr><td>Name, role, value</td><td>4.1.2</td><td>Native first: <code>input type=checkbox</code> named by the task title (L2-029.2), <code>button</code> with <code>aria-pressed</code> in a <code>role=group</code> for the filter (L2-029.4), <code>ul</code>/<code>li</code> for the list.</td></tr>
+<tr><td>Status messages</td><td>4.1.3</td><td>A polite live region announces "Task added", "Task completed", "2 left" and so on; error toasts use <code>role="alert"</code>; toasts never take focus.</td></tr>
+<tr><td>Valid HTML</td><td>—</td><td>No duplicate ids, no interactive content inside interactive content.</td></tr>
+</tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="requirements"><h2><a href="#requirements">Mapping to L2</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Requirement</th><th scope="col">Where the system meets it</th></tr></thead><tbody>
+<tr><td>L2-029.1 one <code>h1</code>, <code>main</code>, list is <code>ul</code>/<code>li</code></td><td><a href="../components/app-header.html">App header</a>, <a href="../components/task-item.html">task item</a></td></tr>
+<tr><td>L2-029.2 native checkbox named by the title</td><td><a href="../components/checkbox.html">Checkbox</a></td></tr>
+<tr><td>L2-029.3 composer labelled "New task"</td><td><a href="../components/composer.html">Composer</a>, <a href="../components/form-field.html">form field</a></td></tr>
+<tr><td>L2-029.4 filter is a group of <code>aria-pressed</code> buttons with counts in their names</td><td><a href="../components/button-group.html">Button group</a></td></tr>
+<tr><td>L2-029.5 icon-only buttons name the task ("Delete Call mom")</td><td><a href="../components/button.html">Button</a>, <a href="iconography.html">iconography</a></td></tr>
+<tr><td>L2-030.1 contrast in both themes</td><td><a href="color.html">Color</a>, <code>contrast-pairs.json</code></td></tr>
+<tr><td>L2-030.2 2px ring, 3:1, 2px offset</td><td>Focus, above</td></tr>
+<tr><td>L2-030.3/4 zoom and text spacing</td><td><a href="responsive.html">Responsive</a></td></tr>
+<tr><td>L2-030.5 axe in every state</td><td>Testing, below</td></tr>
+<tr><td>L2-030.6 state never by colour alone</td><td><a href="../components/task-item.html">Task item</a>: tick + strike + muted text</td></tr>
+<tr><td>L2-028 touch ergonomics</td><td>Target size, above; <a href="responsive.html#touch">responsive touch rules</a></td></tr>
+<tr><td>L2-024.2 reduced motion</td><td><a href="motion.html#accessibility">Motion</a></td></tr>
+</tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="contract"><h2><a href="#contract">Component contract</a></h2>
+<p>Every <a href="../components/button.html">component page</a> documents, under <code>#accessibility</code>:</p>
+<ol>
+<li><b>Role and pattern</b>: the native element or the <a href="https://www.w3.org/WAI/ARIA/apg/patterns/">WAI-ARIA APG</a> pattern used.</li>
+<li><b>Keyboard</b>: a table of keys and effects.</li>
+<li><b>Focus</b>: where it starts, where it goes after an action, how the ring looks.</li>
+<li><b>Labelling</b>: what is named, how, and what is announced.</li>
+<li><b>Contrast</b>: the token pairs with live ratios in both themes.</li>
+<li><b>Motion</b>: what animates and what reduced motion does.</li>
+<li><b>Touch</b>: target sizes and hover alternatives.</li>
+</ol>
+    </section>
+
+    <section class="ds-section" id="usage"><h2><a href="#usage">Testing</a></h2>
+<ul class="ds-checklist" style="overflow-wrap: anywhere;">
+<li><code>python check_contrast.py tokens/tokens.css</code>: every declared pair, both themes, exits 0.</li>
+<li><code>python check_design_system.py docs/design-system</code>: labels, names, alt text, landmarks, headings, links.</li>
+<li>axe-core (Playwright) in every product state: loaded, empty, loading, error, editing, toast visible, both themes, zero violations (L2-030.5).</li>
+<li>Keyboard only: add, complete, edit, cancel, delete, undo, filter and clear without a mouse.</li>
+<li>Screen reader (NVDA + Firefox, VoiceOver + Safari): checkbox names, filter counts, live-region announcements, error alerts.</li>
+<li>Zoom to 200% and 400%; apply the text-spacing bookmarklet; emulate <code>prefers-reduced-motion</code>, <code>forced-colors</code> and touch.</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+<thead><tr><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th><th scope="col">Use</th></tr></thead>
+<tbody>
+<tr><td><code>--target-min</code></td><td data-token="--target-min"></td><td><span data-theme="dark" data-token="--target-min"></span></td><td>WCAG 2.5.8 minimum target (24px). Only for inline links and controls whose row is also a target.</td></tr>
+<tr><td><code>--target-comfortable</code></td><td data-token="--target-comfortable"></td><td><span data-theme="dark" data-token="--target-comfortable"></span></td><td>Every product control (44px, L2-028.1): checkbox hit area, delete, filter options, toast action, Clear completed.</td></tr>
+<tr><td><code>--focus-ring-width</code></td><td data-token="--focus-ring-width"></td><td><span data-theme="dark" data-token="--focus-ring-width"></span></td><td>The one focus ring: 2px solid --color-focus-ring (L2-030.2).</td></tr>
+<tr><td><code>--focus-ring-offset</code></td><td data-token="--focus-ring-offset"></td><td><span data-theme="dark" data-token="--focus-ring-offset"></span></td><td>2px gap between ring and control (L2-030.2; the mock checkbox used 3px, D16).</td></tr>
+</tbody></table></div>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

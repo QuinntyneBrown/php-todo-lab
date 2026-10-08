@@ -1,0 +1,25 @@
+@if (loading()) {
+  <ul class="skeleton" data-testid="skeleton" aria-hidden="true">
+    <li><span class="skeleton__dot"></span><span class="skeleton__bar"></span></li>
+    <li><span class="skeleton__dot"></span><span class="skeleton__bar"></span></li>
+    <li><span class="skeleton__dot"></span><span class="skeleton__bar"></span></li>
+  </ul>
+} @else if (todos().length > 0) {
+  <ul class="list" [attr.aria-label]="label">
+    @for (todo of todos(); track todo.id) {
+      <!-- A pending row is swapped for the server version, not removed: no exit (L2-004). -->
+      <li class="list__row" [animate.leave]="todo.pending ? '' : 'list__row--leave'">
+        <app-todo-item
+          [todo]="todo"
+          [editing]="todo.id === editingId()"
+          [focusRequest]="rowFocus()?.id === todo.id ? rowFocus() : null"
+          (toggled)="toggled.emit({ id: todo.id, completed: $event })"
+          (editStarted)="editStarted.emit(todo.id)"
+          (titleSaved)="titleSaved.emit({ id: todo.id, title: $event })"
+          (editCancelled)="editCancelled.emit()"
+          (deleted)="deleted.emit({ id: todo.id, viaKeyboard: $event.viaKeyboard })"
+        />
+      </li>
+    }
+  </ul>
+}

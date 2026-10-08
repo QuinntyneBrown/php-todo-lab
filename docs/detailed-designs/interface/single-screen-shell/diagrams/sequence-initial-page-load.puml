@@ -16,7 +16,7 @@ skinparam package {
 }
 actor "User" as user
 box "Frontend — Angular SPA (UI components)" #E0F2FE
-  participant "Route table" as router
+  participant "routes (app.routes.ts)" as router
   participant "TodoPageComponent" as page
   participant "TodoHeaderComponent" as header
   participant "TodoComposerComponent" as composer
@@ -29,8 +29,9 @@ alt Path is not /
   router -> router : Redirect unknown path to / (L2-022)
 end
 router -> page : Activate route /
-page -> header : Render region 1 with the current date
-header -> header : Format weekday and date in the user locale (L2-022)
+page -> page : today = new Date()
+page -> header : Render region 1, date input = today
+header -> header : toLocaleDateString(undefined, ...) for weekday and day month (L2-022)
 header --> user : Show for example Wednesday and 7 October
 page -> composer : Render region 2
 page -> page : Render region 3 toolbar, region 4 list, region 5 toast area (L2-022)
@@ -38,8 +39,9 @@ page -> store : Read signals for the regions
 note right of page
   No modal dialogs and no other route exist (L2-022)
 end note
-alt Device matches hover: hover
-  page -> composer : Request focus after first render (L2-022)
+alt matchMedia("(hover: hover)").matches
+  page -> composer : focusRequest { target: 'composer', seq } after first render (L2-022)
+  composer -> composer : effect calls focus() on the text field
   composer --> user : Composer has keyboard focus
 else Touch device without hover
   page --> user : Focus is not forced so the on-screen keyboard does not cover the list (L2-022)

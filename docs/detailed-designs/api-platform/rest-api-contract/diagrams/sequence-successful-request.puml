@@ -35,7 +35,7 @@ routes -> routes : Match method and path under the /api/v1 prefix (L2-018)
 routes -> req : Resolve Form Request for the matched route
 req -> req : Validate query parameters
 req -> ctrl : Call controller method with validated input
-ctrl -> action : Invoke ListTodos with the status filter
+ctrl -> action : handle() with the status filter
 action -> repo : Fetch matching todos and counts
 repo -> db : Query non-deleted rows
 db --> repo : Rows

@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iconography — Tasks design system</title>
+<meta name="description" content="Icon grid, stroke, sizes, the icon set used in the Tasks mocks and labelling rules.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation · Iconography</p>
+      <h1>Iconography</h1>
+      <p class="ds-lead">Six inline line icons on a 24-unit grid with a 2px stroke, coloured by currentColor and always labelled by the control that holds them.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Inline SVG</span><span class="ds-pill">6 icons</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#set">Icon set</a></li>
+        <li><a href="#sizes">Sizes</a></li>
+        <li><a href="#illustration">Illustration</a></li>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="#accessibility">Accessibility</a></li>
+        <li><a href="#tokens">Tokens</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Tasks uses a handful of line icons, all drawn inline as SVG so they inherit colour from <code>currentColor</code> and need no icon font or sprite request. There is no external icon library; every icon on this page is one the mocks already draw.</p>
+<ul>
+<li><b>Grid</b>: 24 × 24 units with a 2-unit safe margin. Two small glyphs (the checkbox tick, 14 units; the done tick, 20 units) are drawn on their own grids because they sit inside fixed shapes.</li>
+<li><b>Stroke</b>: 2 units, round caps and joins, no fill (<code>.icon</code> sets all of this). Ticks use a 3-unit stroke so they read at small sizes.</li>
+<li><b>Colour</b>: <code>currentColor</code> only, so an icon always matches its label and theme. Status icons take their status colour from the parent (<code>--alert-icon</code>).</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="set"><h2><a href="#set">Icon set</a></h2>
+<p>Every icon used in the product, at 24px. Copy the <code>&lt;path&gt;</code> into an <code>&lt;svg class="icon" viewBox="0 0 24 24" aria-hidden="true"&gt;</code>.</p>
+<div class="ds-swatches">
+<div class="ds-swatch"><div class="ds-swatch__chip" style="--swatch: var(--color-bg-surface-sunken); justify-content: center; align-items: center; color: var(--color-fg-default);"><svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></div>
+<div class="ds-swatch__body"><span class="ds-swatch__name">Plus</span><span class="ds-swatch__value">Add task button (composer)</span></div></div>
+<div class="ds-swatch"><div class="ds-swatch__chip" style="--swatch: var(--color-bg-surface-sunken); justify-content: center; align-items: center; color: var(--color-fg-default);"><svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></div>
+<div class="ds-swatch__body"><span class="ds-swatch__name">Trash</span><span class="ds-swatch__value">Delete task (row)</span></div></div>
+<div class="ds-swatch"><div class="ds-swatch__chip" style="--swatch: var(--color-bg-surface-sunken); justify-content: center; align-items: center; color: var(--color-fg-default);"><svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg></div>
+<div class="ds-swatch__body"><span class="ds-swatch__name">Alert circle</span><span class="ds-swatch__value">Load-error banner</span></div></div>
+<div class="ds-swatch"><div class="ds-swatch__chip" style="--swatch: var(--color-bg-surface-sunken); justify-content: center; align-items: center; color: var(--color-fg-default);"><svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"/></svg></div>
+<div class="ds-swatch__body"><span class="ds-swatch__name">Wifi off</span><span class="ds-swatch__value">Offline notice</span></div></div>
+<div class="ds-swatch"><div class="ds-swatch__chip" style="--swatch: var(--color-bg-surface-sunken); justify-content: center; align-items: center; color: var(--color-fg-default);"><svg class="icon icon--lg" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></div>
+<div class="ds-swatch__body"><span class="ds-swatch__name">Checkbox tick</span><span class="ds-swatch__value">Inside the checked checkbox (14-unit grid, 3px stroke)</span></div></div>
+<div class="ds-swatch"><div class="ds-swatch__chip" style="--swatch: var(--color-bg-surface-sunken); justify-content: center; align-items: center; color: var(--color-fg-default);"><svg class="icon icon--lg" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10.5l4 4L16 6"/></svg></div>
+<div class="ds-swatch__body"><span class="ds-swatch__name">Done tick</span><span class="ds-swatch__value">Progress ring at 100% (20-unit grid, 3px stroke)</span></div></div>
+</div>
+<details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;svg class="icon" viewBox="0 0 24 24" aria-hidden="true"&gt;&lt;path d="M12 5v14M5 12h14"/&gt;&lt;/svg&gt;</code></pre></details>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+<div class="ds-example"><div class="ds-example__canvas">
+<span class="cluster"><svg class="icon icon--sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg><code>.icon--sm</code> 16px</span>
+<span class="cluster"><svg class="icon icon--md" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg><code>.icon--md</code> 20px</span>
+<span class="cluster"><svg class="icon icon--lg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg><code>.icon--lg</code> 24px</span>
+</div><div class="ds-example__caption"><span>16px inside inline messages and chips, 20px in buttons and toasts (the default), 24px for alert icons.</span></div></div>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class</th><th scope="col">Size</th><th scope="col">Where</th></tr></thead><tbody>
+<tr><td><code>.icon--sm</code></td><td>16px (1rem)</td><td>Inline messages, chip remove, table sort arrows</td></tr>
+<tr><td><code>.icon</code> / <code>.icon--md</code></td><td>20px (1.25rem)</td><td>Buttons (Add task, delete), toasts, compact notice</td></tr>
+<tr><td><code>.icon--lg</code></td><td>24px (1.5rem)</td><td>Alert icons (load-error banner)</td></tr>
+</tbody></table></div>
+<p>The mocks drew the banner icon at 22px; it snaps to 24px with the rest of the 4px grid (D17).</p>
+    </section>
+
+    <section class="ds-section" id="illustration"><h2><a href="#illustration">Illustration</a></h2>
+<div class="ds-example"><div class="ds-example__canvas" style="justify-content: space-around;">
+<figure class="stack stack--tight" style="align-items: center;"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><figcaption class="ds-swatch__value">First run</figcaption></figure>
+<figure class="stack stack--tight" style="align-items: center;"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><path class="art-line" d="M28 47l11 11 22-26"/><path class="art-ray" d="M71 13l-3 6M79 26l-6 2M62 6v6"/><circle class="art-highlight" cx="14" cy="24" r="4"/></svg><figcaption class="ds-swatch__value">All clear</figcaption></figure>
+<figure class="stack stack--tight" style="align-items: center;"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><circle class="art-line art-line--quiet" cx="44" cy="46" r="16"/></svg><figcaption class="ds-swatch__value">Nothing completed yet</figcaption></figure>
+</div><div class="ds-example__caption"><span>88-unit illustrations built from six classes: <code>.art-fill</code>, <code>.art-paper</code>, <code>.art-line</code>, <code>.art-line--quiet</code>, <code>.art-highlight</code>, <code>.art-ray</code>.</span></div></div>
+<p>Empty-state art is the only illustration. It uses the accent tint as a disc, the accent as line work, and <code>--color-highlight</code> (sun) for one spark. It is always <code>aria-hidden</code>: the title beside it carries the meaning.</p>
+    </section>
+
+    <section class="ds-section" id="usage"><h2><a href="#usage">Usage</a></h2>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete Call mom"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></div><figcaption>Icon-only buttons carry an <code>aria-label</code> that names the object ("Delete Call mom", L2-029.5); the SVG is <code>aria-hidden</code>.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete"><svg class="icon" viewBox="0 0 24 24" role="img" aria-label="trash"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></div><figcaption>A generic "Delete" plus an SVG with its own name: the row is ambiguous and the name is read twice.</figcaption></figure>
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--warning alert--compact" role="status"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"/></svg><p class="alert__body">You're offline. Changes will fail until you reconnect.</p></div></div><figcaption>Status icons take the status colour (<code>--color-warning-icon</code>), so tone is colour + icon + text.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--warning alert--compact" role="status"><svg class="icon alert__icon" style="color: var(--color-fg-default);" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"/></svg><p class="alert__body">You're offline. Changes will fail until you reconnect.</p></div></div><figcaption>The mock's notice icon in ink, leaving the tone to the background alone (D19).</figcaption></figure>
+</div>
+<ul>
+<li>One icon means one thing everywhere: the trash is always delete, the plus always add.</li>
+<li>Icons accompany text; the only icon-only controls are delete (row) and Add task below 576px, both with an <code>aria-label</code>.</li>
+<li>Never scale an icon with <code>transform</code>; pick a size class so strokes stay 2px.</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<ul>
+<li>Decorative and redundant icons: <code>aria-hidden="true"</code>, no <code>&lt;title&gt;</code> (WCAG 1.1.1).</li>
+<li>Meaningful icons that stand alone: the control, not the SVG, gets the name via <code>aria-label</code>.</li>
+<li>Icons that carry meaning (status icons, the checked tick) meet 3:1 against their background (1.4.11); see the contrast pairs on the <a href="color.html">color</a> page.</li>
+<li>Under <code>forced-colors: active</code>, <code>currentColor</code> maps to the system text colour, so icons stay visible.</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<p>Icons have no tokens of their own. Their size comes from the <code>.icon--sm/md/lg</code> classes (the <code>--icon-size</code> custom property in <code>components.css</code>), and their colour from the text colour of the parent, usually <code>--color-fg-default</code>, <code>--color-fg-muted</code> or a <code>--color-*-icon</code> status token, documented on the <a href="color.html">color</a> page.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

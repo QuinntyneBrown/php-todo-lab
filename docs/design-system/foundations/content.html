@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content — Tasks design system</title>
+<meta name="description" content="Voice and tone, sentence case, button verbs, numbers and dates, the error and empty-state formulas and the Tasks microcopy library.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation · Content</p>
+      <h1>Content</h1>
+      <p class="ds-lead">Plain, active, sentence-case copy with one name for each thing. Errors say what happened and what to do, and never apologise.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">L2-025</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#voice">Voice and tone</a></li>
+        <li><a href="#casing">Sentence case and naming</a></li>
+        <li><a href="#verbs">Button verbs and echoes</a></li>
+        <li><a href="#numbers">Numbers, dates and counts</a></li>
+        <li><a href="#errors">Error message formula</a></li>
+        <li><a href="#empty">Empty-state formula</a></li>
+        <li><a href="#library">Microcopy library</a></li>
+        <li><a href="#usage">Usage</a></li>
+        <li><a href="#accessibility">Accessibility</a></li>
+        <li><a href="#tokens">Tokens</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Tasks speaks plainly. Copy is active, short, sentence case, and uses one name for each thing: <b>task</b> in the UI, <b>Add task</b>, <b>Undo</b>, <b>Clear completed</b> (L2-025). Errors say what happened and what to do next, and never apologise. Every user-facing string lives in one typed constants file (<code>ui-strings.ts</code>) so it can be reviewed and later localised (L2-025.4).</p>
+    </section>
+
+    <section class="ds-section" id="voice"><h2><a href="#voice">Voice and tone</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">We are</th><th scope="col">So we write</th><th scope="col">Not</th></tr></thead><tbody>
+<tr><td>Calm</td><td>Couldn't add that task. Try again.</td><td>Oops! Something went wrong!</td></tr>
+<tr><td>Direct</td><td>Enter a task title.</td><td>Please make sure you have entered a valid title before submitting.</td></tr>
+<tr><td>Quietly encouraging</td><td>All clear · Nothing left to do.</td><td>Woohoo, you crushed it!!</td></tr>
+<tr><td>Honest</td><td>You're offline. Changes will fail until you reconnect.</td><td>Don't worry, we'll sync later. (It won't.)</td></tr>
+</tbody></table></div>
+<ul>
+<li>No exclamation marks, no "Oops", no "Sorry" (L2-025.1, L2-025.3).</li>
+<li>Second person, present tense: "You have 500 tasks."</li>
+<li>Contractions are fine ("Couldn't", "You're"); they read as spoken.</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="casing"><h2><a href="#casing">Sentence case and naming</a></h2>
+<ul>
+<li>Sentence case everywhere: buttons, headings, toasts, labels. "Clear completed", not "Clear Completed".</li>
+<li>One name per thing. It is always a <b>task</b> (never todo, item or entry); finishing it is <b>complete</b> in announcements and <b>done</b> in the filter.</li>
+<li>Filters are one word each: All, Active, Done.</li>
+<li>The task's own title is user content: show it exactly as typed, including its case, and wrap it, never truncate.</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="verbs"><h2><a href="#verbs">Button verbs and echoes</a></h2>
+<p>A button is a verb phrase. The same verb comes back in the toast and the announcement, in the past tense (L2-025.2): "Add task" produces "Task added".</p>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Action</th><th scope="col">Announced (polite live region)</th><th scope="col">Toast</th></tr></thead><tbody>
+<tr><td>Add task</td><td>Task added</td><td>—</td></tr>
+<tr><td>(tick the checkbox)</td><td>Task completed</td><td>—</td></tr>
+<tr><td>(untick the checkbox)</td><td>Task reopened</td><td>—</td></tr>
+<tr><td>(edit the title, Enter)</td><td>Task updated</td><td>—</td></tr>
+<tr><td>Delete (<code>aria-label</code> "Delete &lt;title&gt;")</td><td>Task deleted</td><td>Task deleted · Undo</td></tr>
+<tr><td>Undo</td><td>Task restored</td><td>—</td></tr>
+<tr><td>Clear completed</td><td>3 tasks cleared</td><td>3 tasks cleared · Undo</td></tr>
+</tbody></table></div>
+<ul>
+<li>Never "OK", "Submit", "Yes" or "Click here".</li>
+<li>Icon-only buttons still have words: <code>aria-label="Delete Call mom"</code> names the verb and the object (L2-029.5).</li>
+<li>Undo is always the word "Undo"; it is offered for every destructive action instead of a confirmation.</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="numbers"><h2><a href="#numbers">Numbers, dates and counts</a></h2>
+<ul>
+<li>Numerals, not words: "3 tasks cleared", "2 left". Counts use tabular figures so they do not jump.</li>
+<li>Singular at 1: "1 task cleared", "1 left" (L2-025). Pluralise with the locale's plural rules, not by appending "s".</li>
+<li>Zero remaining reads "All done" in the header, not "0 left".</li>
+<li>Limits are stated as numbers: "You have 500 tasks."; the counter shows "165/200" without spaces and turns danger-coloured at the limit.</li>
+<li>The header date is the weekday ("Wednesday") over the day and month ("7 October"), both formatted in the user's locale (<code>toLocaleDateString</code> with <code>weekday: 'long'</code> and <code>day: 'numeric', month: 'long'</code>). No year: the page is always today.</li>
+<li>Filter names carry their counts for assistive technology: "Active, 3".</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="errors"><h2><a href="#errors">Error message formula</a></h2>
+<p><b>What happened</b> + <b>what to do</b>. Name the thing, use the past tense for the failure, and give a next step when there is one.</p>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--danger" role="note"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><p class="alert__body">Couldn't load your tasks. Check your connection and try again.</p></div></div><figcaption>What failed, then the fix.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="alert alert--danger" role="note"><svg class="icon alert__icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><p class="alert__body">Sorry! An error occurred (500).</p></div></div><figcaption>Apologises, blames nobody, gives a code and no way forward.</figcaption></figure>
+<figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><p class="message message--error">Enter a task title.</p></div><figcaption>Field errors are an instruction.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><p class="message message--error">Invalid input.</p></div><figcaption>States a judgement, not a fix.</figcaption></figure>
+</div>
+<ul>
+<li>Toasts for failed background actions: "Couldn't &lt;verb&gt; that task." Add "Try again." only when retrying can help.</li>
+<li>Field errors sit at the field, are linked with <code>aria-describedby</code>, and keep what the person typed.</li>
+<li>Server validation messages (422) are shown as sent, at the field (L2-004.4).</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="empty"><h2><a href="#empty">Empty-state formula</a></h2>
+<div class="ds-example"><div class="ds-example__canvas" style="justify-content: space-around; align-items: flex-start;">
+<div class="empty-state empty-state--compact"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><rect class="art-paper" x="27" y="22" width="34" height="44" rx="7"/><rect class="art-line" x="27" y="22" width="34" height="44" rx="7"/><path class="art-line" d="M35 36h18M35 45h12M35 54h7"/><circle class="art-highlight" cx="67" cy="19" r="6"/></svg><h3 class="empty-state__title">Nothing here yet</h3><p class="empty-state__text">Type a task above and press Enter.</p></div>
+<div class="empty-state empty-state--compact"><svg class="empty-state__art" viewBox="0 0 88 88" aria-hidden="true"><circle class="art-fill" cx="44" cy="46" r="38"/><path class="art-line" d="M28 47l11 11 22-26"/><path class="art-ray" d="M71 13l-3 6M79 26l-6 2M62 6v6"/><circle class="art-highlight" cx="14" cy="24" r="4"/></svg><h3 class="empty-state__title">All clear</h3><p class="empty-state__text">Nothing left to do.</p></div>
+</div><div class="ds-example__caption"><span>Title states the situation; the sentence says what to do next or why it is fine.</span></div></div>
+<p><b>Title</b>: the situation in two to four words ("Nothing here yet", "All clear", "Nothing completed yet"). <b>Sentence</b>: the next step, or why there is nothing to do. No action button: the composer is always right above.</p>
+    </section>
+
+    <section class="ds-section" id="library"><h2><a href="#library">Microcopy library</a></h2>
+<p>Every string the mocks use, verbatim, with where it appears. These are the source for <code>ui-strings.ts</code>.</p>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Where</th><th scope="col">Text</th><th scope="col">Mock</th></tr></thead><tbody>
+<tr><td>Composer label (hidden)</td><td>“New task”</td><td><a href="../../mocks/pages/states.composer.html">states.composer</a></td></tr>
+<tr><td>Composer placeholder</td><td>“What needs doing?”</td><td><a href="../../mocks/pages/states.composer.html">states.composer</a></td></tr>
+<tr><td>Composer button</td><td>“Add task”</td><td><a href="../../mocks/pages/states.composer.html">states.composer</a></td></tr>
+<tr><td>Counter (from 160 characters)</td><td>“165/200”</td><td><a href="../../mocks/pages/states.composer.html">states.composer</a></td></tr>
+<tr><td>Empty submit</td><td>“Enter a task title.”</td><td><a href="../../mocks/pages/states.composer.html">states.composer</a>, <a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Task limit</td><td>“You have 500 tasks. Finish or delete some to add more.”</td><td><a href="../../mocks/pages/page.limit.html">page.limit</a>, <a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Server validation (shown as sent)</td><td>“The title field must not be greater than 200 characters.”</td><td><a href="../../mocks/pages/states.composer.html">states.composer</a></td></tr>
+<tr><td>Edit cleared</td><td>“A task needs a title.”</td><td><a href="../../mocks/pages/states.row.html">states.row</a>, <a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Edit field label (hidden)</td><td>“Edit task title”</td><td><a href="../../mocks/pages/states.row.html">states.row</a></td></tr>
+<tr><td>Title button name</td><td>“Edit &lt;title&gt;”</td><td><a href="../../mocks/pages/states.row.html">states.row</a></td></tr>
+<tr><td>Delete button name</td><td>“Delete &lt;title&gt;”</td><td><a href="../../mocks/pages/states.row.html">states.row</a></td></tr>
+<tr><td>Filter group name</td><td>“Show tasks”</td><td><a href="../../mocks/pages/states.toolbar.html">states.toolbar</a></td></tr>
+<tr><td>Filter options (names include counts)</td><td>“All, 5 · Active, 3 · Done, 2”</td><td><a href="../../mocks/pages/states.toolbar.html">states.toolbar</a></td></tr>
+<tr><td>Toolbar action</td><td>“Clear completed”</td><td><a href="../../mocks/pages/states.toolbar.html">states.toolbar</a></td></tr>
+<tr><td>Header count</td><td>“3 left · All done”</td><td><a href="../../mocks/pages/page.loaded.html">page.loaded</a>, <a href="../../mocks/pages/page.all-done.html">page.all-done</a></td></tr>
+<tr><td>Undo toasts</td><td>“Task deleted · 3 tasks cleared · 1 task cleared — Undo”</td><td><a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Error toast: add</td><td>“Couldn't add that task. Try again.”</td><td><a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Error toast: toggle</td><td>“Couldn't update that task.”</td><td><a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Error toast: edit</td><td>“Couldn't save that change.”</td><td><a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Error toast: delete</td><td>“Couldn't delete that task.”</td><td><a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Error toast: gone</td><td>“That task no longer exists.”</td><td><a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+<tr><td>Load error banner</td><td>“Couldn't load your tasks. Check your connection and try again. — Try again”</td><td><a href="../../mocks/pages/page.load-error.html">page.load-error</a></td></tr>
+<tr><td>Offline notice</td><td>“You're offline. Changes will fail until you reconnect.”</td><td><a href="../../mocks/pages/page.offline.html">page.offline</a></td></tr>
+<tr><td>Loading (announced)</td><td>“Loading tasks”</td><td><a href="../../mocks/pages/page.loading.html">page.loading</a></td></tr>
+<tr><td>Empty, first run</td><td>“Nothing here yet — Type a task above and press Enter.”</td><td><a href="../../mocks/pages/page.empty.html">page.empty</a></td></tr>
+<tr><td>Empty, Active filter</td><td>“All clear — Nothing left to do.”</td><td><a href="../../mocks/pages/page.filter-active.empty.html">page.filter-active.empty</a></td></tr>
+<tr><td>Empty, Done filter</td><td>“Nothing completed yet — Tick a task and it will show up here.”</td><td><a href="../../mocks/pages/page.filter-done.empty.html">page.filter-done.empty</a></td></tr>
+<tr><td>Live region</td><td>“Task added · Task completed · Task reopened · Task updated · Task deleted · Task restored · 3 tasks cleared · 2 left · All done”</td><td><a href="../../mocks/pages/notifications.html">notifications</a></td></tr>
+</tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="usage"><h2><a href="#usage">Usage</a></h2>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas"><div class="toast toast--static" role="status"><span class="toast__message">1 task cleared</span><button class="btn btn--ghost" type="button">Undo</button></div></div><figcaption>Singular at 1, verb echoed from Clear completed.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas"><div class="toast toast--static" role="status"><span class="toast__message">1 Tasks Cleared!</span><button class="btn btn--ghost" type="button">OK</button></div></div><figcaption>Wrong plural, title case, exclamation mark, and "OK" instead of the action.</figcaption></figure>
+</div>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<ul>
+<li>Accessible names follow the same rules as visible text: verb first, object named ("Edit Call mom").</li>
+<li>Announcements are short and past tense; the live region is polite, errors use <code>role="alert"</code> (WCAG 4.1.3).</li>
+<li>The placeholder is a question, never the label (WCAG 3.3.2); the label "New task" is always present.</li>
+<li>Error text names the field's problem and the fix (WCAG 3.3.1, 3.3.3).</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<p>Content has no tokens. Text styles (<code>--text-*</code>) are on the <a href="typography.html">typography</a> page.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

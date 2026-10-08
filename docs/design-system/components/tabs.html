@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tabs — Tasks design system</title>
+<meta name="description" content="Tabs: underline and pill variants with counts, APG tabs keyboard model, both themes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Navigation</p>
+      <h1>Tabs</h1>
+      <p class="ds-lead">Switch between panels on one page. Not used in v1: the task filter is a segmented button group (L2-029.4).</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: ready</span><span class="ds-pill ds-pill--warn">Not used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Tabs switch between panels of related content on one page without leaving it. Exactly one tab is selected and its panel is shown.</p>
+      <p><b>Not used in v1.</b> The All / Active / Done switch looks like tabs but is a filter on one list: the list stays the same element, only its rows change, and the choice is mirrored in the URL. L2-029.4 therefore specifies a <code>role="group"</code> of buttons with <code>aria-pressed</code> (or a radio group), which is the <a href="button-group.html">segmented button group</a>. Tabs are kept for future screens with genuinely separate panels (D22).</p>
+      <ul>
+        <li>Use tabs for two to six sibling panels with short labels.</li>
+        <li>Do not use tabs to filter one list, to step through a sequence (use a stepper), or for navigation between pages (use links).</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure"><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views (anatomy)"><button class="tabs__tab" type="button" role="tab" id="tb1-t0" aria-selected="true" aria-controls="tb1-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb1-t1" aria-selected="false" aria-controls="tb1-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb1-t2" aria-selected="false" aria-controls="tb1-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb1-p" aria-labelledby="tb1-t0" tabindex="0">5 tasks.</div></div>
+          <span class="ds-callout" style="left: 8%; top: 30%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 20%; top: 52%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 46%; top: 30%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 10%; top: 78%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Tab list</b><small><code>role="tablist"</code> with a hairline baseline.</small></div></li>
+          <li><div><b>Selected indicator</b><small>2px <code>--color-accent</code> underline plus semibold label.</small></div></li>
+          <li><div><b>Tab</b><small>44px tall, label and optional count.</small></div></li>
+          <li><div><b>Panel</b><small><code>role="tabpanel"</code>, focusable, 16px block padding.</small></div></li>
+        </ol>
+      </div>
+    </section>
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+<div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Underline tabs"><button class="tabs__tab" type="button" role="tab" id="tb2-t0" aria-selected="true" aria-controls="tb2-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb2-t1" aria-selected="false" aria-controls="tb2-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb2-t2" aria-selected="false" aria-controls="tb2-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb2-p" aria-labelledby="tb2-t0" tabindex="0">5 tasks.</div></div>
+        </div>
+        <div class="ds-example__caption"><span>Underline (default), with counts.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;div class="tabs"&gt;
+  &lt;div class="tabs__list" role="tablist" aria-label="Task views"&gt;
+    &lt;button class="tabs__tab" role="tab" aria-selected="true" aria-controls="p1" id="t1"&gt;All &lt;span class="tabs__count"&gt;5&lt;/span&gt;&lt;/button&gt;
+    …
+  &lt;/div&gt;
+  &lt;div class="tabs__panel" role="tabpanel" id="p1" aria-labelledby="t1" tabindex="0"&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre></details>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+<div class="tabs tabs--pill" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Pill tabs"><button class="tabs__tab" type="button" role="tab" id="tb3-t0" aria-selected="true" aria-controls="tb3-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb3-t1" aria-selected="false" aria-controls="tb3-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb3-t2" aria-selected="false" aria-controls="tb3-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb3-p" aria-labelledby="tb3-t0" tabindex="0">5 tasks.</div></div>
+        </div>
+        <div class="ds-example__caption"><span>Pill: a sunken track with a raised selected tab (shares its look with the segmented control, so never put both on one screen).</span></div>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas">
+<div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Tabs without counts"><button class="tabs__tab" type="button" role="tab" id="tb4-t0" aria-selected="true" aria-controls="tb4-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb4-t1" aria-selected="false" aria-controls="tb4-p" tabindex="-1">Active</button><button class="tabs__tab" type="button" role="tab" id="tb4-t2" aria-selected="false" aria-controls="tb4-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb4-p" aria-labelledby="tb4-t0" tabindex="0">5 tasks.</div></div>
+        </div>
+        <div class="ds-example__caption"><span>Without counts.</span></div>
+      </div>
+      <h3>Scrollable</h3>
+      <p>When tabs overflow, the list scrolls horizontally (<code>overflow-x: auto</code>); tabs never wrap to two rows and labels never truncate.</p>
+    </section>
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack">
+<div class="tabs tabs--sm" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Small tabs"><button class="tabs__tab" type="button" role="tab" id="tb5-t0" aria-selected="true" aria-controls="tb5-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb5-t1" aria-selected="false" aria-controls="tb5-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb5-t2" aria-selected="false" aria-controls="tb5-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb5-p" aria-labelledby="tb5-t0" tabindex="0">5 tasks.</div></div><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Medium tabs"><button class="tabs__tab" type="button" role="tab" id="tb6-t0" aria-selected="true" aria-controls="tb6-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb6-t1" aria-selected="false" aria-controls="tb6-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb6-t2" aria-selected="false" aria-controls="tb6-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb6-p" aria-labelledby="tb6-t0" tabindex="0">5 tasks.</div></div>
+        </div>
+        <div class="ds-example__caption"><span>Small (36px, <code>.tabs--sm</code>, only inside a 44px-tall row) and medium (44px, default).</span></div>
+      </div>
+    </section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Selected</th><th scope="col">Disabled</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Underline</th><td><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb7-t0" aria-selected="true" aria-controls="tb7-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb7-t1" aria-selected="false" aria-controls="tb7-p" tabindex="-1">Active</button><button class="tabs__tab" type="button" role="tab" id="tb7-t2" aria-selected="false" aria-controls="tb7-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb7-p" aria-labelledby="tb7-t0" tabindex="0">5 tasks.</div></div></td><td><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb8-t0" aria-selected="true" aria-controls="tb8-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb8-t1" aria-selected="false" aria-controls="tb8-p" tabindex="-1" data-state="hover">Active</button><button class="tabs__tab" type="button" role="tab" id="tb8-t2" aria-selected="false" aria-controls="tb8-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb8-p" aria-labelledby="tb8-t0" tabindex="0">5 tasks.</div></div></td><td><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb9-t0" aria-selected="true" aria-controls="tb9-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb9-t1" aria-selected="false" aria-controls="tb9-p" tabindex="-1" data-state="focus">Active</button><button class="tabs__tab" type="button" role="tab" id="tb9-t2" aria-selected="false" aria-controls="tb9-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb9-p" aria-labelledby="tb9-t0" tabindex="0">5 tasks.</div></div></td><td><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb10-t0" aria-selected="false" aria-controls="tb10-p" tabindex="-1">All</button><button class="tabs__tab" type="button" role="tab" id="tb10-t1" aria-selected="true" aria-controls="tb10-p" tabindex="0">Active</button><button class="tabs__tab" type="button" role="tab" id="tb10-t2" aria-selected="false" aria-controls="tb10-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb10-p" aria-labelledby="tb10-t1" tabindex="0">3 tasks.</div></div></td><td><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb11-t0" aria-selected="true" aria-controls="tb11-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb11-t1" aria-selected="false" aria-controls="tb11-p" tabindex="-1">Active</button><button class="tabs__tab" type="button" role="tab" id="tb11-t2" aria-selected="false" aria-controls="tb11-p" tabindex="-1" disabled>Done</button></div><div class="tabs__panel" role="tabpanel" id="tb11-p" aria-labelledby="tb11-t0" tabindex="0">5 tasks.</div></div></td></tr>
+          <tr><th scope="row">Pill</th><td><div class="tabs tabs--pill" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb12-t0" aria-selected="true" aria-controls="tb12-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb12-t1" aria-selected="false" aria-controls="tb12-p" tabindex="-1">Active</button><button class="tabs__tab" type="button" role="tab" id="tb12-t2" aria-selected="false" aria-controls="tb12-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb12-p" aria-labelledby="tb12-t0" tabindex="0">5 tasks.</div></div></td><td><div class="tabs tabs--pill" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb13-t0" aria-selected="true" aria-controls="tb13-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb13-t1" aria-selected="false" aria-controls="tb13-p" tabindex="-1" data-state="hover">Active</button><button class="tabs__tab" type="button" role="tab" id="tb13-t2" aria-selected="false" aria-controls="tb13-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb13-p" aria-labelledby="tb13-t0" tabindex="0">5 tasks.</div></div></td><td><div class="tabs tabs--pill" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb14-t0" aria-selected="true" aria-controls="tb14-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb14-t1" aria-selected="false" aria-controls="tb14-p" tabindex="-1" data-state="focus">Active</button><button class="tabs__tab" type="button" role="tab" id="tb14-t2" aria-selected="false" aria-controls="tb14-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb14-p" aria-labelledby="tb14-t0" tabindex="0">5 tasks.</div></div></td><td><div class="tabs tabs--pill" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb15-t0" aria-selected="false" aria-controls="tb15-p" tabindex="-1">All</button><button class="tabs__tab" type="button" role="tab" id="tb15-t1" aria-selected="true" aria-controls="tb15-p" tabindex="0">Active</button><button class="tabs__tab" type="button" role="tab" id="tb15-t2" aria-selected="false" aria-controls="tb15-p" tabindex="-1">Done</button></div><div class="tabs__panel" role="tabpanel" id="tb15-p" aria-labelledby="tb15-t1" tabindex="0">3 tasks.</div></div></td><td><div class="tabs tabs--pill" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Task views"><button class="tabs__tab" type="button" role="tab" id="tb16-t0" aria-selected="true" aria-controls="tb16-p" tabindex="0">All</button><button class="tabs__tab" type="button" role="tab" id="tb16-t1" aria-selected="false" aria-controls="tb16-p" tabindex="-1">Active</button><button class="tabs__tab" type="button" role="tab" id="tb16-t2" aria-selected="false" aria-controls="tb16-p" tabindex="-1" disabled>Done</button></div><div class="tabs__panel" role="tabpanel" id="tb16-p" aria-labelledby="tb16-t0" tabindex="0">5 tasks.</div></div></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="ds-example__canvas" style="padding: 0;"><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Tabs light"><button class="tabs__tab" type="button" role="tab" id="tb17-t0" aria-selected="true" aria-controls="tb17-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb17-t1" aria-selected="false" aria-controls="tb17-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb17-t2" aria-selected="false" aria-controls="tb17-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb17-p" aria-labelledby="tb17-t0" tabindex="0">5 tasks.</div></div><div class="tabs tabs--pill" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Pill light"><button class="tabs__tab" type="button" role="tab" id="tb18-t0" aria-selected="true" aria-controls="tb18-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb18-t1" aria-selected="false" aria-controls="tb18-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb18-t2" aria-selected="false" aria-controls="tb18-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb18-p" aria-labelledby="tb18-t0" tabindex="0">5 tasks.</div></div></div></div>
+        <div data-theme="dark"><div class="ds-example__canvas" style="padding: 0;"><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Tabs dark"><button class="tabs__tab" type="button" role="tab" id="tb19-t0" aria-selected="true" aria-controls="tb19-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb19-t1" aria-selected="false" aria-controls="tb19-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb19-t2" aria-selected="false" aria-controls="tb19-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb19-p" aria-labelledby="tb19-t0" tabindex="0">5 tasks.</div></div><div class="tabs tabs--pill" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Pill dark"><button class="tabs__tab" type="button" role="tab" id="tb20-t0" aria-selected="true" aria-controls="tb20-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb20-t1" aria-selected="false" aria-controls="tb20-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb20-t2" aria-selected="false" aria-controls="tb20-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb20-p" aria-labelledby="tb20-t0" tabindex="0">5 tasks.</div></div></div></div>
+      </div>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>All widths: the list scrolls horizontally when it overflows; add a fade at the clipped edge if more than one tab is hidden.</li>
+        <li>Below SM, prefer three or fewer tabs; if more are needed, a <code>&lt;select&gt;</code> may replace the tab list.</li>
+        <li>Tabs keep 44px height at every breakpoint (L2-028.1).</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>Reads <code>--color-fg-muted</code>, <code>--color-fg-default</code>, <code>--color-accent</code>, <code>--color-border-default</code>, <code>--color-border-strong</code> (hover underline) and, for pills, <code>--color-bg-surface-sunken</code>, <code>--color-bg-surface-raised</code> and <code>--shadow-1</code>.</p>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p><a href="https://www.w3.org/WAI/ARIA/apg/patterns/tabs/">APG Tabs pattern</a> with <b>automatic activation</b>: arrow keys move focus and select. <code>role="tablist"</code> (labelled), <code>role="tab"</code> with <code>aria-selected</code> and <code>aria-controls</code>, <code>role="tabpanel"</code> with <code>aria-labelledby</code>. Roving <code>tabindex</code>: only the selected tab is in the tab order.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Moves into the tab list (to the selected tab), then to the panel.</td></tr>
+        <tr><td><kbd>←</kbd> / <kbd>→</kbd></td><td>Selects the previous / next tab, wrapping.</td></tr>
+        <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>Selects the first / last tab.</td></tr>
+        <tr><td>Disabled tabs</td><td>Are skipped by arrow keys.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>Underline tabs draw the ring inset (negative offset) so it is not clipped by the scrolling list; pill tabs use the standard 2px offset. The panel is focusable so keyboard users can reach content that has no controls.</p>
+      <h3>Labelling</h3>
+      <p>The tab label is its name; counts are part of it ("Active 3"). Give the tab list an <code>aria-label</code> describing the set.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Unselected label</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Selected indicator</span><span class="ds-pair__ratio" data-contrast="--color-accent|--color-bg-surface" data-min="3"></span></div>
+        <div class="ds-pair"><span>Pill label on track</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-sunken" data-min="4.5"></span></div>
+      </div>
+      <p>Selection is shown by the underline (or raised pill) and the heavier weight, never by colour alone.</p>
+      <h3>Motion</h3>
+      <p>Colour and underline transition over <code>--duration-fast</code>; instant with reduced motion.</p>
+      <h3>Touch</h3>
+      <p>44px tall; tabs are at least 44px wide because of their padding.</p>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>One or two words in sentence case, nouns not verbs: "Active", not "Show active".</li>
+        <li>Counts are bare numbers after the label.</li>
+        <li>Keep the same order and names everywhere (WCAG 3.2.4).</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="segmented" role="group" aria-label="Show tasks"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true">All</button><button class="segmented__option" type="button" aria-pressed="false">Active</button><button class="segmented__option" type="button" aria-pressed="false">Done</button></div></div><figcaption>Filter one list with a segmented group of <code>aria-pressed</code> buttons (L2-029.4), as the toolbar does.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Filter as tabs"><button class="tabs__tab" type="button" role="tab" id="tb21-t0" aria-selected="true" aria-controls="tb21-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb21-t1" aria-selected="false" aria-controls="tb21-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb21-t2" aria-selected="false" aria-controls="tb21-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb21-p" aria-labelledby="tb21-t0" tabindex="0">5 tasks.</div></div></div><figcaption>Mark up a list filter as tabs: there is only one panel, and screen readers announce panels that never change.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Do labels"><button class="tabs__tab" type="button" role="tab" id="tb22-t0" aria-selected="true" aria-controls="tb22-p" tabindex="0">All <span class="tabs__count">5</span></button><button class="tabs__tab" type="button" role="tab" id="tb22-t1" aria-selected="false" aria-controls="tb22-p" tabindex="-1">Active <span class="tabs__count">3</span></button><button class="tabs__tab" type="button" role="tab" id="tb22-t2" aria-selected="false" aria-controls="tb22-p" tabindex="-1">Done <span class="tabs__count">2</span></button></div><div class="tabs__panel" role="tabpanel" id="tb22-p" aria-labelledby="tb22-t0" tabindex="0">5 tasks.</div></div></div><figcaption>Short, parallel nouns.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><div class="tabs" style="width: 100%;"><div class="tabs__list" role="tablist" aria-label="Wordy tabs"><button class="tabs__tab" type="button" role="tab" aria-selected="true" tabindex="0">Show all of my tasks</button><button class="tabs__tab" type="button" role="tab" aria-selected="false" tabindex="-1">Show only the remaining ones</button></div></div></div><figcaption>Long verb phrases that force the list to scroll.</figcaption></figure>
+      </div>
+    </section>
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Label</td><td><code>--color-fg-muted</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-muted" data-swatch></i><span data-token="--color-fg-muted"></span></span></td></tr>
+          <tr><td>Selected label</td><td><code>--color-fg-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-default" data-swatch></i><span data-token="--color-fg-default"></span></span></td></tr>
+          <tr><td>Selected indicator</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Baseline</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Hover underline</td><td><code>--color-border-strong</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-strong" data-swatch></i><span data-token="--color-border-strong"></span></span></td></tr>
+          <tr><td>Pill track</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr>
+          <tr><td>Pill selected</td><td><code>--color-bg-surface-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td></tr>
+          <tr><td>Height md / sm</td><td><code>--target-comfortable</code> <code>--control-height-sm</code></td><td colspan="2"><span data-token="--target-comfortable"></span> / <span data-token="--control-height-sm"></span></td></tr>
+          <tr><td>Indicator</td><td><code>--border-width-thick</code></td><td colspan="2"><span data-token="--border-width-thick"></span></td></tr>
+          <tr><td>Pill shadow</td><td><code>--shadow-1</code></td><td colspan="2"><span data-token="--shadow-1"></span></td></tr>
+          <tr><td>Transition</td><td><code>--duration-fast</code> <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-fast"></span> / <span data-token="--ease-standard"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;div class="tabs"&gt;
+  &lt;div class="tabs__list" role="tablist" aria-label="Task views"&gt;
+    &lt;button class="tabs__tab" type="button" role="tab" id="t-all" aria-selected="true" aria-controls="p-all"&gt;All &lt;span class="tabs__count"&gt;5&lt;/span&gt;&lt;/button&gt;
+    &lt;button class="tabs__tab" type="button" role="tab" id="t-act" aria-selected="false" aria-controls="p-act" tabindex="-1"&gt;Active &lt;span class="tabs__count"&gt;3&lt;/span&gt;&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;div class="tabs__panel" role="tabpanel" id="p-all" aria-labelledby="t-all" tabindex="0"&gt;…&lt;/div&gt;
+  &lt;div class="tabs__panel" role="tabpanel" id="p-act" aria-labelledby="t-act" tabindex="0" hidden&gt;…&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.tabs</code></td><td>Container.</td></tr>
+        <tr><td><code>.tabs--pill</code> <code>.tabs--sm</code></td><td>Variant, size.</td></tr>
+        <tr><td><code>.tabs__tab</code> + <code>aria-selected</code></td><td>Tab and its selection.</td></tr>
+        <tr><td><code>.tabs__count</code></td><td>Trailing count.</td></tr>
+        <tr><td><code>.tabs__panel</code></td><td>Panel.</td></tr>
+      </tbody></table></div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Derived from the filter control in <a href="../../mocks/pages/states.toolbar.html">pages/states.toolbar</a> (labels, counts, pill look, focus ring), which itself is <em>not</em> tabs (L2-029.4).</p>
+      <p>Drift fixed during extraction: none; tabs are a system addition (D22). The pill variant reuses D9's raised-surface indicator.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

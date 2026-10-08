@@ -26,8 +26,8 @@ user -> artisan : php artisan migrate
 artisan -> migration : Run up()
 migration -> db : Create table todos with id CHAR(26) primary key, title VARCHAR(200), completed_at, created_at, updated_at, deleted_at as TIMESTAMP(3) (L2-021)
 migration -> db : Set charset utf8mb4 and collation utf8mb4_0900_ai_ci (L2-021)
-migration -> db : Create index on deleted_at, created_at, id (list query)
-migration -> db : Create index on deleted_at, completed_at (counts and bulk operations)
+migration -> db : Create index todos_deleted_at_created_at_id_index on deleted_at, created_at, id (list query)
+migration -> db : Create index todos_deleted_at_completed_at_index on deleted_at, completed_at (counts and bulk operations)
 db --> migration : Table and indexes created
 migration --> artisan : Done
 artisan --> user : Migration succeeded, todos can be created and read back (L2-021 criterion 1)

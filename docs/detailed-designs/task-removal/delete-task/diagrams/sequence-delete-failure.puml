@@ -30,14 +30,14 @@ user -> item : Click the delete control (L2-015)
 item -> store : delete(id) through TodoPageComponent
 store -> store : Keep the removed todo and its position, remove the row (L2-015)
 store --> toast : Toast "Task deleted" with Undo shown
-store -> api : deleteTodo(id)
+store -> api : delete(id)
 api -> ctrl : DELETE /api/v1/todos/{id}
 alt Network error or 5xx response
   ctrl --> api : 5xx or no response
   api --> store : Rejected request
   store -> store : Insert the todo back at its original position (L2-015)
   store --> item : Row reappears
-  store -> toast : Replace toast with "Couldn't delete that task." (L2-015)
+  store -> toast : Replace toast with "Couldn't delete that task." (role="alert") (L2-015)
   toast --> user : Error toast shown
 end
 @enduml

@@ -6,7 +6,7 @@ title Components — Frontend structure
 Container_Boundary(spa, "Angular SPA") {
   Component(page, "TodoPageComponent", "Angular smart component", "Route /. Injects TodoStore and wires state to presentational components")
   Component(pres, "Presentational components", "Angular standalone, OnPush", "TodoHeaderComponent, TodoComposerComponent, TodoFilterComponent, TodoItemComponent, TodoListComponent, TodoEmptyStateComponent, ToastComponent. input() and output() only")
-  Component(store, "TodoStore", "Injectable, providedIn root", "Signals todos, filter, editingId, toast. Computed counts, visibleTodos, progress. Reads via httpResource")
+  Component(store, "TodoStore", "Injectable, providedIn root", "Signals todos, filter, editingId, toast. Computed counts, visibleTodos, progress. Reads via resource with a TodoApi.list() loader")
   Component(port, "TodoApi", "Abstract class, DI token", "Port that the store depends on")
   Component(http, "HttpTodoApi", "Adapter", "Only class that uses HttpClient. Wraps calls with firstValueFrom")
   Component(fake, "InMemoryTodoApi", "Test fake", "Replaces HttpTodoApi in tests without HttpTestingController")

@@ -26,38 +26,40 @@ class Todo {
   +updated_at: CarbonImmutable
   +deleted_at: CarbonImmutable
   #dateFormat: string = "Y-m-d H:i:s.v"
-  #fillable: title only
+  #fillable: title, completed_at
   +completed: bool
 }
 
 interface TodoRepository {
   +createWithinLimit(title: string, limit: int): Todo
   +update(todo: Todo, changes: array): Todo
-  +softDeleteCompleted(): list of Todo
-  +restoreMany(ids: list of string): list of Todo
+  +deleteCompleted(): list<string>
+  +restoreMany(ids: list<string>): Collection<int, Todo>
 }
 
 class EloquentTodoRepository {
   +createWithinLimit(title: string, limit: int): Todo
   +update(todo: Todo, changes: array): Todo
-  +softDeleteCompleted(): list of Todo
-  +restoreMany(ids: list of string): list of Todo
+  +deleteCompleted(): list<string>
+  +restoreMany(ids: list<string>): Collection<int, Todo>
 }
 
+class TodoLimitReached <<exception>>
+
 class CreateTodo {
-  +__invoke(title: string): Todo
+  +handle(title: string): Todo
 }
 
 class UpdateTodo {
-  +__invoke(id: string, changes: array): Todo
+  +handle(id: string, changes: array): Todo
 }
 
 class ClearCompletedTodos {
-  +__invoke(): list of Todo
+  +handle(): list<string>
 }
 
 class RestoreTodos {
-  +__invoke(ids: list of string): list of Todo
+  +handle(ids: list<string>): Collection<int, Todo>
 }
 
 class "DB transaction (Illuminate DB facade)" as Transaction {
@@ -71,5 +73,6 @@ RestoreTodos --> TodoRepository
 EloquentTodoRepository ..|> TodoRepository
 EloquentTodoRepository ..> Todo : reads and writes
 EloquentTodoRepository ..> Transaction : wraps create and bulk writes
+EloquentTodoRepository ..> TodoLimitReached : throws
 Migration ..> Todo : creates the table for
 @enduml

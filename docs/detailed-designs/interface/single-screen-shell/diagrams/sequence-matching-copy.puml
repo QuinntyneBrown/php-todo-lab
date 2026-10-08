@@ -18,35 +18,40 @@ actor "User" as user
 box "Frontend — Angular SPA (UI components)" #E0F2FE
   participant "TodoItemComponent" as item
   participant "TodoPageComponent" as page
-  participant "Polite live region" as live
   participant "ToastComponent" as toast
 end box
 box "Frontend — Angular SPA (state and API client)" #E0F2FE
   participant "TodoStore" as store
+  participant "Announcer" as ann
   participant "UI_STRINGS" as strings
   participant "HttpTodoApi" as http
 end box
 user -> item : Activate the delete control
-item -> page : Emit delete through output()
-page -> store : Request deletion of the task
-store -> http : Call TodoApi to delete the task
+item -> page : deleted output
+page -> store : delete(id)
+store -> store : Remove the row optimistically
+store -> strings : Read toasts text "Task deleted" and action "Undo" (L2-025)
+strings --> store : Strings from the one typed constants file (L2-025)
+store -> store : Set toast signal { tone: 'status', undo: { ids } }
+page -> strings : Read announcements text "Task deleted" (L2-025)
+page -> ann : announce("Task deleted")
+ann --> user : Polite announcement through the app shell live region (L2-025)
+page -> toast : Pass toast signal value
+toast --> user : Toast shows the same verb as the announcement (L2-025)
+store -> http : TodoApi.delete(id)
 alt Server accepts the deletion
   http --> store : Deletion confirmed
-  store -> strings : Read toast text Task deleted and action Undo (L2-025)
-  strings --> store : Strings from the one typed constants file (L2-025)
-  store -> store : Set toast signal
-  store -> strings : Read announcement text with the verb deleted (text TO SUPPLY, L2-025)
-  strings --> store : Announcement string
-  page -> toast : Pass toast signal value
-  toast --> user : Toast shows the same verb as the announcement (L2-025)
-  page -> live : Pass announcement text
-  live --> user : Polite announcement (L2-025)
 else Request fails
-  http --> store : Rejected promise
-  store -> strings : Read error text Couldn't delete that task. (L2-025)
+  http --> store : Rejected promise with ApiError
+  store -> store : Make the row reappear
+  store -> strings : Read errors text "Couldn't delete that task." (L2-025)
   strings --> store : Error string states the problem
-  store -> store : Set toast signal as error
+  store -> store : Set toast signal { tone: 'error', undo: null }
   page -> toast : Pass toast signal value
-  toast --> user : Error toast without apology or exclamation mark (L2-025)
+  toast --> user : Error toast with role="alert", without apology or exclamation mark (L2-025)
+  note right of page
+    The earlier announcement is not retracted.
+    The error toast announces the failure.
+  end note
 end
 @enduml

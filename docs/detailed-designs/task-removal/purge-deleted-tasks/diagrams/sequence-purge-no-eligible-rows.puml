@@ -24,11 +24,11 @@ box "Backend — Laravel Infrastructure" #FFF4E5
 end box
 scheduler -> cmd : Run todos:purge-deleted
 cmd -> cmd : Compute cutoff as now minus 24 hours
-cmd -> repo : Purge up to 500 todos soft-deleted before cutoff
+cmd -> repo : purgeDeletedBefore(cutoff, 500)
 repo -> db : Permanently delete up to 500 rows where deleted_at is before cutoff
 db --> repo : 0 rows deleted
 repo --> cmd : Chunk count 0
 note right of cmd : Rows soft-deleted 23 hours ago stay (L2-016 criterion 2)
-cmd -> cmd : Log purged count 0 (L2-016 criterion 3)
+cmd -> cmd : Log and print "Purged 0 soft-deleted todos." (L2-016 criterion 3)
 cmd --> scheduler : Exit 0
 @enduml

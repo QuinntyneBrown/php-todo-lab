@@ -1,0 +1,31 @@
+<header class="head">
+  <div class="head__when">
+    <h1 class="head__day">{{ weekday() }}</h1>
+    <p class="head__date">{{ dayAndMonth() }}</p>
+  </div>
+  <div class="progress" [class.progress--complete]="allDone()">
+    <p class="progress__text" data-testid="progress">
+      @if (allDone()) {
+        <span class="progress__num">{{ strings.allDone }}</span>
+      } @else {
+        <span class="progress__num">{{ activeCount() }}</span>
+        {{ ' ' }}<span class="progress__label">{{ strings.left }}</span>
+      }
+    </p>
+    <div class="progress__ring" aria-hidden="true">
+      <svg class="ring" viewBox="0 0 48 48">
+        <circle class="ring__track" cx="24" cy="24" r="20" />
+        <circle
+          class="ring__fill"
+          data-testid="ring-fill"
+          cx="24"
+          cy="24"
+          r="20"
+          [style.stroke-dasharray]="ring"
+          [style.stroke-dashoffset]="ringOffset()"
+        />
+      </svg>
+      <svg class="ring__done" viewBox="0 0 20 20"><path d="M4 10.5l4 4L16 6" /></svg>
+    </div>
+  </div>
+</header>

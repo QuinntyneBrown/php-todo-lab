@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skeleton — Tasks design system</title>
+<meta name="description" content="Skeleton primitives and the three-row loading state, static under reduced motion.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Feedback</p>
+      <h1>Skeleton</h1>
+      <p class="ds-lead">Grey placeholders in the shape of the task rows while the list loads.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>A skeleton is a grey placeholder in the shape of content that is on its way. The product shows three skeleton rows in the card while the list loads; the header, composer and filters are already there and usable (L2-008.1). The gentle shimmer is the only thing on the page that moves on load (L2-024.1).</p><ul><li>Use a skeleton when the layout of the coming content is known (a list of rows).</li><li>Use a <a href="spinner.html">spinner</a> for a single control, and the <a href="alert.html">banner</a> if loading fails.</li><li>Never skeleton something that is already usable, like the composer.</li></ul>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy"><figure class="ds-anatomy__figure"><div style="width: 100%;"><div class="card" style="width: 100%;"><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li></ul></div></div><span class="ds-callout" style="left: 6%; top: 18%;" aria-hidden="true">1</span><span class="ds-callout" style="left: 40%; top: 18%;" aria-hidden="true">2</span><span class="ds-callout" style="left: 92%; top: 50%;" aria-hidden="true">3</span></figure><ol class="ds-anatomy__list"><li><div><b>Circle</b><small>24px, stands in for the checkbox; inset to line up with the real one.</small></div></li><li><div><b>Bar</b><small>14px tall, fully rounded; widths cycle 58%, 72%, 44% so it reads as text.</small></div></li><li><div><b>Row</b><small>60px minimum height and a hairline divider, the same as a task row.</small></div></li></ol></div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example"><div class="ds-example__canvas"><div class="stack" style="width: 100%;"><span class="skeleton skeleton--title"></span><span class="skeleton"></span><span class="skeleton" style="--skeleton-width: 80%;"></span><span class="skeleton skeleton--circle"></span><span class="skeleton skeleton--rect"></span></div></div><div class="ds-example__caption"><span>Primitives: title, text, circle, rect. All are <code>aria-hidden</code>.</span></div><details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;span class=&quot;skeleton skeleton--title&quot;&gt;&lt;/span&gt;
+&lt;span class=&quot;skeleton&quot; style=&quot;--skeleton-width: 80%&quot;&gt;&lt;/span&gt;
+&lt;span class=&quot;skeleton skeleton--circle&quot;&gt;&lt;/span&gt;
+&lt;span class=&quot;skeleton skeleton--rect&quot;&gt;&lt;/span&gt;</code></pre></details></div><h3>Composed: task rows</h3><div class="ds-example"><div class="ds-example__canvas ds-example__canvas--canvas"><div class="card" style="width: 100%;"><p class="visually-hidden">Loading tasks</p><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li></ul></div></div><div class="ds-example__caption"><span>Three rows, the product's loading state (L2-008.1). The status text is visually hidden.</span></div><details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;p class=&quot;visually-hidden&quot; role=&quot;status&quot;&gt;Loading tasks&lt;/p&gt;
+&lt;ul class=&quot;skeleton-list&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;li class=&quot;skeleton-row&quot;&gt;&lt;span class=&quot;skeleton skeleton--circle&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton&quot;&gt;&lt;/span&gt;&lt;/li&gt;
+  …three rows…
+&lt;/ul&gt;</code></pre></details></div>
+    </section>
+
+    <section class="ds-section" id="sizes"><h2><a href="#sizes">Sizes</a></h2>
+      <p>Skeletons take the size of what they replace. Text bars are 14px; titles 20px; circles 24px; rectangles 96px by default. Width is set with <code>--skeleton-width</code>.</p><div class="ds-example"><div class="ds-example__canvas"><div class="stack stack--tight" style="width: 100%;"><span class="skeleton" style="--skeleton-width: 30%;"></span><span class="skeleton" style="--skeleton-width: 60%;"></span><span class="skeleton" style="--skeleton-width: 90%;"></span></div></div><div class="ds-example__caption"><span><code>--skeleton-width</code>: 30%, 60%, 90%.</span></div></div>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Skeletons are not interactive. Two states: shimmering, and static under reduced motion. They are removed, not faded, when content arrives.</p><div class="ds-matrix"><table><thead><tr><th scope="col">Variant</th><th scope="col">Shimmering</th><th scope="col">Reduced motion (static)</th></tr></thead><tbody><tr><th scope="row">Task rows</th><td><div class="card" style="min-width: 16rem;"><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li></ul></div></td><td><div class="card" style="min-width: 16rem;" data-frozen><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li></ul></div></td></tr><tr><th scope="row">Text</th><td><span class="skeleton" style="min-width: 12rem;"></span></td><td><div data-frozen><span class="skeleton" style="min-width: 12rem;"></span></div></td></tr></tbody></table></div><h3>Both themes</h3><div class="ds-themes"><div data-theme="light"><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0;"><div class="card"><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li></ul></div></div></div><div data-theme="dark"><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0;"><div class="card"><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li></ul></div></div></div></div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul><li>Rows span the card at every breakpoint; bar widths are percentages, so they scale with the column (560 / 640px).</li><li>Show exactly three rows regardless of viewport: enough to read as a list without suggesting a count.</li></ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The shimmer is a gradient from <code>--color-border-default</code> through <code>--color-bg-surface-sunken</code> and back, so it is a quiet light sweep in the light theme and a dim one in dark. Override <code>--skeleton-width</code> per element; colours come from semantic tokens only.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3><p>The skeleton list is <code>aria-hidden="true"</code>. A separate visually hidden <code>role="status"</code> paragraph says "Loading tasks" once; when the list arrives, the count is announced by the polite live region. Alternatively set <code>aria-busy="true"</code> on the list container while loading.</p><h3>Keyboard</h3><p>Nothing to operate: the component is not focusable.</p><h3>Focus</h3><p>Skeletons never take focus. Focus stays in the composer, which is usable while the list loads (L2-022.3).</p><h3>Labelling</h3><p>One announcement for the whole region ("Loading tasks"), not per row.</p><h3>Contrast</h3><div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);"><div class="ds-pair"><span>Bar on card (decorative)</span><span class="ds-pair__ratio" data-contrast="--color-border-default|--color-bg-surface" data-min="1"></span></div><div class="ds-pair"><span>Status text if shown</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div></div><h3>Motion</h3><p>A 1.35s linear shimmer (3 × <code>--duration-deliberate</code>). Under <code>prefers-reduced-motion</code> the animation is removed and the bars are a static tone (L2-024.2, D21).</p><h3>Touch</h3><p>Not interactive.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul><li>No text inside skeletons. The hidden status says "Loading tasks".</li><li>If loading fails after the automatic retries, replace the skeleton with the banner, not an empty state.</li></ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont"><figure class="ds-do"><div class="ds-example__canvas"><div class="card" style="width: 100%;" data-frozen><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li></ul></div></div><figcaption>Stop the shimmer under reduced motion and keep a static tone (D21).</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="card" style="width: 100%;"><div class="composer" style="border: 0;"><span class="skeleton skeleton--rect" style="height: var(--control-height-lg);"></span></div></div></div><figcaption>Skeleton the composer. It works before the list arrives (L2-008.1).</figcaption></figure><figure class="ds-do"><div class="ds-example__canvas"><div class="card" style="width: 100%;"><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li><li class="skeleton-row"><span class="skeleton skeleton--circle"></span><span class="skeleton"></span></li></ul></div></div><figcaption>Match the real row: 60px tall, circle where the checkbox sits.</figcaption></figure><figure class="ds-dont"><div class="ds-example__canvas"><div class="card" style="width: 100%;"><ul class="skeleton-list" aria-hidden="true"><li class="skeleton-row" style="min-height: 0; padding-block: var(--space-1);"><span class="skeleton"></span></li><li class="skeleton-row" style="min-height: 0; padding-block: var(--space-1);"><span class="skeleton"></span></li></ul></div></div><figcaption>Squash the rows; the list jumps when real rows replace them.</figcaption></figure></div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead><tbody><tr><td>Base tone</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr><tr><td>Shimmer highlight</td><td><code>--color-bg-surface-sunken</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-sunken" data-swatch></i><span data-token="--color-bg-surface-sunken"></span></span></td></tr><tr><td>Bar height</td><td><code>--font-size-sm</code></td><td colspan="2"><span data-token="--font-size-sm"></span></td></tr><tr><td>Circle</td><td><code>--space-6</code></td><td colspan="2"><span data-token="--space-6"></span></td></tr><tr><td>Row gap</td><td><code>--space-4</code></td><td colspan="2"><span data-token="--space-4"></span></td></tr><tr><td>Cycle</td><td><code>3 × --duration-deliberate</code></td><td colspan="2"><span data-token="--duration-deliberate"></span></td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;p class=&quot;visually-hidden&quot; role=&quot;status&quot;&gt;Loading tasks&lt;/p&gt;
+&lt;ul class=&quot;skeleton-list&quot; aria-hidden=&quot;true&quot;&gt;
+  &lt;li class=&quot;skeleton-row&quot;&gt;&lt;span class=&quot;skeleton skeleton--circle&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton&quot;&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class=&quot;skeleton-row&quot;&gt;&lt;span class=&quot;skeleton skeleton--circle&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton&quot;&gt;&lt;/span&gt;&lt;/li&gt;
+  &lt;li class=&quot;skeleton-row&quot;&gt;&lt;span class=&quot;skeleton skeleton--circle&quot;&gt;&lt;/span&gt;&lt;span class=&quot;skeleton&quot;&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody><tr><td><code>.skeleton</code></td><td>Text bar; width via <code>--skeleton-width</code>.</td></tr><tr><td><code>.skeleton--title|circle|rect</code></td><td>Shapes.</td></tr><tr><td><code>.skeleton-list</code>, <code>.skeleton-row</code></td><td>Task-row composition; widths cycle automatically.</td></tr><tr><td><code>data-frozen</code></td><td>Documentation: stops motion.</td></tr></tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <ul><li><a href="../../mocks/pages/page.loading.html">pages/page.loading</a> (three rows, composer usable)</li></ul><div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Mock class</th><th scope="col">System class</th></tr></thead><tbody><tr><td><code>.skeleton</code></td><td><code>.skeleton-list</code></td></tr><tr><td><code>.skeleton li</code></td><td><code>.skeleton-row</code></td></tr><tr><td><code>.skeleton__dot</code></td><td><code>.skeleton.skeleton--circle</code></td></tr><tr><td><code>.skeleton__bar</code></td><td><code>.skeleton</code></td></tr></tbody></table></div><p>Drift fixed during extraction: D10 (7px bar radius → full), D11 (14px gap → 16px; 17px padding → 60px row minimum), D15 (1.4s shimmer → 3 × <code>--duration-deliberate</code>), D17 (26px dot → 24px), D21 (blanket reduced-motion override → shimmer removed explicitly).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

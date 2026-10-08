@@ -15,10 +15,17 @@ title Class structure — REST API contract
 
 class "routes/api.php" as Routes {
   +prefix: "/api/v1"
+  +{id}: whereUlid
 }
 
 class TodoController {
-  one method per endpoint (names TO SUPPLY)
+  +index(request: ListTodosRequest): TodoCollection
+  +store(request: StoreTodoRequest): TodoResource
+  +update(request: UpdateTodoRequest, id: string): TodoResource
+  +destroy(id: string): Response
+  +restore(id: string): TodoResource
+  +destroyCompleted(): JsonResponse
+  +restoreMany(request: RestoreTodosRequest): TodoCollection
 }
 
 abstract class FormRequest {
@@ -48,9 +55,12 @@ class Todo {
   +completed: bool
 }
 
-class "Exception rendering (bootstrap/app.php)" as ExceptionRendering <<class name TO SUPPLY>> {
-  +render(e: Throwable, request: Request): JsonResponse
+class "App\Exceptions\ProblemDetailsRenderer" as ExceptionRendering <<invokable, registered in bootstrap/app.php>> {
+  +__invoke(e: Throwable, request: Request): ?JsonResponse
 }
+
+class TodoNotFound <<exception>>
+class TodoLimitReached <<exception>>
 
 class ProblemDetails <<application/problem+json body>> {
   +type: string
@@ -58,6 +68,7 @@ class ProblemDetails <<application/problem+json body>> {
   +status: int
   +detail: string
   +errors: map of field to list of messages
+  +code: string
 }
 
 Routes --> TodoController : dispatches to
@@ -74,4 +85,6 @@ TodoController ..> TodoCollection : returns
 TodoCollection o-- "*" TodoResource : wraps
 TodoResource ..> Todo : serialises
 ExceptionRendering ..> ProblemDetails : builds
+ExceptionRendering ..> TodoNotFound : maps to 404
+ExceptionRendering ..> TodoLimitReached : maps to 422
 @enduml

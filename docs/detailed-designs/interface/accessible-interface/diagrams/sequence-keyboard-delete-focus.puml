@@ -25,24 +25,25 @@ box "Frontend — Angular SPA (state and API client)" #E0F2FE
   participant "TodoStore" as store
 end box
 user -> item : Press Enter or Space on the focused delete control
-item -> page : deleted output
+item -> page : deleted output { viaKeyboard: true }
 page -> store : Read visibleTodos and locate the deleted row index
 store --> page : Rows and index
-page -> store : Delete task
+page -> store : delete(id)
 store --> page : Row removed from visibleTodos
 alt a next row exists
-  page -> list : Request focus on the next row (L2-031)
-  list --> user : Focus on the next row
+  page -> list : focusRequest { id: next, target: 'checkbox', seq } (L2-031)
+  list --> user : Focus on the next row's checkbox
 else deleted row was the last row and a previous row exists
-  page -> list : Request focus on the previous row (L2-031)
-  list --> user : Focus on the previous row
+  page -> list : focusRequest { id: previous, target: 'checkbox', seq } (L2-031)
+  list --> user : Focus on the previous row's checkbox
 else the list is now empty
-  page -> composer : Request focus on the composer (L2-031)
+  page -> composer : focusRequest { target: 'composer', seq } (L2-031)
   composer --> user : Focus on the composer
 end
 note over page, list
   Focus lands on the target row, not on the removed element,
   so the keyboard position is never lost.
-  The element inside the row that receives focus is TO SUPPLY.
+  The row's checkbox receives focus. Each component applies
+  focusRequest in an effect that calls focus() on a viewChild element.
 end note
 @enduml

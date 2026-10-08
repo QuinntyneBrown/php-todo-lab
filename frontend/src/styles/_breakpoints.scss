@@ -1,0 +1,7 @@
+// Breakpoint thresholds from L2-027. Media queries cannot read CSS custom properties,
+// so they are Sass variables, resolved at build time. Kept apart from tokens.scss so
+// components can load them without copying the :root token rules.
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;

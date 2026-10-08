@@ -15,17 +15,27 @@ title Class structure — Filter tasks
 
 package "Angular SPA" {
   class TodoPageComponent <<smart>> {
-    +filter: input<string>
-    +select(filter: string): void
+    +filter: input<string | undefined>
+    +ngOnChanges(): void
+    +select(filter: TodoFilter): void
   }
   class TodoFilterComponent <<presentational>> {
-    +selected: input<string>
-    +selectedChange: output<string>
+    +selected: input<TodoFilter>
+    +allCount: input<number>
+    +activeCount: input<number>
+    +doneCount: input<number>
+    +selectedChange: output<TodoFilter>
   }
   class TodoStore <<providedIn root>> {
     +todos: Signal<TodoView[]>
-    +filter: Signal<string>
+    +filter: WritableSignal<TodoFilter>
+    -leavingIds: WritableSignal<Set<string>>
     +visibleTodos: Signal<TodoView[]>
+  }
+  enum TodoFilter {
+    all
+    active
+    done
   }
   class Router <<Angular>> {
     +navigate(commands, extras): Promise<boolean>
@@ -48,10 +58,10 @@ package "Laravel API" {
     +handle(status: TodoStatus): TodoList
   }
   interface TodoRepository {
-    +list(status: TodoStatus): Todo[]
+    +list(status: TodoStatus): Collection<int, Todo>
   }
   class EloquentTodoRepository {
-    +list(status: TodoStatus): Todo[]
+    +list(status: TodoStatus): Collection<int, Todo>
   }
   class Todo <<Eloquent>> {
     +active(): Builder
@@ -59,7 +69,8 @@ package "Laravel API" {
   }
 }
 
-TodoPageComponent --> TodoStore : sets filter
+TodoPageComponent --> TodoStore : sets filter in ngOnChanges
+TodoStore ..> TodoFilter : holds
 TodoPageComponent ..> TodoFilterComponent : binds
 TodoPageComponent ..> Router : navigates
 
@@ -73,7 +84,7 @@ EloquentTodoRepository --> Todo : applies scopes
 
 note bottom of TodoStore
   Filter values in the URL are active and done, omitted for All.
-  The status values sent to the API are all, active, and completed.
-  Member names that the specs do not fix are provisional (TO SUPPLY).
+  An unknown filter value parses to all.
+  The SPA never sends status; the API accepts all, active, and completed.
 end note
 @enduml

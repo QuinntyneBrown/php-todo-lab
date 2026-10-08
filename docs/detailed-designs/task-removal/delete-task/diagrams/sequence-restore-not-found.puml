@@ -33,13 +33,14 @@ box "Backend — Laravel Infrastructure" #FFF4E5
 end box
 user -> toast : Click Undo (L2-015)
 toast -> store : undo() through TodoPageComponent
-store -> api : restoreTodo(id)
+store -> api : restore(id)
 api -> ctrl : POST /api/v1/todos/{id}/restore
-ctrl -> rest : Invoke with id
-rest -> repo : Find soft-deleted todo by id
-repo --> rest : Not found, purged or never deleted
-rest --> ctrl : Not-found condition
+ctrl -> rest : handle(id)
+rest -> repo : findDeleted(id)
+repo --> rest : null, purged or never deleted
+rest --> ctrl : throw TodoNotFound
 ctrl --> api : 404 problem details (L2-015)
-api --> store : Rejected request with status 404
-note over store : UI treatment of a failed restore is TO SUPPLY
+api --> store : ApiError with status 404
+store -> store : Row stays removed, clear the undo toast
+store --> toast : Error toast "Couldn't restore that task." (role="alert")
 @enduml

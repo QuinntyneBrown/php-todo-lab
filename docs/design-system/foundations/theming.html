@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theming — Tasks design system</title>
+<meta name="description" content="How light and dark themes work in Tasks: data-theme, prefers-color-scheme, color-scheme, token tiers and tokens.json.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation · Theming</p>
+      <h1>Theming</h1>
+      <p class="ds-lead">Two themes from one set of semantic tokens. The product follows the operating system; components never know which theme they are in.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA in both themes</span><span class="ds-pill">L2-026</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#how">How themes work</a></li>
+        <li><a href="#tiers">Token tiers</a></li>
+        <li><a href="#adding">Adding a theme</a></li>
+        <li><a href="#json">Consuming tokens.json</a></li>
+        <li><a href="#usage">Do and don't</a></li>
+        <li><a href="#tokens">Tokens</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Tasks ships two themes, light and dark, built from the same semantic tokens. The product follows the operating system through <code>prefers-color-scheme</code> and has no manual toggle in v1 (L2-026). The <code>data-theme</code> attribute exists so the mocks (<code>?theme=</code>) and this documentation can show both themes side by side.</p>
+<div class="ds-themes"><div data-theme="light"><div class="card">
+<form class="composer" novalidate onsubmit="return false"><div class="composer__field"><label class="visually-hidden" for="th-light">New task</label><input class="input input--filled input--lg" id="th-light" placeholder="What needs doing?"></div>
+<button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task (light sample)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form>
+<ul class="task-list">
+<li class="task task--done"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" checked aria-label="Renew passport (light sample)"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Renew passport (light sample)">Renew passport</button></div><span></span></li>
+<li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Call mom (light sample)"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Call mom (light sample)">Call mom</button></div><span></span></li>
+</ul></div>
+<div class="toast toast--static" role="status" style="margin-top: var(--space-4);"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button" aria-label="Undo (light sample)">Undo</button></div></div><div data-theme="dark"><div class="card">
+<form class="composer" novalidate onsubmit="return false"><div class="composer__field"><label class="visually-hidden" for="th-dark">New task</label><input class="input input--filled input--lg" id="th-dark" placeholder="What needs doing?"></div>
+<button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task (dark sample)"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form>
+<ul class="task-list">
+<li class="task task--done"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" checked aria-label="Renew passport (dark sample)"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Renew passport (dark sample)">Renew passport</button></div><span></span></li>
+<li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Call mom (dark sample)"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Call mom (dark sample)">Call mom</button></div><span></span></li>
+</ul></div>
+<div class="toast toast--static" role="status" style="margin-top: var(--space-4);"><span class="toast__message">Task deleted</span><button class="btn btn--ghost" type="button" aria-label="Undo (dark sample)">Undo</button></div></div></div>
+    </section>
+
+    <section class="ds-section" id="how"><h2><a href="#how">How themes work</a></h2>
+<ol>
+<li><b>Light is <code>:root</code></b>. Every semantic token has its light value there, and <code>color-scheme: light</code> so native controls and scrollbars match.</li>
+<li><b>Dark overrides the semantic tier only</b>, in two identical blocks: <code>[data-theme="dark"]</code>, and <code>@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { … } }</code>. The second makes the OS preference win unless a page forces light. Both set <code>color-scheme: dark</code>.</li>
+<li><b>Components never branch on theme.</b> They read <code>var(--color-…)</code> and get the right value; <code>components.css</code> contains no theme selectors.</li>
+<li><b>Any element can carry <code>data-theme</code></b>, which is how the side-by-side samples on these pages work. <code>ds.js</code> resolves live token values inside the nearest <code>[data-theme]</code>.</li>
+</ol>
+<pre><code>/* tokens.css (abridged) */
+:root { --color-bg-surface: var(--palette-white); color-scheme: light; }
+[data-theme="dark"] { --color-bg-surface: var(--palette-ink-900); color-scheme: dark; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --color-bg-surface: var(--palette-ink-900); color-scheme: dark; }
+}</code></pre>
+<p>No flash of the wrong theme: tokens are plain CSS loaded in <code>&lt;head&gt;</code>, so the first paint already uses the OS scheme (L2-026.1). Nothing waits for JavaScript.</p>
+    </section>
+
+    <section class="ds-section" id="tiers"><h2><a href="#tiers">Token tiers</a></h2>
+<div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Tier</th><th scope="col">Example</th><th scope="col">Changes per theme?</th><th scope="col">Who reads it</th></tr></thead><tbody>
+<tr><td>Primitive</td><td><code>--palette-sea-600: #0b7f74</code></td><td>No: a primitive is a fixed value</td><td>Semantic tokens only</td></tr>
+<tr><td>Semantic</td><td><code>--color-accent: var(--palette-sea-600)</code> (dark: <code>--palette-sea-400</code>)</td><td>Yes: this is the tier themes override</td><td>Components and pages</td></tr>
+<tr><td>Component</td><td><code>--btn-bg: var(--color-accent)</code></td><td>No: follows the semantic token</td><td>One component; the supported way to re-skin it</td></tr>
+</tbody></table></div>
+<h3>How dark differs from light</h3>
+<ul>
+<li>Dark is built from roles, not by inverting light. Surfaces get lighter as they rise: canvas <code>ink-950</code> &lt; surface <code>ink-900</code> &lt; raised <code>ink-850</code>.</li>
+<li>The accent lightens (<code>sea-600</code> → <code>sea-400</code>) and text on it flips to near-black <code>sea-950</code>.</li>
+<li>The toast stays inverse: dark ink in light mode, pale ink in dark mode, with its Undo action switching from <code>sea-300</code> to <code>sea-700</code>.</li>
+<li>Status backgrounds become deep tints with light text; shadows use black at higher opacity because a dark surface cannot cast a visible ink shadow.</li>
+<li>The segmented indicator uses the raised surface so it stays visible in dark (D9).</li>
+</ul>
+    </section>
+
+    <section class="ds-section" id="adding"><h2><a href="#adding">Adding a theme</a></h2>
+<ol>
+<li>Add any new primitives to the primitives block of <code>tokens/tokens.css</code>.</li>
+<li>Add a <code>[data-theme="&lt;name&gt;"]</code> block that overrides <b>semantic</b> tokens only, with <code>color-scheme</code> set. Start by copying the dark block for a dark brand, or nothing for a light one.</li>
+<li>Run <code>check_contrast.py tokens/tokens.css</code>; every pair in <code>contrast-pairs.json</code> is checked for the new theme automatically. Fix primitives until it exits 0.</li>
+<li>Regenerate <code>tokens.json</code> with <code>tokens_to_json.py</code>; the new theme appears under each token's <code>$extensions</code>.</li>
+<li>Review the <a href="color.html">color</a> page and three component pages with <code>?theme=&lt;name&gt;</code>.</li>
+</ol>
+<p>High-contrast and forced-colours modes are handled in <code>tokens.css</code> too: <code>prefers-contrast: more</code> raises borders and muted text to stronger tokens; <code>forced-colors: active</code> hands the focus ring and borders to system colours.</p>
+    </section>
+
+    <section class="ds-section" id="json"><h2><a href="#json">Consuming tokens.json</a></h2>
+<p><code>tokens/tokens.json</code> is a <a href="https://www.designtokens.org/">DTCG</a> export generated from <code>tokens.css</code>: each token has <code>$type</code> and <code>$value</code>, aliases are written <code>{color.accent}</code>, and dark values live under <code>$extensions</code>. Use it to generate platform constants (Sass maps, TypeScript, native) instead of copying hex values.</p>
+<pre><code>"color": {
+  "accent": {
+    "$type": "color",
+    "$value": "{palette.sea.600}",
+    "$extensions": { "com.agent-toolkit": {
+      "css": "--color-accent", "resolved": "#0b7f74",
+      "themes": { "dark": { "$value": "{palette.sea.400}", "resolved": "#4fd1bf" } }
+    } }
+  }
+}</code></pre>
+<p>The Angular app keeps its own <code>frontend/src/styles/tokens.scss</code> (ported from the mocks). When it adopts this system, it should import <code>tokens.css</code> as-is and keep following <code>prefers-color-scheme</code> only.</p>
+    </section>
+
+    <section class="ds-section" id="usage"><h2><a href="#usage">Do and don't</a></h2>
+<div class="ds-dodont">
+<figure class="ds-do"><div class="ds-example__canvas"><code>background: var(--color-bg-surface);</code></div><figcaption>Read semantic tokens; the theme takes care of itself.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas"><code>[data-theme="dark"] .card { background: var(--palette-ink-900); }</code></div><figcaption>Theme selectors inside component CSS, or primitives used directly. The next theme breaks.</figcaption></figure>
+<figure class="ds-do"><div class="ds-example__canvas"><code>--color-accent-hover</code></div><figcaption>A hover state is a token, so dark gets its own value and its contrast is checked.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas"><code>filter: brightness(1.08)</code></div><figcaption>The mock's Add task hover (D6): impossible to theme or contrast-check, and it brightens a dark-theme button the wrong way.</figcaption></figure>
+<figure class="ds-do"><div class="ds-example__canvas"><code>--shadow-1</code></div><figcaption>Shadows are tokens redefined per theme.</figcaption></figure>
+<figure class="ds-dont"><div class="ds-example__canvas"><code>box-shadow: 0 1px 3px rgb(16 34 47 / .18)</code></div><figcaption>The mock's filter pill shadow (D8): an ink shadow that vanishes on a dark surface.</figcaption></figure>
+</div>
+<p>The product offers no theme toggle in v1 (L2-026). The toggle in this documentation's navigation is a review aid, like the mocks' <code>?theme=</code>.</p>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+<p>Theming has no tokens of its own: it is the mechanism that switches the semantic colour and shadow tokens. Their light and dark values are listed on the <a href="color.html">color</a> and <a href="elevation.html">elevation</a> pages.</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

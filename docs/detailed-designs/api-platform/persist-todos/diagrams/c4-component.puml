@@ -10,7 +10,7 @@ Container_Boundary(api, "Laravel API") {
   Component(actions, "CreateTodo, UpdateTodo, ClearCompletedTodos, RestoreTodos", "Action classes", "Call the repository for each write use case")
   Component(repoi, "TodoRepository", "PHP interface", "Declares the write operations")
   Component(repo, "EloquentTodoRepository", "Eloquent repository", "Opens the transactions for create-with-cap and bulk operations")
-  Component(model, "Todo", "Eloquent model", "HasUlids, SoftDeletes, HasFactory, millisecond date format, fillable title")
+  Component(model, "Todo", "Eloquent model", "HasUlids, SoftDeletes, HasFactory, millisecond date format, fillable title and completed_at")
 }
 ContainerDb(db, "MySQL database", "MySQL 8.4", "todos table")
 

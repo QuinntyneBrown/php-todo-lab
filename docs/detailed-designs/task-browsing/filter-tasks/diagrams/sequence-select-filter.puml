@@ -25,18 +25,20 @@ box "Frontend — Angular SPA (state and API client)" #E0F2FE
   participant "TodoStore" as store
 end box
 user -> filter : Select "Active" (or "Done")
-filter -> page : Emit selected filter
+filter -> page : Emit selectedChange('active')
 page -> router : Navigate to / with query filter=active (filter=done for Done, no query for All) (L2-006)
 router --> page : URL updated, no full page reload (L2-006)
 router -> page : Bind query parameter filter to the page input
-page -> store : Set filter signal
+page -> page : ngOnChanges parses the bound value as TodoFilter
+page -> store : filter.set('active')
 store -> store : Recompute visibleTodos for the filter (L2-006)
 store --> list : Only active tasks (or only completed tasks) (L2-006)
 page --> filter : Selected filter
 filter --> user : Move selection indicator, set aria-pressed (L2-006)
 note over page, store : Browser back and forward re-run the same binding from the URL (L2-006)
 opt Task completed while "Active" is selected
-  store -> store : Mark task completed
-  store --> list : Task leaves the list after its completion animation, within 600 ms (L2-006)
+  store -> store : toggle(id, true) adds the id to leavingIds for 350 ms
+  store --> list : Row stays while the completion animation plays
+  store --> list : Id leaves leavingIds; row exit animation of 250 ms or less, gone within 600 ms (L2-006)
 end
 @enduml

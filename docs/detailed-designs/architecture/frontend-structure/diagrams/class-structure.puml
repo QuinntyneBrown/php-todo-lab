@@ -27,32 +27,63 @@ class ToastComponent <<presentational>>
 
 class TodoStore <<providedIn root>> {
   -api: TodoApi
-  +todos: signal
+  -listResource: resource(loader: api.list())
+  +todos: linkedSignal<TodoView[]>
   +filter: signal
   +editingId: signal
-  +toast: signal
+  +toast: signal<ToastState | null>
+  +loading: computed
+  +loadFailed: computed
   +activeCount: computed
   +completedCount: computed
+  +totalCount: computed
   +visibleTodos: computed
   +progress: computed
+  +addTask(title)
+  +toggle(id, completed)
+  +beginEdit(id)
+  +saveTitle(id, title)
+  +cancelEdit()
+  +delete(id)
+  +clearCompleted()
+  +undo()
+  +dismissToast()
+  +reload()
 }
 
 abstract class TodoApi {
-  one operation per endpoint in L2-018
-  operation names TO SUPPLY
+  +list(): Promise<TodoListResponse>
+  +create(title: string): Promise<Todo>
+  +update(id: string, changes: UpdateTodoPayload): Promise<Todo>
+  +delete(id: string): Promise<void>
+  +restore(id: string): Promise<Todo>
+  +clearCompleted(): Promise<ClearCompletedResponse>
+  +restoreMany(ids: readonly string[]): Promise<Todo[]>
 }
 
 class HttpTodoApi {
   -http: HttpClient
   calls wrapped with firstValueFrom
+  timeout(10_000) on every request
+  failures converted to ApiError
 }
 
 class InMemoryTodoApi <<test fake>>
 
 class HttpClient <<Angular>>
 
-package "core/api/models" {
-  class "Request and response interfaces" as Models
+package "core/api/models" as Models {
+  interface Todo
+  interface TodoListResponse
+  interface TodoListMeta
+  interface UpdateTodoPayload
+  interface ClearCompletedResponse
+  interface ProblemDetails
+  class ApiError {
+    +kind: FailureKind
+    +status?: number
+    +problem?: ProblemDetails
+  }
 }
 
 TodoPageComponent --> TodoStore : injects

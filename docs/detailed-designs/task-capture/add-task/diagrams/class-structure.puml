@@ -16,16 +16,18 @@ title Class structure — Add a task
 package "Angular SPA" {
   class TodoPageComponent <<smart>> {
     +store: TodoStore
+    +focusRequest: Signal<FocusRequest | null>
   }
   class TodoComposerComponent <<presentational>> {
-    +title: string
-    +errorMessage: string
-    +validate(title: string): boolean
+    +serverError: InputSignal<string | null>
+    +restoreText: InputSignal<string | null>
+    +focusRequest: InputSignal<FocusRequest | null>
+    +submitted: OutputEmitterRef<string>
   }
   class TodoStore <<providedIn root>> {
-    +todos: Signal<TodoView[]>
-    +filter: Signal<string>
-    +toast: Signal<ToastView>
+    +todos: WritableSignal<TodoView[]>
+    +filter: WritableSignal<TodoFilter>
+    +toast: WritableSignal<ToastState | null>
     +addTask(title: string): Promise<void>
   }
   abstract class TodoApi {
@@ -37,16 +39,20 @@ package "Angular SPA" {
   class InMemoryTodoApi <<test fake>> {
     +create(title: string): Promise<Todo>
   }
-  class TodoView {
-    +id: string
-    +title: string
-    +pending: boolean
+  class "TodoView" as TodoView <<type>> {
+    Todo & { pending?: true }
+    id is tmp-<uuid> while pending
+  }
+  class ApiError {
+    +kind: FailureKind
+    +status?: number
+    +problem?: ProblemDetails
   }
 }
 
 package "Laravel API" {
   class TodoController {
-    +store(request: StoreTodoRequest, action: CreateTodo): TodoResource
+    +store(request: StoreTodoRequest, action: CreateTodo): JsonResponse
   }
   class StoreTodoRequest {
     +rules(): array
@@ -55,25 +61,27 @@ package "Laravel API" {
     +handle(title: string): Todo
   }
   interface TodoRepository {
-    +createWithinLimit(title: string): Todo
+    +createWithinLimit(title: string, limit: int): Todo
   }
   class EloquentTodoRepository {
-    +createWithinLimit(title: string): Todo
+    +createWithinLimit(title: string, limit: int): Todo
   }
   class InMemoryTodoRepository <<test fake>> {
-    +createWithinLimit(title: string): Todo
+    +createWithinLimit(title: string, limit: int): Todo
   }
   class Todo <<Eloquent>> {
     +id: string
     +title: string
-    +completed_at: CarbonImmutable
+    +completed_at: ?CarbonImmutable
     +completed: bool
   }
   class TodoResource {
     +toArray(): array
   }
   class TodoLimitReached <<exception>> {
-    +code: todo_limit_reached
+  }
+  class ProblemDetailsRenderer <<invokable>> {
+    +__invoke(e: Throwable, request: Request): ?JsonResponse
   }
 }
 
@@ -83,20 +91,17 @@ TodoStore --> TodoApi : depends on
 TodoStore "1" o-- "*" TodoView : holds
 HttpTodoApi ..|> TodoApi
 InMemoryTodoApi ..|> TodoApi
+HttpTodoApi ..> ApiError : throws
 HttpTodoApi ..> TodoController : POST /api/v1/todos
 
 TodoController ..> StoreTodoRequest : validates with
 TodoController --> CreateTodo : calls
-TodoController ..> TodoResource : returns
+TodoController ..> TodoResource : returns 201
 CreateTodo --> TodoRepository : depends on
 EloquentTodoRepository ..|> TodoRepository
 InMemoryTodoRepository ..|> TodoRepository
 EloquentTodoRepository --> Todo : creates
 EloquentTodoRepository ..> TodoLimitReached : throws at 500
+ProblemDetailsRenderer ..> TodoLimitReached : renders 422, code todo_limit_reached
 TodoResource ..> Todo : serialises
-
-note bottom of TodoRepository
-  Method, exception, and field names that the specs
-  do not fix are provisional (TO SUPPLY).
-end note
 @enduml

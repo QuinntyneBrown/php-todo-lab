@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Typography — Tasks design system</title>
+<meta name="description" content="Type families, scale, weights, line heights, roles and responsive type of the Tasks design system.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Foundation · Type</p>
+      <h1>Typography</h1>
+      <p class="ds-lead">Bricolage Grotesque for the weekday and the count, Figtree for everything you read and type: nine sizes, four weights, fourteen roles.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Source: <code>tokens/tokens.css</code></span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#families">Families</a></li><li><a href="#roles">Roles</a></li><li><a href="#scale">Scale</a></li><li><a href="#weights">Weights</a></li><li><a href="#line-heights">Line heights</a></li><li><a href="#measure">Measure</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#usage">Usage</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#tokens">Tokens</a></li></ul>
+    </header>
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Two faces: <b>Bricolage Grotesque</b> for the few display moments (the weekday, the count, empty-state titles) and <b>Figtree</b> for everything you read and type. Body stays at 16px, inputs at 18px so phones never zoom, and nothing goes below 12px. Sizes are <code>rem</code>, so the whole scale follows the reader's font-size setting.</p>
+      <p>Components use the role shorthands (<code>font: var(--text-body)</code>), never a raw size. The mocks used six distinct sizes and four line heights, several off any scale; they were snapped to a nine-step scale (D12, D14).</p>
+    </section>
+    <section class="ds-section" id="families"><h2><a href="#families">Families</a></h2>
+      <div class="ds-example"><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-family-display</code><br>Bricolage Grotesque 600/800 from Google Fonts; falls back to Segoe UI, system-ui.</div><div style="font-family: var(--font-family-display); font-size: var(--font-size-2xl);">Wednesday 7 October</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-family-sans</code><br>Figtree 400–700; the body and UI face.</div><div style="font-family: var(--font-family-sans); font-size: var(--font-size-2xl);">Book dentist appointment</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-family-mono</code><br>System monospace; documentation only.</div><div style="font-family: var(--font-family-mono); font-size: var(--font-size-2xl);">--color-accent</div></div></div>
+    </section>
+    <section class="ds-section" id="roles"><h2><a href="#roles">Roles</a></h2>
+      <p>Fourteen role shorthands. Each is a complete <code>font</code> value: weight, size, line height and family.</p>
+      <div class="ds-example"><div class="ds-specimen"><div class="ds-specimen__meta"><b>Display</b><br><code>--text-display</code><br>The weekday in the app header. Bricolage Grotesque 800, clamp(30px, 8vw, 52px), line height 1, letter spacing −0.035em.</div><div style="font: var(--text-display); letter-spacing: var(--letter-spacing-tighter);">Wednesday</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Heading 1</b><br><code>--text-h1</code><br>Documentation and error-page titles. 40px.</div><div style="font: var(--text-h1); letter-spacing: var(--letter-spacing-tight);">Couldn't find that page</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Heading 2</b><br><code>--text-h2</code><br>Empty-state titles. 24px (was 22px, D12).</div><div style="font: var(--text-h2); letter-spacing: var(--letter-spacing-tight);">Nothing here yet</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Heading 3</b><br><code>--text-h3</code><br>Section titles, dialog titles. 20px.</div><div style="font: var(--text-h3); letter-spacing: var(--letter-spacing-tight);">Completing, frame by frame</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Heading 4</b><br><code>--text-h4</code><br>Card and table captions. Figtree 600, 18px.</div><div style="font: var(--text-h4); ">Screen reader announcements</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Stat</b><br><code>--text-stat</code><br>The count beside the progress ring. 24px, line height 1, tabular numerals.</div><div style="font: var(--text-stat); font-variant-numeric: tabular-nums;">3</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Body large</b><br><code>--text-body-lg</code><br>Text typed into inputs: 18px keeps iOS from zooming (L2-028.3; was 17px, D12).</div><div style="font: var(--text-body-lg); ">Call the building manager about the radiator</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Body</b><br><code>--text-body</code><br>Task titles, toasts, alerts, every paragraph. 16px / 1.5.</div><div style="font: var(--text-body); ">Draft the Q4 budget outline</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Body small</b><br><code>--text-body-sm</code><br>Field messages, captions under specimens. 14px.</div><div style="font: var(--text-body-sm); ">A task needs a title.</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Label</b><br><code>--text-label</code><br>Form labels, the progress label, counts. 14px medium.</div><div style="font: var(--text-label); ">left</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Button</b><br><code>--text-button</code><br>Every button label. 16px semibold (the toast's 700 became 600, D13).</div><div style="font: var(--text-button); ">Add task</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Caption</b><br><code>--text-caption</code><br>Badges, metadata. 12px is the floor.</div><div style="font: var(--text-caption); ">L2-028.2</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Overline</b><br><code>--text-overline</code><br>Uppercase section labels and table headers, with --letter-spacing-wide.</div><div style="font: var(--text-overline); text-transform: uppercase; letter-spacing: var(--letter-spacing-wide);">When</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><b>Code</b><br><code>--text-code</code><br>Inline code in documentation.</div><div style="font: var(--text-code); ">aria-pressed="true"</div></div></div>
+    </section>
+    <section class="ds-section" id="scale"><h2><a href="#scale">Size scale</a></h2>
+      <p>Nine steps from 12 to 52px. 17px inputs became 18px, 15px and 13px became 14px, 22px became 24px (D12).</p>
+      <div class="ds-example"><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-xs</code> · <span data-token="--font-size-xs"></span></div><div style="font-size: var(--font-size-xs); line-height: var(--line-height-snug);">Plan the team offsite</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-sm</code> · <span data-token="--font-size-sm"></span></div><div style="font-size: var(--font-size-sm); line-height: var(--line-height-snug);">Plan the team offsite</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-md</code> · <span data-token="--font-size-md"></span></div><div style="font-size: var(--font-size-md); line-height: var(--line-height-snug);">Plan the team offsite</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-lg</code> · <span data-token="--font-size-lg"></span></div><div style="font-size: var(--font-size-lg); line-height: var(--line-height-snug);">Plan the team offsite</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-xl</code> · <span data-token="--font-size-xl"></span></div><div style="font-size: var(--font-size-xl); line-height: var(--line-height-snug);">Plan the team offsite</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-2xl</code> · <span data-token="--font-size-2xl"></span></div><div style="font-size: var(--font-size-2xl); line-height: var(--line-height-snug);">Plan the team offsite</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-3xl</code> · <span data-token="--font-size-3xl"></span></div><div style="font-size: var(--font-size-3xl); line-height: var(--line-height-snug);">Plan the team offsite</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-4xl</code> · <span data-token="--font-size-4xl"></span></div><div style="font-size: var(--font-size-4xl); line-height: var(--line-height-snug);">Plan the team offsite</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-size-5xl</code> · <span data-token="--font-size-5xl"></span></div><div style="font-size: var(--font-size-5xl); line-height: var(--line-height-snug);">Plan the team offsite</div></div></div>
+    </section>
+    <section class="ds-section" id="weights"><h2><a href="#weights">Weights</a></h2>
+      <p>Four weights. 800 (<code>--font-weight-bold</code>) belongs to the display face only; Figtree tops out at 600 in the product (D13).</p>
+      <div class="ds-example"><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-weight-regular</code> · <span data-token="--font-weight-regular"></span></div><div style="font-weight: var(--font-weight-regular); font-family: var(--font-family-sans); font-size: var(--font-size-xl);">Clear completed</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-weight-medium</code> · <span data-token="--font-weight-medium"></span></div><div style="font-weight: var(--font-weight-medium); font-family: var(--font-family-sans); font-size: var(--font-size-xl);">Clear completed</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-weight-semibold</code> · <span data-token="--font-weight-semibold"></span></div><div style="font-weight: var(--font-weight-semibold); font-family: var(--font-family-display); font-size: var(--font-size-xl);">Nothing here yet (display only)</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--font-weight-bold</code> · <span data-token="--font-weight-bold"></span></div><div style="font-weight: var(--font-weight-bold); font-family: var(--font-family-display); font-size: var(--font-size-xl);">Nothing here yet (display only)</div></div></div>
+    </section>
+    <section class="ds-section" id="line-heights"><h2><a href="#line-heights">Line heights and letter spacing</a></h2>
+      <p>Display and numerals set solid (1); headings 1.2; body and wrapped task titles 1.5 (was 1.4, D14), which also satisfies the text-spacing check in L2-030.4. Relaxed (1.65) is for long documentation prose.</p>
+      <div class="ds-example"><div class="ds-specimen"><div class="ds-specimen__meta"><code>--line-height-tight</code> · <span data-token="--line-height-tight"></span></div><p style="line-height: var(--line-height-tight); max-width: 32ch; margin: 0;">Call the building manager about the leaking radiator, and confirm who pays for the parts.</p></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--line-height-snug</code> · <span data-token="--line-height-snug"></span></div><p style="line-height: var(--line-height-snug); max-width: 32ch; margin: 0;">Call the building manager about the leaking radiator, and confirm who pays for the parts.</p></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--line-height-normal</code> · <span data-token="--line-height-normal"></span></div><p style="line-height: var(--line-height-normal); max-width: 32ch; margin: 0;">Call the building manager about the leaking radiator, and confirm who pays for the parts.</p></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--line-height-relaxed</code> · <span data-token="--line-height-relaxed"></span></div><p style="line-height: var(--line-height-relaxed); max-width: 32ch; margin: 0;">Call the building manager about the leaking radiator, and confirm who pays for the parts.</p></div></div>
+      <div class="ds-example"><div class="ds-specimen"><div class="ds-specimen__meta"><code>--letter-spacing-tighter</code> · <span data-token="--letter-spacing-tighter"></span></div><div style="letter-spacing: var(--letter-spacing-tighter); font: var(--text-h2); ">Wednesday</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--letter-spacing-tight</code> · <span data-token="--letter-spacing-tight"></span></div><div style="letter-spacing: var(--letter-spacing-tight); font: var(--text-h2); ">Wednesday</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--letter-spacing-normal</code> · <span data-token="--letter-spacing-normal"></span></div><div style="letter-spacing: var(--letter-spacing-normal); font: var(--text-h2); ">Wednesday</div></div><div class="ds-specimen"><div class="ds-specimen__meta"><code>--letter-spacing-wide</code> · <span data-token="--letter-spacing-wide"></span></div><div style="letter-spacing: var(--letter-spacing-wide); font: var(--text-h2); text-transform: uppercase; font: var(--text-overline); letter-spacing: var(--letter-spacing-wide);">Show tasks</div></div></div>
+    </section>
+    <section class="ds-section" id="measure"><h2><a href="#measure">Measure</a></h2>
+      <p>Prose is capped at <code>--layout-measure</code> (65ch, owned by <a href="../foundations/layout.html">Layout</a>). Short supporting copy is narrower: the empty-state sentence is capped at 30ch so it breaks into a balanced one or two lines.</p>
+      <div class="ds-example"><div class="ds-example__canvas ds-example__canvas--stack">
+        <p style="max-width: var(--layout-measure); margin: 0;">Toasts confirm what just happened and offer Undo. Errors say what went wrong and what to do next, and never apologise. One toast at a time, at the bottom centre, clear of the safe-area inset.</p>
+        <div class="empty-state empty-state--compact" style="padding: 0;"><h2 class="empty-state__title">Nothing completed yet</h2><p class="empty-state__text">Tick a task and it will show up here.</p></div>
+      </div><div class="ds-example__caption"><span>65ch documentation prose; 30ch empty-state text.</span></div></div>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive type</a></h2>
+      <ul>
+        <li>Only the display role is fluid: <code>clamp(var(--font-size-3xl), 8vw, var(--font-size-5xl))</code>, 30px at 320px wide, 52px from about 650px. It is the one place a long weekday ("Wednesday") must fit beside the progress ring at 320px.</li>
+        <li>Everything else uses fixed steps, so browser zoom and the user's font size scale it (WCAG 1.4.4); spacing does not grow with the viewport.</li>
+        <li>Inputs never drop below 16px at any breakpoint (L2-028.3); the scale's input size is 18px.</li>
+        <li>Long task titles wrap with <code>overflow-wrap: anywhere</code>; nothing truncates (L2-027.6).</li>
+      </ul>
+      <div class="ds-example"><div class="ds-example__canvas"><div class="app-header" style="width: 100%; padding: 0;"><div class="app-header__heading"><p class="app-header__title" role="presentation">Wednesday</p><p class="app-header__subtitle">7 October</p></div><div class="progress-summary"><div class="progress-summary__text"><span class="progress-summary__num">3</span><span class="progress-summary__label">left</span></div></div></div></div><div class="ds-example__caption"><span>Resize the window: the weekday scales with the viewport between 30 and 52px.</span></div></div>
+    </section>
+    <section class="ds-section" id="usage"><h2><a href="#usage">Usage</a></h2>
+      <ul>
+        <li>Use <code>font: var(--text-*)</code>; change only weight or size with the matching primitive when a role needs a variant (for example the selected filter at <code>--font-weight-semibold</code>).</li>
+        <li>Display face for at most one line per view, plus numerals and empty-state titles.</li>
+        <li>Tabular numerals (<code>font-variant-numeric: tabular-nums</code>) for every count that changes in place: the progress count, filter counts, the character counter.</li>
+        <li>Sentence case everywhere (L2-025); uppercase only through the overline role.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <ul>
+        <li>All sizes in <code>rem</code>; 200% zoom keeps every function (L2-030.3).</li>
+        <li>Line height 1.5 for body and titles; nothing clips with WCAG 1.4.12 text-spacing overrides (L2-030.4).</li>
+        <li>Minimum size 12px; muted and subtle text still pass 4.5:1 (see <a href="../foundations/color.html#contrast">colour contrast</a>).</li>
+        <li>18px inputs avoid iOS focus zoom (L2-028.3).</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Token</th><th scope="col">Value</th><th scope="col">Use</th></tr></thead><tbody><tr><td><code>--font-family-display</code></td><td><span data-token="--font-family-display"></span></td><td></td></tr><tr><td><code>--font-family-sans</code></td><td><span data-token="--font-family-sans"></span></td><td></td></tr><tr><td><code>--font-family-mono</code></td><td><span data-token="--font-family-mono"></span></td><td></td></tr><tr><td><code>--font-size-xs</code></td><td><span data-token="--font-size-xs"></span></td><td>12px  badges, captions</td></tr><tr><td><code>--font-size-sm</code></td><td><span data-token="--font-size-sm"></span></td><td>14px  counts, field messages, secondary text</td></tr><tr><td><code>--font-size-md</code></td><td><span data-token="--font-size-md"></span></td><td>16px  body, buttons</td></tr><tr><td><code>--font-size-lg</code></td><td><span data-token="--font-size-lg"></span></td><td>18px  text inputs (&gt;= 16px: no iOS zoom)</td></tr><tr><td><code>--font-size-xl</code></td><td><span data-token="--font-size-xl"></span></td><td>20px  h3</td></tr><tr><td><code>--font-size-2xl</code></td><td><span data-token="--font-size-2xl"></span></td><td>24px  h2, stat numerals</td></tr><tr><td><code>--font-size-3xl</code></td><td><span data-token="--font-size-3xl"></span></td><td>30px  display at 320px</td></tr><tr><td><code>--font-size-4xl</code></td><td><span data-token="--font-size-4xl"></span></td><td>40px  h1</td></tr><tr><td><code>--font-size-5xl</code></td><td><span data-token="--font-size-5xl"></span></td><td>52px  display at its largest</td></tr><tr><td><code>--font-weight-regular</code></td><td><span data-token="--font-weight-regular"></span></td><td></td></tr><tr><td><code>--font-weight-medium</code></td><td><span data-token="--font-weight-medium"></span></td><td></td></tr><tr><td><code>--font-weight-semibold</code></td><td><span data-token="--font-weight-semibold"></span></td><td></td></tr><tr><td><code>--font-weight-bold</code></td><td><span data-token="--font-weight-bold"></span></td><td>display face only</td></tr><tr><td><code>--line-height-tight</code></td><td><span data-token="--line-height-tight"></span></td><td>display, numerals</td></tr><tr><td><code>--line-height-snug</code></td><td><span data-token="--line-height-snug"></span></td><td>headings</td></tr><tr><td><code>--line-height-normal</code></td><td><span data-token="--line-height-normal"></span></td><td>body, task titles</td></tr><tr><td><code>--line-height-relaxed</code></td><td><span data-token="--line-height-relaxed"></span></td><td>long-form documentation</td></tr><tr><td><code>--letter-spacing-tighter</code></td><td><span data-token="--letter-spacing-tighter"></span></td><td>display</td></tr><tr><td><code>--letter-spacing-tight</code></td><td><span data-token="--letter-spacing-tight"></span></td><td>headings</td></tr><tr><td><code>--letter-spacing-normal</code></td><td><span data-token="--letter-spacing-normal"></span></td><td></td></tr><tr><td><code>--letter-spacing-wide</code></td><td><span data-token="--letter-spacing-wide"></span></td><td>uppercase overlines</td></tr><tr><td><code>--text-display</code></td><td><span data-token="--text-display"></span></td><td>The weekday in the app header. Bricolage Grotesque 800, clamp(30px, 8vw, 52px), line height 1, letter spacing −0.035em.</td></tr><tr><td><code>--text-h1</code></td><td><span data-token="--text-h1"></span></td><td>Documentation and error-page titles. 40px.</td></tr><tr><td><code>--text-h2</code></td><td><span data-token="--text-h2"></span></td><td>Empty-state titles. 24px (was 22px, D12).</td></tr><tr><td><code>--text-h3</code></td><td><span data-token="--text-h3"></span></td><td>Section titles, dialog titles. 20px.</td></tr><tr><td><code>--text-h4</code></td><td><span data-token="--text-h4"></span></td><td>Card and table captions. Figtree 600, 18px.</td></tr><tr><td><code>--text-stat</code></td><td><span data-token="--text-stat"></span></td><td>The count beside the progress ring. 24px, line height 1, tabular numerals.</td></tr><tr><td><code>--text-body-lg</code></td><td><span data-token="--text-body-lg"></span></td><td>Text typed into inputs: 18px keeps iOS from zooming (L2-028.3; was 17px, D12).</td></tr><tr><td><code>--text-body</code></td><td><span data-token="--text-body"></span></td><td>Task titles, toasts, alerts, every paragraph. 16px / 1.5.</td></tr><tr><td><code>--text-body-sm</code></td><td><span data-token="--text-body-sm"></span></td><td>Field messages, captions under specimens. 14px.</td></tr><tr><td><code>--text-caption</code></td><td><span data-token="--text-caption"></span></td><td>Badges, metadata. 12px is the floor.</td></tr><tr><td><code>--text-label</code></td><td><span data-token="--text-label"></span></td><td>Form labels, the progress label, counts. 14px medium.</td></tr><tr><td><code>--text-button</code></td><td><span data-token="--text-button"></span></td><td>Every button label. 16px semibold (the toast's 700 became 600, D13).</td></tr><tr><td><code>--text-overline</code></td><td><span data-token="--text-overline"></span></td><td>Uppercase section labels and table headers, with --letter-spacing-wide.</td></tr><tr><td><code>--text-code</code></td><td><span data-token="--text-code"></span></td><td>Inline code in documentation.</td></tr></tbody></table></div>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

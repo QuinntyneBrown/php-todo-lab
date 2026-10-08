@@ -25,11 +25,11 @@ end box
 scheduler -> cmd : Run todos:purge-deleted (L2-016 hourly schedule)
 cmd -> cmd : Compute cutoff as now minus 24 hours (L2-016)
 loop until a chunk deletes fewer than 500 rows
-  cmd -> repo : Purge up to 500 todos soft-deleted before cutoff
+  cmd -> repo : purgeDeletedBefore(cutoff, 500)
   repo -> db : Permanently delete up to 500 rows where deleted_at is before cutoff
   db --> repo : Rows deleted in this chunk
   repo --> cmd : Chunk count
 end
-cmd -> cmd : Log total purged count
+cmd -> cmd : Log and print "Purged {n} soft-deleted todos."
 cmd --> scheduler : Exit 0
 @enduml

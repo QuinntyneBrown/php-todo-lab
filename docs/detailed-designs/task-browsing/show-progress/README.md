@@ -28,28 +28,25 @@ The visual reference is the mock `docs/mocks/todo.html`. It draws the ring as an
 
 ## Description
 
-The feature is frontend-only. The Laravel API and the database supply the todos through the list feature, and no endpoint belongs to this slice. Names that the specs and the shared design contract do not fix are marked `<TO SUPPLY>`. The diagrams use provisional names for them.
+The feature is frontend-only. The Laravel API and the database supply the todos through the list feature, and no endpoint belongs to this slice.
 
-- **`TodoStore`** — root-provided signal store. The `todos` signal holds the tasks. The computed values `activeCount` and `completedCount` count the tasks by state. The computed value `progress` is the completed count divided by the total, and is 0 when no task exists.
-- **`TodoHeaderComponent`** — presentational component built on `input()` and `output()`. It shows the weekday and date, the progress ring, and the label. The label reads "n left" when active tasks exist. It reads "All done" instead of a number when tasks exist and all are completed. It reads "0 left" with an empty ring when no tasks exist. The ring animates to a new value within 300 ms.
-- **`TodoFilterComponent`** — presentational component. It shows each filter button with its count, for example "All 5", "Active 2", and "Done 3". The counts come from the same signals as the header.
-- **`TodoPageComponent`** — smart component on route `/`. It reads the computed values from `TodoStore` and binds them to the header and the filter. It also feeds the polite live region.
-- **Polite live region** — page element with `aria-live="polite"` that is visually hidden. The mock contains such an element. The Angular class that writes to it is `<TO SUPPLY>`. Angular CDK `LiveAnnouncer` is a candidate.
+- **`TodoStore`** — root-provided signal store. The `todos` signal holds the tasks. The computed values `activeCount` and `completedCount` count the tasks by state, and `totalCount` counts all tasks. A pending task counts as active until the server confirms it. The computed value `progress` is the completed count divided by the total, and is 0 when no task exists.
+- **`TodoHeaderComponent`** — presentational component built on `input()` and `output()`. Its inputs are `date: Date`, `activeCount`, and `completedCount`. It shows the weekday and date, the progress ring, and the label. The label reads "n left" when active tasks exist. It reads "All done" instead of a number when tasks exist and all are completed. It reads "0 left" with an empty ring when no tasks exist. The ring animates to a new value within 300 ms.
+- **`TodoFilterComponent`** — presentational component. Its inputs `allCount`, `activeCount`, and `doneCount` set the count on each filter button, for example "All 5", "Active 2", and "Done 3". The counts come from the same signals as the header.
+- **`TodoPageComponent`** — smart component on route `/`. It reads the computed values from `TodoStore` and binds them to the header and the filter. It also passes count announcements to `Announcer`.
+- **Polite live region** — page element with `aria-live="polite"` that is visually hidden. The mock contains such an element. The app shell renders it and binds it to the `message` signal of `Announcer`, the root service in `src/app/shared/ui/announcer/announcer.ts`. `Announcer.announce(message)` sets that signal.
 - **`ui-strings.ts`** — typed constants file that holds the label copy as `UI_STRINGS`.
 
 Behaviour notes:
 
 - With 2 active tasks and 3 completed tasks, the header reads "2 left" and the ring is 60% filled.
 - Completing a task decrements the remaining count, and the ring animates to the new value within 300 ms.
-- The announcement is triggered by an `effect` that reads the counts and writes to the live region. An `effect` is permitted because the write is a side effect outside Angular state.
+- The page announces when the user acts, not from an `effect`. After an action that changes the remaining count, the page passes one message to `Announcer.announce()`. The message is the action text followed by the new count label, for example "Task completed. 2 left" or "Task completed. All done". One message avoids a second announcement that overwrites the first.
+- The count label follows the mock `docs/mocks/pages/notifications.html`: "n left", or "All done" when tasks exist and all are completed.
+- The initial list load announces nothing. Only a user action produces an announcement.
 - Motion limits under `prefers-reduced-motion` belong to the motion requirement (L2-024) and are outside this feature.
 
-Open details:
-
-- The announcement text for a count change is `<TO SUPPLY>`. L2-007 requires an announcement but does not give copy.
-- Whether the initial list load announces the count is `<TO SUPPLY>`.
-- Whether a pending task counts as active before the server confirms it is `<TO SUPPLY>`. L2-007 requires updates on every change, so the design counts it.
-- The Angular class that writes to the live region is `<TO SUPPLY>`.
+- A pending task counts as active before the server confirms it, because L2-007 requires the counts to update on every change.
 
 ## Requirements
 
@@ -73,13 +70,13 @@ The SPA derives counts and progress locally from the todos that the Laravel API 
 
 ### Components
 
-The page reads the computed counts from the store and passes them to the header and the filter. It also writes announcements to the polite live region. The diagram shows only the SPA, because the feature is frontend-only.
+The page reads the computed counts from the store and passes them to the header and the filter. It also passes announcements to `Announcer`, which the polite live region reads. The diagram shows only the SPA, because the feature is frontend-only.
 
 ![C4 component view for showing progress](diagrams/c4-component.png)
 
 ### Class structure
 
-`TodoStore` holds the tasks and computes the counts and the progress. The page binds them to the header and the filter and announces changes through the live region.
+`TodoStore` holds the tasks and computes the counts and the progress. The page binds them to the header and the filter and announces changes through `Announcer`.
 
 ![Class diagram for showing progress](diagrams/class-structure.png)
 
@@ -91,6 +88,6 @@ A change to the task signal recomputes the counts and the progress. The header c
 
 ### Behaviour — announce a count change
 
-An effect in the page watches the counts and writes the announcement to the polite live region when a count changes (L2-007).
+When a user action changes the remaining count, the page passes the action text and the new count label to `Announcer`, and the polite live region speaks it (L2-007).
 
 ![Sequence diagram for announcing a count change](diagrams/sequence-announce-count.png)

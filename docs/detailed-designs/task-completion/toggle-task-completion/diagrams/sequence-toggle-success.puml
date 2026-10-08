@@ -47,12 +47,12 @@ opt Task is being completed
 else Task is being reopened
   item --> user : Strike-through removed, no burst (L2-011)
 end
-store -> api : updateTodo(id, completed)
+store -> api : update(id, {completed})
 api -> ctrl : PATCH /api/v1/todos/{id} with completed
 ctrl -> req : Validate body (non-boolean completed gives 422, L2-009)
 req --> ctrl : Valid
-ctrl -> action : Invoke with id and completed
-action -> repo : Find non-deleted todo by id
+ctrl -> action : handle(id, changes)
+action -> repo : find(id)
 repo -> db : SELECT
 db --> repo : Row
 repo --> action : Todo
@@ -63,7 +63,7 @@ else completed is true and completed_at is set
 else completed is false
   action -> todo : Set completed_at to null (L2-009)
 end
-action -> repo : Save todo
+action -> repo : update(todo, changes)
 repo -> db : UPDATE
 db --> repo : Saved
 repo --> action : Todo

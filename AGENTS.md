@@ -45,20 +45,29 @@ home here, update this section in the same change.
 php-todo-lab/
 ├── AGENTS.md  CLAUDE.md  GEMINI.md   Agent instructions (CLAUDE/GEMINI point here)
 ├── README.md                         Setup, run, and every check command (L2-054)
+├── CONTRIBUTING.md  CODE_OF_CONDUCT.md  SECURITY.md  SUPPORT.md   Community health files
+├── CHANGELOG.md                      Keep a Changelog format
+├── LICENSE                           MIT
 ├── .editorconfig  .gitattributes     Shared whitespace and LF line endings
 ├── docker-compose.yml                Optional: MySQL 8.4 only, never the apps
 ├── docker/mysql/init/                SQL run on first start (creates `todo_test`)
 ├── .github/
 │   ├── copilot-instructions.md
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   ├── ISSUE_TEMPLATE/               bug_report.md, feature_request.md, config.yml
 │   └── workflows/ci.yml              backend and frontend jobs run `check` in parallel
 ├── docs/
 │   ├── specs/                        L1.md, L2.md: requirements (source of truth)
 │   ├── detailed-designs/<subsystem>/<feature>/   README.md + diagrams/
-│   └── mocks/                        todo.html + styles/: design target, no tests
+│   ├── mocks/                        todo.html + styles/: design target, no tests
+│   └── design-system/                tokens/, assets/components.css, foundations/, components/,
+│                                     patterns/ HTML pages: extracted from mocks/, no tests
 ├── backend/                          Laravel API (PHP 8.4, strict_types everywhere)
 │   ├── app/
 │   │   ├── Actions/Todos/            One use case per class: CreateTodo, ListTodos, ...
+│   │   ├── Console/Commands/         Artisan commands (PurgeDeletedTodos)
 │   │   ├── Enums/                    TodoStatus (backed enum)
+│   │   ├── Exceptions/               ProblemDetailsRenderer, domain exceptions (TodoNotFound, ...)
 │   │   ├── Http/
 │   │   │   ├── Controllers/Api/V1/   TodoController: thin, one Action per method
 │   │   │   ├── Requests/Api/V1/      Form Requests: all validation lives here
@@ -77,6 +86,8 @@ php-todo-lab/
 │   │   └── console.php               Scheduled tasks (for example pruning)
 │   ├── tests/
 │   │   ├── Feature/Api/V1/           Pest HTTP tests against real MySQL, one file per endpoint
+│   │   ├── Feature/Models/           Pest tests of the schema and model scopes against MySQL
+│   │   ├── Feature/Console/          Pest tests of Artisan commands and their schedule
 │   │   ├── Unit/Actions/             Pest unit tests with the in-memory fake
 │   │   ├── Fakes/                    InMemoryTodoRepository
 │   │   └── Pest.php
@@ -89,21 +100,25 @@ php-todo-lab/
     ├── src/
     │   ├── app/
     │   │   ├── core/                 App-wide singletons; nothing here imports features/
-    │   │   │   └── api/              TodoApi port, HttpTodoApi adapter, models/ (only rxjs/HttpClient)
+    │   │   │   ├── api/              TodoApi port, HttpTodoApi adapter, models/ (only rxjs/HttpClient)
+    │   │   │   └── connectivity/     Connectivity: the browser's online signal
     │   │   ├── features/
     │   │   │   └── todos/
     │   │   │       ├── todo.store.ts             TodoStore (signals)
-    │   │   │       ├── todo-page/                Smart component on route `/`
+    │   │   │       ├── ui-strings.ts             UI_STRINGS: every user-facing string
+    │   │   │       ├── todo-page/                Smart component on route `/`, its
+    │   │   │       │                             TodoShortcutsDirective, and per-feature specs
     │   │   │       └── components/               Presentational: todo-header/, todo-composer/,
     │   │   │                                     todo-filter/, todo-list/, todo-item/,
     │   │   │                                     todo-empty-state/
-    │   │   ├── shared/ui/            Reusable presentational components (toast/)
+    │   │   ├── shared/ui/            Reusable UI: toast/, announcer/ (the polite live region)
     │   │   ├── app.config.ts         Providers, including TodoApi -> HttpTodoApi
     │   │   ├── app.routes.ts
     │   │   └── app.component.{ts,html,scss}
     │   ├── styles/                   tokens.scss (single source of design tokens)
     │   ├── testing/                  InMemoryTodoApi and other test-only helpers
-    │   ├── styles.scss  index.html  main.ts
+    │   ├── styles.scss  index.html  main.ts  test-setup.ts (Vitest matchers)
+    ├── public/                       Static files copied as-is (favicon)
     ├── e2e/                          Playwright + axe specs and fixtures
     ├── angular.json  tsconfig*.json  eslint.config.js  .prettierrc.json  .stylelintrc.json
     ├── playwright.config.ts  vitest config

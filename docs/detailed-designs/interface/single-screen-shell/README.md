@@ -14,18 +14,20 @@ Copy follows one rule set. It is plain, active, and in sentence case. It uses on
 
 The slice lives entirely in the Angular SPA.
 
-- **Route table** — maps `/` to `TodoPageComponent` and redirects every other path to `/`. The file and symbol name are `<TO SUPPLY>`.
-- **`TodoPageComponent`** — smart component. It renders the five regions in the fixed order, owns the page layout, and requests composer focus after the first render. No other route, dialog, or settings view exists.
-- **`TodoHeaderComponent`** — region 1. It shows the current weekday and date in the user's locale, for example "Wednesday" and "7 October". The mock calls `toLocaleDateString` with an `undefined` locale, which selects the browser locale. The source of the date value passed to the component is `<TO SUPPLY>`.
-- **`TodoComposerComponent`** — region 2. It exposes the text field that receives initial focus. The mechanism that carries the focus request through `input()` and `output()` only is `<TO SUPPLY>`.
-- **`TodoFilterComponent`** — region 3, the toolbar, with the filter tabs. The component that hosts the "Clear completed" button is `<TO SUPPLY>`.
+- **Route table** — the `routes` constant of type `Routes` in `src/app/app.routes.ts`. It maps `/` to `TodoPageComponent` and redirects every other path to `/`. `src/app/app.config.ts` provides it to the router.
+- **`AppComponent`** — app shell. It hosts the router outlet and renders the polite live region.
+- **`TodoPageComponent`** — smart component. It renders the five regions in the fixed order, owns the page layout, and requests composer focus after the first render. Its template holds the toolbar markup, which places `TodoFilterComponent` and the "Clear completed" button side by side. No other route, dialog, or settings view exists.
+- **`TodoHeaderComponent`** — region 1. It shows the current weekday and date in the user's locale, for example "Wednesday" and "7 October". It formats its `date` input with `toLocaleDateString(undefined, { weekday: 'long' })` and `toLocaleDateString(undefined, { day: 'numeric', month: 'long' })`, as the mock does. The `undefined` locale selects the browser locale. `TodoPageComponent` creates the `Date` once, with `new Date()`, when the page is created, and passes it to the `date` input. The header also takes `activeCount` and `completedCount` for the progress ring.
+- **`TodoComposerComponent`** — region 2. It exposes the text field that receives initial focus. The page sets the composer's `focusRequest` input to `{ target: 'composer', seq }`. An `effect` in the composer applies the request by calling `.focus()` on the text field, held as a `viewChild`.
+- **`TodoFilterComponent`** — region 3, the toolbar, with the filter tabs. The "Clear completed" button sits beside it in the `TodoPageComponent` template, not inside the filter component.
 - **`TodoListComponent`** — region 4. It renders task rows and the empty state.
 - **`ToastComponent`** — region 5, the toast area.
-- **Polite live region** — hidden element with `aria-live="polite"`, fed by the page from store state. The class name is `<TO SUPPLY>`. The mock uses a `div` with the id `live`.
-- **`TodoStore`** — holds the `toast` signal. It reads toast text and announcement text from `UI_STRINGS` when an action completes or fails.
-- **`UI_STRINGS`** — typed constants file. It holds every user-facing string so that a reviewer can check tone in one place and a later change can localise it. Key names are `<TO SUPPLY>`.
+- **`Announcer`** — root service in `src/app/shared/ui/announcer/announcer.ts`. It exposes `announce(message)` and a `message` signal. `TodoPageComponent` calls it when the user acts.
+- **Polite live region** — visually hidden element with `aria-live="polite"`, rendered by `AppComponent` and bound to `Announcer.message`. The mock uses a `div` with the id `live`.
+- **`TodoStore`** — holds the `toast` signal. It reads toast text from `UI_STRINGS` when an action starts or fails.
+- **`UI_STRINGS`** — typed constants file. It holds every user-facing string so that a reviewer can check tone in one place and a later change can localise it. The file is `src/app/features/todos/ui-strings.ts`, and it exports `UI_STRINGS` with the groups `composer`, `filters`, `emptyStates`, `toasts`, `announcements`, `ariaLabels`, and `errors`.
 
-Initial focus follows the mock, which focuses the composer only when the device matches `(hover: hover)`. Touch devices do not receive forced focus, so the on-screen keyboard does not cover the list. The final touch detection rule is `<TO SUPPLY>` because L2-022 states the behaviour and not the test.
+Initial focus follows the mock. The page requests composer focus only when `matchMedia('(hover: hover)').matches` is `true`. A device whose primary input cannot hover counts as a touch device and does not receive forced focus, so the on-screen keyboard does not cover the list.
 
 Unknown paths redirect to `/` through a wildcard route. The redirect is a route-table behaviour and involves no server round trip.
 
@@ -60,7 +62,7 @@ The route table activates `TodoPageComponent`, which renders the five regions an
 
 ### Class structure
 
-`TodoPageComponent` renders five region components in a fixed order. Both the page and the store read `UI_STRINGS`, and the page feeds the polite live region.
+`TodoPageComponent` renders five region components in a fixed order. Both the page and the store read `UI_STRINGS`. The page announces through `Announcer`, and `AppComponent` renders the polite live region.
 
 ![Class diagram for the single-screen shell](diagrams/class-structure.png)
 
@@ -72,6 +74,6 @@ An unknown path redirects to `/`. The page renders the regions in order, the hea
 
 ### Behaviour — matching toast and announcement copy
 
-On delete, the store reads the toast text and the announcement text from `UI_STRINGS` under L2-025. Both use the same verb. On failure, the toast states the problem without apology.
+On delete, the store sets the toast "Task deleted" and the page announces "Task deleted", both from `UI_STRINGS` under L2-025. Both use the same verb and appear when the user acts. On failure, the row reappears and the error toast states the problem without apology.
 
 ![Sequence diagram for matching toast and announcement copy](diagrams/sequence-matching-copy.png)

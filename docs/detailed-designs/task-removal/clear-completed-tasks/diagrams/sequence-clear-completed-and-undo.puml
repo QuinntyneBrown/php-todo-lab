@@ -44,11 +44,11 @@ store --> list : Completed rows leave, active rows remain (L2-017)
 opt Filter is "Done"
   store --> empty : Empty state for the Done filter shown (L2-017)
 end
-store --> toast : Toast "n tasks cleared" with Undo (L2-017)
+store --> toast : role="status" toast "n tasks cleared" (n = 1: "1 task cleared") with Undo, 6 s (L2-017)
 store -> api : clearCompleted()
 api -> ctrl : DELETE /api/v1/todos/completed
-ctrl -> clear : Invoke
-clear -> repo : Soft delete all completed todos
+ctrl -> clear : handle()
+clear -> repo : deleteCompleted()
 group One database transaction (L2-017, L2-043)
   repo -> db : BEGIN
   repo -> db : UPDATE deleted_at WHERE completed and not deleted
@@ -62,33 +62,35 @@ group One database transaction (L2-017, L2-043)
     clear --> ctrl : Failure
     ctrl --> api : 5xx problem details
     api --> store : Rejected request
-    note over store : Rollback and toast copy for a failed clear are TO SUPPLY
+    store -> store : Cleared rows reappear in the todos signal
+    store --> toast : role="alert" toast "Couldn't clear completed tasks."
   end
 end
 repo --> clear : Deleted ids
-clear --> ctrl : Count and ids
-ctrl --> api : 200 OK with meta.deleted n and the deleted ids (L2-017)
-api --> store : Count and ids
-user -> toast : Click Undo (L2-017)
+clear --> ctrl : Deleted ids
+ctrl --> api : 200 OK {"data": {"ids": [...]}, "meta": {"deleted": n}} (L2-017)
+api --> store : ClearCompletedResponse
+user -> toast : Click Undo or press Ctrl/Cmd+Z (L2-017)
 toast -> page : undone
 page -> store : undo()
-store -> api : restoreTodos(ids)
-api -> ctrl : POST /api/v1/todos/restore with ids
-ctrl -> req : Validate ids
+store -> store : Wait for the clear request to settle when still in flight
+store -> api : restoreMany(ids)
+api -> ctrl : POST /api/v1/todos/restore {"ids": [...]}
+ctrl -> req : Validate ids: array of 1 to 500 distinct ULIDs
 req --> ctrl : Valid
-ctrl -> restore : Invoke with ids
-restore -> repo : Restore todos by ids
+ctrl -> restore : handle(ids)
+restore -> repo : restoreMany(ids)
 group One database transaction (L2-043)
   repo -> db : BEGIN
-  repo -> db : UPDATE deleted_at to null WHERE id in ids
+  repo -> db : UPDATE deleted_at to null WHERE id in ids and soft-deleted
   repo -> db : COMMIT
   db --> repo : Committed
 end
-repo --> restore : Done
-restore --> ctrl : Done
-ctrl --> api : 200 OK
-api --> store : Restore confirmed
-store -> store : Insert the todos back by createdAt descending, then id descending
+repo --> restore : Restored todos
+restore --> ctrl : Restored todos
+ctrl --> api : 200 OK {"data": [todo, ...]}
+api --> store : Todo[]
+store -> store : Insert the returned todos by createdAt descending, then id descending
 store -> store : Clear the toast
 store --> list : All cleared tasks return (L2-017)
 @enduml

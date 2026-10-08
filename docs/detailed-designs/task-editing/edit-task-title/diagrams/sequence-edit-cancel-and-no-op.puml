@@ -39,6 +39,11 @@ else Saved with an unchanged title after trimming
 else Field cleared and Enter pressed
   user -> item : Clear the field and press Enter (L2-013)
   item -> item : Trimmed text is empty
-  item --> user : Restore original title, show "A task needs a title." briefly, no request sent (L2-013)
+  item --> user : Restore original title, show "A task needs a title." for 3 s, stay in edit mode, no request sent (L2-013)
+else Field cleared and focus leaves
+  user -> item : Clear the field and blur
+  item -> page : editCancelled
+  page -> store : cancelEdit()
+  store --> item : Original title shown, no request sent
 end
 @enduml

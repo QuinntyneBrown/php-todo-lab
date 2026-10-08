@@ -15,14 +15,18 @@ title Class structure — Keyboard operation
 
 class TodoPageComponent <<smart>> {
   -store: TodoStore
-  document keydown listener
-  slash key handling
+  -composerFocus: WritableSignal<{ target: 'composer', seq } or null>
+  +onDocumentKeydown(event: KeyboardEvent): void
+  @HostListener('document:keydown')
+  skips input, textarea, contenteditable
+  toolbar markup with Clear completed button
 }
 
 class TodoComposerComponent <<presentational>> {
-  text field
-  Add task button
-  focus request handling TO SUPPLY
+  +focusRequest: InputSignal<{ target: 'composer', seq } or null>
+  +submitted: OutputEmitterRef<string>
+  -input: viewChild text field
+  effect calls input.focus() per request
 }
 
 class TodoFilterComponent <<presentational>> {
@@ -32,22 +36,30 @@ class TodoFilterComponent <<presentational>> {
 class TodoListComponent <<presentational>>
 
 class TodoItemComponent <<presentational>> {
-  native checkbox
-  title control
-  delete control
-  edit text field
+  +toggled: OutputEmitterRef<boolean>
+  +editStarted: OutputEmitterRef<void>
+  +titleSaved: OutputEmitterRef<string>
+  +editCancelled: OutputEmitterRef<void>
+  +deleted: OutputEmitterRef<{ viaKeyboard: boolean }>
+  native checkbox, title button, delete button
 }
 
 class TodoStore <<providedIn root>> {
-  +todos: signal
-  +editingId: signal
+  +todos: WritableSignal<TodoView[]>
+  +editingId: WritableSignal<string or null>
+  +addTask(title: string): Promise<void>
+  +toggle(id: string, completed: boolean): Promise<void>
+  +beginEdit(id: string): void
+  +saveTitle(id: string, title: string): Promise<void>
+  +cancelEdit(): void
+  +delete(id: string): Promise<void>
 }
 
 TodoPageComponent --> TodoStore : injects
-TodoPageComponent ..> TodoComposerComponent : renders and focuses
+TodoPageComponent ..> TodoComposerComponent : renders, passes focusRequest
 TodoPageComponent ..> TodoFilterComponent : renders
 TodoPageComponent ..> TodoListComponent : renders
 TodoListComponent ..> TodoItemComponent : renders in list order
-TodoComposerComponent ..> TodoPageComponent : add output
-TodoItemComponent ..> TodoListComponent : toggle, edit, delete outputs
+TodoComposerComponent ..> TodoPageComponent : submitted output
+TodoItemComponent ..> TodoListComponent : toggled, editStarted, titleSaved, editCancelled, deleted
 @enduml

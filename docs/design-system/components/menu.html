@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Menu — Tasks design system</title>
+<meta name="description" content="A menu button opens a short list of actions. Icons, shortcuts, sections, danger and checkable items; APG Menu Button. Not used in v1.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Actions</p>
+      <h1>Menu</h1>
+      <p class="ds-lead">A menu gathers several related actions behind one button, so a dense surface stays calm. It opens on demand and closes as soon as an item is chosen.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: ready</span><span class="ds-pill ds-pill--warn">Not used in v1</span><span class="ds-pill">APG Menu Button</span></div>
+      <ul class="ds-toc">
+        <li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li>
+      </ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <p>Use a menu when one trigger offers three or more actions that do not each deserve a visible button: "Sort", "Export", "Delete completed". Use a <a href="button-group.html">segmented control</a> for views, a <a href="select.html">select</a> to pick a value inside a form, and a visible <a href="button.html">button</a> when there are only one or two actions.</p>
+      <p><b>Not used in v1.</b> The product has exactly four actions (add, complete, edit, delete) plus Clear completed and Undo, and every one is visible (L2-022: one screen, nothing hidden). The menu is ready for later features such as sorting or a per-task "more" menu; it is built only from existing tokens (D22).</p>
+    </section>
+
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <div class="stack stack--tight" style="align-items: flex-start;">
+            <button class="btn" type="button" aria-haspopup="menu" aria-expanded="true">Sort<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+            <ul class="menu" role="menu" aria-label="Sort (anatomy)">
+              <li class="menu__section" role="presentation">Order</li>
+              <li role="none"><button class="menu__item" type="button" role="menuitemradio" aria-checked="true"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Newest first<span class="menu__shortcut">N</span></button></li>
+              <li role="none"><button class="menu__item" type="button" role="menuitemradio" aria-checked="false"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Oldest first<span class="menu__shortcut">O</span></button></li>
+            </ul>
+          </div>
+          <span class="ds-callout" style="left: 18%; top: 16%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 18%; top: 40%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 18%; top: 62%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 74%; top: 62%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Trigger</b><small>A <code>.btn</code> with <code>aria-haspopup="menu"</code> and <code>aria-expanded</code>; chevron icon.</small></div></li>
+          <li><div><b>Section label</b><small><code>.menu__section</code>: overline, presentation only.</small></div></li>
+          <li><div><b>Item</b><small><code>.menu__item</code>: 44px tall, optional leading icon or check mark.</small></div></li>
+          <li><div><b>Shortcut</b><small><code>.menu__shortcut</code>: caption, <code>--color-fg-subtle</code>, right-aligned.</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <div class="ds-example">
+        <div class="ds-example__canvas" style="align-items: flex-start;">
+          <ul class="menu" role="menu" aria-label="Task actions">
+            <li role="none"><button class="menu__item" type="button" role="menuitem"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16v4z"/></svg>Edit title<span class="menu__shortcut">Enter</span></button></li>
+            <li role="none"><button class="menu__item" type="button" role="menuitem"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg>Duplicate</button></li>
+            <li role="separator" class="menu__separator"></li>
+            <li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg>Delete task</button></li>
+          </ul>
+          <ul class="menu" role="menu" aria-label="View options">
+            <li class="menu__section" role="presentation">Show</li>
+            <li role="none"><button class="menu__item" type="button" role="menuitemcheckbox" aria-checked="true"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Counts in the filter</button></li>
+            <li role="none"><button class="menu__item" type="button" role="menuitemcheckbox" aria-checked="false"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Completed tasks</button></li>
+          </ul>
+        </div>
+        <div class="ds-example__caption"><span>With icons, shortcuts, a separator and a danger item; with a section and checkable items (<code>menuitemcheckbox</code>).</span></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="sizes" data-na="Menus have one size: 44px items, 12–20rem wide.">
+      <h2><a href="#sizes">Sizes</a></h2><p class="ds-na">Menus have one size: 44px items, 12–20rem wide.</p>
+    </section>
+
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Item</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Disabled</th><th scope="col">Checked</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Item</th>
+            <td><ul class="menu" role="menu" aria-label="Default item"><li role="none"><button class="menu__item" type="button" role="menuitem">Duplicate</button></li></ul></td>
+            <td><ul class="menu" role="menu" aria-label="Hovered item"><li role="none"><button class="menu__item" type="button" role="menuitem" data-state="hover">Duplicate</button></li></ul></td>
+            <td><ul class="menu" role="menu" aria-label="Focused item"><li role="none"><button class="menu__item" type="button" role="menuitem" data-state="focus">Duplicate</button></li></ul></td>
+            <td><ul class="menu" role="menu" aria-label="Disabled item"><li role="none"><button class="menu__item" type="button" role="menuitem" aria-disabled="true">Duplicate</button></li></ul></td>
+            <td><ul class="menu" role="menu" aria-label="Checked item"><li role="none"><button class="menu__item" type="button" role="menuitemcheckbox" aria-checked="true"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Counts</button></li></ul></td></tr>
+          <tr><th scope="row">Danger</th>
+            <td><ul class="menu" role="menu" aria-label="Danger default"><li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem">Delete task</button></li></ul></td>
+            <td><ul class="menu" role="menu" aria-label="Danger hover"><li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem" data-state="hover">Delete task</button></li></ul></td>
+            <td><ul class="menu" role="menu" aria-label="Danger focus"><li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem" data-state="focus">Delete task</button></li></ul></td>
+            <td><ul class="menu" role="menu" aria-label="Danger disabled"><li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem" aria-disabled="true">Delete task</button></li></ul></td>
+            <td>–</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Trigger: closed and open</h3>
+      <div class="ds-example"><div class="ds-example__canvas" style="align-items: flex-start; min-height: 12rem;">
+        <button class="btn" type="button" aria-haspopup="menu" aria-expanded="false">Sort<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+        <div class="menu-anchor">
+          <button class="btn" type="button" aria-haspopup="menu" aria-expanded="true" aria-controls="sortMenuOpen">Sort<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></button>
+          <ul class="menu menu--floating" id="sortMenuOpen" role="menu" aria-label="Sort">
+            <li role="none"><button class="menu__item" type="button" role="menuitemradio" aria-checked="true"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Newest first</button></li>
+            <li role="none"><button class="menu__item" type="button" role="menuitemradio" aria-checked="false" data-state="focus"><svg class="icon menu__check" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7"/></svg>Oldest first</button></li>
+          </ul>
+        </div>
+      </div><div class="ds-example__caption"><span>Open: the trigger keeps its hover fill and <code>aria-expanded="true"</code>; the menu floats at <code>--z-dropdown</code>.</span></div></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><ul class="menu" role="menu" aria-label="Light menu"><li role="none"><button class="menu__item" type="button" role="menuitem" data-state="hover">Edit title</button></li><li role="none"><button class="menu__item" type="button" role="menuitem">Duplicate</button></li><li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem">Delete task</button></li></ul></div>
+        <div data-theme="dark"><ul class="menu" role="menu" aria-label="Dark menu"><li role="none"><button class="menu__item" type="button" role="menuitem" data-state="hover">Edit title</button></li><li role="none"><button class="menu__item" type="button" role="menuitem">Duplicate</button></li><li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem">Delete task</button></li></ul></div>
+      </div>
+    </section>
+
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>The menu opens below its trigger, aligned to its start edge; near the right or bottom edge it flips to stay inside the viewport (script measures and sets <code>right: 0</code> or <code>bottom: 100%</code>).</li>
+        <li>Width is 12–20rem; at XS it never exceeds the viewport minus the 16px gutters.</li>
+        <li>Items stay 44px tall at every size; no hover-only actions.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The panel uses <code>--color-bg-surface-raised</code>, <code>--shadow-3</code> and a hairline <code>--color-border-default</code> edge, so in dark it reads lighter than the card it opens over. Items read <code>--color-bg-subtle</code> on hover; danger items read <code>--color-danger-fg</code> on <code>--color-danger-bg</code>.</p>
+    </section>
+
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p><a href="https://www.w3.org/WAI/ARIA/apg/patterns/menu-button/">APG Menu Button</a>: the trigger has <code>aria-haspopup="menu"</code>, <code>aria-expanded</code> and <code>aria-controls</code>; the list is <code>role="menu"</code> with <code>menuitem</code>, <code>menuitemcheckbox</code> or <code>menuitemradio</code> children (roving <code>tabindex</code>).</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Enter</kbd>, <kbd>Space</kbd>, <kbd>↓</kbd></td><td>On the trigger: opens and focuses the first item. <kbd>↑</kbd> opens on the last.</td></tr>
+        <tr><td><kbd>↓</kbd> / <kbd>↑</kbd></td><td>Moves between items, wrapping; disabled items are focusable but inert.</td></tr>
+        <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>First / last item.</td></tr>
+        <tr><td>Letter keys</td><td>Type-ahead to the next item starting with that letter.</td></tr>
+        <tr><td><kbd>Enter</kbd>, <kbd>Space</kbd></td><td>Activates the item and closes the menu (checkable items toggle and stay open).</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Closes and returns focus to the trigger.</td></tr>
+        <tr><td><kbd>Tab</kbd></td><td>Closes and moves on in page order.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>Focus moves into the menu on open and back to the trigger on close. The focused item gets the hover fill plus an inset 2px ring, so the ring is never clipped by the panel.</p>
+      <h3>Labelling</h3>
+      <p>The trigger's text names the menu; the menu takes <code>aria-labelledby</code> pointing at the trigger. Checked state comes from <code>aria-checked</code>; the check icon is decorative.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Item on panel</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Shortcut on panel</span><span class="ds-pair__ratio" data-contrast="--color-fg-subtle|--color-bg-surface-raised" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Item on hover</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Danger item on hover</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-danger-bg" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring on hover fill</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-subtle" data-min="3"></span></div>
+      </div>
+      <h3>Motion</h3>
+      <p>None on open; the menu appears in place. Reduced motion needs no change.</p>
+      <h3>Touch</h3>
+      <p>44px items; tapping outside closes the menu without activating anything.</p>
+    </section>
+
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Items are verb phrases in sentence case: "Edit title", "Delete task". Checkable items name the setting: "Completed tasks".</li>
+        <li>Put the destructive item last, after a separator.</li>
+        <li>Name the trigger after what the menu does ("Sort"), or "More actions for Call mom" when icon-only.</li>
+      </ul>
+    </section>
+
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><button class="btn btn--icon btn--ghost-danger" type="button" aria-label="Delete Call mom"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></div><figcaption>Keep a frequent action visible, as the row's Delete is.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><button class="btn btn--icon btn--ghost" type="button" aria-label="More actions for Call mom" aria-haspopup="menu" aria-expanded="false"><svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg></button></div><figcaption>Hide one or two actions behind "more"; it costs a tap and hides what the row can do.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><ul class="menu" role="menu" aria-label="Do order"><li role="none"><button class="menu__item" type="button" role="menuitem">Duplicate</button></li><li role="separator" class="menu__separator"></li><li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem">Delete task</button></li></ul></div><figcaption>Separate the destructive item and put it last.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><ul class="menu" role="menu" aria-label="Don't order"><li role="none"><button class="menu__item menu__item--danger" type="button" role="menuitem">Delete task</button></li><li role="none"><button class="menu__item" type="button" role="menuitem">Duplicate</button></li></ul></div><figcaption>Lead with Delete where a mis-tap lands.</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Panel</td><td><code>--color-bg-surface-raised</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface-raised" data-swatch></i><span data-token="--color-bg-surface-raised"></span></span></td></tr>
+          <tr><td>Panel edge</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Item hover</td><td><code>--color-bg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-subtle" data-swatch></i><span data-token="--color-bg-subtle"></span></span></td></tr>
+          <tr><td>Danger item</td><td><code>--color-danger-fg</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-danger-fg" data-swatch></i><span data-token="--color-danger-fg"></span></span></td></tr>
+          <tr><td>Shortcut, section</td><td><code>--color-fg-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-fg-subtle" data-swatch></i><span data-token="--color-fg-subtle"></span></span></td></tr>
+          <tr><td>Shadow</td><td><code>--shadow-3</code></td><td><span data-theme="light" data-token="--shadow-3"></span></td><td><span data-theme="dark" data-token="--shadow-3"></span></td></tr>
+          <tr><td>Radius panel / item</td><td><code>--radius-lg</code> / <code>--radius-md</code></td><td colspan="2"><span data-token="--radius-lg"></span> / <span data-token="--radius-md"></span></td></tr>
+          <tr><td>Item height</td><td><code>--target-comfortable</code></td><td colspan="2"><span data-token="--target-comfortable"></span></td></tr>
+          <tr><td>Layer</td><td><code>--z-dropdown</code></td><td colspan="2"><span data-token="--z-dropdown"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;div class="menu-anchor"&gt;
+  &lt;button class="btn" type="button" id="sortBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="sortMenu"&gt;Sort&lt;/button&gt;
+  &lt;ul class="menu menu--floating" id="sortMenu" role="menu" aria-labelledby="sortBtn" hidden&gt;
+    &lt;li role="none"&gt;&lt;button class="menu__item" type="button" role="menuitemradio" aria-checked="true" tabindex="-1"&gt;Newest first&lt;/button&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.menu-anchor</code></td><td>Positioning context for the floating menu.</td></tr>
+        <tr><td><code>.menu</code>, <code>.menu--floating</code></td><td>Panel; floating places it under the trigger at <code>--z-dropdown</code>; <code>hidden</code> closes it.</td></tr>
+        <tr><td><code>.menu__item</code>, <code>.menu__item--danger</code></td><td>Item; destructive item.</td></tr>
+        <tr><td><code>.menu__check</code> + <code>aria-checked</code></td><td>Check mark shown when checked.</td></tr>
+        <tr><td><code>.menu__shortcut</code>, <code>.menu__section</code>, <code>.menu__separator</code></td><td>Shortcut hint, group label, divider.</td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>No mock contains a menu; v1 keeps every action visible (<a href="../../mocks/pages/page.loaded.html">pages/page.loaded</a>). Built from the system tokens and the row's 44px target and danger-hover conventions (<a href="../../mocks/pages/states.row.html">pages/states.row</a>).</p>
+      <p>Drift fixed during extraction: none; system addition (D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+@use 'breakpoints' as bp;
+
+:host {
+  display: block;
+  flex: 1;
+  max-width: 340px;
+}
+
+.seg {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--paper-sunk);
+  border-radius: 999px;
+  padding: 3px;
+}
+
+// The selection indicator slides to the chosen option (L2-006 criterion 5).
+.seg__pill {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc((100% - 6px) / 3);
+  border-radius: 999px;
+  background: var(--paper);
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.22s var(--ease-out);
+}
+
+.seg[data-selected='active'] .seg__pill {
+  transform: translateX(100%);
+}
+
+.seg[data-selected='done'] .seg__pill {
+  transform: translateX(200%);
+}
+
+.seg__btn {
+  position: relative;
+  min-height: 44px;
+  border: 0;
+  background: none;
+  border-radius: 999px;
+  font-weight: 500;
+  color: var(--slate);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: color 0.15s;
+
+  &[aria-pressed='true'] {
+    color: var(--ink);
+    font-weight: 600;
+  }
+}
+
+.seg__n {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--slate);
+}
+
+// Full width on phones, counts hidden visually (L2-027 criterion 1).
+@media (width < bp.$breakpoint-sm) {
+  :host {
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .seg__n {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

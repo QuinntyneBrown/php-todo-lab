@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card — Tasks design system</title>
+<meta name="description" content="Card: flush task card, boxed, interactive and selected variants, in both themes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Component · Containers</p>
+      <h1>Card</h1>
+      <p class="ds-lead">The raised surface that holds the task list, and the pattern for summaries and whole-card links.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Status: stable</span><span class="ds-pill">Used in v1</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#anatomy">Anatomy</a></li><li><a href="#variants">Variants</a></li><li><a href="#sizes">Sizes</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive</a></li><li><a href="#theming">Theming</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#tokens">Tokens</a></li><li><a href="#code">Code</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+      <ul>
+        <li>A card is the raised surface that groups related content. The product has exactly one: the task card that holds the composer, the toolbar and the list (L2-027.3: at MD and up the list sits on a raised surface with rounded corners).</li>
+        <li>The product card is <b>flush</b>: it has no padding of its own. The composer, toolbar, rows, banner and empty state each carry their own padding, so dividers run edge to edge and hover tints reach the corners (<code>overflow: hidden</code> clips them to the radius).</li>
+        <li>Use the <b>boxed</b> form (<code>.card__header</code>, <code>.card__body</code>, <code>.card__footer</code>) for self-contained summaries. Use the <b>interactive</b> form when the whole card navigates, as the mock launcher tiles do; it has one real link stretched over the card.</li>
+        <li>Do not use a card to decorate a single line of text or to frame a form field; use an <a href="alert.html">alert</a> for messages and a <a href="divider.html">divider</a> to separate content on one surface.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="anatomy"><h2><a href="#anatomy">Anatomy</a></h2>
+      <div class="ds-anatomy">
+        <figure class="ds-anatomy__figure">
+          <article class="card" style="width: 16rem;"><div class="card__header"><h3 class="card__title">Today</h3><span class="badge badge--accent">3 left</span></div><div class="card__body"><p>Renew passport, book the dentist and reply to Priya.</p></div><div class="card__footer"><button class="btn btn--ghost" type="button">Clear completed</button></div></article>
+          <span class="ds-callout" style="left: 18%; top: 20%;" aria-hidden="true">1</span>
+          <span class="ds-callout" style="left: 18%; top: 50%;" aria-hidden="true">2</span>
+          <span class="ds-callout" style="left: 18%; top: 80%;" aria-hidden="true">3</span>
+          <span class="ds-callout" style="left: 84%; top: 8%;" aria-hidden="true">4</span>
+        </figure>
+        <ol class="ds-anatomy__list">
+          <li><div><b>Header (optional)</b><small>Title in <code>--text-h4</code>, optional trailing badge or action; hairline divider below.</small></div></li>
+          <li><div><b>Body</b><small><code>--space-6</code> padding; children 12px apart.</small></div></li>
+          <li><div><b>Footer (optional)</b><small>Actions aligned to the end, <code>--space-3</code> apart.</small></div></li>
+          <li><div><b>Surface</b><small><code>--color-bg-surface</code>, <code>--radius-xl</code> (20px), <code>--shadow-2</code>, clips its children.</small></div></li>
+        </ol>
+      </div>
+    </section>
+    <section class="ds-section" id="variants"><h2><a href="#variants">Variants</a></h2>
+      <p>Four variants. The flush card is the product's; the others are for summaries and navigation.</p>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<section class="card" aria-label="Tasks" style="width: 100%;">
+            <form class="composer" novalidate><div class="composer__field"><label class="visually-hidden" for="ov-new">New task</label><input class="input input--filled input--lg" id="ov-new" type="text" placeholder="What needs doing?" autocomplete="off"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form>
+            <ul class="task-list">
+              <li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Book dentist appointment"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div><button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Book dentist appointment"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></li>
+            </ul>
+          </section>
+        </div>
+        <div class="ds-example__caption"><span>Flush: the task card. Children carry their own padding; dividers run edge to edge.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;section class="card" aria-label="Tasks"&gt;
+  &lt;form class="composer"&gt;…&lt;/form&gt;
+  &lt;div class="toolbar"&gt;…&lt;/div&gt;
+  &lt;ul class="task-list"&gt;…&lt;/ul&gt;
+&lt;/section&gt;</code></pre></details>
+      </div>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<article class="card" style="width: 13rem;"><div class="card__header"><h3 class="card__title">Today</h3></div><div class="card__body"><p>3 tasks left.</p></div></article>
+<article class="card card--interactive" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Loaded</b></a><p class="list__meta">Five tasks, newest first, two done</p></div></article>
+<article class="card card--interactive card--selected" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Filter: Active</b></a><p class="list__meta">Three tasks</p></div></article>
+        </div>
+        <div class="ds-example__caption"><span>Boxed with header and body; interactive (launcher tile); selected.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;article class="card card--interactive"&gt;
+  &lt;div class="card__body"&gt;
+    &lt;a class="card__link" href="pages/page.loaded.html"&gt;&lt;b&gt;Loaded&lt;/b&gt;&lt;/a&gt;
+    &lt;p&gt;Five tasks, newest first, two done&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre></details>
+      </div>
+      <h3>With media</h3>
+      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--canvas">
+<article class="card" style="width: 16rem;"><svg class="card__media" viewBox="0 0 160 90" role="img" aria-label="Illustration of a checklist"><circle class="art-fill" cx="80" cy="48" r="34"/><rect class="art-paper" x="64" y="24" width="32" height="44" rx="6"/><rect class="art-line" x="64" y="24" width="32" height="44" rx="6"/><path class="art-line" d="M71 38h18M71 47h12M71 56h7"/></svg><div class="card__body"><b>Plan the week</b><p class="list__meta">Media sits flush at the top; the body keeps its padding.</p></div></article>
+        </div>
+        <div class="ds-example__caption"><span>Flush media: the card clips it to the top radius.</span></div>
+      </div>
+    </section>
+    <section class="ds-section" id="sizes" data-na="Cards size to their content and container; padding is fixed at --space-6 and the radius at --radius-xl."><h2><a href="#sizes">Sizes</a></h2>
+      <p class="ds-na">Cards size to their content and container; padding is fixed at --space-6 and the radius at --radius-xl.</p>
+    </section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+      <p>Static cards have no interactive states. Interactive cards respond as a whole: the shadow lifts to <code>--shadow-3</code> and, on pointer devices, the card rises 2px. Focus lands on the single link inside and the card draws the ring around itself (<code>:focus-within</code>).</p>
+      <div class="ds-matrix"><table>
+        <thead><tr><th scope="col">Variant</th><th scope="col">Default</th><th scope="col">Hover</th><th scope="col">Focus</th><th scope="col">Selected</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Interactive</th><td><article class="card card--interactive" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Loaded</b></a><p class="list__meta">Five tasks, newest first, two done</p></div></article></td><td><article class="card card--interactive" data-state="hover" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Loaded</b></a><p class="list__meta">Five tasks, newest first, two done</p></div></article></td><td><article class="card card--interactive" data-state="focus" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Loaded</b></a><p class="list__meta">Five tasks, newest first, two done</p></div></article></td><td><article class="card card--interactive card--selected" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Loaded</b></a><p class="list__meta">Five tasks, newest first, two done</p></div></article></td></tr>
+          <tr><th scope="row">Boxed</th><td><article class="card" style="width: 13rem;"><div class="card__header"><h3 class="card__title">Today</h3></div><div class="card__body"><p>3 tasks left.</p></div></article></td><td><article class="card" style="width: 13rem;"><div class="card__header"><h3 class="card__title">Today</h3></div><div class="card__body"><p>3 tasks left.</p></div></article></td><td><article class="card" style="width: 13rem;"><div class="card__header"><h3 class="card__title">Today</h3></div><div class="card__body"><p>3 tasks left.</p></div></article></td><td><article class="card card--selected" style="width: 13rem;"><div class="card__header"><h3 class="card__title">Today</h3></div><div class="card__body"><p>3 tasks left.</p></div></article></td></tr>
+        </tbody>
+      </table></div>
+      <h3>Both themes</h3>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="ds-example__canvas" style="padding: 0;"><article class="card" style="width: 13rem;"><div class="card__header"><h3 class="card__title">Today</h3></div><div class="card__body"><p>3 tasks left.</p></div></article><article class="card card--interactive" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Loaded</b></a><p class="list__meta">Five tasks, newest first, two done</p></div></article></div></div>
+        <div data-theme="dark"><div class="ds-example__canvas" style="padding: 0;"><article class="card" style="width: 13rem;"><div class="card__header"><h3 class="card__title">Today</h3></div><div class="card__body"><p>3 tasks left.</p></div></article><article class="card card--interactive" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Loaded</b></a><p class="list__meta">Five tasks, newest first, two done</p></div></article></div></div>
+      </div>
+      <ul>
+        <li>In dark the surface (<code>--palette-ink-900</code>) sits one step above the canvas (<code>--palette-ink-950</code>) and the shadow deepens, so the card still reads as raised (D5).</li>
+        <li>There is no disabled card. Remove the link (and the <code>card--interactive</code> class) instead.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+      <ul>
+        <li>XS (&lt; 576px): the task card fills the 16px-gutter column; the composer button collapses to its icon (see <a href="composer.html">composer</a>).</li>
+        <li>SM (≥ 576px): the column is capped at 560px (<code>--layout-container-max</code>) and centred.</li>
+        <li>MD and up (≥ 768px): the column is 640px; the card keeps <code>--radius-xl</code> and <code>--shadow-2</code> (L2-027.3). LG adds the 8vh top offset; the card never stretches wider (L2-027.4).</li>
+        <li>Grids of interactive cards use <code>.grid--auto</code> (<code>minmax(18rem, 1fr)</code>), so they go from one column on phones to as many as fit.</li>
+        <li>The lift on hover is applied only under <code>(hover: hover)</code>; touch devices get the shadow change on press only.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="theming"><h2><a href="#theming">Theming</a></h2>
+      <p>The card reads <code>--color-bg-surface</code>, <code>--radius-xl</code> and <code>--shadow-2</code>; interactive cards add <code>--shadow-3</code>, selected cards <code>--color-accent-subtle</code> and an inset <code>--color-accent</code> edge. Themes change only those semantic tokens; the shadow tokens are redefined per theme (darker, stronger in dark, D8).</p>
+      <pre><code>/* A sunken summary card for a hypothetical settings screen */
+.card--sunken { background: var(--color-bg-surface-sunken); box-shadow: none; }</code></pre>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+      <h3>Role and pattern</h3>
+      <p>A card is a grouping, not a widget: use <code>&lt;section aria-label&gt;</code> when it is a landmark-worthy region (the task card is <code>aria-label="Tasks"</code>), <code>&lt;article&gt;</code> for a self-contained item, or a plain <code>&lt;div&gt;</code>. An interactive card contains exactly one link or button whose <code>::after</code> covers the card; the card itself is never focusable and never has a click handler.</p>
+      <h3>Keyboard</h3>
+      <div class="ds-table-wrap"><table class="ds-table ds-keys"><thead><tr><th scope="col">Key</th><th scope="col">Action</th></tr></thead><tbody>
+        <tr><td><kbd>Tab</kbd></td><td>Moves to the card's single link, then to any separate buttons inside it in DOM order.</td></tr>
+        <tr><td><kbd>Enter</kbd></td><td>Follows the link.</td></tr>
+      </tbody></table></div>
+      <h3>Focus</h3>
+      <p>The link suppresses its own outline; the card draws the shared 2px <code>--color-focus-ring</code> at a 2px offset with <code>:focus-within</code>, so the ring follows the visible shape.</p>
+      <h3>Labelling</h3>
+      <p>The link text is the card's name, so a screen reader list of links reads "Loaded", not "Read more". Supporting text follows the link in DOM order. Secondary buttons inside an interactive card sit above the stretched link (<code>position: relative</code>) and need their own names.</p>
+      <h3>Contrast</h3>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+        <div class="ds-pair"><span>Text on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Secondary text on card</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Text on selected card</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-accent-subtle" data-min="4.5"></span></div>
+        <div class="ds-pair"><span>Focus ring vs page</span><span class="ds-pair__ratio" data-contrast="--color-focus-ring|--color-bg-canvas" data-min="3"></span></div>
+      </div>
+      <p>The card edge is defined by the shadow and the canvas tint, which is decorative: no information depends on seeing it.</p>
+      <h3>Motion</h3>
+      <p>Shadow and lift transition over <code>--duration-fast</code>; under reduced motion the change is instant.</p>
+      <h3>Touch</h3>
+      <p>The whole interactive card is the target, far above 44 × 44px. Nested buttons keep their own 44px targets and 8px spacing.</p>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+      <ul>
+        <li>Card titles are nouns or short noun phrases in sentence case: "Today", "Loaded". No trailing punctuation.</li>
+        <li>Supporting text is one sentence that says what is inside, as the launcher tiles do: "Five tasks, newest first, two done".</li>
+        <li>Never "Click here" or "Learn more" as the card link; the title is the link.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+      <div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas"><section class="card" style="width: 100%;" aria-label="Tasks example">
+            <form class="composer" novalidate><div class="composer__field"><label class="visually-hidden" for="dd-new">New task</label><input class="input input--filled input--lg" id="dd-new" type="text" placeholder="What needs doing?" autocomplete="off"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form>
+            <ul class="task-list">
+              <li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Book dentist appointment"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div><button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Book dentist appointment"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></li>
+            </ul>
+          </section></div><figcaption>Let the composer, toolbar and rows own their padding inside a flush card, so dividers and hover tints reach the edges.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><article class="card" style="width: 100%;"><div class="card__body"><div class="card" style="box-shadow: var(--shadow-2);"><div class="card__body"><p>Book dentist appointment</p></div></div></div></article></div><figcaption>Nest cards to separate rows. Rows are separated by hairline dividers on one surface.</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas"><article class="card card--interactive" style="width: 13rem;"><div class="card__body"><a class="card__link" href="../../mocks/pages/page.loaded.html"><b>Loaded</b></a><p class="list__meta">Five tasks, newest first, two done</p></div></article></div><figcaption>Make one link the card's name and stretch it over the card.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas"><article class="card" style="width: 13rem;"><div class="card__body"><b>Loaded</b><p class="list__meta">Five tasks.</p><a href="../../mocks/pages/page.loaded.html">Read more</a></div></article></div><figcaption>Hide the destination behind a vague "Read more" link, or wire a click handler onto the card itself.</figcaption></figure>
+      </div>
+    </section>
+    <section class="ds-section" id="tokens"><h2><a href="#tokens">Tokens</a></h2>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Part</th><th scope="col">Token</th><th scope="col">Light</th><th scope="col">Dark</th></tr></thead>
+        <tbody>
+          <tr><td>Surface</td><td><code>--color-bg-surface</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-bg-surface" data-swatch></i><span data-token="--color-bg-surface"></span></span></td></tr>
+          <tr><td>Selected surface</td><td><code>--color-accent-subtle</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent-subtle" data-swatch></i><span data-token="--color-accent-subtle"></span></span></td></tr>
+          <tr><td>Selected edge, focus</td><td><code>--color-accent</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-accent" data-swatch></i><span data-token="--color-accent"></span></span></td></tr>
+          <tr><td>Header and footer divider</td><td><code>--color-border-default</code></td><td><span class="ds-swatch-cell" data-theme="light"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td><td><span class="ds-swatch-cell" data-theme="dark"><i data-token="--color-border-default" data-swatch></i><span data-token="--color-border-default"></span></span></td></tr>
+          <tr><td>Radius</td><td><code>--radius-xl</code></td><td colspan="2"><span data-token="--radius-xl"></span></td></tr>
+          <tr><td>Shadow (rest / hover)</td><td><code>--shadow-2</code> <code>--shadow-3</code></td><td colspan="2"><span data-token="--shadow-2"></span> / <span data-token="--shadow-3"></span></td></tr>
+          <tr><td>Body padding</td><td><code>--space-6</code></td><td colspan="2"><span data-token="--space-6"></span></td></tr>
+          <tr><td>Header and footer padding</td><td><code>--space-4</code> <code>--space-6</code></td><td colspan="2"><span data-token="--space-4"></span> / <span data-token="--space-6"></span></td></tr>
+          <tr><td>Transition</td><td><code>--duration-fast</code> <code>--ease-standard</code></td><td colspan="2"><span data-token="--duration-fast"></span> / <span data-token="--ease-standard"></span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="ds-section" id="code"><h2><a href="#code">Code</a></h2>
+      <pre><code>&lt;section class="card" aria-label="Tasks"&gt;
+  &lt;form class="composer" novalidate&gt;…&lt;/form&gt;
+  &lt;div class="toolbar"&gt;…&lt;/div&gt;
+  &lt;ul class="task-list"&gt;…&lt;/ul&gt;
+&lt;/section&gt;
+
+&lt;article class="card card--interactive"&gt;
+  &lt;div class="card__body"&gt;
+    &lt;a class="card__link" href="…"&gt;&lt;b&gt;Loaded&lt;/b&gt;&lt;/a&gt;
+    &lt;p&gt;Five tasks, newest first, two done&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+      <div class="ds-table-wrap"><table class="ds-table"><thead><tr><th scope="col">Class / attribute</th><th scope="col">Effect</th></tr></thead><tbody>
+        <tr><td><code>.card</code></td><td>Flush raised surface: radius, shadow, clipping.</td></tr>
+        <tr><td><code>.card__header</code> <code>.card__body</code> <code>.card__footer</code></td><td>Boxed layout with padding and dividers.</td></tr>
+        <tr><td><code>.card__title</code></td><td>Header title (<code>--text-h4</code>).</td></tr>
+        <tr><td><code>.card__media</code></td><td>Flush 16:9 media at the top.</td></tr>
+        <tr><td><code>.card--interactive</code> + <code>.card__link</code></td><td>Whole-card navigation through one stretched link.</td></tr>
+        <tr><td><code>.card--selected</code></td><td>Selected state (accent tint and edge).</td></tr>
+        <tr><td><code>data-state="hover|focus"</code></td><td>Documentation only: forces the state.</td></tr>
+      </tbody></table></div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+      <p>Extracted from:</p>
+      <ul>
+        <li><a href="../../mocks/pages/page.loaded.html">pages/page.loaded</a> (the task card, <code>section.card</code>)</li>
+        <li><a href="../../mocks/index.html">index</a> (launcher <code>.tile</code> cards → <code>.card.card--interactive</code>)</li>
+        <li><a href="../../mocks/pages/notifications.html">pages/notifications</a> (banner and field messages inside the card)</li>
+      </ul>
+      <p>Mapping: <code>.card</code> → <code>.card</code>; mock-only <code>.tile</code> → <code>.card.card--interactive</code>; <code>.tile--star</code> is not carried over (a filled accent card competes with the primary button).</p>
+      <p>Drift fixed during extraction: D5 (dark surface merged into <code>--palette-ink-900</code>), D8 (card and hover shadows are tokens per theme), D10 (20px radius is <code>--radius-xl</code>). Boxed, media and selected variants are system additions (D22).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>

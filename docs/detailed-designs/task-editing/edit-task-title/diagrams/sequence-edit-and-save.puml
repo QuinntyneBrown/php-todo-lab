@@ -51,17 +51,17 @@ item -> page : titleSaved(title)
 page -> store : saveTitle(id, title)
 store -> store : Replace the title in the todos signal and clear editingId (L2-012)
 store --> item : Updated title shown
-store -> api : updateTodo(id, title)
+store -> api : update(id, {title})
 api -> ctrl : PATCH /api/v1/todos/{id} with title
 ctrl -> req : Validate title (more than 200 characters gives 422, L2-013)
 req --> ctrl : Valid, body is not empty (L2-014)
-ctrl -> action : Invoke with id and validated fields
-action -> repo : Find non-deleted todo by id
+ctrl -> action : handle(id, validated fields)
+action -> repo : find(id)
 repo -> db : SELECT
 db --> repo : Row
 repo --> action : Todo
 action -> todo : Set title only, completed is unchanged (L2-014)
-action -> repo : Save todo
+action -> repo : update(todo, changes), one UPDATE
 repo -> db : UPDATE
 db --> repo : Saved
 repo --> action : Todo

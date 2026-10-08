@@ -42,25 +42,25 @@ page -> store : Add task
 opt Filter is "Done"
   store -> store : Switch filter to "All" (L2-001)
 end
-store -> store : Insert pending task with temporary id at top (L2-004)
+store -> store : Insert pending task, id tmp-<uuid>, at top (L2-004)
 store --> list : Pending task shown dimmed, not completable or editable (L2-004)
 page -> composer : Clear field and keep keyboard focus (L2-001)
 store -> api : Create task
 api -> controller : POST /api/v1/todos with body {"title": string}
 controller -> request : Validate title: required, string, 1 to 200 characters (L2-002)
 request --> controller : Valid, trimmed title
-controller -> action : Handle create
-action -> repo : Create todo within the 500-task cap
-repo -> db : Begin transaction
-repo -> db : Count non-deleted todos under a lock (L2-003, L2-043)
+controller -> action : handle(title)
+action -> repo : createWithinLimit(title, 500)
+repo -> db : Begin DB::transaction (attempts: 3)
+repo -> db : Count non-deleted todos with lockForUpdate() (L2-003, L2-043)
 db --> repo : Count below 500
 repo -> db : Insert todo with ULID id (L2-043)
 repo -> db : Commit
 db --> repo : Committed
 repo --> action : Todo
 action --> controller : Todo
-controller --> api : 201 Created, Location header, data with completed false and completedAt null (L2-001)
+controller --> api : 201 Created, Location: /api/v1/todos/{id}, data with completed false and completedAt null (L2-001)
 api --> store : Todo from server
-store -> store : Replace pending task with server task, real id (L2-004)
+store -> store : Replace pending task in place, stable track key (L2-004)
 store --> list : Row updated in place, no visible jump (L2-004)
 @enduml

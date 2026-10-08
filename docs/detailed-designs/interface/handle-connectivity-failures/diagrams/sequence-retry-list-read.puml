@@ -26,8 +26,8 @@ box "Backend — Laravel API (HTTP layer)" #D1FADF
   participant "TodoController" as controller
 end box
 user -> page : Open the page or press Try again
-page -> store : Load tasks
-store -> api : list()
+page -> store : reload() on Try again; the resource loads on page open
+store -> api : list() through the resource loader
 api -> controller : GET /api/v1/todos (attempt 1)
 alt attempt 1 succeeds
   controller --> api : 200 with data and meta
@@ -49,10 +49,13 @@ else attempt 1 fails with a network error or 5xx (L2-042)
     else retry 2 fails
       controller --> api : Network error or 5xx
       api --> store : Failure after 2 retries (L2-042)
-      store --> page : List resource in error state
+      store --> page : List resource in error state, loadFailed true
       page --> user : Error state shown
     end
   end
 end
 store --> page : Task list when any attempt succeeded
+note over api
+  A 4xx response is not retried. It shows the same error state.
+end note
 @enduml

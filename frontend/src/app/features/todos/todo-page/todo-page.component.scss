@@ -1,0 +1,136 @@
+@use 'breakpoints' as bp;
+
+// Single centred column (L2-027).
+.app {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 24px 16px calc(96px + env(safe-area-inset-bottom));
+}
+
+@media (width >= bp.$breakpoint-md) {
+  .app {
+    max-width: 640px;
+    padding-top: 40px;
+  }
+}
+
+@media (width >= bp.$breakpoint-lg) {
+  .app {
+    padding-top: 8vh;
+  }
+}
+
+.card {
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+// aria-disabled rather than disabled, so the button stays discoverable (L2-017 criterion 2).
+.link-btn {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 0;
+  background: none;
+  border-radius: 8px;
+  color: var(--sea);
+  font-weight: 600;
+  white-space: nowrap;
+
+  &:hover:not([aria-disabled='true']) {
+    background: var(--paper-sunk);
+  }
+
+  &[aria-disabled='true'] {
+    color: var(--slate);
+    cursor: default;
+  }
+}
+
+@media (width < bp.$breakpoint-sm) {
+  .toolbar {
+    flex-wrap: wrap;
+  }
+
+  .link-btn {
+    margin-left: auto;
+  }
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  background: var(--sun-soft);
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.notice__icon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+// Bottom-centred, clear of the home indicator (L2-028 criterion 5).
+.toasts {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+// Inline error inside the card; the composer above stays usable (L2-008).
+.banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 16px;
+  background: var(--danger-soft);
+  color: var(--ink);
+}
+
+.banner__text {
+  margin: 0;
+  flex: 1 1 200px;
+  font-weight: 500;
+}
+
+.banner__btn {
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid var(--danger);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--danger);
+  font-weight: 600;
+
+  &:hover {
+    background: var(--paper);
+  }
+}

@@ -1,0 +1,82 @@
+<main
+  class="app"
+  appTodoShortcuts
+  (composerShortcut)="focusComposer()"
+  (undoShortcut)="onUndoShortcut($event)"
+>
+  <app-todo-header
+    [date]="today"
+    [activeCount]="store.activeCount()"
+    [completedCount]="store.completedCount()"
+  />
+  @if (!connectivity.online()) {
+    <!-- Above the card and non-blocking: everything stays usable (L2-042 criterion 3). -->
+    <div class="notice" role="status">
+      <svg class="notice__icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M2 8.8a15 15 0 0 1 4.2-2.6M10 5.1A15 15 0 0 1 22 8.8M5.5 12.3a10 10 0 0 1 4-2.1M14.8 10.4a10 10 0 0 1 3.7 1.9M9 15.8a5 5 0 0 1 6 0M12 19.2v.01M3 3l18 18"
+        />
+      </svg>
+      <span>{{ strings.offline }}</span>
+    </div>
+  }
+  <section class="card" [attr.aria-label]="strings.list.label">
+    <app-todo-composer
+      [focusRequest]="composerFocus()"
+      [refused]="refusedAdd()"
+      (submitted)="onAdd($event)"
+    />
+
+    <div class="toolbar">
+      <app-todo-filter
+        [selected]="store.filter()"
+        [allCount]="store.totalCount()"
+        [activeCount]="store.activeCount()"
+        [doneCount]="store.completedCount()"
+        (selectedChange)="select($event)"
+      />
+      <button
+        class="link-btn"
+        type="button"
+        [attr.aria-disabled]="store.completedCount() === 0"
+        (click)="onClearCompleted()"
+      >
+        {{ strings.filters.clearCompleted }}
+      </button>
+    </div>
+
+    @if (store.loadFailed()) {
+      <div class="banner" role="alert">
+        <p class="banner__text">{{ strings.list.loadFailed }}</p>
+        <button class="banner__btn" type="button" (click)="store.reload()">
+          {{ strings.list.retry }}
+        </button>
+      </div>
+    } @else {
+      <app-todo-list
+        [todos]="store.visibleTodos()"
+        [loading]="store.loading()"
+        [editingId]="store.editingId()"
+        [rowFocus]="rowFocus()"
+        (deleted)="onDelete($event.id, $event.viaKeyboard)"
+        (toggled)="onToggled($event.id, $event.completed)"
+        (editStarted)="store.beginEdit($event)"
+        (titleSaved)="onTitleSaved($event.id, $event.title)"
+        (editCancelled)="store.cancelEdit()"
+      />
+      @if (!store.loading() && store.visibleTodos().length === 0) {
+        <app-todo-empty-state [kind]="emptyKind()" />
+      }
+    }
+  </section>
+</main>
+<div class="toasts">
+  @if (store.toast(); as toast) {
+    <app-toast
+      [toast]="toast"
+      [undoLabel]="strings.toasts.undo"
+      (undone)="onUndo()"
+      (dismissed)="store.dismissToast()"
+    />
+  }
+</div>

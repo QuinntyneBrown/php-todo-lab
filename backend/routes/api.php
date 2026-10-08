@@ -1,0 +1,17 @@
+<?php
+
+declare(strict_types=1);
+
+use App\Http\Controllers\Api\V1\TodoController;
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('v1')->group(function (): void {
+    Route::get('todos', [TodoController::class, 'index']);
+    Route::post('todos', [TodoController::class, 'store']);
+    // Static paths first, so `completed` and `restore` are never read as an id.
+    Route::delete('todos/completed', [TodoController::class, 'destroyCompleted']);
+    Route::post('todos/restore', [TodoController::class, 'restoreMany']);
+    Route::patch('todos/{todo}', [TodoController::class, 'update'])->whereUlid('todo');
+    Route::delete('todos/{todo}', [TodoController::class, 'destroy'])->whereUlid('todo');
+    Route::post('todos/{todo}/restore', [TodoController::class, 'restore'])->whereUlid('todo');
+});

@@ -23,32 +23,32 @@ The slice runs from the delete control in a row to the `todos` table.
 
 Frontend (Angular SPA):
 
-- **`TodoItemComponent`** — presentational component for one row. It renders the delete control and emits a `deleted` output.
-- **`TodoListComponent`** — presentational component that renders the rows and forwards `deleted`. It plays the row exit so that the row collapses within 250 ms. The animation mechanism is `<TO SUPPLY>`.
-- **`ToastComponent`** — presentational component. It renders the message and the "Undo" button, and emits `undone`. The toast is placed in the toast area, which is the last region of the page.
-- **`TodoPageComponent`** — smart component. It maps `deleted` and `undone` to store calls. It also handles Ctrl+Z and Cmd+Z while the toast is visible.
-- **`TodoStore`** — signal store. On delete, it keeps the removed todo and its position, removes it from the `todos` signal, and sets the `toast` signal to "Task deleted" with the todo as Undo target. It owns the 6 s timer. A second deletion replaces the toast value, so Undo applies to the latest deletion only. On undo, it inserts the restored todo by `createdAt` descending, then `id` descending, which is the list order. On a failed delete, it reinserts the todo and replaces the toast with "Couldn't delete that task."
-- **`TodoApi`**, **`HttpTodoApi`**, **`InMemoryTodoApi`** — the port, the `HttpClient` adapter, and the test fake.
-- **`UI_STRINGS`** in `ui-strings.ts` — typed constants that hold the copy.
+- **`TodoItemComponent`** — presentational component for one row. It renders the delete control with the `aria-label` "Delete <title>", as in the mock, and emits the `deleted` output with `{ viaKeyboard: boolean }`.
+- **`TodoListComponent`** — presentational component that renders the rows and forwards `deleted`. It plays the row exit so that the row collapses within 250 ms. The exit uses Angular's native `animate.leave` binding with a CSS class whose transition collapses the row height and fades it out. Under `prefers-reduced-motion: reduce`, the class removes the row without motion.
+- **`ToastComponent`** — presentational component. It renders the message and the "Undo" button, and emits `undone`. The undo toast uses `role="status"` and an error toast uses `role="alert"`. The toast is placed in the toast area, which is the last region of the page.
+- **`TodoPageComponent`** — smart component. It maps `deleted` and `undone` to `delete(id)` and `undo()` on the store. It also handles Ctrl+Z and Cmd+Z while the undo toast is visible. After a keyboard delete, it sets its `focusRequest` signal so that focus moves to the next row's checkbox, else the previous row's checkbox, else the composer.
+- **`TodoStore`** — signal store. On delete, it keeps the removed todo and its position, removes it from the `todos` signal, and sets the `toast` signal to a `ToastState` with the message "Task deleted", `tone: 'status'`, and `undo: { ids: [id] }`. It owns the 6 s timer. The timer pauses while the toast has focus and restarts at the full 6 s when focus leaves. A second deletion replaces the toast value, so Undo applies to the latest deletion only. On undo, it inserts the restored todo by `createdAt` descending, then `id` descending, which is the list order. On a failed delete, it reinserts the todo and replaces the toast with "Couldn't delete that task."
+- **`TodoApi`**, **`HttpTodoApi`**, **`InMemoryTodoApi`** — the port, the `HttpClient` adapter, and the test fake. This feature uses `delete(id: string): Promise<void>` and `restore(id: string): Promise<Todo>`. `HttpTodoApi` converts failures to `ApiError`, and never retries a write.
+- **`UI_STRINGS`** in `src/app/features/todos/ui-strings.ts` — typed constants that hold the copy in the `toasts`, `announcements`, and `ariaLabels` groups.
 
 Backend (Laravel API):
 
-- **`TodoController`** — thin controller for `DELETE /api/v1/todos/{id}` and `POST /api/v1/todos/{id}/restore`.
-- **`DeleteTodo`** — action that soft-deletes a non-deleted todo through `TodoRepository`.
-- **`RestoreTodo`** — action that finds a soft-deleted todo through `TodoRepository` and restores it. When the todo was purged or was never deleted, it raises a not-found condition (type `<TO SUPPLY>`), which the exception handler renders as `404` problem details.
+- **`TodoController`** — thin controller. `destroy` serves `DELETE /api/v1/todos/{id}` and `restore` serves `POST /api/v1/todos/{id}/restore`. Both routes constrain `{todo}` with `whereUlid`, so a malformed id is a `404` from routing.
+- **`DeleteTodo`** — action with one public method, `handle(string $id): void`. It finds a non-deleted todo through `TodoRepository::find` and soft-deletes it through `TodoRepository::delete`. When no non-deleted todo matches, it throws `TodoNotFound`.
+- **`RestoreTodo`** — action with one public method, `handle(string $id): Todo`. It finds a soft-deleted todo through `TodoRepository::findDeleted` and restores it through `TodoRepository::restore`. When the todo was purged or was never deleted, it throws `TodoNotFound` from `app/Exceptions`. `ProblemDetailsRenderer` renders that exception as `404` problem details.
 - **`TodoRepository`**, **`EloquentTodoRepository`**, **`InMemoryTodoRepository`** — the interface, the Eloquent implementation using `SoftDeletes`, and the unit-test fake.
 - **`Todo`** — Eloquent model with `SoftDeletes`.
 - **`TodoResource`** — serialises the restored todo.
 
-Method names shown in the diagrams, such as `delete`, `undo`, `findDeleted`, and `restore`, are indicative. Final names are `<TO SUPPLY>`.
+The method names in the diagrams, `delete`, `undo`, `find`, `findDeleted`, `restore`, and `handle`, are the settled names.
 
-Open details:
+Further decisions:
 
-- Whether the 6 s timer restarts when a second deletion replaces the toast: `<TO SUPPLY>`.
-- UI treatment of a failed restore, including a `404` response: `<TO SUPPLY>`.
-- Order of the restore request when the user presses "Undo" while the delete request is still in flight: `<TO SUPPLY>`.
-- Mechanism that makes "Undo" reachable with Tab immediately after the delete action, given that the toast area is the last page region: `<TO SUPPLY>`.
-- Response of `DELETE /api/v1/todos/{id}` for an unknown or already deleted id: `<TO SUPPLY>`.
+- A second deletion replaces the toast and restarts the 6 s timer at the full duration.
+- A failed restore, including a `404` response, leaves the row removed. The store shows the error toast "Couldn't restore that task.".
+- When the user presses "Undo" while the delete request is still in flight, the store waits for the delete request to settle, then sends the restore request.
+- After a keyboard delete, `TodoPageComponent` arms a one-shot Tab handler while the undo toast is visible. The next Tab keypress moves focus to the "Undo" button. Any other key, or a focus change by pointer, disarms the handler. Shift+Tab is not intercepted.
+- `DELETE /api/v1/todos/{id}` returns `404` problem details for an unknown or already deleted id.
 
 ## Requirements
 
@@ -74,7 +74,7 @@ The Angular SPA sends `DELETE` and restore requests to the Laravel API, which se
 
 ### Components
 
-In the SPA, the item and the toast raise events that the page routes to the store, which calls the `TodoApi` port. In the API, the controller invokes `DeleteTodo` or `RestoreTodo`, which use the repository.
+In the SPA, the item and the toast raise events that the page routes to the store, which calls the `TodoApi` port. In the API, the controller calls `DeleteTodo` or `RestoreTodo`, which use the repository.
 
 ![C4 component view for deleting a task](diagrams/c4-component.png)
 

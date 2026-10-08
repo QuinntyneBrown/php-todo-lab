@@ -17,18 +17,23 @@ skinparam package {
 actor "User" as user
 box "Frontend — Angular SPA (UI components)" #E0F2FE
   participant "TodoPageComponent" as page
-  participant "Polite live region" as live
+  participant "Polite live region (app shell)" as live
 end box
 box "Frontend — Angular SPA (state and API client)" #E0F2FE
   participant "TodoStore" as store
+  participant "Announcer" as ann
 end box
-store -> store : Recompute activeCount and completedCount after a change
-store --> page : Count signal changed
-page -> page : Effect reads the counts, a side effect outside Angular state (L2-007)
-alt Count value differs from the last announced value
-  page -> live : Write the announcement text (text TO SUPPLY)
-  live --> user : Assistive technology announces the change politely (L2-007)
-else Count value is unchanged
-  page --> store : No announcement
+user -> page : Complete a task
+page -> store : toggle(id, true)
+store -> store : Recompute activeCount and completedCount optimistically (L2-007)
+store --> page : New activeCount
+page -> page : Build action text and count label from UI_STRINGS
+alt Tasks remain active
+  page -> ann : announce("Task completed. 2 left")
+else All tasks are completed
+  page -> ann : announce("Task completed. All done")
 end
+ann -> live : message signal changes
+live --> user : Assistive technology announces the change politely (L2-007)
+note over page, ann : The initial list load announces nothing; only user actions announce.
 @enduml

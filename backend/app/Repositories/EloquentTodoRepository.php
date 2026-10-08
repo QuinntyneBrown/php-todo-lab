@@ -1,0 +1,121 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Repositories;
+
+use App\Enums\TodoStatus;
+use App\Exceptions\TodoLimitReached;
+use App\Models\Todo;
+use Carbon\CarbonImmutable;
+use DateTimeInterface;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
+
+final class EloquentTodoRepository implements TodoRepository
+{
+    public function list(TodoStatus $status): Collection
+    {
+        $query = Todo::query()->orderByDesc('created_at')->orderByDesc('id');
+
+        match ($status) {
+            TodoStatus::All => null,
+            TodoStatus::Active => $query->active(),
+            TodoStatus::Completed => $query->completed(),
+        };
+
+        return $query->get()->toBase();
+    }
+
+    public function counts(): array
+    {
+        return [
+            'active' => Todo::query()->active()->count(),
+            'completed' => Todo::query()->completed()->count(),
+        ];
+    }
+
+    public function createWithinLimit(string $title, int $limit): Todo
+    {
+        // The locking read takes next-key locks on the scanned index range, so a
+        // concurrent create waits here until this transaction commits, then counts
+        // the new row. A deadlock is retried by the transaction attempts.
+        return DB::transaction(function () use ($title, $limit): Todo {
+            if (Todo::query()->lockForUpdate()->count() >= $limit) {
+                throw new TodoLimitReached($limit);
+            }
+
+            return Todo::query()->create(['title' => $title]);
+        }, attempts: 3);
+    }
+
+    public function find(string $id): ?Todo
+    {
+        return Todo::query()->find($id);
+    }
+
+    public function update(Todo $todo, array $columns): Todo
+    {
+        // A query-level update writes every given column in one statement, even one
+        // that matches a stale read, which a model save() would skip as clean.
+        $values = array_map(
+            fn (mixed $value): mixed => $value instanceof DateTimeInterface ? $todo->fromDateTime($value) : $value,
+            $columns,
+        );
+        Todo::query()->whereKey($todo->getKey())->update($values);
+
+        return $todo->refresh();
+    }
+
+    public function delete(Todo $todo): void
+    {
+        $todo->delete();
+    }
+
+    public function findDeleted(string $id): ?Todo
+    {
+        return Todo::onlyTrashed()->find($id);
+    }
+
+    public function restore(Todo $todo): Todo
+    {
+        $todo->restore();
+
+        return $todo;
+    }
+
+    public function deleteCompleted(): array
+    {
+        return DB::transaction(function (): array {
+            /** @var list<string> $ids */
+            $ids = Todo::query()->completed()->lockForUpdate()->pluck('id')->all();
+
+            if ($ids !== []) {
+                Todo::query()->whereIn('id', $ids)->delete();
+            }
+
+            return $ids;
+        });
+    }
+
+    public function restoreMany(array $ids): Collection
+    {
+        return DB::transaction(function () use ($ids): Collection {
+            $found = Todo::onlyTrashed()->whereIn('id', $ids)->lockForUpdate()->pluck('id');
+
+            if ($found->isNotEmpty()) {
+                Todo::onlyTrashed()->whereIn('id', $found)->restore();
+            }
+
+            return Todo::query()->whereIn('id', $found)->get()->toBase();
+        });
+    }
+
+    public function purgeDeletedBefore(CarbonImmutable $cutoff, int $limit): int
+    {
+        return Todo::onlyTrashed()
+            ->where('deleted_at', '<', $cutoff)
+            ->limit($limit)
+            ->forceDelete();
+    }
+}

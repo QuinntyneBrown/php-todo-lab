@@ -36,24 +36,26 @@ The API exposes exactly the following endpoints. All endpoints accept and return
 
 The components are as follows.
 
-- **`routes/api.php`** — declares the seven routes under the `/api/v1` prefix. The static routes `DELETE /todos/completed` and `POST /todos/restore` are registered before the parameterised routes, so that `completed` and `restore` are not read as a todo `{id}`. A path that matches no route, such as `/api/v2/todos`, raises a not-found exception. A path that matches a route with a different method raises a method-not-allowed exception that carries the allowed methods.
-- **`TodoController`** — thin controller for all todo endpoints. It calls one Action per endpoint and returns a Resource. Controller method names are `<TO SUPPLY>`.
+- **`routes/api.php`** — declares the seven routes under the `/api/v1` prefix. The static routes `DELETE /todos/completed` and `POST /todos/restore` are registered before the parameterised routes, so that `completed` and `restore` are not read as a todo `{id}`. Each `{id}` parameter is constrained with `whereUlid`, so a malformed ULID matches no route and ends in `404`. A path that matches no route, such as `/api/v2/todos`, raises a not-found exception. A path that matches a route with a different method raises a method-not-allowed exception that carries the allowed methods.
+- **`TodoController`** — thin controller for all todo endpoints. It calls one Action per endpoint through the Action's single public `handle(...)` method and returns a Resource. The methods are `index`, `store`, `update`, `destroy`, `restore`, `destroyCompleted`, and `restoreMany`.
 - **`ListTodosRequest`, `StoreTodoRequest`, `UpdateTodoRequest`, `RestoreTodosRequest`** — Form Requests that validate input before the controller method runs. A failed validation raises a validation exception that carries a map of field names to message lists.
 - **`TodoResource`** — API Resource that serialises one `Todo`. The array holds exactly the keys `id`, `title`, `completed`, `completedAt`, `createdAt`, and `updatedAt`. Names are camelCase. The resource formats each timestamp as an ISO-8601 UTC string that ends in `Z`, and emits `completedAt` as `null` when the todo is not complete. The resource reads `completed` from the `Todo` accessor, which derives it from `completed_at`. The resource never reads or emits `deleted_at`.
 - **`TodoCollection`** — wraps a list of `TodoResource` objects. Laravel nests every resource response under `data`. The list response also carries the `meta` object defined by the list feature.
+- **`TodoNotFound`, `TodoLimitReached`** — domain exceptions in `app/Exceptions`. An Action throws `TodoNotFound` when the id names no non-deleted todo, and the renderer maps it to `404`. The repository throws `TodoLimitReached` when a create would exceed the task limit, and the renderer maps it to `422`.
 - **`Todo`** — Eloquent model that holds the data the resource reads. The persistence design describes the table.
-- **Exception rendering** — a callback registered in `bootstrap/app.php`. The class or function name is `<TO SUPPLY>`. The callback converts every exception to problem details and sets the media type `application/problem+json`. The callback applies to every request whose path starts with `/api`, regardless of the `Accept` header, so that Laravel never selects its HTML error page.
+- **`ProblemDetailsRenderer`** — invokable class `App\Exceptions\ProblemDetailsRenderer`, registered in the `withExceptions` callback of `bootstrap/app.php` through `$exceptions->render(...)`. The renderer converts every exception to problem details and sets the media type `application/problem+json`. The renderer applies to every request whose path starts with `api/`, regardless of the `Accept` header, so that Laravel never selects its HTML error page.
 
 The problem details body maps from the exception as follows.
 
-| Cause | `status` | Extra members |
-|---|---|---|
-| Validation failure | `422` | `errors`, an object mapping each field name to an array of messages |
-| Unknown route or unknown todo | `404` | none |
-| Unsupported method | `405` | `Allow` response header lists the supported methods |
-| Unhandled exception | `500` | `detail` carries a message |
+| Cause | `status` | `title` | `detail` | Extra members |
+|---|---|---|---|---|
+| Validation failure | `422` | `Unprocessable Content` | `One or more fields are invalid.` | `errors`, an object mapping each field name to an array of messages |
+| Task limit reached (`TodoLimitReached`) | `422` | `Unprocessable Content` | `You have 500 tasks. Finish or delete some to add more.` | `code` with the value `todo_limit_reached`; `errors.title` holds the same sentence |
+| Unknown route, malformed id, or unknown todo (`TodoNotFound`) | `404` | `Not Found` | `The requested resource was not found.` | none |
+| Unsupported method | `405` | `Method Not Allowed` | `The <METHOD> method is not supported for this route.` | `Allow` response header lists the supported methods |
+| Unhandled exception | `500` | `Internal Server Error` | `An unexpected error occurred. Try again later.` | none |
 
-The values of `type` and `title`, and the exact text of `detail` for each status, are `<TO SUPPLY>`. Whether the `500` `detail` exposes the exception message or a fixed sentence is `<TO SUPPLY>`.
+`type` is `about:blank` in every response. `title` is the HTTP reason phrase of the status. The `500` `detail` is a fixed sentence in every environment. The renderer logs the exception and never exposes its message, class, or trace.
 
 ## Requirements
 

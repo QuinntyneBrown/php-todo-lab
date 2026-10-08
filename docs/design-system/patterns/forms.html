@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forms — Tasks design system</title>
+<meta name="description" content="How Tasks collects and validates text: the composer and the inline edit.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&amp;family=Figtree:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../tokens/tokens.css">
+<link rel="stylesheet" href="../assets/components.css">
+<link rel="stylesheet" href="../assets/ds.css">
+</head>
+<body id="top">
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="ds-shell">
+  <nav class="ds-nav" aria-label="Design system">
+    <div class="ds-nav__brand"><a href="../index.html">Tasks DS</a><button class="ds-theme-toggle" type="button" aria-pressed="false">☾ Dark</button></div>
+    <details open><summary>Foundations</summary><ul>
+      <li><a href="../foundations/color.html">Color</a></li>
+      <li><a href="../foundations/typography.html">Typography</a></li>
+      <li><a href="../foundations/spacing.html">Spacing</a></li>
+      <li><a href="../foundations/layout.html">Layout</a></li>
+      <li><a href="../foundations/elevation.html">Elevation</a></li>
+      <li><a href="../foundations/shape.html">Shape</a></li>
+      <li><a href="../foundations/motion.html">Motion</a></li>
+      <li><a href="../foundations/iconography.html">Iconography</a></li>
+      <li><a href="../foundations/theming.html">Theming</a></li>
+      <li><a href="../foundations/responsive.html">Responsive</a></li>
+      <li><a href="../foundations/accessibility.html">Accessibility</a></li>
+      <li><a href="../foundations/content.html">Content</a></li>
+    </ul></details>
+    <details open><summary>Components</summary><ul>
+      <li><a href="../components/button.html">Button</a></li>
+      <li><a href="../components/button-group.html">Button group</a></li>
+      <li><a href="../components/link.html">Link</a></li>
+      <li><a href="../components/menu.html">Menu</a></li>
+      <li><a href="../components/text-field.html">Text field</a></li>
+      <li><a href="../components/textarea.html">Textarea</a></li>
+      <li><a href="../components/select.html">Select</a></li>
+      <li><a href="../components/checkbox.html">Checkbox</a></li>
+      <li><a href="../components/radio-group.html">Radio group</a></li>
+      <li><a href="../components/switch.html">Switch</a></li>
+      <li><a href="../components/form-field.html">Form field</a></li>
+      <li><a href="../components/form-layout.html">Form layout</a></li>
+      <li><a href="../components/composer.html">Composer</a></li>
+      <li><a href="../components/app-header.html">App header</a></li>
+      <li><a href="../components/sidebar-navigation.html">Sidebar navigation</a></li>
+      <li><a href="../components/tabs.html">Tabs</a></li>
+      <li><a href="../components/breadcrumb.html">Breadcrumb</a></li>
+      <li><a href="../components/pagination.html">Pagination</a></li>
+      <li><a href="../components/skip-link.html">Skip link</a></li>
+      <li><a href="../components/card.html">Card</a></li>
+      <li><a href="../components/dialog.html">Dialog</a></li>
+      <li><a href="../components/tooltip.html">Tooltip</a></li>
+      <li><a href="../components/divider.html">Divider</a></li>
+      <li><a href="../components/layout-primitives.html">Layout primitives</a></li>
+      <li><a href="../components/task-item.html">Task item</a></li>
+      <li><a href="../components/list.html">List</a></li>
+      <li><a href="../components/table.html">Table</a></li>
+      <li><a href="../components/description-list.html">Description list</a></li>
+      <li><a href="../components/avatar.html">Avatar</a></li>
+      <li><a href="../components/badge.html">Badge</a></li>
+      <li><a href="../components/chip.html">Chip</a></li>
+      <li><a href="../components/toast.html">Toast</a></li>
+      <li><a href="../components/alert.html">Alert</a></li>
+      <li><a href="../components/inline-message.html">Inline message</a></li>
+      <li><a href="../components/progress.html">Progress</a></li>
+      <li><a href="../components/spinner.html">Spinner</a></li>
+      <li><a href="../components/skeleton.html">Skeleton</a></li>
+      <li><a href="../components/empty-state.html">Empty state</a></li>
+      <li><a href="../components/error-page.html">Error page</a></li>
+    </ul></details>
+    <details open><summary>Patterns</summary><ul>
+      <li><a href="../patterns/forms.html">Forms</a></li>
+      <li><a href="../patterns/feedback-and-loading.html">Feedback and loading</a></li>
+      <li><a href="../patterns/empty-and-error-states.html">Empty and error states</a></li>
+      <li><a href="../patterns/navigation-and-structure.html">Navigation and structure</a></li>
+      <li><a href="../patterns/dialogs-and-overlays.html">Dialogs and overlays</a></li>
+      <li><a href="../patterns/tables-and-lists.html">Tables and lists</a></li>
+      <li><a href="../patterns/notifications.html">Notifications</a></li>
+      <li><a href="../patterns/content-and-tone.html">Content and tone</a></li>
+    </ul></details>
+  </nav>
+
+  <main id="main" class="ds-main">
+    <header class="ds-header">
+      <p class="ds-kicker">Pattern</p>
+      <h1>Forms</h1>
+      <p class="ds-lead">Two one-field forms, one rule: never lose what the person typed, and explain every rejection at the field.</p>
+      <div class="ds-meta"><span class="ds-pill ds-pill--ok">WCAG 2.2 AA</span><span class="ds-pill">Used in v1</span><span class="ds-pill">L2-001 to L2-004, L2-012, L2-013</span></div>
+      <ul class="ds-toc"><li><a href="#overview">Overview</a></li><li><a href="#when">When to use</a></li><li><a href="#structure">Structure</a></li><li><a href="#states">States</a></li><li><a href="#responsive">Responsive behaviour</a></li><li><a href="#accessibility">Accessibility</a></li><li><a href="#content">Content</a></li><li><a href="#do-dont">Do and don't</a></li><li><a href="#sources">Sources</a></li></ul>
+    </header>
+
+    <section class="ds-section" id="overview"><h2><a href="#overview">Overview</a></h2>
+<p>Tasks has two forms and both are one field long: the <b>composer</b> that adds a task and the <b>inline edit</b> that renames one. The pattern is the same for both: type, press Enter, see the result immediately; anything that cannot be saved is explained at the field, in one sentence, and the typed text is never lost.</p>
+      <ul>
+        <li>Validation is local first: an empty or whitespace-only title is rejected before any request is sent (L2-002.1, L2-013.2).</li>
+        <li>The 200-character limit is enforced by <code>maxlength</code> and made visible by a quiet counter from 160 characters (L2-002.2, L2-002.3).</li>
+        <li>Server validation (HTTP 422, RFC 9457 problem details) is shown as is, at the field (L2-004.4).</li>
+        <li>Failures keep the text: a rejected add leaves the title in the composer; a rejected edit restores the previous title (L2-004.3, L2-013.4).</li>
+      </ul>
+      <p>Components: <a href="../components/composer.html">Composer</a>, <a href="../components/text-field.html">Text field</a>, <a href="../components/form-field.html">Form field</a>, <a href="../components/inline-message.html">Inline message</a>, <a href="../components/button.html">Button</a>, <a href="../components/task-item.html">Task item</a>. Longer forms (settings, sign-in) are not part of v1; <a href="../components/form-layout.html">Form layout</a> documents how they would be built.</p>
+    </section>
+    <section class="ds-section" id="when"><h2><a href="#when">When to use</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Situation</th><th scope="col">Use</th><th scope="col">Why</th></tr></thead>
+        <tbody>
+        <tr><td>Create one thing from a short string</td><td><a href="../components/composer.html">Composer</a>: field + primary button in one row</td><td>Enter submits; focus stays in the field for the next task (L2-001.3).</td></tr>
+        <tr><td>Rename something already in a list</td><td>Inline edit inside the <a href="../components/task-item.html">task row</a></td><td>No context switch, no dialog (L2-022). Enter or blur saves, Escape cancels (L2-012).</td></tr>
+        <tr><td>Several related fields</td><td><a href="../components/form-layout.html">Form layout</a> with labelled <a href="../components/form-field.html">form fields</a></td><td>Not in v1. One column below MD; error summary on submit.</td></tr>
+        <tr><td>Destructive action</td><td>No form at all: act, then offer Undo</td><td>Undo beats confirmation for reversible actions (L2-015). See <a href="feedback-and-loading.html">Feedback and loading</a>.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="ds-section" id="structure"><h2><a href="#structure">Structure</a></h2>
+<div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas">
+<section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc1">New task</label><input class="input input--filled input--lg" id="pc1" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-describedby="pc1e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc1e" role="alert" hidden></p><div class="toolbar"><div class="segmented" role="group" aria-label="Show tasks"><span class="segmented__indicator" aria-hidden="true"></span><button class="segmented__option" type="button" aria-pressed="true" aria-label="All, 5">All <span class="segmented__count">5</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Active, 3">Active <span class="segmented__count">3</span></button><button class="segmented__option" type="button" aria-pressed="false" aria-label="Done, 2">Done <span class="segmented__count">2</span></button></div><button class="btn btn--ghost" type="button" aria-disabled="false">Clear completed</button></div><ul class="task-list"><li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Call mom"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><input class="input task__edit" type="text" value="Call mom Sunday" maxlength="200" aria-label="Edit task title" data-state="focus"></div><button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Call mom"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></li><li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Book dentist appointment"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><button class="task__title-btn" type="button" aria-label="Edit Book dentist appointment">Book dentist appointment</button></div><button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Book dentist appointment"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></li></ul></section>
+        </div>
+        <div class="ds-example__caption"><span>The composer sits first in the card; the inline edit replaces a row's title in place. Both use the same input, focus halo and error message.</span></div>
+        <details class="ds-example__code"><summary>HTML</summary><pre><code>&lt;form class=&quot;composer&quot; novalidate&gt;&lt;div class=&quot;composer__field field__control&quot;&gt;&lt;label class=&quot;visually-hidden&quot; for=&quot;pc2&quot;&gt;New task&lt;/label&gt;&lt;input class=&quot;input input--filled input--lg&quot; id=&quot;pc2&quot; name=&quot;title&quot; type=&quot;text&quot; maxlength=&quot;200&quot; placeholder=&quot;What needs doing?&quot; autocomplete=&quot;off&quot; value=&quot;&quot; aria-describedby=&quot;pc2e&quot;&gt;&lt;/div&gt;&lt;button class=&quot;btn btn--primary btn--lg btn--collapse&quot; type=&quot;submit&quot; aria-label=&quot;Add task&quot;&gt;&lt;svg class=&quot;icon&quot; viewBox=&quot;0 0 24 24&quot; aria-hidden=&quot;true&quot;&gt;&lt;path d=&quot;M12 5v14M5 12h14&quot;/&gt;&lt;/svg&gt;&lt;span class=&quot;btn__label&quot;&gt;Add task&lt;/span&gt;&lt;/button&gt;&lt;/form&gt;&lt;p class=&quot;message message--error composer__message&quot; id=&quot;pc2e&quot; role=&quot;alert&quot; hidden&gt;&lt;/p&gt;</code></pre></details>
+      </div>
+      <ol>
+        <li><b>Label</b>: the composer's label "New task" is visually hidden; the placeholder "What needs doing?" is a hint, not the label (L2-029.3). The edit input is named "Edit task title".</li>
+        <li><b>Field</b>: <code>.input--filled.input--lg</code> in the composer (18px text, no iOS zoom), <code>.input</code> in the row.</li>
+        <li><b>Counter</b>: <code>.field__count</code> inside the field, shown from 160 characters, red at 200/200.</li>
+        <li><b>Action</b>: one primary button, collapsed to its plus icon below SM.</li>
+        <li><b>Message</b>: <code>.message--error</code> directly under the field, linked by <code>aria-describedby</code>, announced with <code>role="alert"</code>.</li>
+      </ol>
+    </section>
+    <section class="ds-section" id="states"><h2><a href="#states">States</a></h2>
+<p>Validation timing: nothing is validated while typing. The composer validates on submit; the edit validates on Enter or blur. A message clears as soon as the person types again.</p>
+      <div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">State</th><th scope="col">Trigger</th><th scope="col">Result</th><th scope="col">Requirement</th></tr></thead>
+        <tbody>
+        <tr><td>Default</td><td>Page load</td><td>Composer has focus (not on touch devices)</td><td>L2-022.3</td></tr>
+        <tr><td>Typing</td><td>Any input</td><td>No validation; Enter or Add task submits</td><td>L2-001.3</td></tr>
+        <tr><td>Counter</td><td>160+ characters</td><td><code>165/200</code> inside the field</td><td>L2-002.3</td></tr>
+        <tr><td>At the limit</td><td>200 characters</td><td>Counter turns danger red; typing stops (<code>maxlength</code>)</td><td>L2-002.2</td></tr>
+        <tr><td>Empty submit</td><td>Enter on blank text</td><td>"Enter a task title." One short shake (none with reduced motion). No request.</td><td>L2-002.1</td></tr>
+        <tr><td>Task limit</td><td>Server says 500 tasks exist</td><td>"You have 500 tasks. Finish or delete some to add more." Text kept.</td><td>L2-003.2</td></tr>
+        <tr><td>Server validation</td><td>HTTP 422</td><td>The server's message, as is, at the field</td><td>L2-004.4</td></tr>
+        <tr><td>Add failed</td><td>Network or 5xx</td><td>Pending row removed, title back in the composer, error toast</td><td>L2-004.3</td></tr>
+        <tr><td>Edit cleared</td><td>Enter on empty edit</td><td>Original title restored, "A task needs a title.", no request</td><td>L2-013.2</td></tr>
+        <tr><td>Edit unchanged</td><td>Enter with same title</td><td>Leaves edit mode, no request</td><td>L2-013</td></tr>
+        </tbody>
+      </table></div>      <div class="ds-example">
+        <div class="ds-example__canvas ds-example__canvas--stack ds-example__canvas--canvas">
+<section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc3">New task</label><input class="input input--filled input--lg" id="pc3" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-invalid="true" aria-describedby="pc3e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc3e" role="alert">Enter a task title.</p></section><section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc4">New task</label><input class="input input--filled input--lg" id="pc4" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Plan the team offsite" aria-invalid="true" aria-describedby="pc4e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc4e" role="alert">You have 500 tasks. Finish or delete some to add more.</p></section><section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc5">New task</label><input class="input input--filled input--lg input--with-count" id="pc5" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Call the building manager about the leaking radiator in the spare room, ask whether the plumber can come before the twentieth" data-state="focus" aria-describedby="pc5e"><span class="field__count" data-limit="reached">200/200</span></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc5e" role="alert" hidden></p></section><section class="card" aria-label="Tasks"><ul class="task-list"><li class="task"><label class="checkbox checkbox--round"><span class="checkbox__control"><input class="checkbox__input" type="checkbox" aria-label="Call mom"><span class="checkbox__box"><svg class="checkbox__tick" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.5l3.2 3.2L12 3.5"/></svg></span></span></label><div class="task__title"><input class="input task__edit" type="text" value="" maxlength="200" aria-label="Edit task title" aria-invalid="true" aria-describedby="fe1"><p class="message message--error task__message" id="fe1">A task needs a title.</p></div><button class="btn btn--icon btn--ghost-danger task__delete" type="button" aria-label="Delete Call mom"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 002 2h6a2 2 0 002-2l1-12M9 7V4h6v3"/></svg></button></li></ul></section>
+        </div>
+        <div class="ds-example__caption"><span>Empty submit, task limit (text kept), counter at the limit, and a cleared edit.</span></div>
+      </div>
+      <div class="ds-themes">
+        <div data-theme="light"><div class="stack"><section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc6">New task</label><input class="input input--filled input--lg" id="pc6" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Buy oat milk" aria-invalid="true" aria-describedby="pc6e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc6e" role="alert">The title field must not be greater than 200 characters.</p></section></div></div>
+        <div data-theme="dark"><div class="stack"><section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc6">New task</label><input class="input input--filled input--lg" id="pc6" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Buy oat milk" aria-invalid="true" aria-describedby="pc6e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc6e" role="alert">The title field must not be greater than 200 characters.</p></section></div></div>
+      </div>
+    </section>
+    <section class="ds-section" id="responsive"><h2><a href="#responsive">Responsive behaviour</a></h2>
+<ul>
+        <li><b>XS (&lt; 576px)</b>: the Add task button collapses to a 52px square with the plus icon (<code>.btn--collapse</code>); its name stays "Add task" through <code>aria-label</code>.</li>
+        <li><b>SM and up</b>: the button shows its label; the field takes the remaining width.</li>
+        <li>Inputs use 18px text at every size so iOS never zooms on focus (L2-028.3).</li>
+        <li>Rotating the device keeps the composer text and the edit state (L2-028.4): state lives in the component, not the layout.</li>
+        <li>Long edits wrap nowhere: the edit input scrolls horizontally inside itself, the row's height does not jump.</li>
+      </ul>
+    </section>
+    <section class="ds-section" id="accessibility"><h2><a href="#accessibility">Accessibility</a></h2>
+<ul>
+        <li><b>Labels</b>: every field has a programmatic name ("New task", "Edit task title"). Placeholders are hints only.</li>
+        <li><b>Errors</b>: <code>aria-invalid="true"</code> on the field, the message linked with <code>aria-describedby</code> and rendered with <code>role="alert"</code>, so it is announced once without moving focus. Error text names the problem and the fix (WCAG 3.3.1, 3.3.3).</li>
+        <li><b>Keyboard</b>: <kbd>/</kbd> focuses the composer from anywhere outside a field; <kbd>Enter</kbd> submits; in a row, <kbd>Enter</kbd> on the title edits, <kbd>Enter</kbd> saves and <kbd>Esc</kbd> cancels, then focus returns to the title (L2-023, L2-031.4).</li>
+        <li><b>No disabled submit</b>: the Add task button is never disabled; activating it on empty text explains the problem instead (L2-008.6).</li>
+        <li><b>Motion</b>: the shake on an empty submit is removed with <code>prefers-reduced-motion</code>; the message carries the meaning.</li>
+      </ul>
+      <div class="ds-example__canvas ds-example__canvas--stack" style="padding: 0; gap: var(--space-2);">
+          <div class="ds-pair"><span>Error message on card</span><span class="ds-pair__ratio" data-contrast="--color-danger-fg|--color-bg-surface" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Typed text in filled input</span><span class="ds-pair__ratio" data-contrast="--color-fg-default|--color-bg-surface-sunken" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Placeholder in filled input</span><span class="ds-pair__ratio" data-contrast="--color-fg-muted|--color-bg-surface-sunken" data-min="4.5"></span></div>
+          <div class="ds-pair"><span>Filled input boundary (D2)</span><span class="ds-pair__ratio" data-contrast="--color-border-strong|--color-bg-surface-sunken" data-min="3"></span></div>
+          <div class="ds-pair"><span>Invalid border</span><span class="ds-pair__ratio" data-contrast="--color-danger-solid|--color-bg-surface" data-min="3"></span></div>
+      </div>
+    </section>
+    <section class="ds-section" id="content"><h2><a href="#content">Content</a></h2>
+<div class="ds-table-wrap"><table class="ds-table">
+        <thead><tr><th scope="col">Moment</th><th scope="col">Copy</th></tr></thead>
+        <tbody>
+        <tr><td>Composer label (hidden)</td><td>New task</td></tr>
+        <tr><td>Composer placeholder</td><td>What needs doing?</td></tr>
+        <tr><td>Submit</td><td>Add task</td></tr>
+        <tr><td>Empty title</td><td>Enter a task title.</td></tr>
+        <tr><td>Too many tasks</td><td>You have 500 tasks. Finish or delete some to add more.</td></tr>
+        <tr><td>Empty edit</td><td>A task needs a title.</td></tr>
+        <tr><td>Server 422</td><td>The server's <code>detail</code> or field message, unchanged</td></tr>
+        </tbody>
+      </table></div>
+      <p>Messages are one sentence, say what to do, and never apologise or blame (L2-025). Field errors end with a full stop; button labels do not.</p>
+    </section>
+    <section class="ds-section" id="do-dont"><h2><a href="#do-dont">Do and don't</a></h2>
+<div class="ds-dodont">
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc7">New task</label><input class="input input--filled input--lg" id="pc7" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Plan the team offsite" aria-invalid="true" aria-describedby="pc7e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc7e" role="alert">You have 500 tasks. Finish or delete some to add more.</p></section></div><figcaption>Keep the typed text when the add is rejected, and say what to do next.</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc8">New task</label><input class="input input--filled input--lg" id="pc8" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="" aria-invalid="true" aria-describedby="pc8e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc8e" role="alert">Oops! Something went wrong.</p></section></div><figcaption>Clear the field and apologise. The person loses their text and learns nothing (L2-025).</figcaption></figure>
+        <figure class="ds-do"><div class="ds-example__canvas ds-example__canvas--stack"><section class="card" aria-label="Tasks"><form class="composer" novalidate><div class="composer__field field__control"><label class="visually-hidden" for="pc9">New task</label><input class="input input--filled input--lg" id="pc9" name="title" type="text" maxlength="200" placeholder="What needs doing?" autocomplete="off" value="Buy oat milk" data-state="focus" aria-describedby="pc9e"></div><button class="btn btn--primary btn--lg btn--collapse" type="submit" aria-label="Add task"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span class="btn__label">Add task</span></button></form><p class="message message--error composer__message" id="pc9e" role="alert" hidden></p></section></div><figcaption>Give the filled composer a visible 3:1 boundary at rest (D2).</figcaption></figure>
+        <figure class="ds-dont"><div class="ds-example__canvas ds-example__canvas--stack"><div class="card" style="padding: var(--space-3);"><p class="message message--hint">Placeholder used as the only label: "What needs doing?" disappears as soon as typing starts, leaving the field unnamed.</p></div></div><figcaption>Rely on the placeholder as the label; it vanishes and is not reliably announced.</figcaption></figure>
+      </div>
+    </section>
+    <section class="ds-section" id="sources"><h2><a href="#sources">Sources</a></h2>
+<ul>
+        <li><a href="../../mocks/pages/states.composer.html">pages/states.composer</a> (default, focus, typing, counter, limit, messages)</li>
+        <li><a href="../../mocks/pages/states.row.html">pages/states.row</a> (editing, changed, cleared, editing a completed task)</li>
+        <li><a href="../../mocks/pages/notifications.html">pages/notifications</a> (field messages)</li>
+        <li><a href="../../mocks/pages/page.limit.html">pages/page.limit</a>, <a href="../../mocks/todo.html">todo</a></li>
+      </ul>
+      <p>Drift fixed: D2 (filled input boundary), D12 (15px and 14px field errors unified at 14px; 17px input text to 18px), D18 (mobile-first collapse of the Add task button), D21 (shake removed by tokens, not a blanket override).</p>
+    </section>
+
+    <footer class="ds-footer"><span>Tasks design system · extracted from <a href="../../mocks/index.html">docs/mocks</a></span><a href="#top">Back to top</a></footer>
+  </main>
+</div>
+<script src="../assets/ds.js"></script>
+</body>
+</html>
