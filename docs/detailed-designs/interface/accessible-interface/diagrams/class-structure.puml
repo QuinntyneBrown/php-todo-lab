@@ -14,44 +14,62 @@ skinparam class {
 title Class structure — Accessible interface
 
 class TodoPageComponent <<smart component>> {
-  +onDeleteByKeyboard(id: string): void
-  +onEditEnded(id: string, how: string): void
+  +focusRequest: WritableSignal<FocusRequest or null>
+  +onDeleted(id: string, event: { viaKeyboard: boolean }): void
+  +onTitleSaved(id: string, title: string): void
+  +onEditCancelled(): void
   +onToastFocusWithin(focused: boolean): void
 }
 
-class PoliteLiveRegion <<class name to supply>> {
+class FocusRequest {
+  +id: string
+  +target: 'checkbox' or 'title'
+  +seq: number
+}
+
+class Announcer <<providedIn root>> {
+  +message: Signal<string>
   +announce(message: string): void
 }
 
+class AppComponent <<app shell>> {
+  renders the aria-live polite element
+  bound to Announcer.message
+}
+
 class TodoStore <<providedIn root>> {
-  +todos: WritableSignal<Todo[]>
+  +todos: WritableSignal<TodoView[]>
   +editingId: WritableSignal<string or null>
   +toast: WritableSignal<ToastState or null>
-  +visibleTodos: Signal<Todo[]>
+  +visibleTodos: Signal<TodoView[]>
   +activeCount: Signal<number>
   +completedCount: Signal<number>
 }
 
 class ToastState {
   +message: string
-  +isError: boolean
-  +hasUndo: boolean
+  +tone: 'status' or 'error'
+  +undo: { ids: string[] } or null
 }
 
 class TodoItemComponent <<presentational>> {
-  +todo: InputSignal<Todo>
+  +todo: InputSignal<TodoView>
   +editing: InputSignal<boolean>
+  +focusRequest: InputSignal<FocusRequest or null>
   +toggled: OutputEmitterRef<boolean>
-  +deleted: OutputEmitterRef<void>
-  +editEnded: OutputEmitterRef<string>
+  +editStarted: OutputEmitterRef<void>
+  +titleSaved: OutputEmitterRef<string>
+  +editCancelled: OutputEmitterRef<void>
+  +deleted: OutputEmitterRef<{ viaKeyboard: boolean }>
 }
 
 class TodoComposerComponent <<presentational>> {
+  +focusRequest: InputSignal<{ target: 'composer', seq } or null>
   +submitted: OutputEmitterRef<string>
 }
 
 class TodoFilterComponent <<presentational>> {
-  +filter: InputSignal<string>
+  +selected: InputSignal<TodoFilter>
   +allCount: InputSignal<number>
   +activeCount: InputSignal<number>
   +doneCount: InputSignal<number>
@@ -62,7 +80,8 @@ class TodoHeaderComponent <<presentational>> {
 }
 
 class TodoListComponent <<presentational>> {
-  +todos: InputSignal<Todo[]>
+  +todos: InputSignal<TodoView[]>
+  +focusRequest: InputSignal<FocusRequest or null>
 }
 
 class ToastComponent <<presentational>> {
@@ -83,7 +102,9 @@ class "tokens.scss" as Tokens <<design tokens>> {
 }
 
 TodoPageComponent --> TodoStore : calls actions
-TodoPageComponent --> PoliteLiveRegion : announces through
+TodoPageComponent --> Announcer : announces through
+AppComponent ..> Announcer : renders message
+TodoPageComponent --> FocusRequest : sets
 TodoPageComponent ..> UI_STRINGS : reads text
 TodoPageComponent *-- TodoHeaderComponent
 TodoPageComponent *-- TodoComposerComponent

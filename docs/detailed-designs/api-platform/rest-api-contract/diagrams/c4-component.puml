@@ -9,7 +9,7 @@ Container_Boundary(api, "Laravel API") {
   Component(ctrl, "TodoController", "Laravel controller", "Validates through a Form Request, calls one Action, returns a Resource")
   Component(actions, "Action classes", "PHP classes", "Run one use case each and return todos")
   Component(resource, "TodoResource and TodoCollection", "Laravel API Resources", "Serialise todos with camelCase keys inside data")
-  Component(errors, "Exception rendering", "bootstrap/app.php", "Renders every error as application/problem+json")
+  Component(errors, "ProblemDetailsRenderer", "Invokable class registered in bootstrap/app.php", "Renders every error on an api/ path as application/problem+json")
 }
 
 Rel(routes, requests, "Dispatches matched request to")

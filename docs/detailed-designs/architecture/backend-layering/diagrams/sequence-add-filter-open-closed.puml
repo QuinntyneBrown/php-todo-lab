@@ -35,7 +35,7 @@ client -> routes : GET /api/v1/todos?status=overdue
 routes -> req : Resolve the Form Request for the route
 req -> req : Validate status against all TodoStatus cases, including the new case
 req -> ctrl : Call the controller method with the TodoStatus value
-ctrl -> action : Call ListTodos, unchanged
+ctrl -> action : Call ListTodos handle(), unchanged
 action -> repo : list(TodoStatus) through the TodoRepository interface
 repo -> model : Apply the scope that the repository maps to the new case
 model -> db : SELECT with the new scope's conditions

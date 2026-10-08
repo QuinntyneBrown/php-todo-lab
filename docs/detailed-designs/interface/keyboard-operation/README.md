@@ -12,13 +12,13 @@ The feature adds no new task behaviour. It ties together behaviours defined else
 
 The slice lives entirely in the Angular SPA. It relies on native elements, so the browser supplies Tab, Enter, and Space behaviour. The design does not set positive `tabindex` values, and the tab order follows document order.
 
-- **`TodoPageComponent`** — smart component. It hosts the document-level `keydown` handling for the `/` shortcut. When `/` is pressed and the focused element is not a text field, the handler prevents the default key action and requests composer focus. The mock treats `input` and `textarea` as text fields. When focus is in a text field, the handler ignores the key, so `/` is typed into the field.
-- **`TodoComposerComponent`** — presentational component with the text field and the "Add task" button. Enter on valid text emits the add output, which the page forwards to `TodoStore` (L2-001). The mechanism that carries a focus request into the component through `input()` and `output()` only is `<TO SUPPLY>`.
+- **`TodoPageComponent`** — smart component. It handles the `/` shortcut with `@HostListener('document:keydown')`. When `/` is pressed and the event target is not a text field, the handler prevents the default key action and sets the composer focus request. The handler treats `input`, `textarea`, and `contenteditable` elements as text fields. The mock checks `input` and `textarea` only. When focus is in a text field, the handler ignores the key, so `/` is typed into the field. The page template also holds the toolbar markup.
+- **`TodoComposerComponent`** — presentational component with the text field and the "Add task" button. Enter on valid text emits the `submitted` output, which the page forwards to `TodoStore.addTask()` (L2-001). A focus request reaches the component through its `focusRequest` input, `{ target: 'composer', seq }`. An `effect` applies the request by calling `.focus()` on the text field, held as a `viewChild`. The `seq` counter makes each `/` press a distinct request.
 - **`TodoFilterComponent`** — presentational component whose tabs are native buttons.
-- **Clear completed control** — native button in the toolbar. The component that hosts it is `<TO SUPPLY>`.
+- **Clear completed control** — native button in the toolbar. The `TodoPageComponent` template hosts it, next to `TodoFilterComponent`.
 - **`TodoListComponent`** — presentational component that renders rows in list order.
 - **`TodoItemComponent`** — presentational component for one row. It renders a native checkbox, the title, and the delete control in that order. Space on the focused checkbox toggles it (L2-009). Enter on the focused title starts editing, and Escape cancels the edit (L2-012). The title control is a native button in the mock.
-- **`TodoStore`** — applies the add, toggle, edit, and delete changes that the page forwards.
+- **`TodoStore`** — applies the add, toggle, edit, and delete changes that the page forwards, through `addTask`, `toggle`, `beginEdit`, `saveTitle`, `cancelEdit`, and `delete`.
 
 The tab order is: composer, "Add task", filter tabs, "Clear completed", then each row in list order (checkbox, title, delete). Region order in the DOM (header, composer, toolbar, list) and row order give this sequence without extra attributes.
 

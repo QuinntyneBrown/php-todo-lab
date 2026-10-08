@@ -23,35 +23,36 @@ The slice runs from the toolbar button to the `todos` table.
 
 Frontend (Angular SPA):
 
-- **"Clear completed" button** — control in the toolbar region. It is disabled and carries `aria-disabled="true"` when `completedCount` is 0. The presentational component that renders it is `<TO SUPPLY>`.
-- **`TodoPageComponent`** — smart component. It handles the click and the `undone` event from the toast and calls the store.
-- **`TodoStore`** — signal store. `completedCount` is computed from the `todos` signal. On clear, it keeps the completed todos, removes them from the `todos` signal, and sets the `toast` signal to "n tasks cleared" with Undo. It uses the ids returned by the server for the restore request. On undo, it inserts the restored todos by `createdAt` descending, then `id` descending, and clears the toast.
+- **"Clear completed" button** — control in the toolbar region. It is disabled and carries `aria-disabled="true"` when `completedCount` is 0. The toolbar markup, the filter and this button, lives in the template of `TodoPageComponent`, so no separate presentational component renders it.
+- **`TodoPageComponent`** — smart component. It handles the click and the `undone` event from the toast and calls `clearCompleted()` and `undo()` on the store.
+- **`TodoStore`** — signal store. `completedCount` is computed from the `todos` signal. On clear, it keeps the completed todos, removes them from the `todos` signal, and sets the `toast` signal to a `ToastState` with `tone: 'status'`, the message "n tasks cleared", and `undo: { ids }`. The message for one task is "1 task cleared", as in the mock `docs/mocks/pages/notifications.html`. It uses the ids returned by the server for the restore request. On undo, it inserts the restored todos by `createdAt` descending, then `id` descending, and clears the toast.
 - **`TodoListComponent`** — presentational component that renders `visibleTodos`.
 - **`TodoEmptyStateComponent`** — presentational component. When the user clears on the "Done" filter, `visibleTodos` becomes empty and this component shows the empty state for that filter.
-- **`ToastComponent`** — presentational component. It renders the message and the "Undo" button, and emits `undone`.
-- **`TodoApi`**, **`HttpTodoApi`**, **`InMemoryTodoApi`** — the port, the `HttpClient` adapter, and the test fake.
-- **`UI_STRINGS`** in `ui-strings.ts` — typed constants that hold the copy.
+- **`ToastComponent`** — presentational component. It renders the message and the "Undo" button, and emits `undone`. A status toast uses `role="status"` and an error toast uses `role="alert"`.
+- **`TodoApi`**, **`HttpTodoApi`**, **`InMemoryTodoApi`** — the port, the `HttpClient` adapter, and the test fake. This feature uses `clearCompleted(): Promise<ClearCompletedResponse>` and `restoreMany(ids: readonly string[]): Promise<Todo[]>`. Writes are never retried.
+- **`UI_STRINGS`** in `src/app/features/todos/ui-strings.ts` — typed constants that hold the copy in the `toasts` and `announcements` groups.
 
 Backend (Laravel API):
 
-- **`TodoController`** — thin controller for `DELETE /api/v1/todos/completed` and `POST /api/v1/todos/restore`.
-- **`RestoreTodosRequest`** — form request that validates the ids to restore. The body key and the rules are `<TO SUPPLY>`.
-- **`ClearCompletedTodos`** — action that soft-deletes all completed todos through `TodoRepository`. It returns the count and the deleted ids.
-- **`RestoreTodos`** — action that restores the todos for the given ids through `TodoRepository`.
+- **`TodoController`** — thin controller. `destroyCompleted` serves `DELETE /api/v1/todos/completed` and `restoreMany` serves `POST /api/v1/todos/restore`. `routes/api.php` registers both static routes before the `{todo}` routes, so `completed` and `restore` never match as ids.
+- **`RestoreTodosRequest`** — form request that validates the body `{"ids": [ulid, ...]}`. `ids` is a required array of 1 to 500 items, and each item is a distinct ULID string.
+- **`ClearCompletedTodos`** — action with one public method, `handle(): list<string>`. It soft-deletes all completed todos through `TodoRepository::deleteCompleted` and returns the deleted ids.
+- **`RestoreTodos`** — action with one public method, `handle(list<string> $ids): Collection<int, Todo>`. It restores the todos for the given ids through `TodoRepository::restoreMany`.
 - **`TodoRepository`**, **`EloquentTodoRepository`**, **`InMemoryTodoRepository`** — the interface, the Eloquent implementation, and the unit-test fake. Each bulk method of `EloquentTodoRepository` runs in one database transaction, so the actions stay free of Eloquent. The `completed()` scope on `Todo` selects the completed todos.
 - **`Todo`** — Eloquent model with `SoftDeletes`.
 
-The `DELETE` response is `200` with `{"meta": {"deleted": n}}` and the deleted ids. The response key for the ids is `<TO SUPPLY>`. The body of the restore response is `<TO SUPPLY>`.
+The `DELETE` response is `200` with the body `{"data": {"ids": [...]}, "meta": {"deleted": n}}`. The restore response is `200` with the body `{"data": [todo, ...]}`, one `TodoResource` per restored todo.
 
-Method names shown in the diagrams, such as `clearCompleted`, `restoreTodos`, `deleteCompleted`, and `restoreMany`, are indicative. Final names are `<TO SUPPLY>`.
+The method names in the diagrams, `clearCompleted`, `restoreMany`, `deleteCompleted`, `destroyCompleted`, and `handle`, are the settled names.
 
-Open details:
+Further decisions:
 
-- Plural and singular copy of the toast for n equal to 1: `<TO SUPPLY>`.
-- Toast duration and whether Ctrl/Cmd+Z applies to this toast: `<TO SUPPLY>`. The 6 second duration and the shortcut are specified for single deletion only.
-- UI treatment and toast copy when the clear request fails: `<TO SUPPLY>`.
-- Outcome of a restore request that contains an id that no longer exists: `<TO SUPPLY>`.
-- Order of the restore request when "Undo" is pressed before the clear response arrives: `<TO SUPPLY>`.
+- The toast reads "1 task cleared" when n is 1 and "n tasks cleared" otherwise.
+- The undo toast lasts 6 s, the same as the toast for a single deletion. The timer pauses while the toast has focus and restarts at the full 6 s when focus leaves. Ctrl/Cmd+Z triggers Undo while this toast is visible.
+- When the clear request fails, the cleared rows reappear in the `todos` signal and the store shows the error toast "Couldn't clear completed tasks.".
+- `POST /api/v1/todos/restore` restores the ids that are soft-deleted and ignores the others. The store inserts the todos the response returns and drops the rest without an error.
+- When "Undo" is pressed while the clear request is still in flight, the store waits for that request to settle, then sends the restore request with the returned ids.
+- When the restore request fails, the store shows the error toast "Couldn't restore those tasks.".
 
 ## Requirements
 
@@ -78,7 +79,7 @@ The Angular SPA sends the bulk `DELETE` and restore requests to the Laravel API,
 
 ### Components
 
-In the SPA, the page calls the store, which supplies the list, the empty state, and the toast. In the API, the controller invokes `ClearCompletedTodos` or `RestoreTodos`, and the repository runs each bulk operation in one transaction.
+In the SPA, the page calls the store, which supplies the list, the empty state, and the toast. In the API, the controller calls `ClearCompletedTodos` or `RestoreTodos`, and the repository runs each bulk operation in one transaction.
 
 ![C4 component view for clearing completed tasks](diagrams/c4-component.png)
 

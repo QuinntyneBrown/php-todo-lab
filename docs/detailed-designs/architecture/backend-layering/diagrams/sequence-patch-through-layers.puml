@@ -35,17 +35,16 @@ client -> routes : PATCH /api/v1/todos/{id}
 routes -> req : Resolve the Form Request for the route
 req -> req : Validate input, no validation in the controller (L2-044 criterion 1)
 req -> ctrl : Call the controller method with validated data
-ctrl -> action : Call UpdateTodo once, no business logic and no query calls (L2-044 criterion 1)
-action -> repo : Find the todo through the TodoRepository interface bound by AppServiceProvider (L2-044 criteria 2 and 3)
+ctrl -> action : Call UpdateTodo handle() once, no business logic and no query calls (L2-044 criterion 1)
+action -> repo : find(id) through the TodoRepository interface bound by AppServiceProvider (L2-044 criteria 2 and 3)
 repo -> model : Query Todo, soft-deleted rows excluded by SoftDeletes (L2-045 criterion 1)
 model -> db : SELECT by id
 db --> model : Row
 model --> repo : Todo with completed_at cast to immutable_datetime (L2-045 criterion 3)
-repo --> action : Todo
-action -> action : Apply the requested changes to the todo
-action -> repo : Save the todo
-repo -> model : save()
-model -> db : UPDATE changed columns
+repo --> action : Todo, or null so the Action throws TodoNotFound
+action -> repo : update(todo, changes)
+repo -> model : Fill changed attributes and save()
+model -> db : One UPDATE of the changed columns
 db --> model : Saved
 model --> repo : Todo
 repo --> action : Todo

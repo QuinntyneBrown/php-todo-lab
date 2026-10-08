@@ -36,9 +36,12 @@ boot -> page : Create TodoPageComponent for route /
 page -> store : inject() TodoStore, created on first use (L2-047)
 store -> token : inject() abstract TodoApi (L2-048)
 token --> store : HttpTodoApi instance
+store -> store : resource({ loader: () => api.list() }) (L2-047)
+store -> http : list() through the TodoApi port (L2-048)
 note over store, http
-  Route of the httpResource list read through the
-  TodoApi port: TO SUPPLY
+  The list read uses resource with a TodoApi loader,
+  not httpResource, so HttpTodoApi stays the only
+  class that uses HttpClient.
 end note
 == Test configuration ==
 test -> token : Provide InMemoryTodoApi for TodoApi (L2-048)

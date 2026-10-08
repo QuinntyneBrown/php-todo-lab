@@ -18,7 +18,7 @@ actor "User" as user
 box "Backend — Laravel API (HTTP layer)" #D1FADF
   participant "TodoController" as controller
   participant "ListTodosRequest" as request
-  participant "Exception handler" as errs
+  participant "ProblemDetailsRenderer" as errs
 end box
 box "Backend — Laravel Application and Domain" #ECFDF3
   participant "ListTodos" as action
@@ -31,8 +31,8 @@ user -> controller : GET /api/v1/todos?status=value sent directly to the API
 controller -> request : Validate status against TodoStatus (default all) (L2-006)
 alt status is all, active, or completed
   request --> controller : Valid
-  controller -> action : Handle with the TodoStatus
-  action -> repo : List non-deleted todos for the status
+  controller -> action : handle(TodoStatus)
+  action -> repo : list(status) and counts()
   repo -> db : Select rows, with the active or completed scope when requested
   db --> repo : Rows
   repo --> action : Todos
@@ -41,6 +41,6 @@ alt status is all, active, or completed
 else status is bogus
   request --> controller : Validation failed
   controller -> errs : Render validation failure
-  errs --> user : 422 problem details with errors.status (L2-006)
+  errs --> user : 422 problem details, detail "One or more fields are invalid.", errors.status (L2-006)
 end
 @enduml

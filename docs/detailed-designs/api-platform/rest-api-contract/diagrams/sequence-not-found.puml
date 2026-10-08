@@ -20,7 +20,7 @@ end box
 box "Backend — Laravel API (HTTP layer)" #D1FADF
   participant "routes/api.php" as routes
   participant "TodoController" as ctrl
-  participant "Exception rendering (bootstrap/app.php)" as errors
+  participant "ProblemDetailsRenderer" as errors
 end box
 box "Backend — Laravel Application and Domain" #ECFDF3
   participant "Action class" as action
@@ -35,14 +35,15 @@ alt Unknown route such as /api/v2/todos
   routes -> errors : Raise not-found exception
 else Unknown todo id on a known route
   client -> routes : PATCH /api/v1/todos/{id}
+  routes -> routes : {id} passes whereUlid (a malformed id matches no route and ends here as not found)
   routes -> ctrl : Dispatch to the controller
-  ctrl -> action : Invoke the Action with the id
+  ctrl -> action : handle() with the id
   action -> repo : Find the non-deleted todo
   repo -> db : Query by id
   db --> repo : No row
-  repo --> action : Not found
-  action --> errors : Raise not-found exception
+  repo --> action : null
+  action --> errors : Throw TodoNotFound
 end
-errors -> errors : Build problem details with status 404 (L2-020 criterion 2)
+errors -> errors : Build problem details: type about:blank, title Not Found, status 404, detail "The requested resource was not found." (L2-020 criterion 2)
 errors --> client : 404 application/problem+json, never an HTML page
 @enduml

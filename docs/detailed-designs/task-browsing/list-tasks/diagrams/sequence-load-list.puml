@@ -35,15 +35,15 @@ box "Backend — Laravel Infrastructure" #FFF4E5
   database "MySQL database" as db
 end box
 user -> page : Open /
-page -> store : Read list
-store -> controller : GET /api/v1/todos with no query parameters
+page -> store : Read todos and loading
+store -> controller : resource loader calls TodoApi.list(); HttpTodoApi sends GET /api/v1/todos with no query parameters
 store --> page : List request in flight
 page -> list : Show 3 skeleton rows, no spinner (L2-008)
 note right of page : Composer is already usable (L2-008)
 controller -> request : Validate query, status defaults to all
 request --> controller : Valid
-controller -> action : Handle with TodoStatus All
-action -> repo : List non-deleted todos
+controller -> action : handle(TodoStatus::All)
+action -> repo : list(TodoStatus::All) and counts()
 repo -> db : Select non-deleted rows ordered by created_at desc, id desc (L2-005)
 db --> repo : Rows
 repo -> db : Count active and completed non-deleted todos (L2-005)
@@ -51,7 +51,7 @@ db --> repo : Counts
 repo --> action : Todos and counts
 action --> controller : Todos and counts
 controller --> store : 200 with data array and meta.active, meta.completed, within 200 ms for 500 todos (L2-005, L2-038)
-store -> store : Copy data into todos signal, keep server order
+store -> store : linkedSignal todos takes the resource value, keeps server order
 store --> page : Loaded
 alt No tasks exist
   page -> empty : Show "Nothing here yet" and "Type a task above and press Enter." (L2-008)

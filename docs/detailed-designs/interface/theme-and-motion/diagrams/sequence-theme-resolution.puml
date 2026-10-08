@@ -22,7 +22,7 @@ box "Frontend — Angular SPA (UI components)" #E0F2FE
   participant "Component stylesheets" as css
 end box
 user -> browser : Open the app with the OS set to light or dark
-browser -> global : Load the global stylesheet before first paint
+browser -> global : Load src/styles.scss output through a render-blocking link before first paint
 global -> tokens : Include the light and dark token sets
 browser -> browser : Evaluate prefers-color-scheme
 alt OS is set to dark

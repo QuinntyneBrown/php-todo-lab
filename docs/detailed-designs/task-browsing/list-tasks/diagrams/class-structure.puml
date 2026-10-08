@@ -25,10 +25,15 @@ package "Angular SPA" {
     +kind: input<string>
   }
   class TodoStore <<providedIn root>> {
+    -api: TodoApi
+    -listResource: resource(loader: api.list())
     +todos: linkedSignal<TodoView[]>
-    +loading: Signal<boolean>
-    +loadFailed: Signal<boolean>
+    +loading: computed<boolean>
+    +loadFailed: computed<boolean>
     +reload(): void
+  }
+  abstract class TodoApi {
+    +list(): Promise<TodoListResponse>
   }
   class TodoListResponse <<interface>> {
     +data: Todo[]
@@ -56,16 +61,16 @@ package "Laravel API" {
     Completed
   }
   interface TodoRepository {
-    +list(status: TodoStatus): Todo[]
-    +counts(): TodoCounts
+    +list(status: TodoStatus): Collection<int, Todo>
+    +counts(): array{active: int, completed: int}
   }
   class EloquentTodoRepository {
-    +list(status: TodoStatus): Todo[]
-    +counts(): TodoCounts
+    +list(status: TodoStatus): Collection<int, Todo>
+    +counts(): array{active: int, completed: int}
   }
   class InMemoryTodoRepository <<test fake>> {
-    +list(status: TodoStatus): Todo[]
-    +counts(): TodoCounts
+    +list(status: TodoStatus): Collection<int, Todo>
+    +counts(): array{active: int, completed: int}
   }
   class Todo <<Eloquent>> {
     +id: string
@@ -83,7 +88,8 @@ package "Laravel API" {
 TodoPageComponent --> TodoStore : reads
 TodoPageComponent ..> TodoListComponent : binds
 TodoPageComponent ..> TodoEmptyStateComponent : binds
-TodoStore ..> TodoListResponse : receives
+TodoStore --> TodoApi : list()
+TodoApi ..> TodoListResponse : returns
 TodoListResponse *-- TodoListMeta
 
 TodoController ..> ListTodosRequest : validates with
@@ -98,7 +104,7 @@ EloquentTodoRepository --> Todo : queries
 TodoCollection ..> Todo : serialises
 
 note bottom of TodoRepository
-  Method and field names that the specs
-  do not fix are provisional (TO SUPPLY).
+  list() returns non-deleted todos ordered by
+  created_at desc, then id desc.
 end note
 @enduml

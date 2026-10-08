@@ -22,25 +22,30 @@ The feature has three concerns. Semantics and labels give each element a correct
 
 The feature is a frontend-only slice. It touches the Angular SPA container and no other container.
 
-- **`TodoPageComponent`** — smart component at route `/`. It renders the `main` landmark and hosts the polite live region. It handles the outputs of the presentational components, calls `TodoStore`, and writes announcement text to the live region. After a keyboard delete it chooses the focus target.
-- **Polite live region** — page element with `aria-live="polite"`. The class that feeds it (for example Angular CDK `LiveAnnouncer`) is `<TO SUPPLY>`. It announces text from `UI_STRINGS`, such as "Task added" and "Task completed".
+- **`TodoPageComponent`** — smart component at route `/`. It renders the `main` landmark. It handles the outputs of the presentational components, calls `TodoStore`, and passes announcement text to `Announcer`. After a keyboard delete it chooses the focus target. It holds the `focusRequest` signal that carries focus into the presentational components.
+- **`Announcer`** — root service in `src/app/shared/ui/announcer/announcer.ts`. It exposes `announce(message)` and a `message` signal. It announces text from `UI_STRINGS`, such as "Task added" and "Task completed".
+- **Polite live region** — visually hidden element with `aria-live="polite"`, rendered once by the app shell (`AppComponent`) and bound to `Announcer.message`. The mock uses a `div` with the id `live`.
 - **`TodoHeaderComponent`** — presentational component. It renders the only `h1`, which contains the date.
 - **`TodoComposerComponent`** — presentational component. Its input has the label "New task", visible or programmatically associated. The mock uses a visually hidden `label`.
 - **`TodoFilterComponent`** — presentational component. It renders a `role="group"` of buttons with `aria-pressed`. The name of each button includes its count, for example "Active 2".
 - **`TodoListComponent`** — presentational component. It renders a `ul` with one `li` per task.
-- **`TodoItemComponent`** — presentational component for one row. Its checkbox is a native `input[type=checkbox]` whose accessible name equals the task title. Its icon-only buttons carry an `aria-label` that includes the title, such as "Delete Call mom". The wording of the edit button label is `<TO SUPPLY>`. After edit mode ends by Enter or Escape, it returns focus to the title.
-- **`ToastComponent`** — presentational component. It renders `role="alert"` for an error toast and `role="status"` for any other toast. It never takes focus. It emits `focusWithinChange` when focus enters or leaves the toast or its "Undo" button.
-- **`TodoStore`** — root service. Signals `todos`, `filter`, `editingId`, and `toast` hold state. Computed values `activeCount`, `completedCount`, and `visibleTodos` supply the counts in filter names and the focus target list. The store pauses and resumes the toast dismiss timer on focus-within changes.
+- **`TodoItemComponent`** — presentational component for one row. Its checkbox is a native `input[type=checkbox]` whose accessible name equals the task title. Its icon-only buttons carry an `aria-label` that includes the title, such as "Delete Call mom". The title button carries the label "Edit <title>", such as "Edit Call mom", as the mock does. Its inputs are `todo`, `editing`, and `focusRequest`. Its outputs are `toggled`, `editStarted`, `titleSaved`, `editCancelled`, and `deleted`. The `deleted` output carries `{ viaKeyboard: boolean }`. After edit mode ends by Enter or Escape, it returns focus to the title button.
+- **`ToastComponent`** — presentational component in `shared/ui/toast/`. It renders `role="alert"` for a toast whose `tone` is `'error'` and `role="status"` for a toast whose `tone` is `'status'`. It never takes focus. It emits `focusWithinChange` when focus enters or leaves the toast or its "Undo" button.
+- **`TodoStore`** — root service. Signals `todos`, `filter`, `editingId`, and `toast` hold state. Computed values `activeCount`, `completedCount`, and `visibleTodos` supply the counts in filter names and the focus target list. The store pauses the toast dismiss timer while focus is inside the toast.
+- **`ToastState`** — value held by the `toast` signal: `{ message: string; tone: 'status' | 'error'; undo: { ids: string[] } | null }`.
+- **focus request** — value `{ id: string; target: 'checkbox' | 'title'; seq: number }` that names the row element to focus; the composer receives `{ target: 'composer', seq }` on its own `focusRequest` input
 - **`UI_STRINGS`** — typed constants in `ui-strings.ts`. They hold announcement text and `aria-label` text.
 - **`tokens.scss`** — design tokens as CSS custom properties. Light and dark sets under `prefers-color-scheme` satisfy the contrast ratios, and the focus ring is defined once.
 
-Details that this design leaves open:
+Focus moves by input, not by direct calls. `TodoPageComponent` sets its `focusRequest` signal and passes it through `input()` to `TodoListComponent`, `TodoItemComponent`, and `TodoComposerComponent`. Each presentational component applies the request in an `effect` that calls `.focus()` on a `viewChild` element. DOM focus is a side effect outside Angular, which L2-047 permits. The `seq` counter makes a repeated request for the same element distinct.
 
-- The element inside the target row that receives focus after a keyboard delete is `<TO SUPPLY>`.
-- The mechanism that moves focus from `TodoPageComponent` to a presentational component, given that presentational components use `input()` and `output()` only, is `<TO SUPPLY>`.
-- The timing of an announcement relative to server confirmation, and whether a rollback retracts it, is `<TO SUPPLY>`.
-- Announcement text for edit, reopen, and delete is not fixed by L2-031 beyond "Task added" and "Task completed". The mock uses "Task updated", "Task reopened", and "Task deleted".
-- After the toast loses focus, whether the dismiss timer restarts at 6 seconds or resumes the remainder is `<TO SUPPLY>`.
+After a keyboard delete, focus moves to the checkbox of the next row. If the deleted row was last, focus moves to the checkbox of the previous row. If the list is empty, focus moves to the composer input. A pointer delete sets `viaKeyboard` to `false` and does not move focus.
+
+`TodoPageComponent` announces optimistically, when the user acts and before the server confirms. A rollback does not retract the announcement. The error toast, with `role="alert"`, announces the failure instead.
+
+Announcement text for edit, reopen, and delete is not fixed by L2-031 beyond "Task added" and "Task completed". The design uses the mock's text: "Task updated", "Task reopened", and "Task deleted". These strings live in `UI_STRINGS.announcements`.
+
+The undo toast lasts 6 seconds. The dismiss timer pauses while the toast or its "Undo" button has focus. When focus leaves the toast, the timer restarts at the full 6 seconds.
 
 Contrast values are token-level decisions. Text meets 4.5:1 against its background, and text of 24 px or larger and UI component boundaries meet 3:1, in both themes. The focus ring is 2 px wide with at least 3:1 contrast and a 2 px offset. Completed tasks show a check and a strike-through in addition to the colour change. An automated axe-core scan of the loaded, empty, loading, error, editing, and toast-visible states reports zero violations.
 
@@ -70,36 +75,36 @@ Only the Angular SPA takes part, because semantics, focus, and announcements run
 
 ### Components
 
-`TodoPageComponent` hosts the presentational components and the polite live region. `TodoItemComponent` and `ToastComponent` carry most of the semantic and focus behaviour. `UI_STRINGS` and `tokens.scss` supply text and visual tokens.
+`TodoPageComponent` hosts the presentational components and calls `Announcer`. The app shell renders the polite live region. `TodoItemComponent` and `ToastComponent` carry most of the semantic and focus behaviour. `UI_STRINGS` and `tokens.scss` supply text and visual tokens.
 
 ![C4 component view for the accessible interface](diagrams/c4-component.png)
 
 ### Class structure
 
-`TodoPageComponent` composes the presentational components, calls `TodoStore`, and writes to the polite live region. `TodoStore` holds the `ToastState` that `ToastComponent` renders.
+`TodoPageComponent` composes the presentational components, calls `TodoStore`, and announces through `Announcer`. `TodoStore` holds the `ToastState` that `ToastComponent` renders.
 
 ![Class diagram for the accessible interface](diagrams/class-structure.png)
 
 ### Behaviour — announce a task action
 
-After an add, toggle, edit, or delete, `TodoPageComponent` reads the matching string from `UI_STRINGS` and writes it to the polite live region, as `L2-031` requires.
+After an add, toggle, edit, or delete, `TodoPageComponent` reads the matching string from `UI_STRINGS` and passes it to `Announcer.announce()`. The app shell's polite live region speaks it, as `L2-031` requires.
 
 ![Sequence diagram for announcing a task action](diagrams/sequence-announce-task-action.png)
 
 ### Behaviour — keyboard delete with focus movement
 
-After a keyboard delete, `TodoPageComponent` moves focus to the next row, else the previous row, else the composer, per `L2-031`.
+After a keyboard delete, `TodoPageComponent` moves focus to the next row's checkbox, else the previous row's checkbox, else the composer, per `L2-031`.
 
 ![Sequence diagram for keyboard delete focus movement](diagrams/sequence-keyboard-delete-focus.png)
 
 ### Behaviour — edit mode ending returns focus to the title
 
-When edit mode ends by Enter or Escape, `TodoItemComponent` replaces the text field with the title and returns focus to the title, per `L2-031`.
+When edit mode ends by Enter or Escape, `TodoItemComponent` replaces the text field with the title and returns focus to the title button, per `L2-031`.
 
 ![Sequence diagram for focus after edit mode ends](diagrams/sequence-edit-end-focus.png)
 
 ### Behaviour — toast roles and undo toast focus
 
-`ToastComponent` renders `role="alert"` for an error toast and `role="status"` otherwise. The undo toast never takes focus, and the store pauses auto-dismiss while focus is inside the toast.
+`ToastComponent` renders `role="alert"` for an error toast and `role="status"` otherwise. The undo toast never takes focus, and the store pauses auto-dismiss while focus is inside the toast. The timer restarts at 6 seconds when focus leaves.
 
 ![Sequence diagram for toast roles and focus handling](diagrams/sequence-toast-roles-and-focus.png)

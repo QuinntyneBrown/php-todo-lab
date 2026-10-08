@@ -13,36 +13,36 @@ skinparam class {
 ' --------------------------
 title Class structure — Handle connectivity failures
 
-enum FailureKind {
-  Network
-  Server
-  Client
+class FailureKind <<type>> {
+  network | server | client
 }
 
-class ResiliencePolicy <<placement in code to supply>> {
-  +maxReadRetries: 2
-  +readRetryDelays: 300 ms, 900 ms
-  +requestTimeout: 10 seconds
-  +retriesWrites: false
-  +isRetryable(kind: FailureKind): boolean
+class ApiError <<error>> {
+  +kind: FailureKind
+  +status?: number
+  +problem?: ProblemDetails
 }
 
 abstract class TodoApi {
-  +list(): Promise<TodoList>
+  +list(): Promise<TodoListResponse>
   +create(title: string): Promise<Todo>
-  +update(id: string, changes: TodoChanges): Promise<Todo>
+  +update(id: string, changes: UpdateTodoPayload): Promise<Todo>
   +delete(id: string): Promise<void>
   +restore(id: string): Promise<Todo>
+  +clearCompleted(): Promise<ClearCompletedResponse>
+  +restoreMany(ids: readonly string[]): Promise<Todo[]>
 }
 
 class HttpTodoApi {
   -http: HttpClient
-  -policy: ResiliencePolicy
-  +list(): Promise<TodoList>
+  +list(): Promise<TodoListResponse>
   +create(title: string): Promise<Todo>
-  +update(id: string, changes: TodoChanges): Promise<Todo>
+  +update(id: string, changes: UpdateTodoPayload): Promise<Todo>
   +delete(id: string): Promise<void>
   +restore(id: string): Promise<Todo>
+  +clearCompleted(): Promise<ClearCompletedResponse>
+  +restoreMany(ids: readonly string[]): Promise<Todo[]>
+  -toApiError(error: unknown): ApiError
 }
 
 class InMemoryTodoApi <<test fake>> {
@@ -50,20 +50,27 @@ class InMemoryTodoApi <<test fake>> {
 }
 
 class TodoStore <<providedIn root>> {
-  +todos: WritableSignal<Todo[]>
+  +todos: WritableSignal<TodoView[]>
   +toast: WritableSignal<ToastState or null>
-  +rollbackAdd(): void
-  +rollbackToggle(id: string): void
-  +rollbackEdit(id: string): void
-  +rollbackDelete(id: string): void
+  +loadFailed: Signal<boolean>
+  +addTask(title: string): Promise<void>
+  +toggle(id: string, completed: boolean): Promise<void>
+  +saveTitle(id: string, title: string): Promise<void>
+  +delete(id: string): Promise<void>
+  +clearCompleted(): Promise<void>
+  +reload(): void
+  rollbacks are internal to each method
+}
+
+class Connectivity <<providedIn root>> {
+  +online: Signal<boolean>
+  seeded from navigator.onLine
+  updated by window online and offline events
 }
 
 class TodoPageComponent <<smart component>> {
-  +isOffline: Signal<boolean>
-}
-
-class OfflineBanner <<class name to supply>> {
-  +message: "You're offline. Changes will fail until you reconnect."
+  offline banner markup, role="status":
+  "You're offline. Changes will fail until you reconnect."
 }
 
 class ToastComponent <<presentational>> {
@@ -72,10 +79,16 @@ class ToastComponent <<presentational>> {
 
 TodoApi <|.. HttpTodoApi
 TodoApi <|.. InMemoryTodoApi
-HttpTodoApi --> ResiliencePolicy : applies
-ResiliencePolicy ..> FailureKind : classifies
+HttpTodoApi ..> ApiError : throws
+note right of HttpTodoApi
+  Every request pipes through timeout of 10 000 ms.
+  list adds retry: count 2, delays 300 ms then 900 ms,
+  for network errors and 5xx only.
+  Writes are never retried.
+end note
+ApiError --> FailureKind
 TodoStore --> TodoApi : depends on
 TodoPageComponent --> TodoStore : reads
-TodoPageComponent *-- OfflineBanner
+TodoPageComponent --> Connectivity : reads online
 TodoPageComponent *-- ToastComponent
 @enduml

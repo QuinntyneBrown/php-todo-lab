@@ -21,20 +21,20 @@ The layout is a stylesheet concern. No script reads the viewport size. Component
 The feature is a frontend-only slice. It touches the Angular SPA container and no other container.
 
 - **`TodoPageComponent`** — smart component at route `/`. It hosts the column and the surface that holds the composer, toolbar, and list. Its stylesheet sets the column width, the side gutters, the top offset, and the raised rounded surface from MD upward.
-- **`TodoHeaderComponent`** — presentational component for the date and the progress ring. The ring is 48 px at XS. The ring size from SM upward is `<TO SUPPLY>`; the mock shows 56 px.
+- **`TodoHeaderComponent`** — presentational component for the date and the progress ring. Its inputs are `date`, `activeCount`, and `completedCount`. The ring is 48 px at XS and 56 px from SM upward, as the mock shows.
 - **`TodoComposerComponent`** — presentational component for the new-task field and the "Add task" button. The field computes to a font size of at least 16 px so iOS does not zoom on focus. The text stays in the field when the viewport changes.
-- **`TodoFilterComponent`** — presentational component for the segmented control. It spans the full width at XS.
-- **`TodoListComponent`** — presentational component that renders the `ul` of rows.
+- **`TodoFilterComponent`** — presentational component for the segmented control. Its inputs are `selected`, `allCount`, `activeCount`, and `doneCount`, and its output is `selectedChange`. It spans the full width at XS.
+- **`TodoListComponent`** — presentational component that renders the `ul` of rows, and the skeleton rows while its `loading` input is `true`.
 - **`TodoItemComponent`** — presentational component for one row. Its title wraps and the row grows, so controls never overlap the text at 320 px with a 200-character title. It reveals the delete control according to the hover capability.
 - **`ToastComponent`** — presentational component for the toast. Its bottom offset includes `env(safe-area-inset-bottom)`. The mock adds a 16 px base offset.
 - **`TodoStore`** — root service. Its `editingId` signal records which row is in edit mode. A viewport change does not write to it.
-- **`tokens.scss`** — shared design tokens as CSS custom properties. Component stylesheets read them.
+- **`tokens.scss`** — shared design tokens as CSS custom properties, plus the breakpoint thresholds as Sass variables. Component stylesheets read them.
 
 Every interactive control has a hit area of at least 44 x 44 CSS px. The mock applies this with a 44 px minimum size on the delete control, the toast button, and the banner button.
 
-Breakpoint thresholds are fixed by L2-027. The mechanism that shares the threshold values between component stylesheets is `<TO SUPPLY>`, because media queries cannot read CSS custom properties.
+Breakpoint thresholds are fixed by L2-027. Media queries cannot read CSS custom properties, so `tokens.scss` declares the thresholds as Sass variables: `$breakpoint-sm: 576px`, `$breakpoint-md: 768px`, `$breakpoint-lg: 992px`, and `$breakpoint-xl: 1200px`. Each component stylesheet loads them with `@use` and Sass resolves them at build time.
 
-The SM column is "full width up to 560 px". The side gutter at SM and above is `<TO SUPPLY>`; L2-027 fixes the 16 px gutter at XS only.
+The SM column is "full width up to 560 px". The side gutter is 16 px at every breakpoint, as the mock applies it. L2-027 fixes the 16 px gutter at XS only, and the design keeps the same value above XS.
 
 ## Requirements
 
@@ -67,7 +67,7 @@ Only the Angular SPA takes part. The Laravel API and the MySQL database are not 
 
 ### Class structure
 
-The `Breakpoint` enumeration drives column, ring, and filter rules. The `PointerCapability` enumeration drives the delete reveal in `TodoItemComponent`. The page composes the presentational components, and the list renders one row per task.
+The `Breakpoint` and `PointerCapability` enumerations in the diagram are illustrative. The implementation is CSS-only: media queries on width and on `hover` carry these rules, and no TypeScript enum exists. `Breakpoint` names the column, ring, and filter rules. `PointerCapability` names the delete reveal in `TodoItemComponent`. The page composes the presentational components, and the list renders one row per task.
 
 ![Class diagram for the responsive layout](diagrams/class-structure.png)
 

@@ -26,12 +26,13 @@ box "Frontend — Angular SPA (state and API client)" #E0F2FE
 end box
 user -> user : Type "Buy oat" in the composer and start editing a task title
 user -> css : Rotate the device or resize the window (viewport width changes)
-css -> css : Re-evaluate breakpoint media queries (L2-027)
+css -> css : Re-evaluate media queries built from the $breakpoint-* Sass variables (L2-027)
 alt XS below 576 px
   css -> page : Full width column with 16 px side gutters (L2-027)
   css -> page : Header ring 48 px and filter control full width (L2-027)
 else SM from 576 px
-  css -> page : Full width column up to 560 px, centred (L2-027)
+  css -> page : Full width column up to 560 px, centred, 16 px gutters (L2-027)
+  css -> page : Header ring 56 px
 else MD from 768 px
   css -> page : 640 px centred column, list on raised rounded surface (L2-027)
 else LG and XL from 992 px

@@ -25,7 +25,7 @@ box "Backend — Laravel Infrastructure" #FFF4E5
   database "MySQL database" as db
 end box
 ctrl -> action : Invoke the bulk Action
-action -> repo : Soft-delete all completed todos or restore the given ids
+action -> repo : deleteCompleted() or restoreMany(ids)
 repo -> db : Begin transaction (L2-043 criterion 1)
 repo -> db : Select the affected ids
 db --> repo : Ids
@@ -33,8 +33,8 @@ repo -> db : Update every affected row
 alt Every statement succeeds
   repo -> db : Commit
   db --> repo : Committed, all rows changed
-  repo --> action : Affected todos
-  action --> ctrl : Affected todos
+  repo --> action : Soft-deleted ids or restored todos
+  action --> ctrl : Soft-deleted ids or restored todos
 else A statement fails
   repo -> db : Roll back
   db --> repo : No row changed

@@ -23,29 +23,29 @@ The slice runs from the checkbox in a list row to the `todos` table.
 
 Frontend (Angular SPA):
 
-- **`TodoItemComponent`** — presentational component for one row. It renders the native checkbox, emits a `toggled` output when the checkbox changes, and plays the completion feedback: check draw, ring burst, and left-to-right strike-through wipe. It plays the burst only when `completed` changes from false to true after first render. Reopening removes the strike-through without the burst. Under `prefers-reduced-motion: reduce`, it skips the burst and the wipe and changes colour only. A completed title uses the muted text token from `tokens.scss` (token name `<TO SUPPLY>`).
-- **`TodoPageComponent`** — smart component. It handles `toggled` and calls the store.
-- **`TodoStore`** — signal store. It captures the previous state of the task, sets `completed` and `completedAt` optimistically in the `todos` signal, and lets `activeCount` and `completedCount` recompute. It keeps one ordered write queue per task, so a second write starts only after the first settles. While a later write is pending for a task, the store keeps the optimistic state and does not overwrite it with an earlier server response. On failure, it restores the previous state and sets the `toast` signal.
-- **`ToastComponent`** — presentational component. It renders the toast "Couldn't update that task."
-- **`TodoApi`** — abstract class that defines the update call. **`HttpTodoApi`** is the only implementation that uses `HttpClient`, and **`InMemoryTodoApi`** is the test fake that can be set to fail on demand.
-- **`UI_STRINGS`** in `ui-strings.ts` — typed constants that hold the toast copy.
+- **`TodoItemComponent`** — presentational component for one row. It renders the native checkbox, emits a `toggled` output when the checkbox changes, and plays the completion feedback: check draw, ring burst, and left-to-right strike-through wipe. It plays the burst only when `completed` changes from false to true after first render. Reopening removes the strike-through without the burst. Under `prefers-reduced-motion: reduce`, it skips the burst and the wipe and changes colour only. A completed title uses the muted text token `--slate` from `tokens.scss`, the same token the mock uses. The component receives the row as the `todo` input of type `TodoView` and emits `toggled: boolean`.
+- **`TodoPageComponent`** — smart component. It handles `toggled` and calls `TodoStore.toggle(id, completed)`.
+- **`TodoStore`** — signal store. It captures the previous state of the task, sets `completed` and `completedAt` optimistically in the `todos` signal, and lets `activeCount` and `completedCount` recompute. It keeps one promise chain per task, so a second `PATCH` starts only after the first settles. While a later write is pending for a task, the store keeps the optimistic state and does not overwrite it with an earlier server response. It records the last server-confirmed state of the task after each successful write. On failure, it waits until the chain drains, then reverts the task to the last server-confirmed state, and sets the `toast` signal. The rollback is internal to `toggle`; the store exposes no separate rollback method.
+- **`ToastComponent`** — presentational component. It renders the error toast "Couldn't update that task." with `role="alert"`.
+- **`TodoApi`** — abstract class that defines `update(id: string, changes: UpdateTodoPayload): Promise<Todo>`. **`HttpTodoApi`** is the only implementation that uses `HttpClient`. It applies `timeout(10_000)`, never retries a write, and converts failures to `ApiError` with the status and parsed problem body. **`InMemoryTodoApi`** is the test fake that can be set to fail on demand.
+- **`UI_STRINGS`** in `src/app/features/todos/ui-strings.ts` — typed constants that hold the toast copy in the `toasts` group.
 
 Backend (Laravel API):
 
-- **`TodoController`** — thin controller for `PATCH /api/v1/todos/{id}` under `routes/api.php`. It validates through the form request, calls one action, and returns a resource.
+- **`TodoController`** — thin controller for `PATCH /api/v1/todos/{id}` under `routes/api.php`. It validates through the form request, calls `UpdateTodo::handle`, and returns a resource. The `{todo}` route parameter uses `whereUlid`, so a malformed id is a `404` from routing.
 - **`UpdateTodoRequest`** — form request. It rejects a non-boolean `completed` with `422` and an error entry for the field.
-- **`UpdateTodo`** — action with a single `__invoke` method. It loads the todo through `TodoRepository` and sets `completed_at` to the current UTC time when completing. It sets `completed_at` to null when reopening. It leaves `completed_at` unchanged when the todo is already completed. It then saves the todo.
-- **`TodoRepository`** — interface that the action depends on. **`EloquentTodoRepository`** implements it, and **`InMemoryTodoRepository`** is the unit-test fake.
+- **`UpdateTodo`** — action with a single public method, `handle(string $id, array $changes): Todo`. It loads the todo through `TodoRepository::find` and throws `TodoNotFound` when the todo is missing or soft-deleted. It sets `completed_at` to the current UTC time when completing. It sets `completed_at` to null when reopening. It leaves `completed_at` unchanged when the todo is already completed. It then calls `TodoRepository::update`, which issues one `UPDATE` statement.
+- **`TodoRepository`** — interface that the action depends on. This feature uses `find(string $id): ?Todo` and `update(Todo $todo, array $changes): Todo`. **`EloquentTodoRepository`** implements it, and **`InMemoryTodoRepository`** is the unit-test fake.
 - **`Todo`** — Eloquent model with a `completed_at` cast to `immutable_datetime` and a computed `completed` accessor.
 - **`TodoResource`** — serialises the todo as `id`, `title`, `completed`, `completedAt`, `createdAt`, and `updatedAt`, wrapped in `data`.
 
-Method names shown in the diagrams, such as `toggle`, `updateTodo`, `find`, and `save`, are indicative. Final names are `<TO SUPPLY>`.
+The method names in the diagrams, `toggle`, `update`, `find`, and `handle`, are the settled names.
 
-Open details:
+Further decisions:
 
-- Behaviour of queued later writes for a task when an earlier write fails: `<TO SUPPLY>`.
-- Treatment of a `404` response to a toggle: `<TO SUPPLY>`. The `404` handling for a `PATCH` on a task deleted elsewhere is specified in `L2-014` and is described in the edit-task-title design.
-- Mechanism that distinguishes a completion transition from the initial render of a completed row: `<TO SUPPLY>`.
+- A failed write does not cancel later writes queued for the same task. The later writes still run in order. After the chain drains, the task reverts to the last server-confirmed state when any write in the chain failed, and the counts revert with it.
+- A `404` response to a toggle follows `L2-014` criterion 5. The store removes the row from the `todos` signal and shows the error toast "That task no longer exists.".
+- `TodoItemComponent` distinguishes a completion transition from the initial render in an `effect` over the `todo` input. The effect stores the `completed` value it last saw. The first run only records the value, and later runs play the burst when the value changes from false to true.
 
 ## Requirements
 
@@ -73,7 +73,7 @@ The Angular SPA sends the toggle as a `PATCH` to the Laravel API, which stores `
 
 ### Components
 
-In the SPA, the item emits `toggled` and the store applies the change and calls the `TodoApi` port. In the API, the controller validates through `UpdateTodoRequest` and invokes `UpdateTodo`, which persists through the repository.
+In the SPA, the item emits `toggled` and the store applies the change and calls the `TodoApi` port. In the API, the controller validates through `UpdateTodoRequest` and calls `UpdateTodo::handle`, which persists through the repository.
 
 ![C4 component view for toggling task completion](diagrams/c4-component.png)
 

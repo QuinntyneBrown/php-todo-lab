@@ -14,7 +14,14 @@ skinparam class {
 title Class structure — Backend layering
 
 class TodoController {
-  one method per endpoint, at most 10 lines each
+  +index()
+  +store()
+  +update()
+  +destroy()
+  +restore()
+  +destroyCompleted()
+  +restoreMany()
+  .. each at most 10 lines ..
 }
 
 class "Form Requests" as FormRequests {
@@ -26,25 +33,25 @@ class "Form Requests" as FormRequests {
 
 package "Action classes" {
   class ListTodos {
-    +__invoke(status: TodoStatus)
+    +handle(status: TodoStatus): array
   }
   class CreateTodo {
-    +__invoke(title: string)
+    +handle(title: string): Todo
   }
   class UpdateTodo {
-    +__invoke(id: string, changes: array)
+    +handle(id: string, changes: array): Todo
   }
   class DeleteTodo {
-    +__invoke(id: string)
+    +handle(id: string): void
   }
   class RestoreTodo {
-    +__invoke(id: string)
+    +handle(id: string): Todo
   }
   class ClearCompletedTodos {
-    +__invoke()
+    +handle(): list<string>
   }
   class RestoreTodos {
-    +__invoke(ids: list of string)
+    +handle(ids: list<string>): Collection<int, Todo>
   }
 }
 
@@ -55,14 +62,17 @@ enum TodoStatus {
 }
 
 interface TodoRepository {
-  +list(status: TodoStatus)
-  +find(id: string): Todo
+  +list(status: TodoStatus): Collection<int, Todo>
+  +counts(): array{active: int, completed: int}
   +createWithinLimit(title: string, limit: int): Todo
+  +find(id: string): ?Todo
   +update(todo: Todo, changes: array): Todo
-  +softDelete(todo: Todo): void
-  +restore(id: string): Todo
-  +softDeleteCompleted()
-  +restoreMany(ids: list of string)
+  +delete(todo: Todo): void
+  +findDeleted(id: string): ?Todo
+  +restore(todo: Todo): Todo
+  +deleteCompleted(): list<string>
+  +restoreMany(ids: list<string>): Collection<int, Todo>
+  +purgeDeletedBefore(cutoff: CarbonImmutable, limit: int): int
 }
 
 class EloquentTodoRepository

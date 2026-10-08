@@ -29,8 +29,9 @@ box "Backend — Laravel API (HTTP layer)" #D1FADF
 end box
 user -> router : Open /?filter=done (reload, bookmark, or back)
 router -> page : Bind query parameter filter=done to the page input (L2-006)
-page -> store : Set filter signal to Done
-store -> controller : GET /api/v1/todos (list load as in list-tasks)
+page -> page : ngOnChanges parses 'done' as TodoFilter (unknown values parse to 'all')
+page -> store : filter.set('done')
+store -> controller : TodoApi.list() sends GET /api/v1/todos with no status (list load as in list-tasks)
 controller --> store : 200 with data and meta
 store -> store : Recompute visibleTodos, completed tasks only (L2-006)
 store --> list : Completed tasks only (L2-006)

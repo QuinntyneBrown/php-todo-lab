@@ -30,21 +30,21 @@ box "Backend — Laravel Application and Domain" #ECFDF3
 end box
 user -> item : Check the task (first toggle)
 item -> store : toggle(id, true)
-store -> store : Apply optimistic state, enqueue write 1 for the task (L2-010)
+store -> store : Apply optimistic state, chain write 1 on the task promise chain (L2-010)
 user -> item : Uncheck the task (second toggle)
 item -> store : toggle(id, false)
-store -> store : Apply optimistic state, enqueue write 2 behind write 1 (L2-010)
+store -> store : Apply optimistic state, chain write 2 behind write 1 (L2-010)
 store --> item : UI shows the latest state at once (L2-010)
-store -> api : updateTodo(id, completed true), write 1
+store -> api : update(id, {completed: true}), write 1
 api -> ctrl : PATCH with completed true
-ctrl -> action : Invoke, completed_at set
+ctrl -> action : handle(id, changes), completed_at set
 action --> ctrl : Todo
 ctrl --> api : 200 OK
 api --> store : Todo with completed true
 store -> store : Write 2 is pending, so keep the optimistic UI state
-store -> api : updateTodo(id, completed false), write 2 starts after write 1 settles
+store -> api : update(id, {completed: false}), write 2 starts after write 1 settles
 api -> ctrl : PATCH with completed false
-ctrl -> action : Invoke, completed_at cleared
+ctrl -> action : handle(id, changes), completed_at cleared
 action --> ctrl : Todo
 ctrl --> api : 200 OK
 api --> store : Todo with completed false

@@ -30,8 +30,8 @@ box "Backend — Laravel Infrastructure" #FFF4E5
 end box
 a -> ctrl : PATCH /api/v1/todos/{id} with body A
 b -> ctrl : PATCH /api/v1/todos/{id} with body B at the same time
-ctrl -> action : Invoke UpdateTodo for A and for B
-action -> repo : Update the todo for A and for B
+ctrl -> action : handle() for A and for B
+action -> repo : update(todo, changes) for A and for B
 repo -> db : A sends one UPDATE statement for its changed columns and updated_at
 repo -> db : B sends one UPDATE statement for its changed columns and updated_at
 note right of db : InnoDB row lock serialises the two statements (L2-043 criterion 2)
@@ -41,5 +41,5 @@ repo --> action : Updated Todo for A and for B
 action --> ctrl : Updated Todo for A and for B
 ctrl --> a : 200 with the todo as saved by A
 ctrl --> b : 200 with the todo as saved by B
-note over db : Final state equals the last statement applied, never a partial row (L2-043 criterion 2)
+note over db : Same field: final value equals one of the two requests. Disjoint fields: both changes present. Never a partial row (L2-043 criterion 2)
 @enduml

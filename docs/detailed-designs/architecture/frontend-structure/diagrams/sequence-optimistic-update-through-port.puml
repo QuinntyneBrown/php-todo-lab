@@ -28,14 +28,14 @@ box "Backend — Laravel API (HTTP layer)" #D1FADF
   participant "Laravel API" as api
 end box
 user -> item : Check the task checkbox
-item -> list : Emit toggle through output() (L2-046)
-list -> page : Re-emit toggle through output() (L2-046)
-page -> store : Request completion change for the task
+item -> list : Emit toggled(true) through output() (L2-046)
+list -> page : Re-emit toggled through output() (L2-046)
+page -> store : toggle(id, true)
 store -> store : Write todos signal optimistically (L2-047)
 store -> store : Recompute activeCount, completedCount, progress (L2-047)
 store --> page : Signals notify OnPush components (L2-039)
 page --> user : Updated row and counts within 100 ms (L2-039)
-store -> http : Call TodoApi, resolved to HttpTodoApi (L2-048)
+store -> http : update(id, { completed: true }) on TodoApi, resolved to HttpTodoApi (L2-048)
 http -> api : PATCH /api/v1/todos/{id} through HttpClient and firstValueFrom (L2-048)
 alt Server accepts the change
   api --> http : 200 with todo resource
@@ -43,7 +43,7 @@ alt Server accepts the change
   store -> store : Reconcile todos signal with the server version
 else Request fails
   api --> http : Network error or error response
-  http --> store : Rejected promise
+  http --> store : Promise rejected with ApiError
   store -> store : Revert todos signal and set toast signal (L2-047)
   store --> page : Signals notify OnPush components (L2-039)
   page --> user : Reverted row and error toast

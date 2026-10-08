@@ -30,30 +30,33 @@ end note
 == Add ==
 user -> composer : Type a title with focus in the composer
 user -> composer : Press Enter on valid text
-composer -> page : Emit add through output()
-page -> store : Add the task (L2-001, L2-023)
+composer -> page : submitted output
+page -> store : addTask(title) (L2-001, L2-023)
 == Complete ==
 user -> item : Press Tab until the row checkbox has focus
 user -> item : Press Space on the checkbox
-item -> page : Emit toggle through the list (L2-009, L2-023)
-page -> store : Toggle completion
+item -> page : toggled output through the list (L2-009, L2-023)
+page -> store : toggle(id, completed)
 == Edit ==
 user -> item : Press Tab to the row title
 user -> item : Press Enter to start editing
+item -> page : editStarted output
+page -> store : beginEdit(id)
 item -> item : Replace the title with a text field (L2-012, L2-023)
 alt User presses Enter
   user -> item : Press Enter
-  item -> page : Emit save through output()
-  page -> store : Save the new title
+  item -> page : titleSaved output
+  page -> store : saveTitle(id, title)
 else User presses Escape
   user -> item : Press Escape
-  item -> item : Restore the original title, no request (L2-012, L2-023)
+  item -> page : editCancelled output
+  page -> store : cancelEdit(), no request (L2-012, L2-023)
 end
 == Delete ==
 user -> item : Press Tab to the row delete control
 user -> item : Press Enter or Space on the delete control
-item -> page : Emit delete through the list
-page -> store : Delete the task (L2-015, L2-023)
+item -> page : deleted output { viaKeyboard: true } through the list
+page -> store : delete(id) (L2-015, L2-023)
 note over user, store
   Every flow completes without a pointer (L2-023)
 end note

@@ -22,12 +22,14 @@ The policy has three parts. The client retries idempotent reads, because a repea
 
 The feature is a frontend-only slice. The Laravel API is the remote end of the requests and is unchanged.
 
-- **`TodoApi`** — abstract class that `TodoStore` depends on. It declares one operation for each endpoint. Exact signatures are `<TO SUPPLY>`.
-- **`HttpTodoApi`** — adapter and the only class that uses `HttpClient`. It wraps calls with `firstValueFrom`. It applies the 10-second timeout to every request. It retries `GET /api/v1/todos` up to 2 more times after a network error or a `5xx` response, waiting 300 ms before the first retry and 900 ms before the second. It sends each write once.
-- **Resilience policy** — the values that `HttpTodoApi` applies: 2 retries, delays of 300 ms then 900 ms, a 10-second timeout, and no write retries. How the code expresses the policy (for example an RxJS operator or an HTTP interceptor) is `<TO SUPPLY>`. RxJS stays inside `core/api`.
-- **`TodoStore`** — root service. It loads the list through `TodoApi`, applies optimistic updates, and performs the rollback when a write fails. After the read retries are exhausted, the list resource is in its error state.
-- **`TodoPageComponent`** — smart component. It hosts the offline banner and the toast area, and shows the banner while the browser is offline.
-- **Offline banner** — element that shows "You're offline. Changes will fail until you reconnect." and does not block the page. Its class name and its live-region role are `<TO SUPPLY>`.
+- **`TodoApi`** — abstract class in `src/app/core/api/todo-api.ts` that `TodoStore` depends on. It declares one operation for each endpoint, and each returns a `Promise`: `list(): Promise<TodoListResponse>`, `create(title: string): Promise<Todo>`, `update(id: string, changes: UpdateTodoPayload): Promise<Todo>`, `delete(id: string): Promise<void>`, `restore(id: string): Promise<Todo>`, `clearCompleted(): Promise<ClearCompletedResponse>`, and `restoreMany(ids: readonly string[]): Promise<Todo[]>`.
+- **`HttpTodoApi`** — adapter and the only class that uses `HttpClient`. It wraps calls with `firstValueFrom`. It applies the 10-second timeout to every request. It converts each failure to an `ApiError`. It retries `GET /api/v1/todos` up to 2 more times after a network error or a `5xx` response, waiting 300 ms before the first retry and 900 ms before the second. It sends each write once.
+- **Resilience policy** — the values that `HttpTodoApi` applies: 2 retries, delays of 300 ms then 900 ms, a 10-second timeout, and no write retries. `HttpTodoApi` expresses the policy with RxJS operators on each request, not with an HTTP interceptor. Every request pipes through `timeout(10_000)`, and a timeout counts as a network error. `list()` adds `retry({ count: 2, delay: (_, n) => timer(n === 1 ? 300 : 900) })`, and the delay function rethrows unless the failure is a network error or a `5xx` response. RxJS stays inside `core/api`.
+- **`ApiError`** — error class in `core/api/models` with `kind`, an optional `status`, and an optional `problem` that holds the parsed RFC 9457 body. `kind` is a `FailureKind`: `'network'`, `'server'`, or `'client'`. The store reads `status` to recognise `404` and `422`.
+- **`TodoStore`** — root service. It loads the list through `resource({ loader: () => this.api.list() })`, applies optimistic updates, and performs the rollback inside each write method when the write fails. After the read retries are exhausted, the list resource is in its error state and `loadFailed` is `true`.
+- **`Connectivity`** — root service in `src/app/core/connectivity/connectivity.ts`. Its `online` signal starts from `navigator.onLine` and follows the window `online` and `offline` events.
+- **`TodoPageComponent`** — smart component. It hosts the offline banner and the toast area, and shows the banner while `Connectivity.online` is `false`.
+- **Offline banner** — markup in the `TodoPageComponent` template, not a separate component. It shows "You're offline. Changes will fail until you reconnect." with `role="status"`, as the mock `pages/page.offline.html` does, and does not block the page.
 - **`ToastComponent`** — presentational component that shows the error toast after a rollback.
 - **`UI_STRINGS`** — typed constants that hold the banner text and the rollback toast text.
 
@@ -39,14 +41,19 @@ Rollback for each write is specified by other requirements and is cited here, no
 | Toggle completion (`L2-010`) | Revert the task and the counts | "Couldn't update that task." |
 | Edit title (`L2-013`) | Restore the previous title | "Couldn't save that change." |
 | Delete task (`L2-015`) | Make the row reappear | "Couldn't delete that task." |
+| Clear completed | Make the cleared rows reappear | "Couldn't clear completed tasks." |
+| Restore one (undo of a delete) | Leave the task removed | "Couldn't restore that task." |
+| Restore many (undo of clear completed) | Leave the tasks removed | "Couldn't restore those tasks." |
 
-Details that this design leaves open:
+`TodoStore` reads the list through Angular `resource()` rather than `httpResource`. The loader calls `TodoApi.list()`, so `HttpTodoApi` stays the only class that uses `HttpClient` (L2-048), and the read keeps the port's retry and timeout policy.
 
-- How `TodoStore` reads the list through `httpResource` while `HttpTodoApi` stays the only class that uses `HttpClient` is `<TO SUPPLY>`.
-- The treatment of `4xx` responses to `GET /api/v1/todos` is `<TO SUPPLY>`. L2-042 names network errors and `5xx` responses as the retry triggers.
-- The source of the initial online state at page load, and the connectivity signal used afterwards, is `<TO SUPPLY>`.
-- Each attempt is a separate request, so the 10-second limit applies to each attempt. L2-042 does not state whether a total limit applies across retries, and none is defined here.
-- The bulk writes "Clear completed" and "Restore many" follow the write rule of one attempt. L2-042 cites no rollback requirement for them, so their rollback is `<TO SUPPLY>`.
+A `4xx` response to `GET /api/v1/todos` is not retried, because a repeated request returns the same client error. It shows the same error state as an exhausted retry.
+
+The initial online state comes from `navigator.onLine` at page load. The window `online` and `offline` events update the `Connectivity.online` signal afterwards.
+
+Each attempt is a separate request, so the 10-second limit applies to each attempt. L2-042 does not state a total limit across retries, and none is defined here.
+
+The bulk writes "Clear completed" and "Restore many" follow the write rule of one attempt. A failed clear makes the cleared rows reappear. A failed restore leaves the tasks removed. Each shows the error toast in the table above.
 
 ## Requirements
 
@@ -78,7 +85,7 @@ The Angular SPA applies the policy and sends requests to the Laravel API. The My
 
 ### Class structure
 
-`HttpTodoApi` applies the resilience policy and classifies each failure as a network, server, or client failure. `TodoStore` depends on `TodoApi` and rolls back optimistic updates.
+`HttpTodoApi` applies the resilience policy and converts each failure to an `ApiError` whose `kind` is network, server, or client. `TodoStore` depends on `TodoApi` and rolls back optimistic updates.
 
 ![Class diagram for handling connectivity failures](diagrams/class-structure.png)
 
@@ -96,7 +103,7 @@ A failed write is sent once. `TodoStore` then rolls back as `L2-004`, `L2-010`, 
 
 ### Behaviour — offline banner
 
-`TodoPageComponent` shows the non-blocking offline banner on the browser offline event and removes it on the online event, per `L2-042`.
+`Connectivity` updates its `online` signal on the browser `offline` and `online` events. `TodoPageComponent` shows the non-blocking offline banner while the signal is `false` and removes it when the signal returns to `true`, per `L2-042`.
 
 ![Sequence diagram for the offline banner](diagrams/sequence-offline-banner.png)
 

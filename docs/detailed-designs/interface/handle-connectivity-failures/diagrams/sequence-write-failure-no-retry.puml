@@ -27,7 +27,8 @@ box "Backend — Laravel API (HTTP layer)" #D1FADF
   participant "TodoController" as controller
 end box
 user -> page : Add, toggle, edit, or delete a task
-page -> store : Apply the action optimistically
+page -> store : addTask(), toggle(), saveTitle(), or delete()
+store -> store : Apply the change optimistically
 store --> page : UI already updated
 store -> api : create(), update(), or delete()
 api -> controller : POST, PATCH, or DELETE under /api/v1/todos (single attempt)
@@ -36,7 +37,7 @@ note over api
   No automatic retry for writes, because a retried write
   can duplicate or reorder changes (L2-042).
 end note
-api --> store : Failure
+api --> store : ApiError (single attempt)
 alt add failed
   store -> store : Remove the pending task and restore the typed title (L2-004)
   store --> page : toast "Couldn't add that task. Try again."

@@ -13,7 +13,7 @@ skinparam class {
 ' --------------------------
 title Class structure — Responsive layout
 
-enum Breakpoint {
+enum Breakpoint <<illustrative, CSS media queries only>> {
   XS : below 576 px
   SM : 576 px and above
   MD : 768 px and above
@@ -21,7 +21,7 @@ enum Breakpoint {
   XL : 1200 px and above
 }
 
-enum PointerCapability {
+enum PointerCapability <<illustrative, CSS hover media feature only>> {
   HoverHover
   HoverNone
 }
@@ -33,7 +33,8 @@ class TodoPageComponent <<smart component>> {
 
 class TodoHeaderComponent <<presentational>> {
   +date: InputSignal<Date>
-  +progress: InputSignal<number>
+  +activeCount: InputSignal<number>
+  +completedCount: InputSignal<number>
 }
 
 class TodoComposerComponent <<presentational>> {
@@ -41,18 +42,22 @@ class TodoComposerComponent <<presentational>> {
 }
 
 class TodoFilterComponent <<presentational>> {
-  +filter: InputSignal<string>
-  +filterChange: OutputEmitterRef<string>
+  +selected: InputSignal<TodoFilter>
+  +allCount: InputSignal<number>
+  +activeCount: InputSignal<number>
+  +doneCount: InputSignal<number>
+  +selectedChange: OutputEmitterRef<TodoFilter>
 }
 
 class TodoListComponent <<presentational>> {
-  +todos: InputSignal<Todo[]>
+  +todos: InputSignal<TodoView[]>
+  +loading: InputSignal<boolean>
 }
 
 class TodoItemComponent <<presentational>> {
-  +todo: InputSignal<Todo>
+  +todo: InputSignal<TodoView>
   +editing: InputSignal<boolean>
-  +deleted: OutputEmitterRef<void>
+  +deleted: OutputEmitterRef<{ viaKeyboard: boolean }>
 }
 
 class ToastComponent <<presentational>> {
@@ -65,6 +70,7 @@ class TodoStore <<providedIn root>> {
 
 class "tokens.scss" as Tokens <<design tokens>> {
   light and dark colour sets
+  $breakpoint-sm, -md, -lg, -xl Sass variables
 }
 
 TodoPageComponent *-- TodoHeaderComponent

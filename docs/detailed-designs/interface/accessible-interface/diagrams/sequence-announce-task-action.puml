@@ -20,7 +20,8 @@ box "Frontend — Angular SPA (UI components)" #E0F2FE
   participant "TodoComposerComponent" as composer
   participant "TodoItemComponent" as item
   participant "TodoPageComponent" as page
-  participant "Polite live region" as live
+  participant "Announcer" as ann
+  participant "Polite live region (app shell)" as live
 end box
 box "Frontend — Angular SPA (state and API client)" #E0F2FE
   participant "TodoStore" as store
@@ -29,37 +30,40 @@ end box
 alt add
   user -> composer : Press Enter or click "Add task"
   composer -> page : submitted output
-  page -> store : Add task
+  page -> store : addTask(title)
   store --> page : Pending task shown
   page -> strings : Read announcement for add
   strings --> page : "Task added"
 else complete or reopen
   user -> item : Toggle the checkbox
   item -> page : toggled output
-  page -> store : Set completed
+  page -> store : toggle(id, completed)
   store --> page : State updated
   page -> strings : Read announcement for toggle
   strings --> page : "Task completed" or "Task reopened"
 else edit
   user -> item : Save an edited title
-  item -> page : editEnded output
-  page -> store : Update title
+  item -> page : titleSaved output
+  page -> store : saveTitle(id, title)
   store --> page : Title updated
   page -> strings : Read announcement for edit
   strings --> page : "Task updated"
 else delete
   user -> item : Activate delete
   item -> page : deleted output
-  page -> store : Delete task
+  page -> store : delete(id)
   store --> page : Row removed
   page -> strings : Read announcement for delete
   strings --> page : "Task deleted"
 end
-page -> live : Set message text (L2-031)
+page -> ann : announce(message) (L2-031)
+ann -> live : message signal updates the element text
 live --> at : Polite announcement, queued after current speech (L2-031)
 at --> user : Speaks the announcement
 note over page, live
   Announcement verbs match the button and toast verbs (L2-025).
   Strings other than "Task added" and "Task completed" follow the mock todo.html.
+  The announcement is optimistic, made when the user acts.
+  A rollback does not retract it; the error toast (role="alert") announces the failure.
 end note
 @enduml

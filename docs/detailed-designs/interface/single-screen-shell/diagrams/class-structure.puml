@@ -13,36 +13,57 @@ skinparam class {
 ' --------------------------
 title Class structure — Single-screen shell
 
-class "Route table" as Routes {
+class "routes (app.routes.ts)" as Routes {
   path "" renders TodoPageComponent
   path "**" redirects to /
 }
 
 class TodoPageComponent <<smart>> {
   -store: TodoStore
+  -today: Date = new Date()
+  -composerFocus: WritableSignal<{ target: 'composer', seq } or null>
   regions in order: header, composer, toolbar, list, toast area
-  requests composer focus after first render
+  toolbar markup: TodoFilterComponent and Clear completed button
+  requests composer focus after first render when (hover: hover)
 }
 
 class TodoHeaderComponent <<presentational>> {
+  +date: InputSignal<Date>
+  +activeCount: InputSignal<number>
+  +completedCount: InputSignal<number>
   weekday and date formatted in the user locale
 }
-class TodoComposerComponent <<presentational>>
+class TodoComposerComponent <<presentational>> {
+  +focusRequest: InputSignal<{ target: 'composer', seq } or null>
+  +submitted: OutputEmitterRef<string>
+}
 class TodoFilterComponent <<presentational>>
 class TodoListComponent <<presentational>>
 class ToastComponent <<presentational>>
 
-class "Polite live region" as Live {
-  class name TO SUPPLY
+class Announcer <<providedIn root>> {
+  +message: Signal<string>
+  +announce(message: string): void
+}
+
+class AppComponent <<app shell>> {
+  router outlet
+  aria-live polite element bound to Announcer.message
 }
 
 class TodoStore <<providedIn root>> {
-  +toast: signal
+  +toast: WritableSignal<ToastState or null>
 }
 
 class UI_STRINGS <<typed constants>> {
-  all user-facing strings
-  key names TO SUPPLY
+  all user-facing strings, ui-strings.ts
+  +composer
+  +filters
+  +emptyStates
+  +toasts
+  +announcements
+  +ariaLabels
+  +errors
 }
 
 Routes --> TodoPageComponent : activates for /
@@ -51,7 +72,9 @@ TodoPageComponent ..> TodoComposerComponent : renders 2nd
 TodoPageComponent ..> TodoFilterComponent : renders 3rd
 TodoPageComponent ..> TodoListComponent : renders 4th
 TodoPageComponent ..> ToastComponent : renders 5th
-TodoPageComponent --> Live : feeds
+TodoPageComponent --> Announcer : announces through
+AppComponent ..> Announcer : renders message
+AppComponent ..> Routes : router outlet
 TodoPageComponent --> TodoStore : injects
 TodoStore ..> UI_STRINGS : reads
 TodoPageComponent ..> UI_STRINGS : reads

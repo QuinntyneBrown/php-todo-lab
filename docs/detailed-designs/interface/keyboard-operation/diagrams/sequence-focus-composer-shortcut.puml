@@ -20,12 +20,13 @@ box "Frontend — Angular SPA (UI components)" #E0F2FE
   participant "TodoComposerComponent" as composer
 end box
 user -> page : Press / while focus is somewhere on the page
-page -> page : Inspect the focused element
-alt Focus is outside a text field
+page -> page : HostListener document:keydown inspects the event target
+alt Target is not input, textarea, or contenteditable
   page -> page : Prevent the default key action so / is not typed (L2-023)
-  page -> composer : Request focus (L2-023)
+  page -> composer : focusRequest { target: 'composer', seq } (L2-023)
+  composer -> composer : effect calls focus() on the text field
   composer --> user : Composer has focus
-else Focus is in a text field
+else Target is a text field
   page --> user : Ignore the key so / is typed into the field (L2-023)
 end
 @enduml

@@ -20,16 +20,17 @@ end box
 box "Backend — Laravel API (HTTP layer)" #D1FADF
   participant "routes/api.php" as routes
   participant "TodoController" as ctrl
-  participant "Exception rendering (bootstrap/app.php)" as errors
+  participant "ProblemDetailsRenderer" as errors
 end box
 box "Backend — Laravel Application and Domain" #ECFDF3
   participant "Action class" as action
 end box
 client -> routes : Any /api/v1 request
 routes -> ctrl : Dispatch to the controller
-ctrl -> action : Invoke the Action
+ctrl -> action : handle()
 action --> errors : Unhandled exception escapes
 errors -> errors : Treat every /api request as a JSON request so the default HTML page is bypassed (L2-020 criterion 3)
-errors -> errors : Build problem details with status 500 and a detail message (L2-020)
+errors -> errors : Log the exception
+errors -> errors : Build problem details: type about:blank, title Internal Server Error, status 500, fixed detail "An unexpected error occurred. Try again later." (L2-020)
 errors --> client : 500 application/problem+json
 @enduml

@@ -25,12 +25,12 @@ box "Frontend — Angular SPA (state and API client)" #E0F2FE
   participant "TodoStore" as store
 end box
 user -> item : Complete a task (example: 3 active and 2 completed become 2 active and 3 completed)
-item -> page : Emit change
-page -> store : Apply change optimistically to todos signal
+item -> page : Emit toggled(true)
+page -> store : toggle(id, true) updates the todos signal optimistically
 store -> store : Recompute activeCount, completedCount (L2-007)
 store -> store : Recompute progress, completed divided by total (L2-007)
 store --> page : New counts and progress
-page -> header : Bind activeCount, completedCount, progress
+page -> header : Bind date, activeCount, completedCount
 alt Tasks exist and all are completed
   header --> user : Show "All done" instead of a number (L2-007)
 else Tasks exist and some are active
@@ -39,6 +39,6 @@ else No tasks exist
   header --> user : Show "0 left" with an empty ring (L2-007)
 end
 header -> header : Animate ring to the new value within 300 ms (L2-007)
-page -> filter : Bind counts from the same signals
+page -> filter : Bind allCount, activeCount, doneCount from the same signals
 filter --> user : Show "All 5", "Active 2", "Done 3" style counts (L2-007)
 @enduml

@@ -24,13 +24,13 @@ This document assumes no prior knowledge of the code base. The diagrams show whe
 
 The feature is a vertical slice that runs from the scheduler to the database. No Angular component takes part.
 
-- **Laravel scheduler** — registers `todos:purge-deleted` in `routes/console.php` with an hourly frequency. The scheduler is a component inside the Laravel API container, not a separate container. How the scheduler is triggered during local development (for example `php artisan schedule:work` or an operating-system task) is `<TO SUPPLY>`.
-- **`PurgeDeletedTodos`** — Artisan command with the signature `todos:purge-deleted`. Its `handle` method computes the cutoff as the current time minus 24 hours. It then calls the repository repeatedly, 500 rows at a time, until a call deletes fewer than 500 rows. It logs the total count and returns exit code `0`. The constants `RETENTION_HOURS` (24) and `CHUNK_SIZE` (500) hold the two values from the requirement.
-- **`TodoRepository`** — interface that declares the purge operation. The command depends on this interface, not on Eloquent. The class diagram shows the operation as `purgeDeletedBefore(cutoff, limit)`; the final method name is `<TO SUPPLY>`.
+- **Laravel scheduler** — registers `todos:purge-deleted` in `routes/console.php` with an hourly frequency. The scheduler is a component inside the Laravel API container, not a separate container. During local development, `php artisan schedule:work` triggers the scheduler. The backend README documents that command.
+- **`PurgeDeletedTodos`** — Artisan command with the signature `todos:purge-deleted`. Its `handle` method computes the cutoff as the current time minus 24 hours. It then calls the repository repeatedly, 500 rows at a time, until a call deletes fewer than 500 rows. It logs and prints the total count and returns exit code `0`. The constants `RETENTION_HOURS` (24) and `CHUNK_SIZE` (500) hold the two values from the requirement.
+- **`TodoRepository`** — interface that declares the purge operation. The command depends on this interface, not on Eloquent. The operation is `purgeDeletedBefore(CarbonImmutable $cutoff, int $limit): int`.
 - **`EloquentTodoRepository`** — implements the purge operation. Each call permanently deletes at most `limit` rows whose `deleted_at` is earlier than the cutoff and returns the number of rows deleted. One call issues one statement, so each chunk commits independently.
 - **`Todo`** — Eloquent model with the `SoftDeletes` trait. The repository reaches soft-deleted rows through the model and force-deletes them.
 - **`AppServiceProvider`** — binds `TodoRepository` to `EloquentTodoRepository`.
-- **Log** — the command writes the purged count to the application log. The log channel and the message format are `<TO SUPPLY>`.
+- **Log** — the command writes the message `Purged {n} soft-deleted todos.` at `info` level to the default application log channel. The command also prints the same message to the console. `{n}` is the total count, including `0`.
 
 A todo soft-deleted exactly 24 hours ago is not older than 24 hours and remains. The query condition is a strict comparison of `deleted_at` with the cutoff. The index on `(deleted_at, created_at, id)` from the persistence design has `deleted_at` as its leading column and serves this condition.
 

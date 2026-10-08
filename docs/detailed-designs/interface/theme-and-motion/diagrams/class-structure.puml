@@ -14,9 +14,10 @@ skinparam class {
 title Class structure — Theme and motion
 
 class "tokens.scss" as Tokens <<stylesheet>> {
+  src/styles/tokens.scss, names and values from the mock tokens.css
   light set on root
   dark set under prefers-color-scheme dark
-  colour custom properties such as --paper, --ink, --sea, --danger
+  colour custom properties such as --paper, --ink, --sea, --danger, --focus
   no manual theme toggle
 }
 
@@ -37,7 +38,13 @@ class "Motion budget" as Budget <<constraint>> {
 class "Reduced-motion rules" as Reduced <<stylesheet>> {
   prefers-reduced-motion reduce
   transitions and animations disabled or opacity 100 ms or less
-  skeleton shimmer replaced by a static tone
+  skeleton shimmer replaced by a solid var(--line) tone
+}
+
+class TodoListComponent <<presentational>> {
+  +todos: InputSignal<TodoView[]>
+  +loading: InputSignal<boolean>
+  @for track todo.tempId ?? todo.id
 }
 
 class TodoItemComponent <<presentational>> {
@@ -46,9 +53,19 @@ class TodoItemComponent <<presentational>> {
 
 class "Skeleton rows" as Skeleton {
   shimmer animation
-  host component TO SUPPLY
+  rendered by TodoListComponent while loading
 }
 
+class "Global stylesheet (src/styles.scss)" as Global <<stylesheet>> {
+  @use tokens
+  reduced-motion rules
+  render-blocking link, inlineCritical false
+}
+
+Global --> Tokens : includes
+Global --> Reduced : includes
+TodoListComponent "1" o-- "*" TodoItemComponent
+TodoListComponent --> Skeleton : renders while loading
 ComponentCss --> Tokens : reads
 ComponentCss ..> Budget : conforms to
 TodoItemComponent --> ComponentCss : styled by

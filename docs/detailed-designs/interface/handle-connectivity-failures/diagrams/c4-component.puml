@@ -7,15 +7,17 @@ Container(api, "Laravel API", "PHP 8.4, Laravel", "Serves /api/v1/todos requests
 
 Container_Boundary(spa, "Angular SPA") {
   Component(page, "TodoPageComponent", "Angular smart component", "Hosts the offline banner and the toast area")
-  Component(banner, "Offline banner", "Angular element, class name TO SUPPLY", "Shows the offline message without blocking the page")
+  Component(banner, "Offline banner", "Markup in the TodoPageComponent template, role status", "Shows the offline message without blocking the page")
+  Component(conn, "Connectivity", "Angular service, core/connectivity", "online signal seeded from navigator.onLine and updated by window events")
   Component(store, "TodoStore", "Angular service, Signals", "Applies optimistic updates and rolls them back when a write fails")
   Component(toast, "ToastComponent", "Angular presentational component", "Shows the rollback error toast")
   Component(port, "TodoApi", "Abstract class, DI token", "Port that the store depends on")
-  Component(adapter, "HttpTodoApi", "Angular HTTP adapter", "Only class using HttpClient. Applies the 10 second timeout and the read retry delays")
+  Component(adapter, "HttpTodoApi", "Angular HTTP adapter", "Only class using HttpClient. Applies timeout and read retry with RxJS and converts failures to ApiError")
   Component(strings, "UI_STRINGS", "TypeScript constants in ui-strings.ts", "Holds the offline and rollback messages")
 }
 
 Rel(page, banner, "Shows or removes")
+Rel(page, conn, "Reads online from")
 Rel(page, store, "Reads state from")
 Rel(page, toast, "Hosts")
 Rel(store, port, "Calls")
