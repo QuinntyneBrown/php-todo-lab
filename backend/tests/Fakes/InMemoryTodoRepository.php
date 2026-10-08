@@ -89,6 +89,25 @@ final class InMemoryTodoRepository implements TodoRepository
         return $todo;
     }
 
+    public function delete(Todo $todo): void
+    {
+        $todo->deleted_at = CarbonImmutable::now();
+    }
+
+    public function findDeleted(string $id): ?Todo
+    {
+        $todo = $this->rows[$id] ?? null;
+
+        return $todo?->deleted_at === null ? null : $todo;
+    }
+
+    public function restore(Todo $todo): Todo
+    {
+        $todo->deleted_at = null;
+
+        return $todo;
+    }
+
     /**
      * @return Collection<string, Todo>
      */

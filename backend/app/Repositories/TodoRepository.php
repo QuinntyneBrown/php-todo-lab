@@ -43,4 +43,12 @@ interface TodoRepository
      * @param  array{title?: string, completed_at?: DateTimeInterface|null}  $columns
      */
     public function update(Todo $todo, array $columns): Todo;
+
+    /** Soft-deletes the todo. */
+    public function delete(Todo $todo): void;
+
+    /** The soft-deleted todo with this id, if it has not been purged. */
+    public function findDeleted(string $id): ?Todo;
+
+    public function restore(Todo $todo): Todo;
 }

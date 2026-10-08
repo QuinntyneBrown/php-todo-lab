@@ -58,4 +58,21 @@ final class EloquentTodoRepository implements TodoRepository
 
         return $todo;
     }
+
+    public function delete(Todo $todo): void
+    {
+        $todo->delete();
+    }
+
+    public function findDeleted(string $id): ?Todo
+    {
+        return Todo::onlyTrashed()->find($id);
+    }
+
+    public function restore(Todo $todo): Todo
+    {
+        $todo->restore();
+
+        return $todo;
+    }
 }
