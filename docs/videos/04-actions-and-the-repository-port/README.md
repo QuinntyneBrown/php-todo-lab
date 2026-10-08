@@ -1,6 +1,6 @@
 # 04 · Actions and the repository port
 
-> **Runtime:** ~10 min · **Audience:** senior .NET engineers who use MediatR and Clean Architecture · **Prerequisites:** videos 01 to 03
+> **Runtime:** ~11 min · **Audience:** senior .NET engineers who use MediatR and Clean Architecture · **Prerequisites:** videos 01 to 03
 
 **Video:** [04-actions-and-the-repository-port.mp4](04-actions-and-the-repository-port.mp4) · [Slides](slides.html) · **Audio:** [04-actions-and-the-repository-port.mp3](04-actions-and-the-repository-port.mp3) · [Transcript](script.md)
 

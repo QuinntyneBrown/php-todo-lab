@@ -1,6 +1,6 @@
 # 11 · Quality gates: Pint, Larastan and CI
 
-> **Runtime:** ~9 min · **Audience:** senior .NET engineers who rely on `dotnet format`, Roslyn analysers, nullable reference types, and CI pipelines · **Prerequisites:** videos 01 and 10
+> **Runtime:** ~8 min · **Audience:** senior .NET engineers who rely on `dotnet format`, Roslyn analysers, nullable reference types, and CI pipelines · **Prerequisites:** videos 01 and 10
 
 **Video:** [11-quality-gates-pint-larastan-and-ci.mp4](11-quality-gates-pint-larastan-and-ci.mp4) · [Slides](slides.html) · **Audio:** [11-quality-gates-pint-larastan-and-ci.mp3](11-quality-gates-pint-larastan-and-ci.mp3) · [Transcript](script.md)
 
