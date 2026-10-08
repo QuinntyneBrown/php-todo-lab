@@ -1,6 +1,6 @@
 # 02 · Laravel through ASP.NET Core eyes
 
-> **Runtime:** ~10 min · **Audience:** senior .NET engineers who know `Program.cs`, `IServiceCollection`, and `appsettings.json` · **Prerequisites:** video 01
+> **Runtime:** ~11 min · **Audience:** senior .NET engineers who know `Program.cs`, `IServiceCollection`, and `appsettings.json` · **Prerequisites:** video 01
 
 **Video:** [02-laravel-through-aspnet-core-eyes.mp4](02-laravel-through-aspnet-core-eyes.mp4) · [Slides](slides.html) · **Audio:** [02-laravel-through-aspnet-core-eyes.mp3](02-laravel-through-aspnet-core-eyes.mp3) · [Transcript](script.md)
 

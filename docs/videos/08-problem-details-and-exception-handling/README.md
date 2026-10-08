@@ -1,6 +1,6 @@
 # 08 · Problem details and exception handling
 
-> **Runtime:** ~9 min · **Audience:** senior .NET engineers who know `ProblemDetails` and `IExceptionHandler` · **Prerequisites:** videos 02 to 04
+> **Runtime:** ~8 min · **Audience:** senior .NET engineers who know `ProblemDetails` and `IExceptionHandler` · **Prerequisites:** videos 02 to 04
 
 **Video:** [08-problem-details-and-exception-handling.mp4](08-problem-details-and-exception-handling.mp4) · [Slides](slides.html) · **Audio:** [08-problem-details-and-exception-handling.mp3](08-problem-details-and-exception-handling.mp3) · [Transcript](script.md)
 

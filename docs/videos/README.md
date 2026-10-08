@@ -14,13 +14,13 @@ Each video folder holds the transcript (`script.md`), the slide deck
 | 01 | [PHP 8.4 for .NET developers](01-php-for-dotnet-developers/README.md) | ~12 min | C# records, enums, switch expressions, lambdas, nullable types |
 | 02 | [Laravel through ASP.NET Core eyes](02-laravel-through-aspnet-core-eyes/README.md) | ~11 min | `Program.cs`, `IServiceCollection`, `appsettings.json`, the `dotnet` CLI |
 | 03 | [Routes, Form Requests and the thin controller](03-routes-form-requests-and-the-thin-controller/README.md) | ~10 min | Attribute routing, model binding, FluentValidation |
-| 04 | [Actions and the repository port](04-actions-and-the-repository-port/README.md) | ~10 min | MediatR handlers, Clean Architecture use cases, repository interfaces |
-| 05 | [The Eloquent model, migrations and factories](05-eloquent-model-migrations-and-factories/README.md) | ~9 min | EF Core entities, configurations, query filters, migrations, Bogus |
+| 04 | [Actions and the repository port](04-actions-and-the-repository-port/README.md) | ~11 min | MediatR handlers, Clean Architecture use cases, repository interfaces |
+| 05 | [The Eloquent model, migrations and factories](05-eloquent-model-migrations-and-factories/README.md) | ~10 min | EF Core entities, configurations, query filters, migrations, Bogus |
 | 06 | [The Eloquent repository: queries, transactions and locks](06-eloquent-repository-transactions-and-locks/README.md) | ~9 min | `IQueryable`, change tracking, `ExecuteUpdate`, transactions, isolation |
 | 07 | [API Resources and the JSON contract](07-api-resources-and-the-json-contract/README.md) | ~8 min | DTOs, `System.Text.Json`, API versioning |
 | 08 | [Problem details and exception handling](08-problem-details-and-exception-handling/README.md) | ~8 min | `ProblemDetails`, `IExceptionHandler` |
 | 09 | [Artisan commands and the scheduler](09-artisan-commands-and-the-scheduler/README.md) | ~8 min | `BackgroundService`, Quartz or Hangfire, `TimeProvider` |
-| 10 | [Testing with Pest](10-testing-with-pest/README.md) | ~9 min | xUnit, FluentAssertions, `WebApplicationFactory`, Respawn, Testcontainers |
+| 10 | [Testing with Pest](10-testing-with-pest/README.md) | ~10 min | xUnit, FluentAssertions, `WebApplicationFactory`, Respawn, Testcontainers |
 | 11 | [Quality gates: Pint, Larastan and CI](11-quality-gates-pint-larastan-and-ci/README.md) | ~8 min | `dotnet format`, Roslyn analysers, nullable reference types, CI |
 | 12 | [Reviewing a PHP pull request](12-reviewing-a-php-pull-request/README.md) | ~10 min | Code review, ATDD, the pull request template |
 

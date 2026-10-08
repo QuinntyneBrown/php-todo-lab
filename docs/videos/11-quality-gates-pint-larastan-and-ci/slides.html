@@ -122,6 +122,10 @@ parameters:
 
 <section id="docblocks" data-part="2" data-cue="Watch how the code feeds it">
   <h2>Load-bearing annotations</h2>
+  <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
+<pre class="code tight" data-lang="php" data-mark="2">return DB::transaction(function (): array {
+    /** @var list&lt;string&gt; $ids */
+    $ids = Todo::query()-&gt;completed()-&gt;lockForUpdate()-&gt;pluck('id')-&gt;all();</pre>
   <div class="cols">
     <div>
       <div class="file">backend/app/Repositories/TodoRepository.php</div>
@@ -134,19 +138,11 @@ public function list(TodoStatus $status): Collection;
  * @return array{active: int, completed: int}
  */
 public function counts(): array;</pre>
-      <div class="file">backend/database/factories/TodoFactory.php</div>
-<pre class="code tight" data-lang="php" data-mark="2">/**
- * @extends Factory&lt;Todo&gt;
- */
-class TodoFactory extends Factory</pre>
     </div>
     <div>
-      <div class="file">backend/app/Repositories/EloquentTodoRepository.php</div>
-<pre class="code tight" data-lang="php" data-mark="2">return DB::transaction(function (): array {
-    /** @var list&lt;string&gt; $ids */
-    $ids = Todo::query()-&gt;completed()-&gt;lockForUpdate()-&gt;pluck('id')-&gt;all();</pre>
       <ul class="small">
         <li>Inline <code>@var</code> narrows <code>array&lt;int, mixed&gt;</code> to <code>list&lt;string&gt;</code> where the code knows better</li>
+        <li><code>TodoFactory</code> is <code>@extends Factory&lt;Todo&gt;</code>; the model's <code>HasFactory</code> carries <code>@use HasFactory&lt;TodoFactory&gt;</code></li>
         <li>Remove the <code>@return</code> on <code>counts</code> and <code>ListTodos</code> fails: <code>$counts['active']</code> is no longer an int</li>
         <li>Annotations are code. Review them like signatures.</li>
       </ul>
@@ -159,25 +155,17 @@ class TodoFactory extends Factory</pre>
   <div class="cols">
     <div>
       <span class="tag">Illustrative change</span>
-<pre class="code tight" data-lang="php" data-mark="3">public function handle(string $id): void
+<pre class="code xtight" data-lang="php" data-mark="3">public function handle(string $id): void
 {
     $this-&gt;todos-&gt;delete($this-&gt;todos-&gt;find($id));
 }</pre>
-<pre class="term"><span class="prompt">$</span> composer analyse
- ------ --------------------------------------------------------------
+<pre class="term" style="font-size:20px;line-height:1.4;padding:14px 22px"><span class="prompt">$</span> composer analyse
   Line   Actions/Todos/DeleteTodo.php
- ------ --------------------------------------------------------------
-  17     Parameter #1 $todo of method App\Repositories\TodoRepository
-         ::delete() expects App\Models\Todo, App\Models\Todo|null given.
- ------ --------------------------------------------------------------
+  17     Parameter #1 $todo of method TodoRepository::delete()
+         expects App\Models\Todo, App\Models\Todo|null given.
  <span class="err">[ERROR] Found 1 error</span></pre>
     </div>
     <div>
-      <span class="tag">The fix is the guard</span>
-<pre class="code tight" data-lang="php" data-mark="3">public function handle(string $id): void
-{
-    $this-&gt;todos-&gt;delete($this-&gt;todos-&gt;find($id) ?? throw new TodoNotFound($id));
-}</pre>
       <ul class="small">
         <li>The same bug nullable reference types catch in C#</li>
         <li>Not an <code>@phpstan-ignore</code>, not a baseline entry</li>
@@ -185,6 +173,11 @@ class TodoFactory extends Factory</pre>
       </ul>
     </div>
   </div>
+  <span class="tag">The fix is the guard · backend/app/Actions/Todos/DeleteTodo.php</span>
+<pre class="code tight" data-lang="php" data-mark="3">public function handle(string $id): void
+{
+    $this-&gt;todos-&gt;delete($this-&gt;todos-&gt;find($id) ?? throw new TodoNotFound($id));
+}</pre>
 </section>
 
 <section id="check" data-part="3" data-cue="composer check is the one command">
@@ -209,12 +202,9 @@ class TodoFactory extends Factory</pre>
   <div class="cols-wide">
     <div>
       <div class="file">.github/workflows/ci.yml</div>
-<pre class="code xtight" data-lang="yaml" data-mark="8,9,13,14,16,17,22,23,25,26,27,28">jobs:
+<pre class="code xtight" data-lang="yaml" data-mark="5,6,9,10,12,13,17,18,20,21,22,23">jobs:
   backend:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: backend
     services:
       mysql:
         image: mysql:8.4
@@ -223,10 +213,8 @@ class TodoFactory extends Factory</pre>
           MYSQL_DATABASE: todo_test
           MYSQL_USER: todo
           MYSQL_PASSWORD: secret
-        ports: ['3306:3306']
         options: &gt;-
           --health-cmd="mysqladmin ping -h 127.0.0.1 -psecret"
-          --health-interval=5s --health-timeout=5s --health-retries=20
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2

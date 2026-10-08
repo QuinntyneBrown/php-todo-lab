@@ -1,6 +1,6 @@
 # 07 · API Resources and the JSON contract
 
-> **Runtime:** ~9 min · **Audience:** senior .NET engineers who return DTOs and configure `System.Text.Json` · **Prerequisites:** videos 03 to 05
+> **Runtime:** ~8 min · **Audience:** senior .NET engineers who return DTOs and configure `System.Text.Json` · **Prerequisites:** videos 03 to 05
 
 **Video:** [07-api-resources-and-the-json-contract.mp4](07-api-resources-and-the-json-contract.mp4) · [Slides](slides.html) · **Audio:** [07-api-resources-and-the-json-contract.mp3](07-api-resources-and-the-json-contract.mp3) · [Transcript](script.md)
 

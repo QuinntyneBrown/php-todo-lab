@@ -1,6 +1,6 @@
 # 09 · Artisan commands and the scheduler
 
-> **Runtime:** ~9 min · **Audience:** senior .NET engineers who know `BackgroundService`, Quartz or Hangfire, and `TimeProvider` · **Prerequisites:** videos 02, 04 and 06
+> **Runtime:** ~8 min · **Audience:** senior .NET engineers who know `BackgroundService`, Quartz or Hangfire, and `TimeProvider` · **Prerequisites:** videos 02, 04 and 06
 
 **Video:** [09-artisan-commands-and-the-scheduler.mp4](09-artisan-commands-and-the-scheduler.mp4) · [Slides](slides.html) · **Audio:** [09-artisan-commands-and-the-scheduler.mp3](09-artisan-commands-and-the-scheduler.mp3) · [Transcript](script.md)
 
