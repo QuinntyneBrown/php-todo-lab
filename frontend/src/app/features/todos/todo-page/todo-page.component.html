@@ -29,7 +29,11 @@
         </button>
       </div>
     } @else {
-      <app-todo-list [todos]="store.visibleTodos()" [loading]="store.loading()" />
+      <app-todo-list
+        [todos]="store.visibleTodos()"
+        [loading]="store.loading()"
+        (toggled)="onToggled($event.id, $event.completed)"
+      />
       @if (!store.loading() && store.visibleTodos().length === 0) {
         <app-todo-empty-state [kind]="emptyKind()" />
       }

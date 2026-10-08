@@ -106,16 +106,73 @@
   }
 }
 
+.check__input:active + .check__box {
+  transform: scale(0.88);
+}
+
+.check__input:disabled {
+  cursor: default;
+}
+
+// One ring burst from the checkbox when the user completes a task (L2-011).
+.check::after {
+  content: '';
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--sun);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.item--celebrate .check::after {
+  animation: burst 0.45s var(--ease-out);
+}
+
+@keyframes burst {
+  from {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(2.1);
+  }
+}
+
 .title {
   min-width: 0;
   padding: 10px 6px;
 }
 
+// The strike-through wipes left to right, across every wrapped line (L2-011).
 .title__text {
   line-height: 1.4;
   overflow-wrap: anywhere;
+  background: linear-gradient(currentcolor, currentcolor) 0 55% / 0% 2px no-repeat;
+  box-decoration-break: clone;
+  transition:
+    background-size 0.3s var(--ease-out),
+    color 0.2s;
 }
 
+// Muted, and struck through: colour is never the only signal (L2-030 criterion 6).
 .item--done .title__text {
   color: var(--slate);
+  background-size: 100% 2px;
+}
+
+// State changes apply at once, colour only (L2-011 criterion 3, L2-024 criterion 2).
+@media (prefers-reduced-motion: reduce) {
+  .check__box,
+  .check__tick,
+  .title__text {
+    transition: none;
+  }
+
+  .item--celebrate .check::after {
+    animation: none;
+  }
 }

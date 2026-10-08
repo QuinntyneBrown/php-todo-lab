@@ -13,6 +13,30 @@
   }
 }
 
+// Rows slide out within 250 ms (L2-024).
+.list__row--leave {
+  animation: leave 0.25s var(--ease-out) forwards;
+}
+
+@keyframes leave {
+  to {
+    opacity: 0;
+    translate: 24px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list__row--leave {
+    animation: fade-out 0.1s linear forwards;
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
 .skeleton li {
   display: flex;
   align-items: center;

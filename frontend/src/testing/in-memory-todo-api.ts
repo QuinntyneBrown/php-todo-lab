@@ -45,6 +45,13 @@ export class InMemoryTodoApi extends TodoApi {
     });
   }
 
+  /** Adds one todo and returns it. */
+  seedOne(todo: string | { title: string; completed?: boolean }): Todo {
+    const [seeded] = this.seed(todo);
+    if (!seeded) throw new Error('seed returned nothing');
+    return seeded;
+  }
+
   /** The non-deleted todos as the server would list them. */
   get todos(): Todo[] {
     return this.live().map(strip);

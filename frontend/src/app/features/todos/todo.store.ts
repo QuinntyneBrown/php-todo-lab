@@ -8,7 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { ApiError } from '../../core/api/api-error';
-import type { Todo } from '../../core/api/models';
+import type { Todo, UpdateTodoPayload } from '../../core/api/models';
 import { TodoApi } from '../../core/api/todo-api';
 import type { ToastState } from '../../shared/ui/toast/toast-state';
 import { UI_STRINGS } from './ui-strings';
@@ -22,6 +22,17 @@ export type TodoFilter = 'all' | 'active' | 'done';
 /** Anything other than a known filter, including a missing one, means all (L2-006). */
 export function parseFilter(value: string | null | undefined): TodoFilter {
   return value === 'active' || value === 'done' ? value : 'all';
+}
+
+/** How long a task that left the filter stays for its animation; the exit adds 250 ms. */
+const LEAVE_AFTER_MS = 350;
+
+/** The writes queued for one task, and what the server last confirmed for it. */
+interface PatchQueue {
+  tail: Promise<void>;
+  pending: number;
+  confirmed: Todo;
+  failure: { readonly error: unknown; readonly message: string } | null;
 }
 
 /** Why an add did not stick, so the page can give the title back (L2-004). */
@@ -55,12 +66,22 @@ export class TodoStore {
   readonly completedCount = computed(() => this.todos().filter((t) => t.completed).length);
   readonly totalCount = computed(() => this.todos().length);
 
+  /**
+   * Tasks that stopped matching the filter but stay a moment, so the completion animation
+   * plays in place before the row leaves (L2-006 criterion 6).
+   */
+  private readonly leaving = signal<ReadonlySet<string>>(new Set());
+
   readonly visibleTodos = computed(() => {
     const filter = this.filter();
+    const leaving = this.leaving();
     return filter === 'all'
       ? this.todos()
-      : this.todos().filter((t) => t.completed === (filter === 'done'));
+      : this.todos().filter((t) => t.completed === (filter === 'done') || leaving.has(t.id));
   });
+
+  /** Each task's PATCHes run one after another, so they apply in order (L2-010). */
+  private readonly patchQueues = new Map<string, PatchQueue>();
 
   readonly loading = computed(() => this.listResource.isLoading());
   readonly loadFailed = computed(() => this.listResource.status() === 'error');
@@ -92,6 +113,67 @@ export class TodoStore {
       this.showError(UI_STRINGS.toasts.addFailed);
       return { ok: false, title };
     }
+  }
+
+  /** Completes or reopens a task at once; the server catches up (L2-009, L2-010). */
+  toggle(id: string, completed: boolean): Promise<void> {
+    const todo = this.todos().find((t) => t.id === id);
+    if (!todo || todo.pending) return Promise.resolve();
+
+    if (this.filter() !== 'all' && completed !== (this.filter() === 'done')) {
+      this.leaving.update((ids) => new Set(ids).add(id));
+      setTimeout(() => {
+        this.leaving.update((ids) => new Set([...ids].filter((leavingId) => leavingId !== id)));
+      }, LEAVE_AFTER_MS);
+    }
+
+    const completedAt = completed ? (todo.completedAt ?? new Date().toISOString()) : null;
+    return this.patch(
+      { ...todo, completed, completedAt },
+      { completed },
+      UI_STRINGS.toasts.updateFailed,
+    );
+  }
+
+  /**
+   * Shows `optimistic` at once and queues the PATCH behind any earlier one for the task.
+   * When the queue drains after a failure, the task settles on the last state the server
+   * confirmed, so the UI never stays out of step with the data (L2-010, L1-012).
+   */
+  private patch(optimistic: TodoView, changes: UpdateTodoPayload, failMessage: string) {
+    const current = this.todos().find((t) => t.id === optimistic.id);
+    if (!current) return Promise.resolve();
+    const queue = this.patchQueues.get(current.id) ?? {
+      tail: Promise.resolve(),
+      pending: 0,
+      confirmed: current,
+      failure: null,
+    };
+    this.patchQueues.set(current.id, queue);
+    this.replace(optimistic);
+    queue.pending += 1;
+
+    queue.tail = queue.tail.then(async () => {
+      try {
+        queue.confirmed = await this.track(this.api.update(current.id, changes));
+      } catch (error) {
+        queue.failure = { error, message: failMessage };
+      } finally {
+        queue.pending -= 1;
+        if (queue.pending === 0) this.settle(queue);
+      }
+    });
+    return queue.tail;
+  }
+
+  private settle(queue: PatchQueue): void {
+    this.patchQueues.delete(queue.confirmed.id);
+    this.replace(queue.confirmed);
+    if (queue.failure) this.showError(queue.failure.message);
+  }
+
+  private replace(todo: TodoView): void {
+    this.todos.update((todos) => todos.map((t) => (t.id === todo.id ? todo : t)));
   }
 
   /** Keeps the app unstable until a write settles, so nothing reads a half-done change. */

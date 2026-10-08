@@ -92,6 +92,13 @@ export class TodoPageComponent implements OnChanges {
     }
   }
 
+  protected onToggled(id: string, completed: boolean): void {
+    void this.store.toggle(id, completed);
+    this.announce(
+      completed ? UI_STRINGS.announcements.completed : UI_STRINGS.announcements.reopened,
+    );
+  }
+
   /** One message with the action and the new count, so neither interrupts the other (L2-007). */
   private announce(action: string): void {
     const count =

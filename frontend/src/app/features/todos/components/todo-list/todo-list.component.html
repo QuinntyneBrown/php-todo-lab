@@ -7,7 +7,9 @@
 } @else if (todos().length > 0) {
   <ul class="list" [attr.aria-label]="label">
     @for (todo of todos(); track todo.id) {
-      <li class="list__row"><app-todo-item [todo]="todo" /></li>
+      <li class="list__row" animate.leave="list__row--leave">
+        <app-todo-item [todo]="todo" (toggled)="toggled.emit({ id: todo.id, completed: $event })" />
+      </li>
     }
   </ul>
 }

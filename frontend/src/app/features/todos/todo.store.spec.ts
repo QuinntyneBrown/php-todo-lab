@@ -1,18 +1,7 @@
 // Traces to: L2-003, L2-004, L2-052
-import { TestBed } from '@angular/core/testing';
 import { ApiError } from '../../core/api/api-error';
-import { TodoApi } from '../../core/api/todo-api';
 import { InMemoryTodoApi } from '../../../testing/in-memory-todo-api';
-import { TodoStore } from './todo.store';
-
-async function loadedStore(api: InMemoryTodoApi): Promise<TodoStore> {
-  TestBed.configureTestingModule({ providers: [{ provide: TodoApi, useValue: api }] });
-  const store = TestBed.inject(TodoStore);
-  await vi.waitFor(() => {
-    expect(store.loading()).toBe(false);
-  });
-  return store;
-}
+import { loadedStore } from '../../../testing/loaded-store';
 
 describe('TodoStore add', () => {
   it('shows the task at once as pending, then swaps in the server version', async () => {

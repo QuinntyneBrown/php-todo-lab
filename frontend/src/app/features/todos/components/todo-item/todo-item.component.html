@@ -1,6 +1,7 @@
 <div
   class="item"
   [class.item--done]="todo().completed"
+  [class.item--celebrate]="celebrating() && todo().completed"
   [class.item--pending]="todo().pending"
   [class.item--enter]="todo().pending"
 >
@@ -11,6 +12,7 @@
       [checked]="todo().completed"
       [disabled]="todo().pending"
       [attr.aria-label]="todo().title"
+      (change)="onChange($event)"
     />
     <span class="check__box">
       <svg class="check__tick" viewBox="0 0 14 14" aria-hidden="true">
