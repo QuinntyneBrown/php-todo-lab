@@ -75,4 +75,31 @@ final class EloquentTodoRepository implements TodoRepository
 
         return $todo;
     }
+
+    public function deleteCompleted(): array
+    {
+        return DB::transaction(function (): array {
+            /** @var list<string> $ids */
+            $ids = Todo::query()->completed()->lockForUpdate()->pluck('id')->all();
+
+            if ($ids !== []) {
+                Todo::query()->whereIn('id', $ids)->delete();
+            }
+
+            return $ids;
+        });
+    }
+
+    public function restoreMany(array $ids): Collection
+    {
+        return DB::transaction(function () use ($ids): Collection {
+            $found = Todo::onlyTrashed()->whereIn('id', $ids)->lockForUpdate()->pluck('id');
+
+            if ($found->isNotEmpty()) {
+                Todo::onlyTrashed()->whereIn('id', $found)->restore();
+            }
+
+            return Todo::query()->whereIn('id', $found)->get()->toBase();
+        });
+    }
 }

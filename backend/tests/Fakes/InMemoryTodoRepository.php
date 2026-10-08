@@ -108,6 +108,23 @@ final class InMemoryTodoRepository implements TodoRepository
         return $todo;
     }
 
+    public function deleteCompleted(): array
+    {
+        $completed = $this->live()->filter(fn (Todo $todo): bool => $todo->completed);
+        $completed->each(fn (Todo $todo) => $this->delete($todo));
+
+        return array_values($completed->keys()->all());
+    }
+
+    public function restoreMany(array $ids): Collection
+    {
+        return collect($ids)
+            ->map(fn (string $id): ?Todo => $this->findDeleted($id))
+            ->filter()
+            ->map(fn (Todo $todo): Todo => $this->restore($todo))
+            ->values();
+    }
+
     /**
      * @return Collection<string, Todo>
      */

@@ -51,4 +51,19 @@ interface TodoRepository
     public function findDeleted(string $id): ?Todo;
 
     public function restore(Todo $todo): Todo;
+
+    /**
+     * Soft-deletes every completed todo in one transaction.
+     *
+     * @return list<string> the ids deleted
+     */
+    public function deleteCompleted(): array;
+
+    /**
+     * Restores the soft-deleted todos among `$ids` in one transaction.
+     *
+     * @param  list<string>  $ids
+     * @return Collection<int, Todo> the restored todos
+     */
+    public function restoreMany(array $ids): Collection;
 }
