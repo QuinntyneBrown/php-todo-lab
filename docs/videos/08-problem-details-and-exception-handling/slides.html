@@ -140,10 +140,8 @@ final class ProblemDetailsRenderer
 
 <section id="body" data-part="3" data-cue="The private problem method builds the response">
   <h2>The body: four members plus extensions</h2>
-  <div class="cols">
-    <div>
-      <div class="file">backend/app/Exceptions/ProblemDetailsRenderer.php</div>
-<pre class="code tight" data-lang="php" data-mark="5,6,7,8,9,12">private static function problem(int $status, string $detail, array $extensions = [], array $headers = []): JsonResponse
+  <div class="file">backend/app/Exceptions/ProblemDetailsRenderer.php</div>
+<pre class="code xtight" data-lang="php" data-mark="5,6,7,8,9,12">private static function problem(int $status, string $detail, array $extensions = [], array $headers = []): JsonResponse
 {
     return new JsonResponse(
         [
@@ -157,17 +155,17 @@ final class ProblemDetailsRenderer
         ['Content-Type' =&gt; 'application/problem+json', ...$headers],
     );
 }</pre>
-    </div>
+  <div class="cols">
     <div>
-<pre class="code tight" data-lang="json">{
+<pre class="code xtight" data-lang="json">{
   "type": "about:blank",
   "title": "Unprocessable Content",
   "status": 422,
   "detail": "One or more fields are invalid.",
-  "errors": {
-    "title": ["The title field is required."]
-  }
+  "errors": { "title": ["The title field is required."] }
 }</pre>
+    </div>
+    <div>
       <ul class="small">
         <li>Same four members and <code>Extensions</code> as .NET's <code>ProblemDetails</code></li>
         <li><code>title</code> is the reason phrase from Symfony's status table</li>
@@ -182,7 +180,7 @@ final class ProblemDetailsRenderer
   <div class="cols">
     <div>
       <div class="file">backend/tests/Feature/Api/V1/ProblemDetailsTest.php</div>
-<pre class="code xtight" data-lang="php" data-mark="1,4,11,14,24,27">function assertProblem(Illuminate\Testing\TestResponse $response, int $status, string $title, string $detail): void
+<pre class="code xtight" data-lang="php" data-mark="1,4,12,14,16,17">function assertProblem(Illuminate\Testing\TestResponse $response, int $status, string $title, string $detail): void
 {
     $response-&gt;assertStatus($status)
         -&gt;assertHeader('Content-Type', 'application/problem+json')
@@ -191,15 +189,6 @@ final class ProblemDetailsRenderer
         -&gt;assertJsonPath('status', $status)
         -&gt;assertJsonPath('detail', $detail);
 }
-
-it('renders unknown API routes as 404 problem details, never HTML', function (string $uri): void {
-    $response = $this-&gt;get($uri, ['Accept' =&gt; 'text/html']);
-
-    assertProblem($response, 404, 'Not Found', 'The requested resource was not found.');
-})-&gt;with([
-    'unknown v1 path' =&gt; '/api/v1/nope',
-    'unsupported version' =&gt; '/api/v2/todos',
-]);
 
 it('renders unhandled exceptions as 500 problem details without leaking the message', function (): void {
     Route::get('api/v1/boom', fn () =&gt; throw new RuntimeException('secret internals'));

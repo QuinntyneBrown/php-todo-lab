@@ -78,6 +78,7 @@ a { color: var(--accent); }
 .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
 .cols-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 36px; align-items: start; }
 .cols-wide { display: grid; grid-template-columns: 1.3fr 1fr; gap: 48px; align-items: start; }
+.cols > *, .cols-3 > *, .cols-wide > * { min-width: 0; }
 .card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 20px; padding: 28px 34px; }
 .card h3 { margin-top: 0; }
 .card.cs { border-top: 6px solid var(--dotnet); }
